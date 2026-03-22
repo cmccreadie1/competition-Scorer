@@ -1,9 +1,9 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 4.6.1 - THE PRONOUNCED LEADERBOARD
+   VERSION 4.6.2 - THE FORMATTING ENGINE
    FULL VOLUME SERVICE WORKER
 */
 
-const CACHE_NAME = 'match-edition-v4.6.1-gold';
+const CACHE_NAME = 'match-edition-v4.6.2-gold';
 
 const ASSETS = [
   './',
@@ -19,7 +19,7 @@ self.addEventListener('install', (event) => {
   
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching Gold Master 4.6.1 Assets');
+      console.log('SW: Caching Gold Master 4.6.2 Assets');
       return cache.addAll(ASSETS);
     })
   );
