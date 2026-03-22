@@ -1,9 +1,9 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 4.3.8 - CLOCK HARDENING
+   VERSION 4.3.9 - WORKFLOW & HISTORY SYNC
    FULL VOLUME SERVICE WORKER
 */
 
-const CACHE_NAME = 'match-edition-v4.3.8-sync-fix';
+const CACHE_NAME = 'match-edition-v4.3.9-gold';
 
 const ASSETS = [
   './',
@@ -12,17 +12,19 @@ const ASSETS = [
   '/competition-Scorer/icon.png'
 ];
 
+
 self.addEventListener('install', (event) => {
-  /* Force immediate takeover to apply the synchronized timer logic */
+  /* Force immediate activation to ensure timer sync logic applies */
   self.skipWaiting();
   
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching Gold Master 4.3.8 Assets');
+      console.log('SW: Caching Gold Master 4.3.9 Assets');
       return cache.addAll(ASSETS);
     })
   );
 });
+
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -30,7 +32,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('SW: Purging Legacy Version Cache');
+            console.log('SW: Purging Legacy Logic');
             return caches.delete(cacheName);
           }
         })
@@ -38,19 +40,20 @@ self.addEventListener('activate', (event) => {
     })
   );
   
-  /* Ensure all open windows/tabs synchronize immediately */
+  /* Synchronize all clients for real-time history countdowns */
   self.clients.claim();
 });
+
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      /* Priority 1: Instant load from cache for offshore reliability */
+      /* Priority 1: Speed - Instant load from cache for coastal use */
       if (response) {
         return response;
       }
       
-      /* Priority 2: Real-time fetch for Firebase synchronization */
+      /* Priority 2: Sync - Real-time fetch for Firebase updates */
       return fetch(event.request);
     })
   );
