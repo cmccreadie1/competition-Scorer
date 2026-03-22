@@ -1,11 +1,9 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 4.9.0 - THE ID MASTER (RESTART BUILD)
+   VERSION 4.8.0 - THE TAXONOMY & QUICK-SELECT UPDATE
    FULL VOLUME SERVICE WORKER
 */
 
-
-const CACHE_NAME = 'match-edition-v4.9.0-gold';
-
+const CACHE_NAME = 'match-edition-v4.8.0-gold';
 
 const ASSETS = [
   './',
@@ -16,26 +14,19 @@ const ASSETS = [
 
 
 self.addEventListener('install', (event) => {
-
-
   /* Force immediate takeover for zero-lag workflow */
   self.skipWaiting();
   
-  
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching Gold Master 4.9.0 Assets');
+      console.log('SW: Caching Gold Master 4.8.0 Assets');
       return cache.addAll(ASSETS);
     })
   );
-
-
 });
 
 
 self.addEventListener('activate', (event) => {
-
-
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -49,17 +40,12 @@ self.addEventListener('activate', (event) => {
     })
   );
   
-  
   /* Synchronize all clients for real-time history stability */
   self.clients.claim();
-
-
 });
 
 
 self.addEventListener('fetch', (event) => {
-
-
   event.respondWith(
     caches.match(event.request).then((response) => {
       /* Priority 1: Speed - Instant load from cache */
@@ -71,6 +57,4 @@ self.addEventListener('fetch', (event) => {
       return fetch(event.request);
     })
   );
-
-
 });
