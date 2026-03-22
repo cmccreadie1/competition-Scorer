@@ -219,7 +219,7 @@
             <div class="text-center text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V4.9.0</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V4.9.2</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -394,45 +394,45 @@
 
             <div id="loggingArea" class="scrollable-area p-4 space-y-4 text-center">
                 
-                <div class="match-card p-4 space-y-3.5 text-center">
-                    <div class="relative">
+                <div class="match-card p-4 space-y-4 text-center">
+                    <div>
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1 text-center">Fish Species</label>
-                        <div class="flex space-x-2">
-                            <select id="inputSpecies" onchange="checkSpeciesSelection()" class="flex-1 bg-slate-900 border-2 border-slate-800 p-2.5 rounded-lg text-base font-black appearance-none text-white focus:border-blue-500 transition shadow-inner">
-                                <option value="" disabled selected>-- Select Fish --</option>
-                                <optgroup label="🎣 RECENT CAPTURES" id="recentCapturesGroup" class="hidden"></optgroup>
-                                <optgroup label="Roundfish">
-                                    <option value="Cod">Cod</option><option value="Whiting">Whiting</option><option value="Haddock">Haddock</option><option value="Pollock">Pollock</option><option value="Coalfish (Saithe)">Coalfish (Saithe)</option><option value="European Bass">European Bass</option><option value="Ling">Ling</option><option value="Pouting">Pouting</option><option value="Poor Cod">Poor Cod</option>
-                                </optgroup>
-                                <optgroup label="Bass & Bream">
-                                    <option value="Black Bream">Black Bream</option><option value="Gilthead Bream">Gilthead Bream</option><option value="Red Bream">Red Bream</option><option value="Couch’s Bream">Couch’s Bream</option>
-                                </optgroup>
-                                <optgroup label="Flatfish">
-                                    <option value="Flounder">Flounder</option><option value="Plaice">Plaice</option><option value="Dab">Dab</option><option value="Turbot">Turbot</option><option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
-                                </optgroup>
-                                <optgroup label="Sharks & Rays">
-                                    <option value="Lesser Spotted Dogfish">Lesser Spotted Dogfish</option><option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Bull Huss">Bull Huss</option><option value="Smoothhound">Smoothhound</option><option value="Starry Smoothhound">Starry Smoothhound</option><option value="Spurdog">Spurdog</option><option value="Tope">Tope</option><option value="Thornback Ray">Thornback Ray</option><option value="Spotted Ray">Spotted Ray</option><option value="Blonde Ray">Blonde Ray</option><option value="Small-Eyed Ray">Small-Eyed Ray</option><option value="Undulate Ray">Undulate Ray</option>
-                                </optgroup>
-                                <optgroup label="Wrasse & Rockfish">
-                                    <option value="Ballan Wrasse">Ballan Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Baillon’s Wrasse">Baillon’s Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option><option value="Rainbow Wrasse">Rainbow Wrasse</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Shore Rockling">Shore Rockling</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option>
-                                </optgroup>
-                                <optgroup label="Pelagics & Minis">
-                                    <option value="Mackerel">Mackerel</option><option value="Herring">Herring</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option><option value="Garfish">Garfish</option><option value="Three-Spined Stickleback">Three-Spined Stickleback</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Common Goby">Common Goby</option>
-                                </optgroup>
-                                <optgroup label="Eels & Gurnards">
-                                    <option value="Conger Eel">Conger Eel</option><option value="Common Eel">Common Eel</option><option value="Grey Gurnard">Grey Gurnard</option><option value="Tub Gurnard">Tub Gurnard</option><option value="Red Gurnard">Red Gurnard</option>
-                                </optgroup>
-                                <optgroup label="Unlisted / Custom" id="customSpeciesGroup">
-                                    <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
-                                </optgroup>
-                            </select>
-                            <button onclick="document.getElementById('idMasterDrawer').classList.add('open')" class="bg-slate-800 border-2 border-slate-700 px-4 rounded-lg text-blue-400 active:bg-blue-600 active:text-white transition shadow-md">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </button>
-                        </div>
+                        <select id="inputSpecies" onchange="checkSpeciesSelection()" class="w-full bg-slate-900 border-2 border-slate-800 p-4 rounded-lg text-base font-black appearance-none text-white focus:border-blue-500 transition shadow-inner">
+                            <option value="" disabled selected>-- Select Fish --</option>
+                            <optgroup label="🎣 RECENT CAPTURES" id="recentCapturesGroup" class="hidden"></optgroup>
+                            <optgroup label="Roundfish">
+                                <option value="Cod">Cod</option><option value="Whiting">Whiting</option><option value="Haddock">Haddock</option><option value="Pollock">Pollock</option><option value="Coalfish (Saithe)">Coalfish (Saithe)</option><option value="European Bass">European Bass</option><option value="Ling">Ling</option><option value="Pouting">Pouting</option><option value="Poor Cod">Poor Cod</option>
+                            </optgroup>
+                            <optgroup label="Bass & Bream">
+                                <option value="Black Bream">Black Bream</option><option value="Gilthead Bream">Gilthead Bream</option><option value="Red Bream">Red Bream</option><option value="Couch’s Bream">Couch’s Bream</option>
+                            </optgroup>
+                            <optgroup label="Flatfish">
+                                <option value="Flounder">Flounder</option><option value="Plaice">Plaice</option><option value="Dab">Dab</option><option value="Turbot">Turbot</option><option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
+                            </optgroup>
+                            <optgroup label="Sharks & Rays">
+                                <option value="Lesser Spotted Dogfish">Lesser Spotted Dogfish</option><option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Bull Huss">Bull Huss</option><option value="Smoothhound">Smoothhound</option><option value="Starry Smoothhound">Starry Smoothhound</option><option value="Spurdog">Spurdog</option><option value="Tope">Tope</option><option value="Thornback Ray">Thornback Ray</option><option value="Spotted Ray">Spotted Ray</option><option value="Blonde Ray">Blonde Ray</option><option value="Small-Eyed Ray">Small-Eyed Ray</option><option value="Undulate Ray">Undulate Ray</option>
+                            </optgroup>
+                            <optgroup label="Wrasse & Rockfish">
+                                <option value="Ballan Wrasse">Ballan Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Baillon’s Wrasse">Baillon’s Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option><option value="Rainbow Wrasse">Rainbow Wrasse</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Shore Rockling">Shore Rockling</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option>
+                            </optgroup>
+                            <optgroup label="Pelagics & Minis">
+                                <option value="Mackerel">Mackerel</option><option value="Herring">Herring</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option><option value="Garfish">Garfish</option><option value="Three-Spined Stickleback">Three-Spined Stickleback</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Common Goby">Common Goby</option>
+                            </optgroup>
+                            <optgroup label="Eels & Gurnards">
+                                <option value="Conger Eel">Conger Eel</option><option value="Common Eel">Common Eel</option><option value="Grey Gurnard">Grey Gurnard</option><option value="Tub Gurnard">Tub Gurnard</option><option value="Red Gurnard">Red Gurnard</option>
+                            </optgroup>
+                            <optgroup label="Unlisted / Custom" id="customSpeciesGroup">
+                                <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
+                            </optgroup>
+                        </select>
                     </div>
 
-                    <div id="deckSizeInputs">
+                    <button onclick="document.getElementById('idMasterDrawer').classList.add('open')" class="w-full bg-blue-600 border border-blue-400 text-white font-black py-4 rounded-xl shadow-lg flex items-center justify-center space-x-3 active:scale-95 transition-transform uppercase tracking-widest text-[11px]">
+                        <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                        <span>Open Identification Guide</span>
+                    </button>
+
+                    <div id="deckSizeInputs" class="pt-2">
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-[0.3em] mb-1.5 ml-1 text-center" id="labelSize">Capture Record</label>
                         <div id="deckLength" class="flex space-x-2">
                             <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="flex-1 bg-slate-900 border-2 border-slate-800 p-2.5 rounded-lg text-2xl font-black text-center w-full text-white focus:border-blue-500 outline-none shadow-inner" placeholder="0">
@@ -539,21 +539,7 @@
                 </section>
                 <section>
                     <h4 class="text-amber font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center">1. Purpose of the Application</h4>
-                    <p class="text-xs leading-relaxed">Sea Diary: Match Edition Pro is a specialized, cloud-synchronized platform designed to manage sea angling tournaments in real-time. By moving away from traditional paper scorecards, the app provides instant transparency through a <b>Live Leader Board</b>, automated time management, and a centralized reporting system for Marshalls.</p>
-                </section>
-                <section>
-                    <h4 class="text-blue-400 font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center">2. The Marshall’s Perspective (Steward)</h4>
-                    <ul class="space-y-3 text-[11px] leading-relaxed">
-                        <li><b>Initialization:</b> Enter your name and venue. Navigate to the Steward section to select match duration and scoring format.</li>
-                        <li><b>Starting:</b> Once anglers are in the lobby, tap Start Match to trigger a synchronized 5-second countdown on every phone.</li>
-                    </ul>
-                </section>
-                <section>
-                    <h4 class="text-red-500 font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center">3. The Competitor’s Perspective (Angler)</h4>
-                    <ul class="space-y-3 text-[11px] leading-relaxed">
-                        <li><b>Scorecard:</b> Select species and enter measurement. For unlisted fish, use <b>"[Add Other Species...]"</b> at the bottom of the dropdown.</li>
-                        <li><b>ID Master:</b> Use the search icon to access identifying features for rare or similar-looking fish.</li>
-                    </ul>
+                    <p class="text-xs leading-relaxed">Sea Diary: Match Edition Pro is a specialized platform for managing sea angling tournaments in real-time. Features include an interactive **ID Master** for fish identification and a dynamic **Recent Captures** list.</p>
                 </section>
             </div>
         </div>
@@ -596,7 +582,7 @@
                     <i class="fa-solid fa-search absolute left-3.5 top-4 text-slate-500"></i>
                 </div>
             </div>
-            <div id="idGuideContent" class="scrollable-area p-4 space-y-3"></div>
+            <div id="idGuideContent" class="scrollable-area p-4 space-y-4"></div>
         </div>
 
 
@@ -655,66 +641,57 @@
             status: 'idle'
         };
 
+        /* V4.9.2 SPECIES GUIDE DATA WITH DIAGRAM LINKS */
         const SPECIES_GUIDE = {
-            "Cod": "3 dorsal fins, white lateral line, distinct chin barbel.",
-            "Whiting": "No barbel, dark spot at base of pectoral fin.",
-            "Haddock": "Dark thumb-print mark above pectoral fin.",
-            "Pollock": "Protruding lower jaw, dark curved lateral line.",
-            "Coalfish (Saithe)": "Straight white lateral line, forked tail.",
-            "European Bass": "Two dorsal fins, first has 9 sharp spines.",
-            "Ling": "Long eel-like body, single barbel on chin.",
-            "Pouting": "Deep body, dark vertical bands, long chin barbel.",
-            "Poor Cod": "Similar to Pouting but smaller/slimmer.",
-            "Black Bream": "Oval body, vertical bars, large forked tail.",
-            "Gilthead Bream": "Royal gold mark between the eyes.",
-            "Red Bream": "Large eyes, reddish-pink, dark spot at pectoral base.",
-            "Couch’s Bream": "Rare, reddish-pink with yellow tinged fins.",
-            "Flounder": "Rough bony tubercles along the lateral line.",
-            "Plaice": "Smooth skin, bright orange/red spots.",
-            "Dab": "Sharp curve in lateral line above pectoral fin.",
-            "Turbot": "Diamond shape, no scales, bony bumps on skin.",
-            "Brill": "Oval shape, fringed first dorsal rays.",
-            "Dover Sole": "Small filaments fringe the head like 'stubble'.",
-            "Lemon Sole": "Small head, slimy skin, mottled pattern.",
-            "Megrim": "Left-eyed, thin/translucent, very large mouth.",
-            "Lesser Spotted Dogfish": "Small dark spots, rough skin.",
-            "Blackmouth Dogfish": "Inside of mouth is distinct jet black.",
-            "Bull Huss": "Large dark spots, bigger than Dogfish.",
-            "Smoothhound": "No white spots, no spines.",
-            "Starry Smoothhound": "Dotted with distinct white spots.",
-            "Spurdog": "Large spines before dorsal fins, white spots on back.",
-            "Tope": "Large shark shape, distinct notched tail.",
-            "Thornback Ray": "Prickly spines along the back and tail.",
-            "Spotted Ray": "Spots do NOT reach the edge of the wings.",
-            "Blonde Ray": "Spots extend all the way to wing edges.",
-            "Small-Eyed Ray": "Fine lines, very small eyes for body size.",
-            "Undulate Ray": "Complex 'undulating' lines and patterns.",
-            "Ballan Wrasse": "Heavy bodied, varied mottling, juveniles are emerald.",
-            "Cuckoo Wrasse": "Males blue/orange, Females orange with 3 black spots.",
-            "Corkwing Wrasse": "Black spot at base of tail AND behind eye.",
-            "Goldsinny Wrasse": "Dark spot at front of dorsal AND top of tail root.",
-            "Rock Cook Wrasse": "Small mouth, golden-brown with neon blue markings.",
-            "Baillon’s Wrasse": "Corkwing lookalike, dark spot on 2/3rds of dorsal fin.",
-            "Scale-rayed Wrasse": "Extremely rare, deep water specialist.",
-            "Rainbow Wrasse": "Tropical appearance, rare vagrant.",
-            "Three-bearded Rockling": "3 barbels, orange/red mottled/spotted 'slug'.",
-            "Shore Rockling": "3 barbels, uniform dark brown/black, slimy.",
-            "Five-bearded Rockling": "5 barbels: 4 on upper snout, 1 on chin.",
-            "Four-bearded Rockling": "4 barbels, small deep-water specialist.",
-            "Mackerel": "Tiger stripes, no scales.",
-            "Herring": "Silver, smooth belly, pelvic fins set far back.",
-            "Scad (Horse Mackerel)": "Hard boney plates along the lateral line.",
-            "Garfish": "Long needle-like beak with green bones.",
-            "Conger Eel": "Black/Grey, dorsal fin starts at pectoral tip.",
-            "Common Eel": "Brownish, dorsal fin starts much further back.",
-            "Three-Spined Stickleback": "Three distinct spines on back.",
-            "Common Blenny (Shanny)": "Green/Brown, smooth head, no tentacles.",
-            "Tompot Blenny": "Antler-like tentacles on the head.",
-            "Montagu's Blenny": "Single fringed tentacle above each eye.",
-            "Common Goby": "Small, sand-coloured, fused pelvic fins.",
-            "Grey Gurnard": "Large wing-like fins, walks on pectoral rays.",
-            "Tub Gurnard": "Vibrant blue fringed pectoral fins.",
-            "Red Gurnard": "Red body, large pectoral 'wings'."
+            "Cod": { info: "3 dorsal fins, white lateral line, distinct chin barbel.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gadus_morhua_diagram.svg/600px-Gadus_morhua_diagram.svg.png" },
+            "Whiting": { info: "No barbel, dark spot at base of pectoral fin.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Merlangius_merlangus.png/500px-Merlangius_merlangus.png" },
+            "Haddock": { info: "Dark thumb-print mark (St Peter's mark) above pectoral fin.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Melanogrammus_aeglefinus.png/500px-Melanogrammus_aeglefinus.png" },
+            "Pollock": { info: "Protruding lower jaw, dark curved lateral line.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Pollachius_pollachius_1.png/500px-Pollachius_pollachius_1.png" },
+            "Coalfish (Saithe)": { info: "Straight white lateral line, forked tail.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Pollachius_virens.png/500px-Pollachius_virens.png" },
+            "European Bass": { info: "Two dorsal fins, first has 9 sharp spines.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/European_bass.png/500px-European_bass.png" },
+            "Ling": { info: "Long eel-like body, single barbel on chin.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Ling_Molva_molva.png/500px-Ling_Molva_molva.png" },
+            "Pouting": { info: "Deep body, dark vertical bands, long chin barbel.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Trisopterus_luscus_drawing.png/500px-Trisopterus_luscus_drawing.png" },
+            "Poor Cod": { info: "Smaller than Pouting. Anal fin begins well back.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Trisopterus_minutus.png/500px-Trisopterus_minutus.png" },
+            "Black Bream": { info: "Oval body, vertical bars, large forked tail.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Spondyliosoma_cantharus.png/500px-Spondyliosoma_cantharus.png" },
+            "Gilthead Bream": { info: "Royal gold mark between the eyes.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Sparus_aurata.png/500px-Sparus_aurata.png" },
+            "Red Bream": { info: "Large eyes, reddish-pink, dark spot at pectoral base.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Pagellus_bogaraveo.png/500px-Pagellus_bogaraveo.png" },
+            "Couch’s Bream": { info: "Rare, reddish-pink with yellow tinged fins.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Pagrus_pagrus.png/500px-Pagrus_pagrus.png" },
+            "Flounder": { info: "Rough bony tubercles along the lateral line.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Platichthys_flesus.png/500px-Platichthys_flesus.png" },
+            "Plaice": { info: "Smooth skin, bright orange/red spots.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Pleuronectes_platessa.png/500px-Pleuronectes_platessa.png" },
+            "Dab": { info: "Sharp curve in lateral line above pectoral fin.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Limanda_limanda.png/500px-Limanda_limanda.png" },
+            "Turbot": { info: "Diamond shape, no scales, bony bumps on skin.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Scophthalmus_maximus.png/500px-Scophthalmus_maximus.png" },
+            "Brill": { info: "Oval shape, fringed first dorsal rays.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Scophthalmus_rhombus.png/500px-Scophthalmus_rhombus.png" },
+            "Dover Sole": { info: "Small filaments fringe the head like 'stubble'.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Solea_solea.png/500px-Solea_solea.png" },
+            "Lemon Sole": { info: "Small head, slimy skin, mottled pattern.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Microstomus_kitt.png/500px-Microstomus_kitt.png" },
+            "Megrim": { info: "Left-eyed, thin/translucent, very large mouth.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Lepidorhombus_whiffiagonis.png/500px-Lepidorhombus_whiffiagonis.png" },
+            "Lesser Spotted Dogfish": { info: "Small dark spots, rough skin.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Scyliorhinus_canicula.png/500px-Scyliorhinus_canicula.png" },
+            "Blackmouth Dogfish": { info: "Inside of mouth is distinct jet black.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Galeus_melastomus.png/500px-Galeus_melastomus.png" },
+            "Bull Huss": { info: "Large dark spots, nasal flaps reach mouth.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Scyliorhinus_stellaris.png/500px-Scyliorhinus_stellaris.png" },
+            "Smoothhound": { info: "No white spots, no spines.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Mustelus_mustelus.png/500px-Mustelus_mustelus.png" },
+            "Starry Smoothhound": { info: "Dotted with distinct white spots.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Mustelus_asterias.png/500px-Mustelus_asterias.png" },
+            "Spurdog": { info: "Large spines before dorsal fins, white spots.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Squalus_acanthias.png/500px-Squalus_acanthias.png" },
+            "Tope": { info: "Large shark shape, distinct notched tail.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Galeorhinus_galeus.png/500px-Galeorhinus_galeus.png" },
+            "Thornback Ray": { info: "Prickly spines along the back and tail.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Raja_clavata.png/500px-Raja_clavata.png" },
+            "Spotted Ray": { info: "Spots do NOT reach the edge of the wings.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Raja_montagui.png/500px-Raja_montagui.png" },
+            "Blonde Ray": { info: "Spots extend all the way to wing edges.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Raja_brachyura.png/500px-Raja_brachyura.png" },
+            "Small-Eyed Ray": { info: "Fine lines, very small eyes for body size.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Raja_microocellata.png/500px-Raja_microocellata.png" },
+            "Undulate Ray": { info: "Complex 'undulating' lines and patterns.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Raja_undulata.png/500px-Raja_undulata.png" },
+            "Ballan Wrasse": { info: "Heavy bodied, varied mottling. Emerald juveniles.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Labrus_bergylta.png/500px-Labrus_bergylta.png" },
+            "Cuckoo Wrasse": { info: "Blue/orange (Male), Orange w/ 3 spots (Female).", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Labrus_mixtus.png/500px-Labrus_mixtus.png" },
+            "Corkwing Wrasse": { info: "Black spot at tail base AND behind eye.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Symphodus_melops.png/500px-Symphodus_melops.png" },
+            "Goldsinny Wrasse": { info: "Spot at front of dorsal and top of tail root.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Ctenolabrus_rupestris.png/500px-Ctenolabrus_rupestris.png" },
+            "Rock Cook Wrasse": { info: "Small mouth, neon blue markings on head.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Centrolabrus_exoletus.png/500px-Centrolabrus_exoletus.png" },
+            "Five-bearded Rockling": { info: "5 barbels: 4 on upper snout, 1 on chin.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Ciliata_mustela.png/500px-Ciliata_mustela.png" },
+            "Shore Rockling": { info: "3 barbels, uniform dark brown/black, slimy.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Gaidropsarus_mediterraneus.png/500px-Gaidropsarus_mediterraneus.png" },
+            "Three-bearded Rockling": { info: "3 barbels, orange/red mottled 'slug'.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Gaidropsarus_vulgaris.png/500px-Gaidropsarus_vulgaris.png" },
+            "Mackerel": { info: "Tiger stripes, no scales.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Scomber_scombrus.png/500px-Scomber_scombrus.png" },
+            "Herring": { info: "Silver, smooth belly, pelvic fins set back.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Clupea_harengus.png/500px-Clupea_harengus.png" },
+            "Scad (Horse Mackerel)": { info: "Hard boney plates along the lateral line.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Trachurus_trachurus.png/500px-Trachurus_trachurus.png" },
+            "Garfish": { info: "Long needle-like beak with green bones.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Belone_belone.png/500px-Belone_belone.png" },
+            "Conger Eel": { info: "Dorsal fin starts at pectoral tip.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Conger_conger.png/500px-Conger_conger.png" },
+            "Common Eel": { info: "Brownish, dorsal fin starts much further back.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Anguilla_anguilla.png/500px-Anguilla_anguilla.png" },
+            "Common Blenny (Shanny)": { info: "Green/Brown, smooth head, no tentacles.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Lipophrys_pholis.png/500px-Lipophrys_pholis.png" },
+            "Tompot Blenny": { info: "Antler-like tentacles on the head.", diagram: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Parablennius_gattorugine.png/500px-Parablennius_gattorugine.png" }
         };
 
         let activeHistoryId = null;
@@ -726,15 +703,13 @@
         let alert20Played = false;
         let isArchiveOpen = false;
 
-        function saveState() {
-            localStorage.setItem('matchState', JSON.stringify(state));
-        }
+        function saveState() { localStorage.setItem('matchState', JSON.stringify(state)); }
 
         function navTo(viewId) {
             document.querySelectorAll('.view-frame').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
             state.view = viewId;
-            if (viewId === 'history') { renderHistory(); }
+            if (viewId === 'history') renderHistory();
             if (viewId === 'fishing') { updateRecentCaptures(); renderIdGuide(); }
             saveState();
         }
@@ -752,7 +727,7 @@
         }
 
         function exitApp() {
-            if (confirm("CLOSE APP?\n\nThis will clear current lobby inputs. History remains untouched.")) {
+            if (confirm("CLOSE APP?")) {
                 localStorage.removeItem('matchState');
                 state = { status: 'idle', pin: null };
                 clearInterval(clockInterval); clearInterval(hypeInterval); clearInterval(historyUpdateInterval);
@@ -768,33 +743,30 @@
                 localStorage.removeItem('matchState');
                 if ('serviceWorker' in navigator) {
                     const registrations = await navigator.serviceWorker.getRegistrations();
-                    for (let registration of registrations) { await registration.unregister(); }
+                    for (let registration of registrations) await registration.unregister();
                 }
                 if ('caches' in window) {
                     const keys = await caches.keys();
-                    for (let key of keys) { await caches.delete(key); }
+                    for (let key of keys) await caches.delete(key);
                 }
                 setTimeout(() => { window.location.href = window.location.origin + window.location.pathname + '?v=' + Date.now(); }, 1000);
             }
         }
 
-        function handleInputFocus(el) {
-            setTimeout(() => { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300);
-        }
+        function handleInputFocus(el) { setTimeout(() => { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300); }
 
         function checkInstallStatus() {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
             const installBtn = document.getElementById('btnInstallGuide');
-            if (isStandalone) installBtn.classList.add('hidden');
+            if (window.matchMedia('(display-mode: standalone)').matches) installBtn.classList.add('hidden');
             else installBtn.classList.remove('hidden');
         }
 
         function showInstallGuide() {
             const userAgent = navigator.userAgent.toLowerCase();
             const textEl = document.getElementById('installInstructionText');
-            if (userAgent.includes('iphone') || userAgent.includes('ipad')) { textEl.innerHTML = "iPhone User detected.<br><br>1. Open this link in <b>Safari</b>.<br>2. Tap the <b>Share</b> icon (box with up arrow).<br>3. Select <b>'Add to Home Screen'</b>."; }
-            else if (userAgent.includes('android')) { textEl.innerHTML = "Android User detected.<br><br>1. Open this link in <b>Google Chrome</b>.<br>2. Tap the <b>Settings</b> icon (three dots ⋮).<br>3. Select <b>'Add to Home Screen'</b>."; }
-            else { textEl.innerHTML = "Please open this website on your Mobile Phone to install the Scorecard."; }
+            if (userAgent.includes('iphone') || userAgent.includes('ipad')) textEl.innerHTML = "iPhone User detected.<br><br>1. Open this link in <b>Safari</b>.<br>2. Tap the <b>Share</b> icon.<br>3. Select <b>'Add to Home Screen'</b>.";
+            else if (userAgent.includes('android')) textEl.innerHTML = "Android User detected.<br><br>1. Open this link in <b>Chrome</b>.<br>2. Tap the <b>Settings</b> icon (⋮).<br>3. Select <b>'Add to Home Screen'</b>.";
+            else textEl.innerHTML = "Open on your phone to install.";
             document.getElementById('installModal').classList.remove('hidden');
         }
 
@@ -804,25 +776,32 @@
             return val;
         }
 
-        /* V4.9.0 ID MASTER RENDER */
+        /* V4.9.2 UPDATED ID GUIDE RENDERER WITH DIAGRAMS */
         function renderIdGuide() {
             const container = document.getElementById('idGuideContent');
             if (!container) return;
             const query = document.getElementById('idSearch').value.toLowerCase();
             let html = "";
-            Object.entries(SPECIES_GUIDE).forEach(([name, text]) => {
-                if (name.toLowerCase().includes(query) || text.toLowerCase().includes(query)) {
+            Object.entries(SPECIES_GUIDE).forEach(([name, data]) => {
+                if (name.toLowerCase().includes(query) || data.info.toLowerCase().includes(query)) {
                     html += `
-                        <div class="match-card p-4 space-y-2 border-l-4 border-l-blue-500">
-                            <div class="flex justify-between items-center">
-                                <span class="font-black text-white text-lg uppercase tracking-tight">${name}</span>
-                                <button onclick="selectFromGuide('${name}')" class="bg-blue-600 text-white font-black px-4 py-1.5 rounded-lg text-xs uppercase tracking-widest active:scale-95 transition">Select</button>
+                        <div class="match-card overflow-hidden border-2 border-slate-700 bg-slate-900/50">
+                            <div class="bg-white/5 p-2 flex justify-center border-b border-slate-700">
+                                <img src="${data.diagram}" class="h-28 w-auto object-contain drop-shadow-lg" alt="${name} Diagram" onerror="this.src='https://placehold.co/400x200/1e293b/64748b?text=${name}'">
                             </div>
-                            <p class="text-xs text-slate-400 leading-relaxed font-bold"><i class="fa-solid fa-fingerprint mr-1 text-blue-400"></i> ${text}</p>
+                            <div class="p-4 space-y-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-black text-white text-xl tracking-tight uppercase">${name}</span>
+                                    <button onclick="selectFromGuide('${name}')" class="bg-blue-600 hover:bg-blue-500 text-white font-black px-6 py-2 rounded-lg text-xs uppercase tracking-widest shadow-md transition-all active:scale-95">Select</button>
+                                </div>
+                                <div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800">
+                                    <p class="text-[11px] text-slate-300 leading-relaxed font-bold"><i class="fa-solid fa-fingerprint mr-2 text-blue-400"></i> ${data.info}</p>
+                                </div>
+                            </div>
                         </div>`;
                 }
             });
-            container.innerHTML = html || `<p class="text-center text-slate-500 py-10 font-black uppercase text-xs tracking-widest">No Species Found</p>`;
+            container.innerHTML = html || `<p class="text-center text-slate-500 py-16 font-black uppercase text-xs tracking-[0.3em]">No Match Found</p>`;
         }
 
         function filterIdGuide() { renderIdGuide(); }
@@ -836,21 +815,15 @@
         let atmPin = "";
         function atmPress(num) {
             if (atmPin.length < 4) {
-                atmPin += num;
-                updateAtm();
+                atmPin += num; updateAtm();
                 if (atmPin.length === 4) connectToMatch();
             }
         }
-
         function atmDelete() { atmPin = atmPin.slice(0, -1); updateAtm(); }
         function updateAtm() { for (let i = 1; i <= 4; i++) { const el = document.getElementById(`pin-${i}`); if (el) el.innerText = atmPin[i-1] || ""; } }
 
         function listenToCloud() {
             if(!state.pin) return;
-            onValue(ref(db, ".info/connected"), (snap) => {
-                const icon = document.getElementById('cloudSignal');
-                if (icon) icon.style.color = (snap.val() === true) ? '#22c55e' : '#ef4444';
-            });
             onValue(ref(db, 'matches/' + state.pin), (snapshot) => {
                 if (snapshot.exists()) { globalMatchData = snapshot.val(); processCloudUpdate(); }
                 else if (['waiting', 'playing', 'grace', 'hype'].includes(state.status)) { alert("Lobby expired."); resetApp(); }
@@ -860,8 +833,7 @@
         function showNotification(msg) {
             const toast = document.getElementById('broadcastToast');
             document.getElementById('broadcastMsg').innerText = msg;
-            toast.classList.add('show');
-            playTone(600, 0.2);
+            toast.classList.add('show'); playTone(600, 0.2);
             setTimeout(() => { toast.classList.remove('show'); }, 8000);
         }
 
@@ -870,11 +842,7 @@
                 const list = document.getElementById('attendanceList');
                 if (list) {
                     let anglers = Object.values(globalMatchData.anglers);
-                    list.innerHTML = anglers.map(a => `
-                        <div class="match-card p-4 font-bold text-slate-100 flex justify-between items-center text-center">
-                            <span><i class="fa-solid fa-user-check text-green-500 mr-3 animate-pulse"></i> ${a.name}</span>
-                            <span class="text-[8px] text-slate-400 uppercase tracking-widest">Linked</span>
-                        </div>`).join('');
+                    list.innerHTML = anglers.map(a => `<div class="match-card p-4 font-bold text-slate-100 flex justify-between items-center text-center"><span><i class="fa-solid fa-user-check text-green-500 mr-3 animate-pulse"></i> ${a.name}</span><span class="text-[8px] text-slate-400 uppercase tracking-widest">Linked</span></div>`).join('');
                 }
             }
             if (globalMatchData.status === 'playing') {
@@ -884,7 +852,7 @@
                     document.getElementById('app-container').classList.remove('grace-active');
                     document.getElementById('mainTimer').classList.remove('grace-pulse');
                     document.getElementById('btnRecord').classList.remove('grace-btn-pulse');
-                    showNotification("MATCH RESUMED: Time adjusted.");
+                    showNotification("MATCH RESUMED.");
                 }
                 state.endTime = globalMatchData.endTime;
                 if (state.view !== 'fishing' && state.status !== 'hype') beginFishing(false);
@@ -897,8 +865,7 @@
                 document.getElementById('app-container').classList.add('grace-active');
                 document.getElementById('mainTimer').classList.add('grace-pulse');
                 document.getElementById('btnRecord').classList.add('grace-btn-pulse');
-                showNotification("5 MINUTE GRACE: Log final fish.");
-                saveState();
+                showNotification("5 MINUTE GRACE."); saveState();
             }
             if (globalMatchData.status === 'finished' && state.status !== 'finished') lockdownMatch(false);
             if (globalMatchData.hostId === uid) {
@@ -920,8 +887,7 @@
         }
 
         function pushMyScoreToCloud() {
-            if(!state.pin) return;
-            updateLiveTally();
+            if(!state.pin) return; updateLiveTally();
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
             update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name || "Angler", score: total, catches: state.myCatches });
         }
@@ -931,9 +897,7 @@
             state.venue = document.getElementById('venueName').value || "Unknown Venue";
             state.isHost = true; state.format = document.getElementById('hostFormat').value;
             state.pin = Math.floor(1000 + Math.random() * 9000).toString(); 
-            set(ref(db, 'matches/' + state.pin), { 
-                hostId: uid, format: state.format, status: 'waiting', anglers: { [uid]: { name: state.name, score: 0 } } 
-            }).then(() => {
+            set(ref(db, 'matches/' + state.pin), { hostId: uid, format: state.format, status: 'waiting', anglers: { [uid]: { name: state.name, score: 0 } } }).then(() => {
                 state.status = 'waiting'; listenToCloud();
                 document.getElementById('displayPin').innerText = state.pin;
                 document.getElementById('hostControls').classList.remove('hidden');
@@ -957,13 +921,12 @@
             });
         }
 
-        function exitWaitingRoom() { if (confirm("Cancel session?")) { if (state.isHost) remove(ref(db, 'matches/' + state.pin)); resetApp(); } }
+        function exitWaitingRoom() { if (confirm("Cancel?")) { if (state.isHost) remove(ref(db, 'matches/' + state.pin)); resetApp(); } }
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTone(freq, duration) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
             osc.connect(gain); gain.connect(audioCtx.destination);
@@ -1018,7 +981,7 @@
         }
 
         function promptCustomSpecies() {
-            let name = prompt("Name of Unusual Species:");
+            let name = prompt("Name:");
             if (name) {
                 let grp = document.getElementById('customSpeciesGroup');
                 let opt = document.createElement('option');
@@ -1034,14 +997,11 @@
             const stewardBtn = document.getElementById('btnStewardPanelContainer');
             if(state.isHost && stewardBtn) stewardBtn.classList.remove('hidden');
             pushMyScoreToCloud();
-            const label = document.getElementById('labelSize');
-            const sizeDeck = document.getElementById('deckSizeInputs');
+            const label = document.getElementById('labelSize'); const sizeDeck = document.getElementById('deckSizeInputs');
             if (state.format === 'speciesHunt') sizeDeck.classList.add('hidden');
             else {
                 sizeDeck.classList.remove('hidden');
-                document.getElementById('deckLength').classList.add('hidden'); 
-                document.getElementById('deckWeightLb').classList.add('hidden'); 
-                document.getElementById('deckWeightKg').classList.add('hidden'); 
+                document.getElementById('deckLength').classList.add('hidden'); document.getElementById('deckWeightLb').classList.add('hidden'); document.getElementById('deckWeightKg').classList.add('hidden'); 
                 if (state.format === 'weightLb') { document.getElementById('deckWeightLb').classList.remove('hidden'); label.innerText = "Weight (Lbs/Oz)"; }
                 else if (state.format === 'weightKg') { document.getElementById('deckWeightKg').classList.remove('hidden'); label.innerText = "Weight (Kg/g)"; }
                 else { document.getElementById('deckLength').classList.remove('hidden'); label.innerText = "Measurement (cm)"; }
@@ -1056,7 +1016,7 @@
                 let now = Date.now();
                 if (state.status === 'playing') {
                     let remaining = state.endTime - now;
-                    if (remaining <= 1200000 && remaining > 1198000 && !alert20Played) { alert20Played = true; playAlert(); showNotification("⚠️ 20 MINUTES LEFT!"); }
+                    if (remaining <= 1200000 && remaining > 1198000 && !alert20Played) { alert20Played = true; playAlert(); showNotification("20 MINS LEFT!"); }
                     if (remaining <= 0) { playHorn(); if (state.isHost) { let grace = Date.now() + 300000; update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: grace }); } }
                     else updateTimerDisplay(remaining);
                 } else if (state.status === 'grace') {
@@ -1068,9 +1028,9 @@
         }
 
         function updateTimerDisplay(ms) {
-            let totalSec = Math.max(0, Math.floor(ms / 1000));
-            let hours = Math.floor(totalSec / 3600); let mins = Math.floor((totalSec % 3600) / 60); let secs = totalSec % 60;
-            if (document.getElementById('mainTimer')) document.getElementById('mainTimer').innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+            let s = Math.max(0, Math.floor(ms / 1000));
+            let h = Math.floor(s / 3600); let m = Math.floor((s % 3600) / 60); s %= 60;
+            if (document.getElementById('mainTimer')) document.getElementById('mainTimer').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
         }
 
         function adjustSize(val) { let input = document.getElementById('inputSize'); input.value = (parseFloat(input.value) || 0) + val; }
@@ -1079,28 +1039,15 @@
             let species = document.getElementById('inputSpecies').value;
             if(!species) { if(navigator.vibrate) navigator.vibrate([50, 100, 50]); return alert("Select species first!"); }
             let finalSize = 0; let displaySize = ""; let pts = 0;
-            if (state.format === 'weightLb') { 
-                let lbs = parseInt(document.getElementById('inputLbs').value) || 0; let oz = parseInt(document.getElementById('inputOz').value) || 0; 
-                finalSize = (lbs * 16) + oz; displaySize = `${lbs}lb ${oz}oz`; pts = finalSize;
-            } else if (state.format === 'weightKg') {
-                let kg = parseInt(document.getElementById('inputKg').value) || 0; let g = parseInt(document.getElementById('inputGrammes').value) || 0; 
-                finalSize = (kg * 1000) + g; displaySize = `${kg}kg ${g}g`; pts = finalSize;
-            } else if (state.format === 'speciesHunt') { finalSize = 1; displaySize = "Captured"; }
-            else { 
-                finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = finalSize.toString(); pts = finalSize;
-                if (state.format === 'length10') pts = finalSize + 10;
-            }
-            if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { 
-                if(navigator.vibrate) navigator.vibrate([50, 100, 50]); alert("MEASUREMENT REQUIRED."); return; 
-            }
-            if (state.format === 'speciesHunt') { 
-                let existing = state.myCatches.filter(x => x.species === species && x.id !== state.editingId).length; 
-                pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; 
-            } else if (species === 'Mackerel') { if (state.myCatches.filter(x => x.species === 'Mackerel' && x.id !== state.editingId).length >= 3) pts = 0; }
-            if (state.editingId) { 
-                let obj = state.myCatches.find(x => x.id === state.editingId); if(obj) { obj.species = species; obj.size = finalSize; obj.display = displaySize; obj.points = pts; } 
-                state.editingId = null; document.getElementById('btnRecord').innerText = "Record Catch"; 
-            } else state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }); 
+            if (state.format === 'weightLb') { let lbs = parseInt(document.getElementById('inputLbs').value) || 0; let oz = parseInt(document.getElementById('inputOz').value) || 0; finalSize = (lbs * 16) + oz; displaySize = `${lbs}lb ${oz}oz`; pts = finalSize; }
+            else if (state.format === 'weightKg') { let kg = parseInt(document.getElementById('inputKg').value) || 0; let g = parseInt(document.getElementById('inputGrammes').value) || 0; finalSize = (kg * 1000) + g; displaySize = `${kg}kg ${g}g`; pts = finalSize; }
+            else if (state.format === 'speciesHunt') { finalSize = 1; displaySize = "Captured"; }
+            else { finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = finalSize.toString(); pts = finalSize; if (state.format === 'length10') pts = finalSize + 10; }
+            if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { if(navigator.vibrate) navigator.vibrate([50, 100, 50]); alert("SIZE REQUIRED."); return; }
+            if (state.format === 'speciesHunt') { let existing = state.myCatches.filter(x => x.species === species && x.id !== state.editingId).length; pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; }
+            else if (species === 'Mackerel') { if (state.myCatches.filter(x => x.species === 'Mackerel' && x.id !== state.editingId).length >= 3) pts = 0; }
+            if (state.editingId) { let obj = state.myCatches.find(x => x.id === state.editingId); if(obj) { obj.species = species; obj.size = finalSize; obj.display = displaySize; obj.points = pts; } state.editingId = null; document.getElementById('btnRecord').innerText = "Record Catch"; }
+            else state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }); 
             document.getElementById('inputSpecies').value = ""; document.getElementById('inputSize').value = ""; document.getElementById('inputLbs').value = ""; document.getElementById('inputOz').value = ""; document.getElementById('inputKg').value = ""; document.getElementById('inputGrammes').value = "";
             if(navigator.vibrate) navigator.vibrate(50);
             saveState(); renderCatchList(); pushMyScoreToCloud();
@@ -1119,11 +1066,7 @@
 
         function deleteCatch(id) {
             state.myCatches = state.myCatches.filter(x => x.id !== id);
-            if (state.format === 'speciesHunt') {
-                let counts = {}; let temp = [...state.myCatches].reverse();
-                temp.forEach(c => { counts[c.species] = (counts[c.species] || 0) + 1; let n = counts[c.species]; c.points = (n === 1) ? 25 : (n === 2) ? 35 : (n === 3) ? 40 : 1; });
-                state.myCatches = temp.reverse();
-            }
+            if (state.format === 'speciesHunt') { let counts = {}; let temp = [...state.myCatches].reverse(); temp.forEach(c => { counts[c.species] = (counts[c.species] || 0) + 1; let n = counts[c.species]; c.points = (n === 1) ? 25 : (n === 2) ? 35 : (n === 3) ? 40 : 1; }); state.myCatches = temp.reverse(); }
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
 
@@ -1138,8 +1081,7 @@
             updateRecentCaptures(); const list = document.getElementById('localCatchList'); if (!list) return;
             list.innerHTML = "";
             state.myCatches.forEach(c => {
-                let div = document.createElement('div');
-                div.className = "match-card p-3.5 flex justify-between items-center active:bg-slate-700 transition mb-1 shadow-md text-center";
+                let div = document.createElement('div'); div.className = "match-card p-3.5 flex justify-between items-center active:bg-slate-700 transition mb-1 shadow-md text-center";
                 let ptLabel = state.format === 'speciesHunt' ? `(${c.points})` : (c.points === 0 ? '(0)' : '');
                 div.innerHTML = `<div class="flex-1 text-center" onclick="editCatch('${c.id}')"><span class="font-black text-white text-base uppercase tracking-tight">${c.species}</span><span class="text-xs ml-2 text-slate-400 font-bold">${c.display || c.size}</span><span class="text-[10px] text-amber ml-2 font-black">${ptLabel}</span></div><button onclick="deleteCatch('${c.id}')" class="text-amber px-3 active:text-red-500 transition"><i class="fa-solid fa-trash-can text-base"></i></button>`;
                 list.appendChild(div);
@@ -1167,13 +1109,13 @@
         function transferSteward() {
             if(!globalMatchData || !globalMatchData.anglers) return;
             let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name }));
-            if(options.length === 0) { alert("No other competitors linked."); return; }
-            let choice = prompt("Select Angler Number to Transfer Control:\n\n" + options.map((opt, index) => `${index + 1}: ${opt.name}`).join('\n'));
-            let selectedIndex = parseInt(choice) - 1;
-            if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer control to ${options[selectedIndex].name}?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); document.getElementById('stewardDrawer').classList.remove('open'); } }
+            if(options.length === 0) return alert("No other competitors linked.");
+            let choice = prompt("Select Angler Number:\n\n" + options.map((opt, i) => `${i + 1}: ${opt.name}`).join('\n'));
+            let idx = parseInt(choice) - 1;
+            if (!isNaN(idx) && idx >= 0 && idx < options.length) { if(confirm(`Transfer control to ${options[idx].name}?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[idx].id }); document.getElementById('stewardDrawer').classList.remove('open'); } }
         }
 
-        function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?")) { saveHistory(true); resetApp(); } }
+        function leaveMatchEarly() { if (confirm("LEAVE?")) { saveHistory(true); resetApp(); } }
 
         function lockdownMatch(isHostPushing) {
             clearInterval(clockInterval); if(isHostPushing && state.isHost) update(ref(db, 'matches/' + state.pin), { status: 'finished' });
@@ -1195,13 +1137,12 @@
         function renderHistory() {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
             const r = document.getElementById('historyRecentList'); const a = document.getElementById('historyArchiveList'); const now = Date.now();
-            r.innerHTML = ""; a.innerHTML = ""; if(h.length === 0) { r.innerHTML = '<p class="text-slate-400 py-24 font-black uppercase text-[10px] tracking-widest text-center">History Empty</p>'; return; }
+            r.innerHTML = ""; a.innerHTML = ""; if(h.length === 0) { r.innerHTML = '<p class="text-slate-400 py-24 font-black text-xs text-center">Empty</p>'; return; }
             h.forEach((m, i) => {
-                const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 300000));
+                const live = m.isLive && (now < (m.graceEndTime || m.endTime + 300000));
                 let card = document.createElement('div'); card.className = "match-card p-5 flex flex-col items-center active:bg-slate-900 transition relative overflow-hidden mb-3";
-                let headerText = isStillActuallyLive ? "" : "<p class='text-[9px] font-black text-slate-500 mb-1.5 uppercase tracking-[0.4em]'>MATCH ENDED</p>";
-                let timerDisplay = isStillActuallyLive ? `<p id="hist-timer-${m.id}" class="text-amber font-black text-[10px] tabular-nums mb-0.5">Checking Clock...</p>` : "";
-                card.innerHTML = `${headerText}<div class="w-full flex justify-between items-center text-center"><div class="flex-1 text-center" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-base uppercase tracking-tight">${m.date}</span> ${isStillActuallyLive ? '<span class="text-[8px] bg-red-600 px-2 py-0.5 rounded-full text-white font-black ml-2 animate-pulse">LIVE</span>' : ''}<br><span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || 'No Venue'}</span><br><span class="text-[10px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span>${timerDisplay}</div><div class="text-right flex items-center space-x-4 text-center"><div onclick="viewPastRecord('${m.id}')" class="text-center"><div class="text-2xl font-black text-white">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[9px] text-amber uppercase font-black">Total</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1 py-3"><i class="fa-solid fa-trash-can text-base"></i></button></div></div>`;
+                let timer = live ? `<p id="hist-timer-${m.id}" class="text-amber font-black text-[10px] tabular-nums mb-0.5">Checking...</p>` : "";
+                card.innerHTML = `<div class="w-full flex justify-between items-center text-center"><div class="flex-1 text-center" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-base">${m.date}</span> ${live ? '<span class="text-[8px] bg-red-600 px-2 rounded-full animate-pulse">LIVE</span>' : ''}<br><span class="text-[9px] text-slate-400 font-bold uppercase">${m.venue || 'No Venue'}</span><br><span class="text-[10px] text-amber font-black uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span>${timer}</div><div class="text-right flex items-center space-x-4 text-center"><div onclick="viewPastRecord('${m.id}')" class="text-center"><div class="text-2xl font-black text-white">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[9px] text-amber uppercase font-black">Total</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1 py-3"><i class="fa-solid fa-trash-can text-base"></i></button></div></div>`;
                 if(i < 6) r.appendChild(card); else a.appendChild(card);
             });
             document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 6);
@@ -1217,18 +1158,18 @@
                     if (timerEl) {
                         let totalEnd = m.graceEndTime || (m.endTime + 300000); let diff = totalEnd - now;
                         if (diff <= 0) renderHistory(); 
-                        else { let s = Math.floor(diff / 1000); let hours = Math.floor(s / 3600); let mins = Math.floor((s % 3600) / 60); let secs = s % 60; timerEl.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')} Remaining`; }
+                        else { let s = Math.floor(diff / 1000); let h_ = Math.floor(s / 3600); let m_ = Math.floor((s % 3600) / 60); s %= 60; timerEl.innerText = `${h_.toString().padStart(2,'0')}:${m_.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} Remaining`; }
                     }
                 });
             }, 1000);
         }
 
-        function deleteHistoryItem(id) { if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
+        function deleteHistoryItem(id) { if(confirm("Wipe?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
         function toggleArchive() { isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
 
         function viewPastRecord(id) {
             activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === id);
-            if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); }
+            if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden', 'open'); void document.getElementById('historyDetailDrawer').offsetWidth; document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); }
         }
 
         function switchHistoryTab(tab) {
@@ -1277,7 +1218,7 @@
 
         window.addEventListener('popstate', () => {
             if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open') || document.getElementById('guideDrawer').classList.contains('open') || document.getElementById('idMasterDrawer').classList.contains('open') || !document.getElementById('historyDetailDrawer').classList.contains('hidden')) { document.querySelectorAll('.drawer-right, .drawer-left').forEach(d => d.classList.remove('open')); closeHistoryDetail(); history.pushState(null, null, window.location.href); return; }
-            if (state.view === 'fishing' || state.status === 'playing' || state.status === 'grace') { if (confirm("Match live. Exit Scorecard?")) leaveMatchEarly(); else history.pushState(null, null, window.location.href); }
+            if (state.view === 'fishing' || state.status === 'playing' || state.status === 'grace') { if (confirm("Match live?")) leaveMatchEarly(); else history.pushState(null, null, window.location.href); }
             else if (state.view !== 'home') { navTo('home'); history.pushState(null, null, window.location.href); }
         });
 
