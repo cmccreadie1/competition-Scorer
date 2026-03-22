@@ -75,7 +75,6 @@
             overflow: hidden;
         }
 
-        /* V4.5.0 SLEEK UI: Reduced Border Radius */
         .match-card {
             background-color: #1e293b; 
             border: 1px solid #334155; 
@@ -112,7 +111,6 @@
             text-align: center;
         }
 
-        /* V4.5.0 SLEEK UI: Thinner ATM Buttons */
         .atm-btn {
             background: #1e293b;
             border: 2px solid #334155;
@@ -227,7 +225,7 @@
             <div class="text-center text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V4.6.1</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V4.6.2</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -506,7 +504,7 @@
             <h1 class="text-4xl font-black uppercase text-amber border-b-4 border-slate-900 pb-5 tracking-tighter text-center text-center text-center">Final Result</h1>
             <div class="match-card p-6 shadow-[0_0_40px_rgba(59,130,246,0.15)] text-center text-center text-center">
                 <p class="text-slate-500 font-black uppercase tracking-[0.3em] text-[9px] mb-2 text-center text-center">Tournament Total Score</p>
-                <p class="text-7xl font-black text-white text-center text-center text-center" id="finalScore">0</p>
+                <p class="text-6xl font-black text-white text-center text-center text-center" id="finalScore">0</p>
             </div>
             
             <div class="grid grid-cols-2 gap-3 text-center text-center text-center">
@@ -624,9 +622,9 @@
                 <h2 class="font-bold text-sm tracking-widest text-slate-100 uppercase">Live Leader Board</h2>
             </div>
             
-            <div class="flex-none bg-amber text-slate-900 py-2 px-4 border-b-4 border-yellow-600 shadow-md flex justify-between items-center" id="bountyContainer">
-                <span class="text-[10px] font-bold uppercase tracking-wide">👑 Match Biggest Fish</span>
-                <span class="font-bold text-sm truncate max-w-[60%] text-right" id="bountyBanner">Waiting...</span>
+            <div class="flex-none bg-amber text-slate-900 py-3 px-4 border-b-4 border-yellow-600 shadow-md flex flex-col items-center justify-center text-center" id="bountyContainer">
+                <span class="text-[10px] font-black uppercase tracking-widest mb-1 opacity-80">👑 Match Biggest Fish</span>
+                <span class="font-black text-base leading-tight" id="bountyBanner">Waiting...</span>
             </div>
             
             <div id="leaderboardList" class="scrollable-area p-3 space-y-1.5"></div>
@@ -792,6 +790,22 @@
         }
 
 
+        /* V4.6.2 CENTRAL TRANSLATION ENGINE */
+        function formatScoreDisplay(val, fmt) {
+            if (fmt === 'weightLb') {
+                let lbs = Math.floor(val / 16);
+                let oz = val % 16;
+                return `${lbs}lb ${oz}oz`;
+            }
+            if (fmt === 'weightKg') {
+                let kg = Math.floor(val / 1000);
+                let g = val % 1000;
+                return `${kg}kg ${g}g`;
+            }
+            return val;
+        }
+
+
         let atmPin = "";
         function atmPress(num) {
             if (atmPin.length < 4) {
@@ -909,10 +923,11 @@
             renderGlobalLeaderboard();
         }
 
+        /* V4.6.2 FORMATTED TALLY */
         function updateLiveTally() {
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
             const box = document.getElementById('liveTallyBox');
-            if (box) { box.innerText = total; }
+            if (box) { box.innerText = formatScoreDisplay(total, state.format); }
         }
 
         function pushMyScoreToCloud() {
@@ -1240,6 +1255,7 @@
         }
 
 
+        /* V4.6.2 FORMATTED LEADERBOARD RENDERING */
         function renderGlobalLeaderboard() {
             if(!globalMatchData || !globalMatchData.anglers) return;
             const list = document.getElementById('leaderboardList'); if (!list) return;
@@ -1252,7 +1268,7 @@
                         <span class="font-bold text-slate-100 text-sm uppercase tracking-wide truncate text-left">${a.name}</span>
                     </div>
                     <div class="font-bold text-lg text-white text-right w-1/3">
-                        ${a.score} <span class="text-[10px] text-slate-500 ml-1">pts</span>
+                        ${formatScoreDisplay(a.score, state.format)} <span class="text-[10px] text-slate-500 ml-1">${(state.format === 'weightLb' || state.format === 'weightKg') ? '' : 'pts'}</span>
                     </div>
                 </div>
             `).join('');
@@ -1265,7 +1281,7 @@
                         catchList.forEach(fish => { 
                             if(fish.size > biggestVal) { 
                                 biggestVal = fish.size; 
-                                biggestStr = `${angler.name}: ${fish.display || fish.size} ${fish.species}`; 
+                                biggestStr = `${angler.name} - ${fish.species} - ${fish.display || fish.size}`; 
                             } 
                         }); 
                     } 
@@ -1301,14 +1317,16 @@
             }
         }
 
-
+        /* V4.6.2 FORMATTED FINAL RESULTS */
         function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); resetApp(); } }
 
 
         function lockdownMatch(isHostPushing) {
             clearInterval(clockInterval); if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); }
             saveHistory(false); state.status = 'finished'; saveState();
-            document.getElementById('finalScore').innerText = state.myCatches.reduce((s,c) => s + c.points, 0);
+            
+            let totalPts = state.myCatches.reduce((s,c) => s + c.points, 0);
+            document.getElementById('finalScore').innerText = formatScoreDisplay(totalPts, state.format);
             document.getElementById('finalCount').innerText = state.myCatches.length;
             document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size;
             navTo('results');
@@ -1335,7 +1353,7 @@
             localStorage.setItem('matchHistory', JSON.stringify(h));
         }
 
-
+        /* V4.6.2 FORMATTED HISTORY VAULT */
         function renderHistory() {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
             const r = document.getElementById('historyRecentList'); 
@@ -1362,8 +1380,8 @@
                         </div>
                         <div class="text-right flex items-center space-x-4 text-center">
                             <div onclick="viewPastRecord('${m.id}')" class="text-center">
-                                <div class="text-2xl font-black text-white">${m.score}</div>
-                                <div class="text-[9px] text-amber uppercase font-black">Points</div>
+                                <div class="text-2xl font-black text-white">${formatScoreDisplay(m.score, m.format)}</div>
+                                <div class="text-[9px] text-amber uppercase font-black">Total</div>
                             </div>
                             <button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1 py-3"><i class="fa-solid fa-trash-can text-base"></i></button>
                         </div>
@@ -1413,7 +1431,7 @@
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); });
             document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
-            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest">Score Table</h4><div class="space-y-2.5 text-center">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md"><span class="uppercase text-white font-bold text-sm"><b class="text-amber mr-2">${i+1}.</b> ${a.name}</span><b class="text-white text-lg">${a.score}</b></div>`).join('')}</div>`; }
+            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest">Score Table</h4><div class="space-y-2.5 text-center">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md"><span class="uppercase text-white font-bold text-sm"><b class="text-amber mr-2">${i+1}.</b> ${a.name}</span><b class="text-white text-lg">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; }
             else { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest">Capture Diary</h4><div class="space-y-2.5 text-center">${m.personalCatches.map(c => `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner"><div class="text-left"><b class="text-white text-base uppercase">${c.species}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest">${c.time}</span></div><div class="text-right"><b class="text-white text-base">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest">Points</span></div></div>`).join('')}</div>`; }
         }
 
@@ -1498,6 +1516,7 @@
         window.endMatchEarly = endMatchEarly;
         window.showInstallGuide = showInstallGuide;
         window.proceedToRoleSelection = proceedToRoleSelection;
+        window.formatScoreDisplay = formatScoreDisplay;
 
     </script>
 </body>
