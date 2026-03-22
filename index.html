@@ -75,6 +75,7 @@
             overflow: hidden;
         }
 
+        /* V4.5.0 SLEEK UI: Reduced Border Radius */
         .match-card {
             background-color: #1e293b; 
             border: 1px solid #334155; 
@@ -111,6 +112,7 @@
             text-align: center;
         }
 
+        /* V4.5.0 SLEEK UI: Thinner ATM Buttons */
         .atm-btn {
             background: #1e293b;
             border: 2px solid #334155;
@@ -225,7 +227,7 @@
             <div class="text-center text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V4.6.2</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V4.7.0</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -518,7 +520,9 @@
                 </div>
             </div>
 
-            <button onclick="shareResults()" class="w-full bg-green-600 text-white font-black text-xl py-4 rounded-2xl shadow-lg mt-3 active:bg-green-700 uppercase tracking-widest text-center text-center text-center">Share Results</button>
+            <button id="btnMasterExport" onclick="shareMasterLeaderboard()" class="hidden w-full bg-blue-600 text-white font-black text-lg py-4 rounded-2xl shadow-lg mt-3 active:bg-blue-700 uppercase tracking-widest text-center text-center text-center">Export Full Leaderboard</button>
+
+            <button onclick="shareResults()" class="w-full bg-green-600 text-white font-black text-xl py-4 rounded-2xl shadow-lg mt-3 active:bg-green-700 uppercase tracking-widest text-center text-center text-center">Share My Results</button>
             <button onclick="resetApp()" class="text-slate-400 font-black mt-6 border-b border-slate-900 pb-1 active:text-white uppercase text-[11px] tracking-[0.5em] text-center text-center">Return Home</button>
         </div>
 
@@ -640,6 +644,9 @@
                 <button onclick="transferSteward()" class="w-full bg-slate-900 border-2 border-slate-800 text-slate-400 font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:text-amber transition text-center text-center text-center text-center text-center"><i class="fa-solid fa-right-left mr-3 text-amber text-center text-center text-center"></i> Transfer Control</button>
                 <hr class="border-slate-800 pt-4 text-center text-center text-center text-center">
                 <button onclick="endMatchEarly(true)" class="w-full bg-amber text-slate-900 font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-base leading-tight active:scale-95 transition-transform text-center text-center text-center text-center text-center">Change Ending Time</button>
+                
+                <hr class="border-slate-800 pt-4 text-center text-center text-center text-center">
+                <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:bg-blue-700 transition text-center text-center text-center text-center text-center"><i class="fa-solid fa-file-export mr-3 text-center text-center text-center"></i> Master Export</button>
             </div>
         </div>
 
@@ -706,10 +713,21 @@
             saveState();
         }
 
+        /* V4.7.0 AUTO-CAPITALIZATION FORMATTING */
         function proceedToRoleSelection() {
             document.getElementById('venueName').blur();
-            state.name = document.getElementById('playerName').value || ""; 
-            state.venue = document.getElementById('venueName').value || "";
+            
+            let pName = document.getElementById('playerName').value || "";
+            let vName = document.getElementById('venueName').value || "";
+            
+            pName = pName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+            vName = vName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+            
+            document.getElementById('playerName').value = pName;
+            document.getElementById('venueName').value = vName;
+            
+            state.name = pName; 
+            state.venue = vName;
             saveState();
             navTo('role');
         }
@@ -790,7 +808,6 @@
         }
 
 
-        /* V4.6.2 CENTRAL TRANSLATION ENGINE */
         function formatScoreDisplay(val, fmt) {
             if (fmt === 'weightLb') {
                 let lbs = Math.floor(val / 16);
@@ -923,7 +940,6 @@
             renderGlobalLeaderboard();
         }
 
-        /* V4.6.2 FORMATTED TALLY */
         function updateLiveTally() {
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
             const box = document.getElementById('liveTallyBox');
@@ -1148,7 +1164,10 @@
 
         function recordCatch() {
             let species = document.getElementById('inputSpecies').value;
-            if(!species) return alert("Select species first!");
+            if(!species) {
+                if(navigator.vibrate) navigator.vibrate([50, 100, 50]); /* V4.7.0 Haptic Error */
+                return alert("Select species first!");
+            }
             
             let finalSize = 0; 
             let displaySize = "";
@@ -1180,6 +1199,7 @@
             }
 
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { 
+                if(navigator.vibrate) navigator.vibrate([50, 100, 50]); /* V4.7.0 Haptic Error */
                 alert("MEASUREMENT REQUIRED: Match logic blocks records without a size log."); return; 
             }
 
@@ -1205,6 +1225,9 @@
             document.getElementById('inputOz').value = "";
             document.getElementById('inputKg').value = ""; 
             document.getElementById('inputGrammes').value = "";
+            
+            /* V4.7.0 Haptic Success Confirmation */
+            if(navigator.vibrate) navigator.vibrate(50);
             
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
@@ -1255,7 +1278,6 @@
         }
 
 
-        /* V4.6.2 FORMATTED LEADERBOARD RENDERING */
         function renderGlobalLeaderboard() {
             if(!globalMatchData || !globalMatchData.anglers) return;
             const list = document.getElementById('leaderboardList'); if (!list) return;
@@ -1317,7 +1339,7 @@
             }
         }
 
-        /* V4.6.2 FORMATTED FINAL RESULTS */
+
         function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); resetApp(); } }
 
 
@@ -1329,6 +1351,12 @@
             document.getElementById('finalScore').innerText = formatScoreDisplay(totalPts, state.format);
             document.getElementById('finalCount').innerText = state.myCatches.length;
             document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size;
+            
+            /* V4.7.0 Steward Export Visibility */
+            if (state.isHost && document.getElementById('btnMasterExport')) {
+                document.getElementById('btnMasterExport').classList.remove('hidden');
+            }
+            
             navTo('results');
         }
 
@@ -1353,7 +1381,7 @@
             localStorage.setItem('matchHistory', JSON.stringify(h));
         }
 
-        /* V4.6.2 FORMATTED HISTORY VAULT */
+
         function renderHistory() {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
             const r = document.getElementById('historyRecentList'); 
@@ -1451,6 +1479,22 @@
             if (navigator.share) { navigator.share({ title: 'Results', text: t }); }
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
         }
+        
+        /* V4.7.0 STEWARD MASTER EXPORT */
+        function shareMasterLeaderboard() {
+            if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
+            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
+            let t = `🏆 Official Match Results: ${state.venue}\nSteward: ${state.name}\n\n`;
+            
+            arr.forEach((a, i) => {
+                t += `${i+1}. ${a.name} - ${formatScoreDisplay(a.score, state.format)} ${(state.format === 'weightLb' || state.format === 'weightKg') ? '' : 'pts'}\n`;
+            });
+            
+            t += `\nGenerated via Match Edition Pro.`;
+            
+            if (navigator.share) { navigator.share({ title: 'Official Results', text: t }); }
+            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
+        }
 
 
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
@@ -1517,6 +1561,7 @@
         window.showInstallGuide = showInstallGuide;
         window.proceedToRoleSelection = proceedToRoleSelection;
         window.formatScoreDisplay = formatScoreDisplay;
+        window.shareMasterLeaderboard = shareMasterLeaderboard;
 
     </script>
 </body>
