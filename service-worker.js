@@ -1,9 +1,9 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 4.9.2 - THE VISUAL FIELD GUIDE
+   VERSION 4.9.3 - THE VISUAL ANCHOR
    FULL VOLUME SERVICE WORKER
 */
 
-const CACHE_NAME = 'match-edition-v4.9.2-gold';
+const CACHE_NAME = 'match-edition-v4.9.3-gold';
 
 const ASSETS = [
   './',
@@ -14,11 +14,12 @@ const ASSETS = [
 
 
 self.addEventListener('install', (event) => {
+  /* Force immediate takeover */
   self.skipWaiting();
   
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching Gold Master 4.9.2 Assets');
+      console.log('SW: Caching Gold Master 4.9.3 Assets');
       return cache.addAll(ASSETS);
     })
   );
@@ -46,7 +47,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      /* Return cached version or fetch from live cloud */
+      /* Priority load from cache for beach performance */
       return response || fetch(event.request);
     })
   );
