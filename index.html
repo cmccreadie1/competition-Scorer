@@ -227,7 +227,7 @@
             <div class="text-center text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V4.6.0</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V4.6.1</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -400,9 +400,9 @@
                 </button>
             </div>
             
-            <div class="flex-none w-full bg-slate-900 border-b border-slate-800 shadow-md z-10 text-center text-center">
-                <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="w-full py-3 text-amber-400 font-black text-xs uppercase tracking-[0.2em] active:bg-slate-800 transition flex items-center justify-center text-center text-center text-center">
-                    <i class="fa-solid fa-trophy mr-2 animate-bounce text-center text-center"></i> Live Leader Board
+            <div class="flex-none w-full bg-slate-900 border-b border-slate-800 z-10 p-2.5 text-center shadow-lg">
+                <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="w-full bg-amber text-slate-900 font-black py-3.5 rounded-xl text-sm uppercase tracking-[0.2em] shadow-[0_0_15px_rgba(245,158,11,0.4)] active:scale-95 transition-transform flex items-center justify-center">
+                    <i class="fa-solid fa-trophy mr-2.5 animate-bounce"></i> View Live Leader Board
                 </button>
             </div>
 
@@ -708,7 +708,6 @@
             saveState();
         }
 
-        /* V4.6.0 TWO-STEP FLOW TRANSITION */
         function proceedToRoleSelection() {
             document.getElementById('venueName').blur();
             state.name = document.getElementById('playerName').value || ""; 
@@ -1241,7 +1240,6 @@
         }
 
 
-        /* V4.6.0 PROFESSIONAL DATA-DENSE LEADERBOARD RENDERING */
         function renderGlobalLeaderboard() {
             if(!globalMatchData || !globalMatchData.anglers) return;
             const list = document.getElementById('leaderboardList'); if (!list) return;
