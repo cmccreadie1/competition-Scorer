@@ -1,5 +1,5 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 4.9.3 - THE VISUAL ANCHOR
+   VERSION 4.9.3 - THE VISUAL ANCHOR (FULL VOLUME)
    FULL VOLUME SERVICE WORKER
 */
 
@@ -14,7 +14,7 @@ const ASSETS = [
 
 
 self.addEventListener('install', (event) => {
-  /* Force immediate takeover */
+  /* Force immediate takeover for zero-lag workflow */
   self.skipWaiting();
   
   event.waitUntil(
@@ -40,6 +40,7 @@ self.addEventListener('activate', (event) => {
     })
   );
   
+  /* Synchronize all clients for real-time history stability */
   self.clients.claim();
 });
 
@@ -47,8 +48,13 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      /* Priority load from cache for beach performance */
-      return response || fetch(event.request);
+      /* Priority 1: Speed - Instant load from cache */
+      if (response) {
+        return response;
+      }
+      
+      /* Priority 2: Sync - Live fetch for cloud updates */
+      return fetch(event.request);
     })
   );
 });
