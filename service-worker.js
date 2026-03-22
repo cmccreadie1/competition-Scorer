@@ -1,9 +1,9 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 4.7.0 - QUALITY OF LIFE ENHANCEMENTS
+   VERSION 4.8.0 - THE TAXONOMY & QUICK-SELECT UPDATE
    FULL VOLUME SERVICE WORKER
 */
 
-const CACHE_NAME = 'match-edition-v4.7.0-gold';
+const CACHE_NAME = 'match-edition-v4.8.0-gold';
 
 const ASSETS = [
   './',
@@ -19,7 +19,7 @@ self.addEventListener('install', (event) => {
   
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching Gold Master 4.7.0 Assets');
+      console.log('SW: Caching Gold Master 4.8.0 Assets');
       return cache.addAll(ASSETS);
     })
   );
