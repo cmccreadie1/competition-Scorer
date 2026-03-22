@@ -10,7 +10,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        /* HARDWARE CONSTRAINTS */
+        /* HARDWARE SYSTEM LOCKS */
         html, body {
             font-family: 'Inter', sans-serif;
             background-color: #020617; 
@@ -35,7 +35,7 @@
             transition: background-color 0.6s ease;
         }
 
-        /* GRACE PERIOD RED ALERT */
+        /* GRACE PERIOD DEEP MAROON */
         #app-container.grace-active {
             background-color: #450a0a !important; 
         }
@@ -85,7 +85,7 @@
         .text-amber { color: #f59e0b; }
         .bg-amber { background-color: #f59e0b; }
 
-        /* HYPE TIMER UI */
+        /* HYPE TIMER CIRCULAR UI */
         @keyframes pulse-ring {
             0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
             70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(245, 158, 11, 0); }
@@ -157,6 +157,17 @@
             background: rgba(0,0,0,0.92);
             backdrop-filter: blur(15px);
         }
+
+        /* V4.4.0 SPLASH TEXT */
+        .splash-text {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #f59e0b;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            line-height: 1;
+        }
     </style>
 </head>
 <body>
@@ -200,17 +211,17 @@
             <div class="text-center text-center">
                 <i class="fa-solid fa-stopwatch text-amber text-6xl mb-2"></i>
                 <h1 class="text-3xl font-black tracking-tight mb-1 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-sm tracking-widest text-center"><i class="fa-solid fa-cloud text-green-500 mr-1"></i> GOLD MASTER V4.3.9</div>
+                <div class="text-slate-500 font-bold text-sm tracking-widest text-center"><i class="fa-solid fa-cloud text-green-500 mr-1"></i> GOLD MASTER V4.4.0</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3 pt-2">
                 <div class="match-card p-5 space-y-4 text-center">
                     <div>
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-2 ml-1 text-center">Angler Profile</label>
-                        <input type="text" id="playerName" placeholder="Your Name" class="w-full bg-slate-900 border border-slate-700 text-white font-bold text-lg rounded-xl p-3 text-center focus:border-blue-500 outline-none shadow-inner text-center">
+                        <input type="text" id="playerName" onkeydown="if(event.key === 'Enter'){ document.getElementById('venueName').focus(); }" placeholder="Your Name" class="w-full bg-slate-900 border border-slate-700 text-white font-bold text-lg rounded-xl p-3 text-center focus:border-blue-500 outline-none shadow-inner text-center">
                     </div>
                     <div>
-                        <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-2 ml-1 text-center">Venue Rememory (Local Only)</label>
+                        <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-2 ml-1 text-center">Venue Memory (Local Only)</label>
                         <input type="text" id="venueName" placeholder="Venue Name" class="w-full bg-slate-900 border border-slate-700 text-white font-bold text-lg rounded-xl p-3 text-center focus:border-amber outline-none shadow-inner text-center">
                     </div>
                 </div>
@@ -282,7 +293,7 @@
             </div>
             <div class="match-card p-6 space-y-4 text-center">
                 <div>
-                    <label class="block text-slate-400 font-black text-[11px] uppercase tracking-[0.2em] mb-2 text-center text-center text-center">Match Duration</label>
+                    <label class="block text-slate-400 font-black text-[11px] uppercase tracking-[0.2em] mb-2 text-center text-center text-center">Tournament Hours</label>
                     <select id="hostDuration" class="w-full bg-slate-900 border border-slate-700 p-4 rounded-xl text-lg font-black appearance-none text-center text-white shadow-inner text-center">
                         <option value="1">1.0 Hour</option>
                         <option value="2">2.0 Hours</option>
@@ -312,7 +323,7 @@
                 <div class="text-amber font-black tracking-[0.2em] bg-slate-800 px-6 py-2 rounded-xl border border-slate-700 shadow-xl text-center text-center text-center" id="displayPin">0000</div>
             </div>
             <div class="flex-1 flex flex-col items-center space-y-6 pt-4 text-center">
-                <h3 class="text-2xl font-black text-white uppercase tracking-tight text-center text-center">Match Lobby</h3>
+                <h3 class="text-2xl font-black text-white uppercase tracking-tight text-center text-center">Angler Lobby</h3>
                 <div id="attendanceList" class="w-full max-w-sm flex-1 bg-slate-800/40 rounded-[2rem] border border-slate-800 p-5 space-y-3 overflow-y-auto shadow-inner text-center text-center"></div>
                 <div id="hostControls" class="hidden w-full max-w-sm pb-6 text-center text-center">
                     <button onclick="triggerHypeStart()" class="w-full bg-red-600 text-white font-black text-2xl py-6 rounded-3xl animate-pulse shadow-2xl uppercase active:scale-95 transition-transform text-center text-center">🚀 START MATCH</button>
@@ -325,7 +336,10 @@
 
 
         <div id="view-hype" class="hidden view-frame items-center justify-center bg-black text-center text-center">
-            <div id="hypeCount" class="hype-number flex items-center justify-center w-64 h-64 text-center text-center">10</div>
+            <div id="hypeContainer" class="flex flex-col items-center justify-center">
+                <div id="hypeCount" class="hype-number flex items-center justify-center w-64 h-64 text-center text-center">5</div>
+                <div id="hypeSplash" class="hidden splash-text mt-8 text-center text-center">MATCH STARTED!</div>
+            </div>
         </div>
 
 
@@ -500,7 +514,7 @@
                     <ul class="space-y-4 text-xs leading-relaxed text-center text-center text-center">
                         <li><b>Initialization:</b> Enter your name and venue. Navigate to the Steward section to select match duration and scoring format.</li>
                         <li><b>PIN System:</b> Creating a session generates a unique 4-digit code. Competitors require this to link.</li>
-                        <li><b>Starting:</b> Once anglers are in the lobby, tap Start Match to trigger a synchronized 10-second countdown on every phone.</li>
+                        <li><b>Starting:</b> Once anglers are in the lobby, tap Start Match to trigger a synchronized 5-second countdown on every phone.</li>
                         <li><b>Ending:</b> Allow clock to reach zero or use "Strike Now" to activate the <b>5-Minute Grace Period</b>.</li>
                     </ul>
                 </section>
@@ -509,7 +523,7 @@
                     <p class="text-sm leading-relaxed mb-4 text-center text-center">As an Angler, your focus is logging catches accurately and monitoring standings.</p>
                     <ul class="space-y-4 text-xs leading-relaxed text-center text-center text-center text-center">
                         <li><b>Joining:</b> Enter name and venue, then provide the PIN from your Marshall.</li>
-                        <li><b>Logging:</b> Select species and enter measurement. Entries without size logs are blocked. For unlisted fish, use <b>"[Add Other Species...]"</b> at the bottom of the dropdown.</li>
+                        <li><b>Scorecard:</b> Select species and enter measurement. Entries without size logs are blocked. For unlisted fish, use <b>"[Add Other Species...]"</b> at the bottom of the dropdown.</li>
                         <li><b>Standings:</b> Tap the trophy to view the Live Leader Board and the "Match Biggest Fish."</li>
                         <li><b>Grace Period:</b> At expiration, the screen turns Maroon. You have 5 mins to submit captures before locking.</li>
                     </ul>
@@ -699,7 +713,6 @@
         }
 
 
-        /* V4.3.9 REINFORCED CLOUD SYNC */
         function processCloudUpdate() {
             if (state.view === 'waiting' && globalMatchData.anglers) {
                 const list = document.getElementById('attendanceList');
@@ -715,10 +728,7 @@
 
             if (globalMatchData.status === 'playing') {
                 if (state.status === 'hype') {
-                    clearInterval(hypeInterval);
-                    countdownActive = false;
-                    state.status = 'playing';
-                    beginFishing(false);
+                    /* Splash logic handles transition */
                 }
                 if (state.status === 'grace') {
                     state.status = 'playing';
@@ -733,9 +743,10 @@
                 if (state.view !== 'fishing' && state.status !== 'hype') { beginFishing(false); }
             }
 
-            if (globalMatchData.status === 'hype' && state.status !== 'hype') { runGlobalCountdown(); }
+            if (globalMatchData.status === 'hype' && state.status !== 'hype') { 
+                runGlobalCountdown(); 
+            }
 
-            /* V4.3.9 GRACE CLOCK PROTECTION - NEVER CALCULATE LOCALLY */
             if (globalMatchData.status === 'grace' && state.status !== 'grace') {
                 state.graceEndTime = globalMatchData.graceEndTime;
                 state.endTime = globalMatchData.endTime; 
@@ -836,26 +847,53 @@
         function triggerHypeStart() {
             if(!state.isHost) return;
             const matchDuration = parseFloat(document.getElementById('hostDuration').value);
-            update(ref(db, 'matches/' + state.pin), { status: 'hype', endTime: Date.now() + (matchDuration * 3600000) + 11000 });
+            update(ref(db, 'matches/' + state.pin), { status: 'hype', endTime: Date.now() + (matchDuration * 3600000) + 6000 });
         }
 
+
+        /* V4.4.0 5-SECOND HYPE REPAIR */
         function runGlobalCountdown() {
             if (countdownActive) return;
             countdownActive = true;
             state.status = 'hype';
             navTo('hype');
-            let count = 10;
+            
+            document.getElementById('hypeCount').classList.remove('hidden');
+            document.getElementById('hypeSplash').classList.add('hidden');
+            
+            let count = 5;
             document.getElementById('hypeCount').innerText = count;
             playTone(400, 0.1);
+            
             hypeInterval = setInterval(() => {
                 count--;
-                if (count > 0) { document.getElementById('hypeCount').innerText = count; playTone(400, 0.1); }
-                else { clearInterval(hypeInterval); countdownActive = false; if(state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'playing' }); } }
+                if (count > 0) { 
+                    document.getElementById('hypeCount').innerText = count; 
+                    playTone(400, 0.1); 
+                }
+                else { 
+                    clearInterval(hypeInterval);
+                    triggerSplashSequence();
+                }
             }, 1000);
         }
 
 
-        /* V4.3.9 AUTO-FOCUS JUMP */
+        function triggerSplashSequence() {
+            document.getElementById('hypeCount').classList.add('hidden');
+            document.getElementById('hypeSplash').classList.remove('hidden');
+            playHorn();
+            
+            setTimeout(() => {
+                countdownActive = false;
+                if(state.isHost) {
+                    update(ref(db, 'matches/' + state.pin), { status: 'playing' });
+                }
+                beginFishing(false);
+            }, 1500);
+        }
+
+
         function focusMeasurement() {
             const el = (state.format === 'weightLb') ? document.getElementById('inputLbs') : document.getElementById('inputSize');
             if (el) { 
@@ -865,12 +903,17 @@
         }
 
 
+        /* V4.4.0 WORKFLOW JUMP */
         function checkSpeciesSelection() {
-            if (document.getElementById('inputSpecies').value === "[ADD OTHER]") { 
+            const select = document.getElementById('inputSpecies');
+            if (select.value === "[ADD OTHER]") { 
                 promptCustomSpecies(); 
-            } else if (state.format !== 'speciesHunt') {
+            } else if (state.format === 'speciesHunt') {
+                document.getElementById('btnRecord').focus();
+            } else {
                 focusMeasurement(); 
             }
+            select.blur(); /* Dismiss keyboard/dropdown immediately */
         }
 
 
@@ -882,6 +925,7 @@
                 opt.value = name; opt.innerText = name; opt.selected = true;
                 grp.insertBefore(opt, grp.lastElementChild); 
                 if (state.format !== 'speciesHunt') focusMeasurement();
+                else document.getElementById('btnRecord').focus();
             } else { 
                 document.getElementById('inputSpecies').value = ""; 
             }
@@ -897,7 +941,6 @@
             const label = document.getElementById('labelSize');
             const sizeDeck = document.getElementById('deckSizeInputs');
 
-            /* V4.3.9 SPECIES HUNT UI OPTIMIZATION */
             if (state.format === 'speciesHunt') {
                 sizeDeck.classList.add('hidden');
             } else {
@@ -960,7 +1003,7 @@
                 let oz = parseInt(document.getElementById('inputOz').value) || 0; 
                 finalSize = (lbs * 16) + oz; displaySize = `${lbs}lb ${oz}oz`; 
             } else if (state.format === 'speciesHunt') {
-                finalSize = 1; /* Marker for capture */
+                finalSize = 1; 
                 displaySize = "Captured";
             } else { 
                 finalSize = parseFloat(document.getElementById('inputSize').value) || 0; 
@@ -968,7 +1011,7 @@
             }
 
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { 
-                alert("MEASUREMENT REQUIRED: No record saved without size."); return; 
+                alert("MEASUREMENT REQUIRED: Captured fish must have a size log."); return; 
             }
 
             let pts = finalSize;
@@ -1079,7 +1122,6 @@
         }
 
 
-        /* V4.3.9 REINFORCED HISTORY SAVE */
         function saveHistory(isL) {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
             h.unshift({ 
@@ -1101,28 +1143,20 @@
         }
 
 
-        /* V4.3.9 ADVANCED HISTORY RENDER WITH TICKING TIMERS */
         function renderHistory() {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
             const r = document.getElementById('historyRecentList'); 
             const a = document.getElementById('historyArchiveList');
             const now = Date.now();
-            
             r.innerHTML = ""; a.innerHTML = "";
-            if(h.length === 0) { 
-                r.innerHTML = '<p class="text-slate-400 py-24 font-black uppercase text-[10px] tracking-widest text-center">History Empty</p>'; 
-                return; 
-            }
+            if(h.length === 0) { r.innerHTML = '<p class="text-slate-400 py-24 font-black uppercase text-[10px] tracking-widest text-center">History Empty</p>'; return; }
             
             h.forEach((m, i) => {
                 const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 300000));
-                
                 let card = document.createElement('div');
                 card.className = "match-card p-6 flex flex-col items-center active:bg-slate-900 transition relative overflow-hidden mb-4";
-                
                 let headerText = isStillActuallyLive ? "" : "<p class='text-[10px] font-black text-slate-500 mb-2 uppercase tracking-[0.4em]'>MATCH ENDED</p>";
                 let timerDisplay = isStillActuallyLive ? `<p id="hist-timer-${m.id}" class="text-amber font-black text-xs tabular-nums mb-1">Checking Clock...</p>` : "";
-
                 card.innerHTML = `
                     ${headerText}
                     <div class="w-full flex justify-between items-center text-center">
@@ -1141,10 +1175,8 @@
                             <button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-2 py-4"><i class="fa-solid fa-trash-can text-lg"></i></button>
                         </div>
                     </div>`;
-
                 if(i < 6) r.appendChild(card); else a.appendChild(card);
             });
-
             document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 6);
             startHistoryTimers();
         }
@@ -1155,16 +1187,13 @@
             historyUpdateInterval = setInterval(() => {
                 const now = Date.now();
                 let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
-                
                 h.forEach(m => {
                     const timerEl = document.getElementById(`hist-timer-${m.id}`);
                     if (timerEl) {
                         let totalEnd = m.graceEndTime || (m.endTime + 300000);
                         let diff = totalEnd - now;
-                        
-                        if (diff <= 0) {
-                            renderHistory(); /* Refresh to strip badges */
-                        } else {
+                        if (diff <= 0) { renderHistory(); }
+                        else {
                             let s = Math.floor(diff / 1000);
                             let hours = Math.floor(s / 3600);
                             let mins = Math.floor((s % 3600) / 60);
@@ -1183,11 +1212,7 @@
 
         function viewPastRecord(id) {
             activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === id);
-            if(m) { 
-                document.getElementById('historyDetailDrawer').classList.remove('hidden'); 
-                document.getElementById('historyDetailDrawer').classList.add('open'); 
-                switchHistoryTab('standings'); 
-            }
+            if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); }
         }
 
 
@@ -1195,12 +1220,8 @@
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); });
             document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
-            
-            if(tab === 'standings') { 
-                document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-slate-400 mb-6 text-center tracking-widest">Score Table</h4><div class="space-y-3 text-center">${m.standings.map((a, i) => `<div class="match-card p-5 flex justify-between items-center border border-slate-700 shadow-xl"><span class="uppercase text-white font-black"><b class="text-amber mr-3">${i+1}.</b> ${a.name}</span><b class="text-white text-2xl">${a.score}</b></div>`).join('')}</div>`; 
-            } else { 
-                document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-slate-400 mb-6 text-center tracking-widest">Capture Diary</h4><div class="space-y-3 text-center">${m.personalCatches.map(c => `<div class="match-card p-5 flex justify-between items-center border border-slate-800 shadow-inner"><div class="text-left"><b class="text-white text-lg uppercase">${c.species}</b><br><span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">${c.time}</span></div><div class="text-right"><b class="text-white text-lg">${c.display || c.size}</b><br><span class="text-[10px] text-amber font-black uppercase tracking-widest">Points</span></div></div>`).join('')}</div>`; 
-            }
+            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-slate-400 mb-6 text-center tracking-widest">Score Table</h4><div class="space-y-3 text-center">${m.standings.map((a, i) => `<div class="match-card p-5 flex justify-between items-center border border-slate-700 shadow-xl"><span class="uppercase text-white font-black"><b class="text-amber mr-3">${i+1}.</b> ${a.name}</span><b class="text-white text-2xl">${a.score}</b></div>`).join('')}</div>`; }
+            else { document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-slate-400 mb-6 text-center tracking-widest">Capture Diary</h4><div class="space-y-3 text-center">${m.personalCatches.map(c => `<div class="match-card p-5 flex justify-between items-center border border-slate-800 shadow-inner"><div class="text-left"><b class="text-white text-lg uppercase">${c.species}</b><br><span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">${c.time}</span></div><div class="text-right"><b class="text-white text-lg">${c.display || c.size}</b><br><span class="text-[10px] text-amber font-black uppercase tracking-widest">Points</span></div></div>`).join('')}</div>`; }
         }
 
 
@@ -1209,17 +1230,8 @@
 
         let wakeLock = null;
         async function toggleWakeLock() {
-            if(wakeLock) { 
-                await wakeLock.release(); 
-                wakeLock = null; 
-                document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon"></i>`; 
-                document.getElementById('wakeLockBtn').classList.remove('text-amber'); 
-            } else { 
-                try { 
-                    wakeLock = await navigator.wakeLock.request('screen'); 
-                    document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber"></i>`; 
-                } catch(e) {} 
-            }
+            if(wakeLock) { await wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon"></i>`; document.getElementById('wakeLockBtn').classList.remove('text-amber'); }
+            else { try { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber"></i>`; } catch(e) {} }
         }
 
 
@@ -1245,11 +1257,7 @@
                         state = oldState; listenToCloud(); navTo(state.view);
                         if (state.status === 'playing' || state.status === 'grace') { 
                             renderCatchList(); startClock(); updateLiveTally(); 
-                            if (state.status === 'grace') { 
-                                document.getElementById('app-container').classList.add('grace-active'); 
-                                document.getElementById('mainTimer').classList.add('grace-pulse'); 
-                                document.getElementById('btnRecord').classList.add('grace-btn-pulse'); 
-                            } 
+                            if (state.status === 'grace') { document.getElementById('app-container').classList.add('grace-active'); document.getElementById('mainTimer').classList.add('grace-pulse'); document.getElementById('btnRecord').classList.add('grace-btn-pulse'); } 
                         }
                     }
                 } catch(e) { resetApp(); }
@@ -1259,7 +1267,7 @@
 
         window.addEventListener('popstate', () => {
             if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open') || document.getElementById('guideDrawer').classList.contains('open') || !document.getElementById('historyDetailDrawer').classList.contains('hidden')) { document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('guideDrawer').classList.remove('open'); closeHistoryDetail(); history.pushState(null, null, window.location.href); return; }
-            if (state.view === 'fishing' || state.status === 'playing' || state.status === 'grace') { if (confirm("Tournament live. Exit deck?")) { leaveMatchEarly(); } else { history.pushState(null, null, window.location.href); } }
+            if (state.view === 'fishing' || state.status === 'playing' || state.status === 'grace') { if (confirm("Match live. Exit Scorecard?")) { leaveMatchEarly(); } else { history.pushState(null, null, window.location.href); } }
             else if (state.view !== 'home') { navTo('home'); history.pushState(null, null, window.location.href); }
         });
 
