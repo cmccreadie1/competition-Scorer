@@ -1,9 +1,9 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 4.4.2 - THE KILL SCREEN
+   VERSION 4.4.3 - THE INSTRUCTIONAL KILL SCREEN
    FULL VOLUME SERVICE WORKER
 */
 
-const CACHE_NAME = 'match-edition-v4.4.2-gold';
+const CACHE_NAME = 'match-edition-v4.4.3-gold';
 
 const ASSETS = [
   './',
@@ -19,7 +19,7 @@ self.addEventListener('install', (event) => {
   
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching Gold Master 4.4.2 Assets');
+      console.log('SW: Caching Gold Master 4.4.3 Assets');
       return cache.addAll(ASSETS);
     })
   );
