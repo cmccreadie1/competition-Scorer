@@ -1,9 +1,9 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 4.4.0 - SCORECARD EDITION
+   VERSION 4.4.1 - COMPACT UI & WORKFLOW
    FULL VOLUME SERVICE WORKER
 */
 
-const CACHE_NAME = 'match-edition-v4.4.0-final';
+const CACHE_NAME = 'match-edition-v4.4.1-gold';
 
 const ASSETS = [
   './',
@@ -14,12 +14,12 @@ const ASSETS = [
 
 
 self.addEventListener('install', (event) => {
-  /* Force immediate takeover for workflow logic */
+  /* Force immediate takeover for zero-lag workflow */
   self.skipWaiting();
   
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching Gold Master 4.4.0 Assets');
+      console.log('SW: Caching Gold Master 4.4.1 Assets');
       return cache.addAll(ASSETS);
     })
   );
@@ -32,7 +32,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('SW: Purging Legacy Versions');
+            console.log('SW: Purging Legacy Logic');
             return caches.delete(cacheName);
           }
         })
@@ -40,7 +40,7 @@ self.addEventListener('activate', (event) => {
     })
   );
   
-  /* Synchronize all clients for history countdown stability */
+  /* Synchronize all clients for real-time history stability */
   self.clients.claim();
 });
 
