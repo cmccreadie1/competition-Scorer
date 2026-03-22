@@ -10,7 +10,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        /* HARDWARE SYSTEM LOCKS */
+        /* HARDWARE CONSTRAINTS */
         html, body {
             font-family: 'Inter', sans-serif;
             background-color: #020617; 
@@ -35,7 +35,7 @@
             transition: background-color 0.6s ease;
         }
 
-        /* GRACE PERIOD DEEP MAROON */
+        /* GRACE PERIOD RED ALERT */
         #app-container.grace-active {
             background-color: #450a0a !important; 
         }
@@ -85,7 +85,7 @@
         .text-amber { color: #f59e0b; }
         .bg-amber { background-color: #f59e0b; }
 
-        /* HYPE TIMER CIRCULAR UI */
+        /* HYPE TIMER UI */
         @keyframes pulse-ring {
             0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
             70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(245, 158, 11, 0); }
@@ -169,12 +169,13 @@
         </div>
     </div>
 
+
     <div id="customEndModal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-8 space-y-6 border-2 border-amber">
-            <div class="text-center text-center">
+            <div class="text-center">
                 <i class="fa-solid fa-clock-rotate-left text-amber text-4xl mb-3"></i>
                 <h3 class="text-xl font-black uppercase tracking-tight text-white text-center">Change Ending Time</h3>
-                <p class="text-slate-400 text-xs mt-2 leading-relaxed text-center">Modify the tournament clock for all connected devices.</p>
+                <p class="text-slate-400 text-xs mt-2 leading-relaxed text-center">Modify the tournament clock for all competitors.</p>
             </div>
             <div class="grid grid-cols-1 gap-3">
                 <button onclick="stewardSetNewEnd(1)" class="bg-slate-900 border border-slate-700 py-4 rounded-xl font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-sm text-center">1 MINUTE LEFT</button>
@@ -186,7 +187,9 @@
         </div>
     </div>
 
+
     <div id="app-container">
+
 
         <div id="view-home" class="view-frame items-center justify-center p-6 space-y-6 relative">
             
@@ -197,7 +200,7 @@
             <div class="text-center text-center">
                 <i class="fa-solid fa-stopwatch text-amber text-6xl mb-2"></i>
                 <h1 class="text-3xl font-black tracking-tight mb-1 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-sm tracking-widest text-center"><i class="fa-solid fa-cloud text-green-500 mr-1"></i> GOLD MASTER V4.3.8</div>
+                <div class="text-slate-500 font-bold text-sm tracking-widest text-center"><i class="fa-solid fa-cloud text-green-500 mr-1"></i> GOLD MASTER V4.3.9</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3 pt-2">
@@ -212,7 +215,9 @@
                     </div>
                 </div>
                 
-                <button onclick="navTo('join')" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-2xl py-5 rounded-2xl shadow-lg uppercase tracking-wide active:scale-95 transition-transform text-center"> Join Match </button>
+                <button onclick="navTo('join')" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-2xl py-5 rounded-2xl shadow-lg uppercase tracking-wide active:scale-95 transition-transform text-center">
+                    Join Match
+                </button>
                 
                 <div class="flex space-x-4">
                     <button onclick="navTo('host')" class="flex-1 bg-slate-800 text-slate-300 font-bold py-4 rounded-xl text-sm border border-slate-700 active:bg-slate-700 transition text-center text-center">
@@ -234,6 +239,7 @@
                 </button>
             </div>
         </div>
+
 
         <div id="view-join" class="hidden view-frame p-4 bg-[#020617]">
             <div class="flex justify-between items-center border-b border-slate-800 pb-4 pt-2">
@@ -267,6 +273,7 @@
             <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto bg-blue-600 text-white font-black text-2xl py-6 rounded-2xl mb-10 shadow-2xl uppercase tracking-widest active:scale-95 transition-transform text-center text-center">Validate</button>
         </div>
 
+
         <div id="view-host" class="hidden view-frame p-6 space-y-4">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3 text-white text-center">
                 <button onclick="navTo('home')" class="text-slate-500 text-2xl px-2 text-center text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
@@ -275,7 +282,7 @@
             </div>
             <div class="match-card p-6 space-y-4 text-center">
                 <div>
-                    <label class="block text-slate-400 font-black text-[11px] uppercase tracking-[0.2em] mb-2 text-center text-center">Match Duration</label>
+                    <label class="block text-slate-400 font-black text-[11px] uppercase tracking-[0.2em] mb-2 text-center text-center text-center">Match Duration</label>
                     <select id="hostDuration" class="w-full bg-slate-900 border border-slate-700 p-4 rounded-xl text-lg font-black appearance-none text-center text-white shadow-inner text-center">
                         <option value="1">1.0 Hour</option>
                         <option value="2">2.0 Hours</option>
@@ -285,7 +292,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-slate-400 font-black text-[11px] uppercase tracking-[0.2em] mb-2 text-center text-center">Rules Format</label>
+                    <label class="block text-slate-400 font-black text-[11px] uppercase tracking-[0.2em] mb-2 text-center text-center text-center">Rules Engine</label>
                     <select id="hostFormat" class="w-full bg-slate-900 border border-slate-700 p-4 rounded-xl text-lg font-black appearance-none text-center text-white shadow-inner text-center">
                         <option value="length">Length Only (cm)</option>
                         <option value="length10">Length + 10 Pts</option>
@@ -297,6 +304,7 @@
                 <button onclick="createMatch()" class="w-full bg-amber text-slate-900 font-black text-xl py-6 rounded-xl mt-4 shadow-2xl uppercase active:scale-95 transition-transform text-center text-center">Initialize Match</button>
             </div>
         </div>
+
 
         <div id="view-waiting" class="hidden view-frame p-6 space-y-4">
             <div class="flex justify-between items-center w-full text-center">
@@ -315,9 +323,11 @@
             </div>
         </div>
 
+
         <div id="view-hype" class="hidden view-frame items-center justify-center bg-black text-center text-center">
             <div id="hypeCount" class="hype-number flex items-center justify-center w-64 h-64 text-center text-center">10</div>
         </div>
+
 
         <div id="view-fishing" class="hidden view-frame relative bg-[#020617]">
             <div class="flex-none bg-slate-900 border-b border-slate-800 px-4 py-2.5 flex justify-between items-center z-20 shadow-xl text-center">
@@ -397,7 +407,7 @@
                         </select>
                     </div>
 
-                    <div>
+                    <div id="deckSizeInputs">
                         <label class="block text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] mb-1.5 ml-1 text-center text-center text-center" id="labelSize">Capture Record</label>
                         <div id="deckLength" class="flex space-x-2 text-center text-center text-center">
                             <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="flex-1 bg-slate-900 border-2 border-slate-800 p-3 rounded-xl text-3xl font-black text-center w-full text-white focus:border-blue-500 outline-none shadow-inner text-center text-center" placeholder="0">
@@ -432,6 +442,7 @@
             </div>
         </div>
 
+
         <div id="view-results" class="hidden view-frame bg-[#020617] text-white p-6 justify-center text-center space-y-6 text-center text-center">
             <h1 class="text-5xl font-black uppercase text-amber border-b-4 border-slate-900 pb-6 tracking-tighter text-center text-center text-center">Final Result</h1>
             <div class="match-card p-8 shadow-[0_0_50px_rgba(59,130,246,0.15)] text-center text-center text-center">
@@ -454,10 +465,11 @@
             <button onclick="resetApp()" class="text-slate-400 font-black mt-8 border-b border-slate-900 pb-1 active:text-white uppercase text-[12px] tracking-[0.5em] text-center text-center">Return Home</button>
         </div>
 
+
         <div id="view-history" class="hidden view-frame p-6 bg-[#020617] text-center text-center text-center">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-5 mb-6 text-white text-center text-center">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-5 mb-6 text-white text-center text-center text-center">
                 <button onclick="navTo('home')" class="text-slate-500 text-2xl px-2 text-center text-center text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
-                <h2 class="text-xl font-black uppercase tracking-[0.1em] text-center text-center">Match Vault</h2>
+                <h2 class="text-xl font-black uppercase tracking-[0.1em] text-center text-center">History</h2>
                 <div class="w-6 text-center"></div>
             </div>
             <div class="scrollable-area space-y-8 pb-12 text-center text-center">
@@ -471,6 +483,7 @@
                 </div>
             </div>
         </div>
+
 
         <div id="guideDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[250] flex flex-col shadow-2xl text-center text-center text-center">
             <button onclick="document.getElementById('guideDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 py-8 font-black uppercase tracking-[0.4em] text-white border-b border-slate-700 flex justify-center items-center text-center text-center">
@@ -504,6 +517,7 @@
             </div>
         </div>
 
+
         <div id="historyDetailDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[150] flex flex-col shadow-2xl hidden text-center text-center text-center text-center">
             <button onclick="closeHistoryDetail()" class="flex-none w-full bg-slate-900 py-8 font-black uppercase tracking-[0.4em] text-slate-400 border-b border-slate-800 flex justify-center items-center active:bg-slate-800 transition text-center text-center">
                 <i class="fa-solid fa-xmark mr-4 text-center text-center"></i> Exit Vault
@@ -515,12 +529,14 @@
             <div id="historyContent" class="scrollable-area p-8 text-center text-center text-center text-center"></div>
         </div>
 
+
         <div id="leaderboardDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[101] flex flex-col shadow-2xl text-center text-center text-center text-center">
-            <button onclick="document.getElementById('leaderboardDrawer').classList.remove('open')" class="flex-none w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-8 uppercase tracking-[0.3em] flex justify-center items-center active:bg-blue-800 transition text-center text-center text-center text-center"><i class="fa-solid fa-arrow-left mr-4 animate-pulse text-center text-center text-center"></i> RETURN TO DECK</button>
+            <button onclick="document.getElementById('leaderboardDrawer').classList.remove('open')" class="flex-none w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-8 uppercase tracking-[0.3em] flex justify-center items-center active:bg-blue-800 transition text-center text-center text-center text-center"><i class="fa-solid fa-arrow-left mr-4 animate-pulse text-center text-center text-center"></i> RETURN TO LEADER BOARD</button>
             <div class="flex-none p-5 bg-slate-900 flex justify-center items-center border-b border-slate-800 shadow-lg text-center text-center text-center"><h2 class="font-black text-xl tracking-widest text-slate-100 uppercase text-center text-center text-center">Live Leader Board</h2></div>
             <div class="flex-none bg-amber text-slate-900 p-5 text-center border-b-8 border-yellow-600 shadow-2xl text-center text-center text-center" id="bountyContainer"><p class="text-[11px] font-black uppercase mb-1 text-slate-900 text-center text-center text-center">👑 Match Biggest Fish</p><p class="font-black text-2xl tracking-tighter text-slate-900 text-center text-center text-center text-center" id="bountyBanner">Waiting...</p></div>
             <div id="leaderboardList" class="scrollable-area p-5 space-y-4 text-center text-center text-center text-center text-center"></div>
         </div>
+
 
         <div id="stewardDrawer" class="drawer-left fixed inset-0 w-full bg-[#020617] z-[101] flex flex-col shadow-2xl text-center text-center text-center text-center">
             <button onclick="document.getElementById('stewardDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-8 uppercase tracking-[0.3em] flex justify-center items-center active:bg-slate-900 border-b border-slate-800 transition text-center text-center text-center text-center"><i class="fa-solid fa-arrow-left mr-4 text-center text-center text-center"></i> RETURN</button>
@@ -532,6 +548,7 @@
                 <button onclick="endMatchEarly(true)" class="w-full bg-amber text-slate-900 font-black py-7 rounded-3xl shadow-2xl uppercase tracking-widest text-lg leading-tight active:scale-95 transition-transform text-center text-center text-center text-center text-center">Change Ending Time</button>
             </div>
         </div>
+
 
     </div>
 
@@ -576,6 +593,7 @@
         let globalMatchData = null;
         let clockInterval = null;
         let hypeInterval = null;
+        let historyUpdateInterval = null;
         let countdownActive = false;
         let alert20Played = false;
         let isArchiveOpen = false;
@@ -595,7 +613,7 @@
         }
 
         function exitApp() {
-            if (confirm("CLOSE APP?\n\nThis will clear current lobby inputs. Match Vault remains untouched.")) {
+            if (confirm("CLOSE APP?\n\nThis will clear current lobby inputs. History Vault remains untouched.")) {
                 localStorage.removeItem('matchState');
                 state = { status: 'idle' };
                 window.location.reload();
@@ -680,7 +698,8 @@
             setTimeout(() => { toast.classList.remove('show'); }, 8000);
         }
 
-        /* V4.3.8 REINFORCED CLOUD SYNC */
+
+        /* V4.3.9 REINFORCED CLOUD SYNC */
         function processCloudUpdate() {
             if (state.view === 'waiting' && globalMatchData.anglers) {
                 const list = document.getElementById('attendanceList');
@@ -716,7 +735,7 @@
 
             if (globalMatchData.status === 'hype' && state.status !== 'hype') { runGlobalCountdown(); }
 
-            /* V4.3.8 GRACE CLOCK PROTECTION - NEVER CALCULATE LOCALLY */
+            /* V4.3.9 GRACE CLOCK PROTECTION - NEVER CALCULATE LOCALLY */
             if (globalMatchData.status === 'grace' && state.status !== 'grace') {
                 state.graceEndTime = globalMatchData.graceEndTime;
                 state.endTime = globalMatchData.endTime; 
@@ -835,15 +854,25 @@
             }, 1000);
         }
 
+
+        /* V4.3.9 AUTO-FOCUS JUMP */
         function focusMeasurement() {
             const el = (state.format === 'weightLb') ? document.getElementById('inputLbs') : document.getElementById('inputSize');
-            if (el) { el.focus(); handleInputFocus(el); }
+            if (el) { 
+                el.focus(); 
+                handleInputFocus(el); 
+            }
         }
 
+
         function checkSpeciesSelection() {
-            if (document.getElementById('inputSpecies').value === "[ADD OTHER]") { promptCustomSpecies(); }
-            else { focusMeasurement(); }
+            if (document.getElementById('inputSpecies').value === "[ADD OTHER]") { 
+                promptCustomSpecies(); 
+            } else if (state.format !== 'speciesHunt') {
+                focusMeasurement(); 
+            }
         }
+
 
         function promptCustomSpecies() {
             let name = prompt("Name of Unusual Species:");
@@ -851,21 +880,45 @@
                 let grp = document.getElementById('customSpeciesGroup');
                 let opt = document.createElement('option');
                 opt.value = name; opt.innerText = name; opt.selected = true;
-                grp.insertBefore(opt, grp.lastElementChild); focusMeasurement();
-            } else { document.getElementById('inputSpecies').value = ""; }
+                grp.insertBefore(opt, grp.lastElementChild); 
+                if (state.format !== 'speciesHunt') focusMeasurement();
+            } else { 
+                document.getElementById('inputSpecies').value = ""; 
+            }
         }
+
 
         function beginFishing(isPushing) {
             state.status = 'playing'; navTo('fishing');
             const stewardBtn = document.getElementById('btnStewardPanelContainer');
             if(state.isHost && stewardBtn) { stewardBtn.classList.remove('hidden'); }
             pushMyScoreToCloud();
+            
             const label = document.getElementById('labelSize');
-            if (state.format === 'weightLb') { document.getElementById('deckLength').classList.add('hidden'); document.getElementById('deckWeight').classList.remove('hidden'); label.innerText = "Weight (Lbs/Oz)"; }
-            else { document.getElementById('deckLength').classList.remove('hidden'); document.getElementById('deckWeight').classList.add('hidden'); label.innerText = (state.format === 'weightKg') ? "Weight (Kg)" : (state.format === 'speciesHunt' ? "Size (Optional)" : "Measurement (cm)"); }
-            if (document.getElementById('bountyContainer')) { document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); }
+            const sizeDeck = document.getElementById('deckSizeInputs');
+
+            /* V4.3.9 SPECIES HUNT UI OPTIMIZATION */
+            if (state.format === 'speciesHunt') {
+                sizeDeck.classList.add('hidden');
+            } else {
+                sizeDeck.classList.remove('hidden');
+                if (state.format === 'weightLb') { 
+                    document.getElementById('deckLength').classList.add('hidden'); 
+                    document.getElementById('deckWeight').classList.remove('hidden'); 
+                    label.innerText = "Weight (Lbs/Oz)"; 
+                } else { 
+                    document.getElementById('deckLength').classList.remove('hidden'); 
+                    document.getElementById('deckWeight').classList.add('hidden'); 
+                    label.innerText = (state.format === 'weightKg') ? "Weight (Kg)" : "Measurement (cm)"; 
+                }
+            }
+
+            if (document.getElementById('bountyContainer')) { 
+                document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); 
+            }
             startClock();
         }
+
 
         function startClock() {
             clearInterval(clockInterval);
@@ -884,6 +937,7 @@
             }, 1000);
         }
 
+
         function updateTimerDisplay(ms) {
             let totalSec = Math.max(0, Math.floor(ms / 1000));
             let hours = Math.floor(totalSec / 3600);
@@ -892,33 +946,63 @@
             if (document.getElementById('mainTimer')) { document.getElementById('mainTimer').innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`; }
         }
 
+
         function adjustSize(val) { let input = document.getElementById('inputSize'); input.value = (parseFloat(input.value) || 0) + val; }
+
 
         function recordCatch() {
             let species = document.getElementById('inputSpecies').value;
             if(!species) return alert("Select species first!");
             let finalSize = 0; let displaySize = "";
-            if (state.format === 'weightLb') { let lbs = parseInt(document.getElementById('inputLbs').value) || 0; let oz = parseInt(document.getElementById('inputOz').value) || 0; finalSize = (lbs * 16) + oz; displaySize = `${lbs}lb ${oz}oz`; }
-            else { finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = finalSize.toString(); }
-            if (finalSize <= 0 || isNaN(finalSize)) { alert("MEASUREMENT REQUIRED: No record saved without size."); return; }
+            
+            if (state.format === 'weightLb') { 
+                let lbs = parseInt(document.getElementById('inputLbs').value) || 0; 
+                let oz = parseInt(document.getElementById('inputOz').value) || 0; 
+                finalSize = (lbs * 16) + oz; displaySize = `${lbs}lb ${oz}oz`; 
+            } else if (state.format === 'speciesHunt') {
+                finalSize = 1; /* Marker for capture */
+                displaySize = "Captured";
+            } else { 
+                finalSize = parseFloat(document.getElementById('inputSize').value) || 0; 
+                displaySize = finalSize.toString(); 
+            }
+
+            if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { 
+                alert("MEASUREMENT REQUIRED: No record saved without size."); return; 
+            }
+
             let pts = finalSize;
-            if (state.format === 'speciesHunt') { let existing = state.myCatches.filter(x => x.species === species && x.id !== state.editingId).length; pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; }
-            else if (species === 'Mackerel') { if (state.myCatches.filter(x => x.species === 'Mackerel' && x.id !== state.editingId).length >= 3) { pts = 0; } }
-            if (state.editingId) { let obj = state.myCatches.find(x => x.id === state.editingId); if(obj) { obj.species = species; obj.size = finalSize; obj.display = displaySize; obj.points = pts; } state.editingId = null; document.getElementById('btnRecord').innerText = "Record Catch"; }
-            else { state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }); }
+            if (state.format === 'speciesHunt') { 
+                let existing = state.myCatches.filter(x => x.species === species && x.id !== state.editingId).length; 
+                pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; 
+            } else if (species === 'Mackerel') { 
+                if (state.myCatches.filter(x => x.species === 'Mackerel' && x.id !== state.editingId).length >= 3) { pts = 0; } 
+            }
+
+            if (state.editingId) { 
+                let obj = state.myCatches.find(x => x.id === state.editingId); 
+                if(obj) { obj.species = species; obj.size = finalSize; obj.display = displaySize; obj.points = pts; } 
+                state.editingId = null; 
+                document.getElementById('btnRecord').innerText = "Record Catch"; 
+            } else { 
+                state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }); 
+            }
+            
             document.getElementById('inputSpecies').value = ""; document.getElementById('inputSize').value = ""; document.getElementById('inputLbs').value = ""; document.getElementById('inputOz').value = "";
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
+
 
         function editCatch(id) {
             let obj = state.myCatches.find(x => x.id === id);
             if(obj) {
                 document.getElementById('inputSpecies').value = obj.species;
                 if (state.format === 'weightLb') { document.getElementById('inputLbs').value = Math.floor(obj.size / 16); document.getElementById('inputOz').value = obj.size % 16; }
-                else { document.getElementById('inputSize').value = obj.size; }
+                else if (state.format !== 'speciesHunt') { document.getElementById('inputSize').value = obj.size; }
                 state.editingId = id; document.getElementById('btnRecord').innerText = "Update Record";
             }
         }
+
 
         function deleteCatch(id) {
             state.myCatches = state.myCatches.filter(x => x.id !== id);
@@ -929,6 +1013,7 @@
             }
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
+
 
         function renderCatchList() {
             const list = document.getElementById('localCatchList'); if (!list) return;
@@ -942,6 +1027,7 @@
             });
         }
 
+
         function renderGlobalLeaderboard() {
             if(!globalMatchData || !globalMatchData.anglers) return;
             const list = document.getElementById('leaderboardList'); if (!list) return;
@@ -954,7 +1040,9 @@
             }
         }
 
+
         function endMatchEarly(grace) { if(state.isHost && state.pin) { if(grace) { document.getElementById('customEndModal').classList.remove('hidden'); } } }
+
 
         function stewardSetNewEnd(mins) {
             document.getElementById('customEndModal').classList.add('hidden');
@@ -963,11 +1051,12 @@
             else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); }
         }
 
+
         function transferSteward() {
             if(!globalMatchData || !globalMatchData.anglers) return;
             let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name }));
             if(options.length === 0) { alert("No other competitors linked."); return; }
-            let message = "Select Angler Number to Transfer Duties:\n\n";
+            let message = "Select Angler Number to Transfer Control:\n\n";
             options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; });
             let choice = prompt(message);
             let selectedIndex = parseInt(choice) - 1;
@@ -976,7 +1065,9 @@
             }
         }
 
+
         function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); resetApp(); } }
+
 
         function lockdownMatch(isHostPushing) {
             clearInterval(clockInterval); if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); }
@@ -987,7 +1078,8 @@
             navTo('results');
         }
 
-        /* V4.3.8 REINFORCED HISTORY SAVE - ADD ENDTIME DATA */
+
+        /* V4.3.9 REINFORCED HISTORY SAVE */
         function saveHistory(isL) {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
             h.unshift({ 
@@ -1008,62 +1100,128 @@
             localStorage.setItem('matchHistory', JSON.stringify(h));
         }
 
-        /* V4.3.8 BADGE EXPIRY LOGIC */
+
+        /* V4.3.9 ADVANCED HISTORY RENDER WITH TICKING TIMERS */
         function renderHistory() {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
-            const r = document.getElementById('historyRecentList'); const a = document.getElementById('historyArchiveList');
+            const r = document.getElementById('historyRecentList'); 
+            const a = document.getElementById('historyArchiveList');
             const now = Date.now();
+            
             r.innerHTML = ""; a.innerHTML = "";
-            if(h.length === 0) { r.innerHTML = '<p class="text-slate-400 py-24 font-black uppercase text-[10px] tracking-widest text-center">Vault Empty</p>'; return; }
+            if(h.length === 0) { 
+                r.innerHTML = '<p class="text-slate-400 py-24 font-black uppercase text-[10px] tracking-widest text-center">History Empty</p>'; 
+                return; 
+            }
             
             h.forEach((m, i) => {
-                /* Determine if record is actually still live based on current clock */
                 const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 300000));
                 
                 let card = document.createElement('div');
-                card.className = "match-card p-6 flex justify-between items-center active:bg-slate-900 transition relative overflow-hidden text-center";
+                card.className = "match-card p-6 flex flex-col items-center active:bg-slate-900 transition relative overflow-hidden mb-4";
+                
+                let headerText = isStillActuallyLive ? "" : "<p class='text-[10px] font-black text-slate-500 mb-2 uppercase tracking-[0.4em]'>MATCH ENDED</p>";
+                let timerDisplay = isStillActuallyLive ? `<p id="hist-timer-${m.id}" class="text-amber font-black text-xs tabular-nums mb-1">Checking Clock...</p>` : "";
+
                 card.innerHTML = `
-                    <div class="flex-1 text-center" onclick="viewPastRecord('${m.id}')">
-                        <span class="font-black text-white text-lg uppercase tracking-tight">${m.date}</span> 
-                        ${isStillActuallyLive ? '<span class="text-[9px] bg-red-600 px-3 py-1 rounded-full text-white font-black ml-3 animate-pulse">LIVE</span>' : ''}
-                        <br><span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || ''}</span>
-                        <br><span class="text-[11px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Fish</span>
-                    </div>
-                    <div class="text-right flex items-center space-x-6 text-center">
-                        <div onclick="viewPastRecord('${m.id}')" class="text-center">
-                            <div class="text-3xl font-black text-white">${m.score}</div>
-                            <div class="text-[10px] text-amber uppercase font-black">Points</div>
+                    ${headerText}
+                    <div class="w-full flex justify-between items-center text-center">
+                        <div class="flex-1 text-center" onclick="viewPastRecord('${m.id}')">
+                            <span class="font-black text-white text-lg uppercase tracking-tight">${m.date}</span> 
+                            ${isStillActuallyLive ? '<span class="text-[9px] bg-red-600 px-3 py-1 rounded-full text-white font-black ml-3 animate-pulse">LIVE</span>' : ''}
+                            <br><span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || 'No Venue'}</span>
+                            <br><span class="text-[11px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span>
+                            ${timerDisplay}
                         </div>
-                        <button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-2 py-4"><i class="fa-solid fa-trash-can text-lg"></i></button>
+                        <div class="text-right flex items-center space-x-6 text-center">
+                            <div onclick="viewPastRecord('${m.id}')" class="text-center">
+                                <div class="text-3xl font-black text-white">${m.score}</div>
+                                <div class="text-[10px] text-amber uppercase font-black">Points</div>
+                            </div>
+                            <button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-2 py-4"><i class="fa-solid fa-trash-can text-lg"></i></button>
+                        </div>
                     </div>`;
+
                 if(i < 6) r.appendChild(card); else a.appendChild(card);
             });
+
             document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 6);
+            startHistoryTimers();
         }
+
+
+        function startHistoryTimers() {
+            clearInterval(historyUpdateInterval);
+            historyUpdateInterval = setInterval(() => {
+                const now = Date.now();
+                let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
+                
+                h.forEach(m => {
+                    const timerEl = document.getElementById(`hist-timer-${m.id}`);
+                    if (timerEl) {
+                        let totalEnd = m.graceEndTime || (m.endTime + 300000);
+                        let diff = totalEnd - now;
+                        
+                        if (diff <= 0) {
+                            renderHistory(); /* Refresh to strip badges */
+                        } else {
+                            let s = Math.floor(diff / 1000);
+                            let hours = Math.floor(s / 3600);
+                            let mins = Math.floor((s % 3600) / 60);
+                            let secs = s % 60;
+                            timerEl.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')} Remaining`;
+                        }
+                    }
+                });
+            }, 1000);
+        }
+
 
         function deleteHistoryItem(id) { if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
         function toggleArchive() { isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
 
+
         function viewPastRecord(id) {
             activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === id);
-            if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); }
+            if(m) { 
+                document.getElementById('historyDetailDrawer').classList.remove('hidden'); 
+                document.getElementById('historyDetailDrawer').classList.add('open'); 
+                switchHistoryTab('standings'); 
+            }
         }
+
 
         function switchHistoryTab(tab) {
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); });
             document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
-            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-slate-400 mb-6 text-center tracking-widest">Score Table</h4><div class="space-y-3 text-center">${m.standings.map((a, i) => `<div class="match-card p-5 flex justify-between items-center border border-slate-700 shadow-xl"><span class="uppercase text-white font-black"><b class="text-amber mr-3">${i+1}.</b> ${a.name}</span><b class="text-white text-2xl">${a.score}</b></div>`).join('')}</div>`; }
-            else { document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-slate-400 mb-6 text-center tracking-widest">Capture Diary</h4><div class="space-y-3 text-center">${m.personalCatches.map(c => `<div class="match-card p-5 flex justify-between items-center border border-slate-800 shadow-inner"><div class="text-left"><b class="text-white text-lg uppercase">${c.species}</b><br><span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">${c.time}</span></div><div class="text-right"><b class="text-white text-lg">${c.display || c.size}</b><br><span class="text-[10px] text-amber font-black uppercase tracking-widest">Points</span></div></div>`).join('')}</div>`; }
+            
+            if(tab === 'standings') { 
+                document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-slate-400 mb-6 text-center tracking-widest">Score Table</h4><div class="space-y-3 text-center">${m.standings.map((a, i) => `<div class="match-card p-5 flex justify-between items-center border border-slate-700 shadow-xl"><span class="uppercase text-white font-black"><b class="text-amber mr-3">${i+1}.</b> ${a.name}</span><b class="text-white text-2xl">${a.score}</b></div>`).join('')}</div>`; 
+            } else { 
+                document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-slate-400 mb-6 text-center tracking-widest">Capture Diary</h4><div class="space-y-3 text-center">${m.personalCatches.map(c => `<div class="match-card p-5 flex justify-between items-center border border-slate-800 shadow-inner"><div class="text-left"><b class="text-white text-lg uppercase">${c.species}</b><br><span class="text-[10px] text-slate-400 font-black uppercase tracking-widest">${c.time}</span></div><div class="text-right"><b class="text-white text-lg">${c.display || c.size}</b><br><span class="text-[10px] text-amber font-black uppercase tracking-widest">Points</span></div></div>`).join('')}</div>`; 
+            }
         }
+
 
         function closeHistoryDetail() { document.getElementById('historyDetailDrawer').classList.remove('open'); setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); }
 
+
         let wakeLock = null;
         async function toggleWakeLock() {
-            if(wakeLock) { await wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon"></i>`; document.getElementById('wakeLockBtn').classList.remove('text-amber'); }
-            else { try { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber"></i>`; } catch(e) {} }
+            if(wakeLock) { 
+                await wakeLock.release(); 
+                wakeLock = null; 
+                document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon"></i>`; 
+                document.getElementById('wakeLockBtn').classList.remove('text-amber'); 
+            } else { 
+                try { 
+                    wakeLock = await navigator.wakeLock.request('screen'); 
+                    document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber"></i>`; 
+                } catch(e) {} 
+            }
         }
+
 
         function shareResults() {
             let t = `🏆 Match Summary: ${state.name}\nScore: ${document.getElementById('finalScore').innerText} Pts\nLogs: ${document.getElementById('finalCount').innerText}\nLogged via Match Edition Pro.`;
@@ -1071,7 +1229,9 @@
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
         }
 
+
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
+
 
         window.onload = () => {
             history.pushState(null, null, window.location.href);
@@ -1083,17 +1243,26 @@
                     document.getElementById('playerName').value = state.name; document.getElementById('venueName').value = state.venue;
                     if (['playing', 'grace', 'hype', 'waiting'].includes(oldState.status)) {
                         state = oldState; listenToCloud(); navTo(state.view);
-                        if (state.status === 'playing' || state.status === 'grace') { renderCatchList(); startClock(); updateLiveTally(); if (state.status === 'grace') { document.getElementById('app-container').classList.add('grace-active'); document.getElementById('mainTimer').classList.add('grace-pulse'); document.getElementById('btnRecord').classList.add('grace-btn-pulse'); } }
+                        if (state.status === 'playing' || state.status === 'grace') { 
+                            renderCatchList(); startClock(); updateLiveTally(); 
+                            if (state.status === 'grace') { 
+                                document.getElementById('app-container').classList.add('grace-active'); 
+                                document.getElementById('mainTimer').classList.add('grace-pulse'); 
+                                document.getElementById('btnRecord').classList.add('grace-btn-pulse'); 
+                            } 
+                        }
                     }
                 } catch(e) { resetApp(); }
             }
         };
+
 
         window.addEventListener('popstate', () => {
             if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open') || document.getElementById('guideDrawer').classList.contains('open') || !document.getElementById('historyDetailDrawer').classList.contains('hidden')) { document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('guideDrawer').classList.remove('open'); closeHistoryDetail(); history.pushState(null, null, window.location.href); return; }
             if (state.view === 'fishing' || state.status === 'playing' || state.status === 'grace') { if (confirm("Tournament live. Exit deck?")) { leaveMatchEarly(); } else { history.pushState(null, null, window.location.href); } }
             else if (state.view !== 'home') { navTo('home'); history.pushState(null, null, window.location.href); }
         });
+
 
         /* GLOBAL EXPOSURE BLOCK */
         window.atmPress = atmPress; 
