@@ -1,9 +1,9 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 4.3.9 - WORKFLOW & HISTORY SYNC
+   VERSION 4.4.0 - SCORECARD EDITION
    FULL VOLUME SERVICE WORKER
 */
 
-const CACHE_NAME = 'match-edition-v4.3.9-gold';
+const CACHE_NAME = 'match-edition-v4.4.0-final';
 
 const ASSETS = [
   './',
@@ -14,12 +14,12 @@ const ASSETS = [
 
 
 self.addEventListener('install', (event) => {
-  /* Force immediate activation to ensure timer sync logic applies */
+  /* Force immediate takeover for workflow logic */
   self.skipWaiting();
   
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching Gold Master 4.3.9 Assets');
+      console.log('SW: Caching Gold Master 4.4.0 Assets');
       return cache.addAll(ASSETS);
     })
   );
@@ -32,7 +32,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('SW: Purging Legacy Logic');
+            console.log('SW: Purging Legacy Versions');
             return caches.delete(cacheName);
           }
         })
@@ -40,7 +40,7 @@ self.addEventListener('activate', (event) => {
     })
   );
   
-  /* Synchronize all clients for real-time history countdowns */
+  /* Synchronize all clients for history countdown stability */
   self.clients.claim();
 });
 
@@ -48,12 +48,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      /* Priority 1: Speed - Instant load from cache for coastal use */
+      /* Priority 1: Speed - Instant load from cache */
       if (response) {
         return response;
       }
       
-      /* Priority 2: Sync - Real-time fetch for Firebase updates */
+      /* Priority 2: Sync - Live fetch for cloud updates */
       return fetch(event.request);
     })
   );
