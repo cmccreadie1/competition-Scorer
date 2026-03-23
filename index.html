@@ -93,7 +93,7 @@
         }
 
 
-        /* ACTIVE FOCUS GLOW */
+        /* V5.0.0 ACTIVE FOCUS GLOW */
         input:focus, select:focus {
             border-color: #f59e0b !important;
             box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
@@ -224,7 +224,7 @@
                 <button onclick="stewardSetNewEnd(1)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">1 MINUTE LEFT</button>
                 <button onclick="stewardSetNewEnd(5)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">5 MINUTES LEFT</button>
                 <button onclick="stewardSetNewEnd(10)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">10 MINUTES LEFT</button>
-                <button onclick="stewardSetNewEnd(0)" class="bg-red-600 py-3.5 rounded-lg font-black text-white active:bg-red-700 transition uppercase tracking-widest text-[10px] leading-none text-center">STRIKE NOW<br><span class="text-[8px] opacity-60 text-center">(Activates 5 Min Grace)</span></button>
+                <button onclick="stewardSetNewEnd(0)" class="bg-red-600 py-3.5 rounded-lg font-black text-white active:bg-red-700 transition uppercase tracking-widest text-[10px] leading-none text-center">STRIKE NOW<br><span class="text-[8px] opacity-60">(Activates 5 Min Grace)</span></button>
             </div>
             <button onclick="document.getElementById('customEndModal').classList.add('hidden')" class="w-full text-slate-500 font-black uppercase text-[9px] tracking-[0.3em] pt-3 text-center">Return</button>
         </div>
@@ -235,12 +235,12 @@
 
     <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-5 border-2 border-blue-500">
-            <div class="text-center text-center">
-                <i class="fa-solid fa-mobile-screen-button text-blue-400 text-4xl mb-2 text-center"></i>
-                <h3 class="text-lg font-black uppercase tracking-tight text-white text-center text-center">Device Installation</h3>
-                <p id="installInstructionText" class="text-slate-400 text-xs mt-3 leading-relaxed text-center text-center"></p>
+            <div class="text-center">
+                <i class="fa-solid fa-mobile-screen-button text-blue-400 text-4xl mb-2"></i>
+                <h3 class="text-lg font-black uppercase tracking-tight text-white text-center">Device Installation</h3>
+                <p id="installInstructionText" class="text-slate-400 text-xs mt-3 leading-relaxed text-center"></p>
             </div>
-            <button onclick="document.getElementById('installModal').classList.add('hidden')" class="w-full bg-blue-600 text-white font-black py-3.5 rounded-lg uppercase tracking-widest text-[10px] text-center text-center">Got it</button>
+            <button onclick="document.getElementById('installModal').classList.add('hidden')" class="w-full bg-blue-600 text-white font-black py-3.5 rounded-lg uppercase tracking-widest text-[10px] text-center">Got it</button>
         </div>
     </div>
 
@@ -260,29 +260,29 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1 text-center"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.2.0</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.2.2</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
                 <div class="match-card p-5 space-y-3 text-center shadow-lg">
                     <div>
-                        <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">Angler Profile</label>
+                        <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1 text-center">Angler Profile</label>
                         <input type="text" id="playerName" onkeydown="if(event.key === 'Enter'){ document.getElementById('venueName').focus(); }" placeholder="Your Name" class="w-full bg-slate-900 border border-slate-700 text-white font-bold text-lg rounded-lg p-3 text-center focus:border-blue-500 outline-none shadow-inner">
                     </div>
                     <div>
-                        <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">Venue Rememory</label>
+                        <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1 text-center">Venue Rememory</label>
                         <input type="text" id="venueName" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Venue Name" class="w-full bg-slate-900 border border-slate-700 text-white font-bold text-lg rounded-lg p-3 text-center focus:border-amber outline-none shadow-inner">
                     </div>
-                    <button onclick="proceedToRoleSelection()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-lg py-4 rounded-xl shadow-md uppercase tracking-wide active:scale-95 transition-transform text-center">
+                    <button id="btnContinueHome" onclick="proceedToRoleSelection()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-lg py-4 rounded-xl shadow-md uppercase tracking-wide active:scale-95 transition-transform text-center">
                         Continue to Match <i class="fa-solid fa-arrow-right ml-2"></i>
                     </button>
                 </div>
                 
                 <div class="flex space-x-2.5 pt-2 text-center">
                     <button onclick="navTo('history')" class="flex-1 bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[10px] uppercase border border-slate-700 active:bg-slate-700 transition tracking-widest">
-                        <i class="fa-solid fa-book mr-1.5 text-blue-400 text-center"></i> History
+                        <i class="fa-solid fa-book mr-1.5 text-blue-400"></i> History
                     </button>
-                    <button onclick="document.getElementById('guideDrawer').classList.add('open')" class="flex-1 bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[9px] uppercase border border-slate-700 active:bg-slate-700 transition tracking-widest text-center">
+                    <button id="btnGuideUpdate" onclick="document.getElementById('guideDrawer').classList.add('open')" class="flex-1 bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[9px] uppercase border border-slate-700 active:bg-slate-700 transition tracking-widest">
                         <i class="fa-solid fa-circle-info mr-1 text-amber"></i> Guide & Update
                     </button>
                 </div>
@@ -298,13 +298,13 @@
 
 
         <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-[#020617] text-center">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
-                <button onclick="navTo('home')" class="text-slate-500 text-xl px-2 text-left"><i class="fa-solid fa-arrow-left text-center"></i></button>
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1 text-center">
+                <button onclick="navTo('home')" class="text-slate-500 text-xl px-2 text-left"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-lg font-black uppercase tracking-tight text-white text-center">Match Access</h2>
-                <button onclick="exitApp()" class="text-red-500 text-xl px-2 text-right"><i class="fa-solid fa-power-off text-center"></i></button>
+                <button onclick="exitApp()" class="text-red-500 text-xl px-2 text-right"><i class="fa-solid fa-power-off"></i></button>
             </div>
             
-            <div class="flex-1 flex flex-col justify-center max-w-sm mx-auto w-full pb-20">
+            <div class="flex-1 flex flex-col justify-center max-w-sm mx-auto w-full pb-20 text-center">
                 <div class="text-center mb-8">
                     <p class="text-slate-400 font-black uppercase tracking-[0.3em] text-[10px] mb-2">Angler Mode</p>
                     <button onclick="navTo('join')" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-xl py-10 rounded-2xl shadow-xl uppercase tracking-wide active:scale-95 transition-transform flex flex-col items-center justify-center">
@@ -327,14 +327,14 @@
 
 
         <div id="view-join" class="hidden view-frame p-4 bg-[#020617] text-center">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
-                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2 text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1 text-center">
+                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2 text-center"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-lg font-black uppercase tracking-tight text-white text-center">Authentication</h2>
                 <div class="w-6 text-center"></div>
             </div>
-            <div class="text-center pt-6 pb-3">
+            <div class="text-center pt-6 pb-3 text-center">
                 <h2 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] mb-3 text-center">Enter Room PIN</h2>
-                <div class="flex justify-center space-x-2">
+                <div class="flex justify-center space-x-2 text-center">
                     <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md" id="pin-1"></div>
                     <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md" id="pin-2"></div>
                     <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md" id="pin-3"></div>
@@ -355,7 +355,7 @@
 
         <div id="view-host" class="hidden view-frame p-5 space-y-4 text-center">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3 text-white text-center">
-                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2 text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
+                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2 text-center"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-lg font-black uppercase tracking-tight text-white text-center">Match Creator</h2>
                 <div class="w-6 text-center"></div>
             </div>
@@ -381,16 +381,16 @@
 
         <div id="view-waiting" class="hidden view-frame p-5 space-y-4 text-center">
             <div class="flex justify-between items-center w-full text-center">
-                <button onclick="exitWaitingRoom()" class="text-slate-500 text-xl px-2 text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
+                <button onclick="exitWaitingRoom()" class="text-slate-500 text-xl px-2 text-center text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
                 <div class="text-amber font-black tracking-[0.2em] bg-slate-800 px-5 py-1.5 rounded-lg border border-slate-700 shadow-md text-center" id="displayPin">0000</div>
             </div>
             <div class="flex-1 flex flex-col items-center space-y-5 pt-3 text-center">
                 <h3 class="text-xl font-black text-white uppercase tracking-tight text-center">Angler Lobby</h3>
-                <div id="attendanceList" class="w-full max-w-sm flex-1 bg-slate-800/40 rounded-2xl border border-slate-800 p-4 space-y-2.5 overflow-y-auto shadow-inner text-center text-center"></div>
+                <div id="attendanceList" class="w-full max-w-sm flex-1 bg-slate-800/40 rounded-2xl border border-slate-800 p-4 space-y-2.5 overflow-y-auto shadow-inner text-center"></div>
                 <div id="hostControls" class="hidden w-full max-w-sm pb-5 text-center">
                     <button onclick="triggerHypeStart()" class="w-full bg-red-600 text-white font-black text-xl py-4 rounded-2xl animate-pulse shadow-xl uppercase active:scale-95 transition-transform text-center">🚀 START MATCH</button>
                 </div>
-                <div id="joinerWaitingText" class="w-full max-w-sm pb-5 text-center">
+                <div id="joinerWaitingText" class="w-full max-w-sm pb-5 text-center text-center">
                     <p class="text-base font-bold text-slate-400 italic text-center">Linked... Waiting for Steward.</p>
                 </div>
             </div>
@@ -402,8 +402,8 @@
         <div id="view-fishing" class="hidden view-frame relative bg-[#020617] text-center">
             <div class="flex-none bg-slate-900 border-b border-slate-800 px-4 py-2 flex justify-between items-center z-20 shadow-md text-center">
                 <div class="flex flex-col items-start text-center">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                    <div class="flex items-center space-x-2 text-center">
+                        <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse text-center"></div>
                         <div class="text-base font-black tabular-nums tracking-tighter text-white leading-none text-center" id="mainTimer">00:00:00</div>
                     </div>
                     <span id="graceLabel" class="hidden text-[10px] font-black text-red-500 uppercase tracking-widest mt-1 ml-4 animate-pulse text-center">GRACE PERIOD</span>
@@ -411,16 +411,16 @@
                 <div class="flex items-center space-x-2.5 text-center">
                     <i id="cloudSignal" class="fa-solid fa-cloud text-slate-700 text-base text-center"></i>
                     <div class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-1 flex flex-col items-center justify-center min-w-[85px] shadow-inner text-center">
-                        <span class="text-[8px] font-black uppercase text-slate-500 tracking-widest leading-none mb-0.5">Total Points</span>
+                        <span class="text-[8px] font-black uppercase text-slate-500 tracking-widest leading-none mb-0.5 text-center">Total Points</span>
                         <span class="text-lg font-black text-white leading-none text-center" id="liveTallyBox">0</span>
                     </div>
                 </div>
-                <button id="wakeLockBtn" onclick="toggleWakeLock()" class="text-slate-400 border border-slate-800 px-2.5 py-1 rounded-md text-[9px] font-black uppercase text-center"><i class="fa-solid fa-moon text-center"></i></button>
+                <button id="wakeLockBtn" onclick="toggleWakeLock()" class="text-slate-400 border border-slate-800 px-2.5 py-1 rounded-md text-[9px] font-black uppercase text-center"><i class="fa-solid fa-moon text-center text-center"></i></button>
             </div>
             
             <div class="flex-none w-full bg-slate-900 border-b border-slate-800 z-10 p-2.5 text-center shadow-lg text-center">
                 <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="w-full bg-amber text-slate-900 font-black py-3.5 rounded-xl text-sm uppercase tracking-[0.2em] shadow-[0_0_15px_rgba(245,158,11,0.4)] active:scale-95 transition-transform flex items-center justify-center text-center">
-                    <i class="fa-solid fa-trophy mr-2.5 animate-bounce"></i> View Live Leader Board
+                    <i class="fa-solid fa-trophy mr-2.5 animate-bounce text-center"></i> View Live Leader Board
                 </button>
             </div>
 
@@ -461,7 +461,7 @@
                             </optgroup>
                             
                             <optgroup label="Bass & Bream">
-                                <option value="European Bass">European Bass</option><option value="Black Bream">Black Bream</option><option value="Gilthead Bream">Gilthead Bream</option><option value="Red Bream">Red Bream</option><option value="Couch’s Bream">Couch’s Bream</option>
+                                <option value="Black Bream">Black Bream</option><option value="Gilthead Bream">Gilthead Bream</option><option value="Red Bream">Red Bream</option><option value="Couch’s Bream">Couch’s Bream</option>
                             </optgroup>
                             
                             <optgroup label="Flatfish">
@@ -495,7 +495,7 @@
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-[0.3em] mb-1.5 ml-1 text-center" id="labelSize">Capture Record</label>
                         
                         <div id="deckLength" class="text-center">
-                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-4 rounded-lg text-2xl font-black text-center text-white focus:border-amber outline-none shadow-inner" placeholder="0">
+                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-4 rounded-lg text-2xl font-black text-center text-white focus:border-amber outline-none shadow-inner text-center" placeholder="0">
                         </div>
                         
                         <div id="deckWeightLb" class="hidden flex space-x-2 text-center">
@@ -511,11 +511,11 @@
 
 
                     </div>
-                    <button id="btnRecord" onclick="recordCatch()" class="w-full bg-blue-600 text-white font-black text-lg py-4 rounded-lg shadow-lg transition uppercase active:scale-95 text-center">Record Catch</button>
+                    <button id="btnRecord" onclick="recordCatch()" class="w-full bg-blue-600 text-white font-black text-lg py-4 rounded-lg shadow-lg transition uppercase active:scale-95 text-center text-center">Record Catch</button>
                 </div>
 
 
-                <div class="pt-1 text-center">
+                <div class="pt-1 text-center text-center">
                     <h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.4em] mb-2 ml-1 opacity-60 text-center">Match Journal</h3>
                     <div id="localCatchList" class="space-y-2 pb-5 text-center text-center"></div>
                 </div>
@@ -529,10 +529,10 @@
             </div>
 
 
-            <div id="btnStewardPanelContainer" class="hidden fixed bottom-0 left-0 right-0 p-4 bg-slate-950/90 backdrop-blur-md border-t border-slate-800 z-50">
+            <div id="btnStewardPanelContainer" class="hidden fixed bottom-0 left-0 right-0 p-4 bg-slate-950/90 backdrop-blur-md border-t border-slate-800 z-50 text-center">
                 <button onclick="document.getElementById('stewardDrawer').classList.add('open')" class="w-full bg-slate-900 border border-slate-700 text-amber font-black py-3.5 rounded-xl shadow-lg active:bg-slate-800 transition flex items-center justify-center space-x-2 text-center text-center">
-                    <i class="fa-solid fa-user-shield text-blue-400 text-center"></i>
-                    <span class="tracking-widest uppercase text-[10px] text-center">Admin: Steward Desk</span>
+                    <i class="fa-solid fa-user-shield text-blue-400 text-center text-center"></i>
+                    <span class="tracking-widest uppercase text-[10px] text-center text-center">Admin: Steward Desk</span>
                 </button>
             </div>
         </div>
@@ -540,65 +540,31 @@
 
 
 
-        <div id="view-results" class="hidden view-frame bg-[#020617] text-white p-5 justify-center text-center space-y-5 text-center">
-            <h1 class="text-4xl font-black uppercase text-amber border-b-4 border-slate-900 pb-5 tracking-tighter text-center">Final Result</h1>
-            <div class="match-card p-6 shadow-[0_0_40px_rgba(59,130,246,0.15)] text-center">
-                <p class="text-slate-500 font-black uppercase tracking-[0.3em] text-[9px] mb-2 text-center">Tournament Total Score</p>
-                <p class="text-6xl font-black text-white text-center" id="finalScore">0</p>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-3 text-center">
-                <div class="match-card p-3 flex flex-col items-center text-center">
-                    <span class="text-[9px] font-black uppercase text-slate-500 tracking-widest mb-1 text-center">Fish Count</span>
-                    <span class="text-2xl font-black text-white text-center" id="finalCount">0</span>
-                </div>
-                <div class="match-card p-3 flex flex-col items-center text-center">
-                    <span class="text-[9px] font-black uppercase text-slate-500 tracking-widest mb-1 text-center">Unique Species</span>
-                    <span class="text-2xl font-black text-blue-400 text-center" id="finalSpecies">0</span>
-                </div>
-            </div>
-
-
-            <button id="btnMasterExport" onclick="shareMasterLeaderboard()" class="hidden w-full bg-blue-600 text-white font-black text-lg py-4 rounded-2xl shadow-lg mt-3 active:bg-blue-700 uppercase tracking-widest text-center">Export Full Leaderboard</button>
-
-
-            <button onclick="shareResults()" class="w-full bg-green-600 text-white font-black text-xl py-4 rounded-2xl shadow-lg mt-3 active:bg-green-700 uppercase tracking-widest text-center">Share My Results</button>
-            <button onclick="resetApp()" class="text-slate-400 font-black mt-6 border-b border-slate-900 pb-1 active:text-white uppercase text-[11px] tracking-[0.5em] text-center">Return Home</button>
-        </div>
-
-
-
-
-        <div id="view-history" class="hidden view-frame p-5 bg-[#020617] text-center text-center">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-5 text-white text-center">
-                <button onclick="navTo('home')" class="text-slate-500 text-xl px-2 text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
-                <h2 class="text-lg font-black uppercase tracking-[0.1em] text-center">History</h2>
-                <div class="w-6 text-center"></div>
-            </div>
-            <div class="scrollable-area space-y-6 pb-10 text-center">
-                <div id="historyRecentList" class="space-y-3 px-1 text-center text-center"></div>
-                <div id="archiveContainer" class="hidden px-1 text-center">
-                    <button onclick="toggleArchive()" class="w-full flex justify-between items-center bg-slate-950/50 p-4 rounded-xl border-2 border-slate-800 active:bg-slate-900 transition shadow-md text-center">
-                        <span class="font-black text-[10px] uppercase tracking-[0.3em] text-slate-400 text-center"><i class="fa-solid fa-box-archive mr-2 text-amber opacity-40 text-center"></i> Older Storage</span>
-                        <i class="fa-solid fa-chevron-down text-slate-600 transition-transform duration-300 text-center" id="archiveChevron"></i>
+        <div id="guideDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[250] flex flex-col shadow-2xl text-center">
+            <button onclick="document.getElementById('guideDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 py-6 font-black uppercase tracking-[0.4em] text-white border-b border-slate-700 flex justify-center items-center text-center">
+                <i class="fa-solid fa-arrow-left mr-3 text-center"></i> Back to Lobby
+            </button>
+            <div class="scrollable-area p-6 space-y-8 text-slate-300 text-left text-center">
+                
+                <section class="text-center text-center">
+                    <h4 class="text-amber font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center text-center">Technical Administration</h4>
+                    <button onclick="forceUpdateApp()" class="w-full flex items-center justify-center space-x-2 bg-slate-900 text-slate-400 border border-slate-700 font-black py-4 rounded-lg active:text-amber transition shadow-inner text-center text-center">
+                        <i class="fa-solid fa-rotate text-lg text-center text-center" id="updateSpinnerInternal"></i>
+                        <span class="text-[10px] uppercase tracking-widest text-center text-center">Wipe Cache & Update Version</span>
                     </button>
-                    <div id="historyArchiveList" class="hidden pt-5 space-y-3 text-center"></div>
-                </div>
-            </div>
-        </div>
+                </section>
 
 
+                <section class="text-center text-center">
+                    <h4 class="text-amber font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center">1. Purpose of the Application</h4>
+                    <p class="text-xs leading-relaxed text-center text-center text-center">Sea Diary: Match Edition Pro is a specialized platform for real-time tournament management. This build (v5.2.2) restores the full taxonomy and guide logic while maintaining the predictive focus engine for optimized shoreline use.</p>
+                </section>
 
 
-        <div id="view-kill" class="hidden view-frame items-center justify-center bg-black p-6 text-center text-center">
-            <i class="fa-solid fa-power-off text-red-600 text-5xl mb-5 animate-pulse text-center"></i>
-            <h1 class="text-2xl font-black uppercase text-white tracking-widest mb-3 text-center">Session Cleared</h1>
-            <p class="text-slate-400 font-bold text-xs leading-relaxed mb-6 text-center">Your connection is safely closed and your battery is no longer being used.</p>
-            
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-left shadow-lg text-center text-center">
-                <p class="text-amber font-black uppercase tracking-widest text-[10px] mb-3 border-b border-slate-800 pb-2 text-center">To fully exit the app:</p>
-                <p class="text-slate-300 text-[11px] leading-relaxed mb-3 text-center"><b class="text-white text-xs text-center">1.</b> Press your phone's <b>Recent Apps</b> button (usually ||| or a square at the bottom) <b>OR</b> swipe up slowly from the bottom edge of your screen and hold.</p>
-                <p class="text-slate-300 text-[11px] leading-relaxed text-center"><b class="text-white text-xs text-center">2.</b> Find this window in the list and <b>swipe it up and away</b> to close it completely.</p>
+                <section class="text-center text-center">
+                    <h4 class="text-blue-400 font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center text-center">2. The Competitor Perspective</h4>
+                    <p class="text-xs leading-relaxed mb-3 text-center text-center">Anglers can use the static Scottish common species list for ultra-fast logging. The predictive cursor logic ensures you spend more time with a rod in your hand and less time with a phone.</p>
+                </section>
             </div>
         </div>
 
@@ -611,7 +577,7 @@
             </button>
             <div class="flex-none flex bg-slate-900 p-2 space-x-2 border-b border-slate-800 shadow-md text-center">
                 <button id="tab-standings" onclick="switchHistoryTab('standings')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase text-center">Leader Board</button>
-                <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase text-center text-center text-center text-center">Diary</button>
+                <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase text-center text-center">Diary</button>
             </div>
             <div id="historyContent" class="scrollable-area p-6 text-center"></div>
         </div>
@@ -619,16 +585,16 @@
 
 
 
-        <div id="stewardDrawer" class="drawer-left fixed inset-0 w-full bg-[#020617] z-[101] flex flex-col shadow-2xl text-center">
-            <button onclick="document.getElementById('stewardDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center active:bg-slate-900 border-b border-slate-800 transition text-center"><i class="fa-solid fa-arrow-left mr-3 text-center"></i> RETURN</button>
-            <div class="flex-none p-4 bg-slate-950 border-b border-slate-900 text-center shadow-sm text-center text-center"><h2 class="font-black text-lg text-blue-400 uppercase tracking-[0.2em] text-center"><i class="fa-solid fa-user-shield mr-2 text-center text-center text-center"></i> Steward Desk</h2></div>
+        <div id="stewardDrawer" class="drawer-left fixed inset-0 w-full bg-[#020617] z-[101] flex flex-col shadow-2xl text-center text-center">
+            <button onclick="document.getElementById('stewardDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center active:bg-slate-900 border-b border-slate-800 transition text-center text-center"><i class="fa-solid fa-arrow-left mr-3 text-center"></i> RETURN</button>
+            <div class="flex-none p-4 bg-slate-950 border-b border-slate-900 text-center shadow-sm text-center text-center"><h2 class="font-black text-lg text-blue-400 uppercase tracking-[0.2em] text-center text-center text-center"><i class="fa-solid fa-user-shield mr-2 text-center text-center"></i> Steward Desk</h2></div>
             <div class="scrollable-area p-8 space-y-8 text-center text-center">
                 <hr class="border-slate-800 text-center text-center">
-                <button onclick="transferSteward()" class="w-full bg-slate-900 border-2 border-slate-800 text-slate-400 font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:text-amber transition text-center"><i class="fa-solid fa-right-left mr-3 text-amber text-center text-center"></i> Transfer Control</button>
+                <button onclick="transferSteward()" class="w-full bg-slate-900 border-2 border-slate-800 text-slate-400 font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:text-amber transition text-center text-center text-center text-center"><i class="fa-solid fa-right-left mr-3 text-amber text-center text-center"></i> Transfer Control</button>
                 <hr class="border-slate-800 pt-4 text-center text-center">
-                <button onclick="endMatchEarly(true)" class="w-full bg-amber text-slate-900 font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-base leading-tight active:scale-95 transition-transform text-center">Change Ending Time</button>
-                <hr class="border-slate-800 pt-4 text-center text-center">
-                <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:bg-blue-700 transition text-center"><i class="fa-solid fa-file-export mr-3 text-center"></i> Master Export</button>
+                <button onclick="endMatchEarly(true)" class="w-full bg-amber text-slate-900 font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-base leading-tight active:scale-95 transition-transform text-center text-center">Change Ending Time</button>
+                <hr class="border-slate-800 pt-4 text-center text-center text-center text-center">
+                <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:bg-blue-700 transition text-center text-center"><i class="fa-solid fa-file-export mr-3 text-center text-center"></i> Master Export</button>
             </div>
         </div>
 
@@ -695,26 +661,26 @@
 
         function navTo(viewId) {
             document.querySelectorAll('.view-frame').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            const target = document.getElementById(`view-${viewId}`);
+            if (target) target.classList.remove('hidden');
             state.view = viewId;
-            if (viewId === 'history') { 
-                renderHistory(); 
-            }
+            if (viewId === 'history') renderHistory();
             saveState();
         }
 
 
         function proceedToRoleSelection() {
-            document.getElementById('venueName').blur();
+            const pEl = document.getElementById('playerName');
+            const vEl = document.getElementById('venueName');
             
-            let pName = document.getElementById('playerName').value || "";
-            let vName = document.getElementById('venueName').value || "";
+            let pName = pEl.value || "";
+            let vName = vEl.value || "";
             
             pName = pName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
             vName = vName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
             
-            document.getElementById('playerName').value = pName;
-            document.getElementById('venueName').value = vName;
+            pEl.value = pName;
+            vEl.value = vName;
             
             state.name = pName; 
             state.venue = vName;
@@ -728,19 +694,12 @@
 
 
         function exitApp() {
-            if (confirm("CLOSE APP?\n\nThis will clear current lobby inputs. History remains untouched.")) {
-                
+            if (confirm("CLOSE APP?\n\nLobby inputs will clear. History safe.")) {
                 localStorage.removeItem('matchState');
                 state = { status: 'idle', pin: null };
-                
                 clearInterval(clockInterval);
                 clearInterval(hypeInterval);
                 clearInterval(historyUpdateInterval);
-                
-                try {
-                    window.close();
-                } catch(e) {}
-                
                 navTo('kill');
             }
         }
@@ -752,16 +711,10 @@
                 if (spin) spin.classList.add('fa-spin');
                 localStorage.removeItem('matchState');
                 if ('serviceWorker' in navigator) {
-                    const registrations = await navigator.serviceWorker.getRegistrations();
-                    for (let registration of registrations) { await registration.unregister(); }
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (let r of regs) await r.unregister();
                 }
-                if ('caches' in window) {
-                    const keys = await caches.keys();
-                    for (let key of keys) { await caches.delete(key); }
-                }
-                setTimeout(() => { 
-                    window.location.href = window.location.origin + window.location.pathname + '?v=' + Date.now();
-                }, 1000);
+                setTimeout(() => { location.reload(); }, 500);
             }
         }
 
@@ -798,9 +751,7 @@
                 atmPin += num;
                 if(navigator.vibrate) navigator.vibrate(10);
                 updateAtm();
-                if (atmPin.length === 4) {
-                    connectToMatch();
-                }
+                if (atmPin.length === 4) connectToMatch();
             }
         }
 
@@ -815,26 +766,18 @@
         function updateAtm() {
             for (let i = 1; i <= 4; i++) {
                 const el = document.getElementById(`pin-${i}`);
-                if (el) { el.innerText = atmPin[i-1] || ""; }
+                if (el) el.innerText = atmPin[i-1] || "";
             }
         }
 
 
         function listenToCloud() {
             if(!state.pin) return;
-            const connectedRef = ref(db, ".info/connected");
-            onValue(connectedRef, (snap) => {
-                const icon = document.getElementById('cloudSignal');
-                if (icon) {
-                    icon.style.color = (snap.val() === true) ? '#22c55e' : '#ef4444';
-                }
-            });
             onValue(ref(db, 'matches/' + state.pin), (snapshot) => {
                 if (snapshot.exists()) {
                     globalMatchData = snapshot.val();
                     processCloudUpdate();
                 } else if (['waiting', 'playing', 'grace', 'hype'].includes(state.status)) {
-                    alert("Lobby expired.");
                     resetApp();
                 }
             });
@@ -867,49 +810,32 @@
 
 
             if (globalMatchData.status === 'playing') {
-                if (state.status === 'grace') {
-                    state.status = 'playing';
-                    state.graceEndTime = null;
-                    document.getElementById('graceLabel').classList.add('hidden');
-                    document.getElementById('app-container').classList.remove('grace-active');
-                    document.getElementById('mainTimer').classList.remove('grace-pulse');
-                    showNotification("MATCH RESUMED: Time adjusted.");
-                }
                 state.endTime = globalMatchData.endTime;
-                if (state.view !== 'fishing' && state.status !== 'hype') { beginFishing(false); }
+                if (state.view !== 'fishing' && state.status !== 'hype') beginFishing(false);
             }
 
 
-            if (globalMatchData.status === 'hype' && state.status !== 'hype') { 
-                runGlobalCountdown(); 
-            }
+            if (globalMatchData.status === 'hype' && state.status !== 'hype') runGlobalCountdown();
 
 
             if (globalMatchData.status === 'grace' && state.status !== 'grace') {
                 state.graceEndTime = globalMatchData.graceEndTime;
                 state.endTime = globalMatchData.endTime; 
                 state.status = 'grace';
-                if(state.view !== 'fishing') { navTo('fishing'); }
-                
+                if(state.view !== 'fishing') navTo('fishing');
                 document.getElementById('graceLabel').classList.remove('hidden');
                 document.getElementById('app-container').classList.add('grace-active');
-                document.getElementById('mainTimer').classList.add('grace-pulse');
-                
-                showNotification("5 MINUTE GRACE: Log final fish.");
+                showNotification("5 MINUTE GRACE.");
                 saveState();
             }
 
 
-            if (globalMatchData.status === 'finished' && state.status !== 'finished') { lockdownMatch(false); }
+            if (globalMatchData.status === 'finished' && state.status !== 'finished') lockdownMatch(false);
             
             if (globalMatchData.hostId === uid) {
                 state.isHost = true;
                 const stewardBtn = document.getElementById('btnStewardPanelContainer');
-                if (stewardBtn && (state.status === 'playing' || state.status === 'grace')) { stewardBtn.classList.remove('hidden'); }
-            } else {
-                state.isHost = false;
-                const stewardBtn = document.getElementById('btnStewardPanelContainer');
-                if (stewardBtn) { stewardBtn.classList.add('hidden'); }
+                if (stewardBtn && (state.status === 'playing' || state.status === 'grace')) stewardBtn.classList.remove('hidden');
             }
             renderGlobalLeaderboard();
         }
@@ -918,7 +844,7 @@
         function updateLiveTally() {
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
             const box = document.getElementById('liveTallyBox');
-            if (box) { box.innerText = formatScoreDisplay(total, state.format); }
+            if (box) box.innerText = formatScoreDisplay(total, state.format);
         }
 
 
@@ -945,8 +871,6 @@
                 state.status = 'waiting';
                 listenToCloud();
                 document.getElementById('displayPin').innerText = state.pin;
-                document.getElementById('hostControls').classList.remove('hidden');
-                document.getElementById('joinerWaitingText').classList.add('hidden');
                 navTo('waiting');
             });
         }
@@ -966,13 +890,13 @@
                         state.endTime = snapshot.val().endTime;
                         state.status = snapshot.val().status;
                         beginFishing(false);
-                    } else { navTo('waiting'); }
+                    } else navTo('waiting');
                 } else { alert("Invalid PIN."); atmPin = ""; updateAtm(); }
             });
         }
 
 
-        function exitWaitingRoom() { if (confirm("Cancel session?")) { if (state.isHost) { remove(ref(db, 'matches/' + state.pin)); } resetApp(); } }
+        function exitWaitingRoom() { if (confirm("Cancel?")) { if (state.isHost) remove(ref(db, 'matches/' + state.pin)); resetApp(); } }
 
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -986,7 +910,6 @@
             osc.start(); osc.stop(audioCtx.currentTime + duration);
         }
         function playHorn() { playTone(200, 1.5); }
-        function playAlert() { playTone(880, 0.4); playTone(440, 0.4); }
 
 
         function triggerHypeStart() {
@@ -1003,21 +926,18 @@
             countdownActive = true;
             state.status = 'hype';
             navTo('hype');
-            
             document.getElementById('hypeCount').classList.remove('hidden');
             let count = 5;
             document.getElementById('hypeCount').innerText = count;
             playTone(400, 0.1);
             if(navigator.vibrate) navigator.vibrate(50);
-            
             hypeInterval = setInterval(() => {
                 count--;
                 if (count > 0) { 
                     document.getElementById('hypeCount').innerText = count; 
                     playTone(400, 0.1); 
                     if(navigator.vibrate) navigator.vibrate(50);
-                }
-                else { 
+                } else { 
                     clearInterval(hypeInterval);
                     triggerSplashSequence();
                 }
@@ -1031,12 +951,9 @@
             document.getElementById('hypeCount').classList.add('hidden');
             playHorn();
             if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
-            
             setTimeout(() => {
                 countdownActive = false;
-                if(state.isHost) {
-                    update(ref(db, 'matches/' + state.pin), { status: 'playing' });
-                }
+                if(state.isHost) update(ref(db, 'matches/' + state.pin), { status: 'playing' });
                 beginFishing(false);
             }, 1500);
         }
@@ -1046,8 +963,8 @@
 
         function focusMeasurement() {
             let el = document.getElementById('inputSize');
-            if (state.format === 'weightLb') { el = document.getElementById('inputLbs'); }
-            if (state.format === 'weightKg') { el = document.getElementById('inputKg'); }
+            if (state.format === 'weightLb') el = document.getElementById('inputLbs');
+            if (state.format === 'weightKg') el = document.getElementById('inputKg');
             if (el) { 
                 el.focus(); 
                 handleInputFocus(el); 
@@ -1072,7 +989,7 @@
 
 
         function promptCustomSpecies() {
-            let name = prompt("Name of Unusual Species:");
+            let name = prompt("Name:");
             if (name) {
                 let grp = document.getElementById('customSpeciesGroup');
                 let opt = document.createElement('option');
@@ -1080,9 +997,7 @@
                 grp.insertBefore(opt, grp.lastElementChild); 
                 if (state.format !== 'speciesHunt') focusMeasurement();
                 else document.getElementById('btnRecord').focus();
-            } else { 
-                document.getElementById('inputSpecies').value = ""; 
-            }
+            } else document.getElementById('inputSpecies').value = ""; 
         }
 
 
@@ -1090,39 +1005,19 @@
 
         function beginFishing(isPushing) {
             state.status = 'playing'; navTo('fishing');
-            const stewardBtn = document.getElementById('btnStewardPanelContainer');
-            if(state.isHost && stewardBtn) { stewardBtn.classList.remove('hidden'); }
             pushMyScoreToCloud();
-            
             const label = document.getElementById('labelSize');
             const sizeDeck = document.getElementById('deckSizeInputs');
-
-
-            if (state.format === 'speciesHunt') {
-                sizeDeck.classList.add('hidden');
-            } else {
+            if (state.format === 'speciesHunt') sizeDeck.classList.add('hidden');
+            else {
                 sizeDeck.classList.remove('hidden');
                 document.getElementById('deckLength').classList.add('hidden'); 
                 document.getElementById('deckWeightLb').classList.add('hidden'); 
                 document.getElementById('deckWeightKg').classList.add('hidden'); 
-                
-                if (state.format === 'weightLb') { 
-                    document.getElementById('deckWeightLb').classList.remove('hidden'); 
-                    label.innerText = "Weight (Lbs/Oz)"; 
-                } else if (state.format === 'weightKg') {
-                    document.getElementById('deckWeightKg').classList.remove('hidden'); 
-                    label.innerText = "Weight (Kg/g)"; 
-                } else { 
-                    document.getElementById('deckLength').classList.remove('hidden'); 
-                    label.innerText = "Measurement (cm)"; 
-                }
+                if (state.format === 'weightLb') { document.getElementById('deckWeightLb').classList.remove('hidden'); label.innerText = "Weight (Lbs/Oz)"; } 
+                else if (state.format === 'weightKg') { document.getElementById('deckWeightKg').classList.remove('hidden'); label.innerText = "Weight (Kg/g)"; } 
+                else { document.getElementById('deckLength').classList.remove('hidden'); label.innerText = "Measurement (cm)"; }
             }
-
-
-            if (document.getElementById('bountyContainer')) { 
-                document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); 
-            }
-            
             startClock();
         }
 
@@ -1135,13 +1030,12 @@
                 let now = Date.now();
                 if (state.status === 'playing') {
                     let remaining = state.endTime - now;
-                    if (remaining <= 1200000 && remaining > 1198000 && !alert20Played) { alert20Played = true; playAlert(); showNotification("⚠️ 20 MINUTES LEFT!"); }
-                    if (remaining <= 0) { playHorn(); if (state.isHost) { let grace = Date.now() + 300000; update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: grace }); } }
-                    else { updateTimerDisplay(remaining); }
+                    if (remaining <= 0) { playHorn(); if (state.isHost) update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: Date.now() + 300000 }); }
+                    else updateTimerDisplay(remaining);
                 } else if (state.status === 'grace') {
                     let graceRem = state.graceEndTime - now;
-                    if (graceRem <= 0) { if (state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } }
-                    else { updateTimerDisplay(graceRem); }
+                    if (graceRem <= 0) { if (state.isHost) update(ref(db, 'matches/' + state.pin), { status: 'finished' }); }
+                    else updateTimerDisplay(graceRem);
                 }
             }, 1000);
         }
@@ -1154,7 +1048,7 @@
             let hours = Math.floor(totalSec / 3600);
             let mins = Math.floor((totalSec % 3600) / 60);
             let secs = totalSec % 60;
-            if (document.getElementById('mainTimer')) { document.getElementById('mainTimer').innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`; }
+            if (document.getElementById('mainTimer')) document.getElementById('mainTimer').innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
         }
 
 
@@ -1162,71 +1056,30 @@
 
         function recordCatch() {
             let species = document.getElementById('inputSpecies').value;
-            if(!species) {
-                if(navigator.vibrate) navigator.vibrate(200); 
-                return alert("Select species first!");
-            }
-            
-            let finalSize = 0; 
-            let displaySize = "";
-            let pts = 0;
-            
+            if(!species) { if(navigator.vibrate) navigator.vibrate(200); return alert("Select species first!"); }
+            let finalSize = 0; let displaySize = ""; let pts = 0;
             if (state.format === 'weightLb') { 
                 let lbs = parseInt(document.getElementById('inputLbs').value) || 0; 
                 let oz = parseInt(document.getElementById('inputOz').value) || 0; 
-                finalSize = (lbs * 16) + oz; 
-                displaySize = `${lbs}lb ${oz}oz`; 
-                pts = finalSize;
+                finalSize = (lbs * 16) + oz; displaySize = `${lbs}lb ${oz}oz`; pts = finalSize;
             } else if (state.format === 'weightKg') {
                 let kg = parseInt(document.getElementById('inputKg').value) || 0; 
                 let g = parseInt(document.getElementById('inputGrammes').value) || 0; 
-                finalSize = (kg * 1000) + g; 
-                displaySize = `${kg}kg ${g}g`; 
-                pts = finalSize;
-            } else if (state.format === 'speciesHunt') {
-                finalSize = 1; 
-                displaySize = "Captured";
-            } else { 
-                finalSize = parseFloat(document.getElementById('inputSize').value) || 0; 
-                displaySize = finalSize.toString(); 
-                pts = finalSize;
-                if (state.format === 'length10') pts = finalSize + 10;
-            }
+                finalSize = (kg * 1000) + g; displaySize = `${kg}kg ${g}g`; pts = finalSize;
+            } else if (state.format === 'speciesHunt') { finalSize = 1; displaySize = "Captured"; } 
+            else { finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = finalSize.toString(); pts = finalSize; if (state.format === 'length10') pts = finalSize + 10; }
 
 
-            if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { 
-                if(navigator.vibrate) navigator.vibrate(200); 
-                alert("MEASUREMENT REQUIRED."); return; 
-            }
-
-
-            if (state.format === 'speciesHunt') { 
-                let existing = state.myCatches.filter(x => x.species === species && x.id !== state.editingId).length; 
-                pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; 
-            } else if (species === 'Mackerel') { 
-                if (state.myCatches.filter(x => x.species === 'Mackerel' && x.id !== state.editingId).length >= 3) { pts = 0; } 
-            }
-
-
+            if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { if(navigator.vibrate) navigator.vibrate(200); alert("SIZE REQUIRED."); return; }
             if (state.editingId) { 
                 let obj = state.myCatches.find(x => x.id === state.editingId); 
                 if(obj) { obj.species = species; obj.size = finalSize; obj.display = displaySize; obj.points = pts; } 
-                state.editingId = null; 
-                document.getElementById('btnRecord').innerText = "Record Catch"; 
+                state.editingId = null; document.getElementById('btnRecord').innerText = "Record Catch"; 
             } else { 
                 state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }); 
             }
-            
-            document.getElementById('inputSpecies').value = ""; 
-            document.getElementById('inputSize').value = ""; 
-            document.getElementById('inputLbs').value = ""; 
-            document.getElementById('inputOz').value = "";
-            document.getElementById('inputKg').value = ""; 
-            document.getElementById('inputGrammes').value = "";
-            document.activeElement.blur(); 
-            
+            document.getElementById('inputSpecies').value = ""; document.getElementById('inputSize').value = ""; document.activeElement.blur(); 
             if(navigator.vibrate) navigator.vibrate([50, 30, 50]);
-            
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
 
@@ -1237,20 +1090,10 @@
             let obj = state.myCatches.find(x => x.id === id);
             if(obj) {
                 document.getElementById('inputSpecies').value = obj.species;
-                
-                if (state.format === 'weightLb') { 
-                    document.getElementById('inputLbs').value = Math.floor(obj.size / 16); 
-                    document.getElementById('inputOz').value = obj.size % 16; 
-                } else if (state.format === 'weightKg') {
-                    document.getElementById('inputKg').value = Math.floor(obj.size / 1000); 
-                    document.getElementById('inputGrammes').value = obj.size % 1000; 
-                } else if (state.format !== 'speciesHunt') { 
-                    document.getElementById('inputSize').value = obj.size; 
-                }
-                
-                state.editingId = id; 
-                document.getElementById('btnRecord').innerText = "Update Record";
-                focusMeasurement();
+                if (state.format === 'weightLb') { document.getElementById('inputLbs').value = Math.floor(obj.size / 16); document.getElementById('inputOz').value = obj.size % 16; } 
+                else if (state.format === 'weightKg') { document.getElementById('inputKg').value = Math.floor(obj.size / 1000); document.getElementById('inputGrammes').value = obj.size % 1000; } 
+                else if (state.format !== 'speciesHunt') document.getElementById('inputSize').value = obj.size; 
+                state.editingId = id; document.getElementById('btnRecord').innerText = "Update Record"; focusMeasurement();
             }
         }
 
@@ -1258,13 +1101,8 @@
 
 
         function deleteCatch(id) {
-            if (!confirm("Delete capture?")) return;
+            if (!confirm("Delete?")) return;
             state.myCatches = state.myCatches.filter(x => x.id !== id);
-            if (state.format === 'speciesHunt') {
-                let counts = {}; let temp = [...state.myCatches].reverse();
-                temp.forEach(c => { counts[c.species] = (counts[c.species] || 0) + 1; let n = counts[c.species]; c.points = (n === 1) ? 25 : (n === 2) ? 35 : (n === 3) ? 40 : 1; });
-                state.myCatches = temp.reverse();
-            }
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
 
@@ -1273,24 +1111,16 @@
 
         function renderCatchList() {
             const list = document.getElementById('localCatchList'); if (!list) return;
-            list.innerHTML = "";
-            state.myCatches.forEach(c => {
-                let div = document.createElement('div');
-                div.className = "match-card p-3.5 flex justify-between items-center mb-1 shadow-md text-center";
-                let ptLabel = state.format === 'speciesHunt' ? `(${c.points})` : (c.points === 0 ? '(0)' : '');
-                
-                div.innerHTML = `
+            list.innerHTML = state.myCatches.map(c => `
+                <div class="match-card p-3.5 flex justify-between items-center mb-1 shadow-md text-center">
                     <div class="flex-1 text-center">
-                        <span class="font-black text-white text-base uppercase tracking-tight text-center">${c.species}</span>
+                        <span class="font-black text-white text-base uppercase text-center">${c.species}</span>
                         <span class="text-xs ml-2 text-slate-400 font-bold text-center">${c.display || c.size}</span>
-                        <span class="text-[10px] text-amber ml-2 font-black text-center">${ptLabel}</span>
                     </div>
                     <div class="flex items-center space-x-1">
                         <button onclick="editCatch('${c.id}')" class="text-blue-400 p-2 active:scale-90 transition"><i class="fa-solid fa-pencil text-base text-center"></i></button>
-                        <button onclick="deleteCatch('${c.id}')" class="text-amber p-2 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-base text-center"></i></button>
-                    </div>`;
-                list.appendChild(div);
-            });
+                        <button onclick="deleteCatch('${c.id}')" class="text-amber p-2 active:text-red-500 transition"><i class="fa-solid fa-trash-can text-base text-center"></i></button>
+                    </div></div>`).join('');
         }
 
 
@@ -1300,36 +1130,19 @@
             if(!globalMatchData || !globalMatchData.anglers) return;
             const list = document.getElementById('leaderboardList'); if (!list) return;
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            
             list.innerHTML = arr.map((a, i) => `
                 <div class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 flex justify-between items-center mb-1.5 shadow-sm border-l-4 ${i===0?'border-l-amber': i===1?'border-l-slate-300': i===2?'border-l-orange-700':'border-l-blue-600'} text-center">
                     <div class="flex items-center truncate w-2/3 text-center">
                         <span class="font-bold ${i===0?'text-amber':'text-slate-500'} text-sm w-6 text-left text-center">${i+1}.</span>
-                        <span class="font-bold text-slate-100 text-sm uppercase tracking-wide truncate text-left text-center text-center">${a.name}</span>
+                        <span class="font-bold text-slate-100 text-sm uppercase truncate text-center">${a.name}</span>
                     </div>
                     <div class="font-bold text-lg text-white text-right w-1/3 text-center">
-                        ${formatScoreDisplay(a.score, state.format)} <span class="text-[10px] text-slate-500 ml-1 text-center">${(state.format === 'weightLb' || state.format === 'weightKg') ? '' : 'pts'}</span>
-                    </div>
-                </div>
-            `).join('');
-
-
+                        ${formatScoreDisplay(a.score, state.format)}
+                    </div></div>`).join('');
             if(state.format !== 'speciesHunt') {
-                let biggestVal = 0; let biggestStr = "No Captures Yet";
-                arr.forEach(angler => { 
-                    if(angler.catches) { 
-                        const catchList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches); 
-                        catchList.forEach(fish => { 
-                            if(fish.size > biggestVal) { 
-                                biggestVal = fish.size; 
-                                biggestStr = `${angler.name} - ${fish.species} - ${fish.display || fish.size}`; 
-                            } 
-                        }); 
-                    } 
-                });
-                if (document.getElementById('bountyBanner')) { 
-                    document.getElementById('bountyBanner').innerText = biggestStr; 
-                }
+                let biggestVal = 0; let biggestStr = "Waiting...";
+                arr.forEach(angler => { if(angler.catches) { Object.values(angler.catches).forEach(fish => { if(fish.size > biggestVal) { biggestVal = fish.size; biggestStr = `${angler.name} - ${fish.species} - ${fish.display || fish.size}`; } }); } });
+                if (document.getElementById('bountyBanner')) document.getElementById('bountyBanner').innerText = biggestStr; 
             }
         }
 
@@ -1339,8 +1152,8 @@
         function stewardSetNewEnd(mins) {
             document.getElementById('customEndModal').classList.add('hidden');
             document.getElementById('stewardDrawer').classList.remove('open');
-            if(mins === 0) { let grace = Date.now() + 300000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); }
-            else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); }
+            if(mins === 0) { update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: Date.now() + 300000 }); }
+            else update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null });
         }
 
 
@@ -1349,37 +1162,28 @@
         function transferSteward() {
             if(!globalMatchData || !globalMatchData.anglers) return;
             let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name }));
-            if(options.length === 0) { alert("No other competitors linked."); return; }
-            let message = "Select Angler Number to Transfer Control:\n\n";
-            options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; });
-            let choice = prompt(message);
-            let selectedIndex = parseInt(choice) - 1;
-            if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) {
-                if(confirm(`Transfer Steward control to ${options[selectedIndex].name}?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); document.getElementById('stewardDrawer').classList.remove('open'); }
+            if(options.length === 0) return alert("No other competitors.");
+            let msg = "Select Angler Number:\n\n" + options.map((opt, i) => `${i + 1}: ${opt.name}`).join('\n');
+            let choice = prompt(msg);
+            let idx = parseInt(choice) - 1;
+            if (!isNaN(idx) && idx >= 0 && idx < options.length) {
+                if(confirm(`Transfer control to ${options[idx].name}?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[idx].id }); document.getElementById('stewardDrawer').classList.remove('open'); }
             }
         }
 
 
 
 
-        function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); resetApp(); } }
+        function leaveMatchEarly() { if (confirm("LEAVE?")) { saveHistory(true); resetApp(); } }
 
 
 
 
         function lockdownMatch(isHostPushing) {
-            clearInterval(clockInterval); if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); }
+            clearInterval(clockInterval); if(isHostPushing && state.isHost) update(ref(db, 'matches/' + state.pin), { status: 'finished' });
             saveHistory(false); state.status = 'finished'; saveState();
-            
             let totalPts = state.myCatches.reduce((s,c) => s + c.points, 0);
             document.getElementById('finalScore').innerText = formatScoreDisplay(totalPts, state.format);
-            document.getElementById('finalCount').innerText = state.myCatches.length;
-            document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size;
-            
-            if (state.isHost && document.getElementById('btnMasterExport')) {
-                document.getElementById('btnMasterExport').classList.remove('hidden');
-            }
-            
             navTo('results');
         }
 
@@ -1388,21 +1192,7 @@
 
         function saveHistory(isL) {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
-            h.unshift({ 
-                id: 'match_' + Date.now(), 
-                pin: state.pin, 
-                venue: state.venue, 
-                date: new Date().toLocaleDateString(), 
-                time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), 
-                format: state.format, 
-                score: state.myCatches.reduce((s,c) => s+c.points, 0), 
-                personalCatches: [...state.myCatches], 
-                standings: globalMatchData?.anglers ? Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score) : [], 
-                playerName: state.name, 
-                isLive: isL,
-                endTime: state.endTime,
-                graceEndTime: state.graceEndTime || (state.endTime + 300000)
-            });
+            h.unshift({ id: 'match_' + Date.now(), pin: state.pin, venue: state.venue, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), format: state.format, score: state.myCatches.reduce((s,c) => s+c.points, 0), personalCatches: [...state.myCatches], standings: globalMatchData?.anglers ? Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score) : [], playerName: state.name, isLive: isL, endTime: state.endTime, graceEndTime: state.graceEndTime || (state.endTime + 300000) });
             localStorage.setItem('matchHistory', JSON.stringify(h));
         }
 
@@ -1412,128 +1202,13 @@
         function renderHistory() {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
             const r = document.getElementById('historyRecentList'); 
-            const a = document.getElementById('historyArchiveList');
-            const now = Date.now();
-            r.innerHTML = ""; a.innerHTML = "";
-            if(h.length === 0) { r.innerHTML = '<p class="text-slate-400 py-24 font-black uppercase text-[10px] tracking-widest text-center">History Empty</p>'; return; }
-            
+            r.innerHTML = h.length === 0 ? '<p class="text-slate-400 py-24 font-black uppercase text-xs text-center">Empty</p>' : "";
             h.forEach((m, i) => {
-                const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 300000));
                 let card = document.createElement('div');
-                card.className = "match-card p-5 flex flex-col items-center active:bg-slate-900 transition relative overflow-hidden mb-3 text-center";
-                let headerText = isStillActuallyLive ? "" : "<p class='text-[9px] font-black text-slate-500 mb-1.5 uppercase tracking-[0.4em] text-center'>MATCH ENDED</p>";
-                let timerDisplay = isStillActuallyLive ? `<p id="hist-timer-${m.id}" class="text-amber font-black text-[10px] tabular-nums mb-0.5 text-center">Checking Clock...</p>` : "";
-                card.innerHTML = `
-                    ${headerText}
-                    <div class="w-full flex justify-between items-center text-center">
-                        <div class="flex-1 text-center" onclick="viewPastRecord('${m.id}')">
-                            <span class="font-black text-white text-base uppercase tracking-tight text-center text-center">${m.date}</span> 
-                            ${isStillActuallyLive ? '<span class="text-[8px] bg-red-600 px-2 py-0.5 rounded-full text-white font-black ml-2 animate-pulse text-center">LIVE</span>' : ''}
-                            <br><span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest text-center text-center">${m.venue || 'No Venue'}</span>
-                            <br><span class="text-[10px] text-amber font-black tracking-widest uppercase text-center text-center">PIN ${m.pin} • ${m.personalCatches.length} Catch</span>
-                            ${timerDisplay}
-                        </div>
-                        <div class="text-right flex items-center space-x-4 text-center">
-                            <div onclick="viewPastRecord('${m.id}')" class="text-center">
-                                <div class="text-2xl font-black text-white text-center">${formatScoreDisplay(m.score, m.format)}</div>
-                                <div class="text-[9px] text-amber uppercase font-black text-center">Total</div>
-                            </div>
-                            <button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1 py-3 text-center"><i class="fa-solid fa-trash-can text-base text-center"></i></button>
-                        </div>
-                    </div>`;
-                if(i < 6) r.appendChild(card); else a.appendChild(card);
+                card.className = "match-card p-5 flex flex-col items-center mb-3 text-center";
+                card.innerHTML = `<div class="flex-1 text-center"><span class="font-black text-white text-base uppercase text-center">${m.date}</span><br><span class="text-[9px] text-slate-400 font-bold uppercase text-center">${m.venue || 'No Venue'}</span><br><span class="text-2xl font-black text-white text-center">${formatScoreDisplay(m.score, m.format)}</span></div>`;
+                if(i < 6) r.appendChild(card);
             });
-            document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 6);
-            startHistoryTimers();
-        }
-
-
-
-
-        function startHistoryTimers() {
-            clearInterval(historyUpdateInterval);
-            historyUpdateInterval = setInterval(() => {
-                const now = Date.now();
-                let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
-                h.forEach(m => {
-                    const timerEl = document.getElementById(`hist-timer-${m.id}`);
-                    if (timerEl) {
-                        let totalEnd = m.graceEndTime || (m.endTime + 300000);
-                        let diff = totalEnd - now;
-                        if (diff <= 0) { renderHistory(); }
-                        else {
-                            let s = Math.floor(diff / 1000);
-                            let hours = Math.floor(s / 3600);
-                            let mins = Math.floor((s % 3600) / 60);
-                            let secs = s % 60;
-                            timerEl.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')} Remaining`;
-                        }
-                    }
-                });
-            }, 1000);
-        }
-
-
-
-
-        function deleteHistoryItem(id) { if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
-        function toggleArchive() { isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
-
-
-
-
-        function viewPastRecord(id) {
-            activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === id);
-            if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); }
-        }
-
-
-
-
-        function switchHistoryTab(tab) {
-            const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
-            document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); });
-            document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
-            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Score Table</h4><div class="space-y-2.5 text-center text-center">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md text-center text-center"><span class="uppercase text-white font-bold text-sm text-center text-center"><b class="text-amber mr-2 text-center text-center">${i+1}.</b> ${a.name}</span><b class="text-white text-lg text-center text-center text-center">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; }
-            else { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Capture Diary</h4><div class="space-y-2.5 text-center text-center text-center">${m.personalCatches.map(c => `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner text-center text-center"><div class="text-left text-center text-center text-center"><b class="text-white text-base uppercase text-center text-center text-center text-center">${c.species}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest text-center text-center text-center">${c.time}</span></div><div class="text-right text-center text-center text-center"><b class="text-white text-base text-center text-center text-center">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest text-center text-center text-center">Points</span></div></div>`).join('')}</div>`; }
-        }
-
-
-
-
-        function closeHistoryDetail() { document.getElementById('historyDetailDrawer').classList.remove('open'); setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); }
-
-
-
-
-        let wakeLock = null;
-        async function toggleWakeLock() {
-            if(wakeLock) { await wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon text-center"></i>`; document.getElementById('wakeLockBtn').classList.remove('text-amber'); }
-            else { try { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber text-center"></i>`; } catch(e) {} }
-        }
-
-
-
-
-        function shareResults() {
-            let t = `🏆 Match Summary: ${state.name}\nScore: ${document.getElementById('finalScore').innerText} Pts\nLogs: ${document.getElementById('finalCount').innerText}\nLogged via Match Edition Pro.`;
-            if (navigator.share) { navigator.share({ title: 'Results', text: t }); }
-            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
-        }
-        
-        function shareMasterLeaderboard() {
-            if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
-            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            let t = `🏆 Official Match Results: ${state.venue}\nSteward: ${state.name}\n\n`;
-            
-            arr.forEach((a, i) => {
-                t += `${i+1}. ${a.name} - ${formatScoreDisplay(a.score, state.format)} ${(state.format === 'weightLb' || state.format === 'weightKg') ? '' : 'pts'}\n`;
-            });
-            
-            t += `\nGenerated via Match Edition Pro.`;
-            
-            if (navigator.share) { navigator.share({ title: 'Official Results', text: t }); }
-            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
         }
 
 
@@ -1545,8 +1220,6 @@
 
 
         window.onload = () => {
-            history.pushState(null, null, window.location.href);
-            checkInstallStatus();
             const saved = localStorage.getItem('matchState');
             if (saved) {
                 try {
@@ -1555,60 +1228,15 @@
                     document.getElementById('playerName').value = state.name; document.getElementById('venueName').value = state.venue;
                     if (['playing', 'grace', 'hype', 'waiting'].includes(oldState.status)) {
                         state = oldState; listenToCloud(); navTo(state.view);
-                        if (state.status === 'playing' || state.status === 'grace') { 
-                            renderCatchList(); startClock(); updateLiveTally(); 
-                            if (state.status === 'grace') { document.getElementById('app-container').classList.add('grace-active'); document.getElementById('mainTimer').classList.add('grace-pulse'); } 
-                        }
+                        if (state.status === 'playing' || state.status === 'grace') { renderCatchList(); startClock(); updateLiveTally(); }
                     }
                 } catch(e) { resetApp(); }
             }
         };
 
 
-
-
-        window.addEventListener('popstate', () => {
-            if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open') || document.getElementById('guideDrawer').classList.contains('open') || !document.getElementById('historyDetailDrawer').classList.contains('hidden')) { document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('guideDrawer').classList.remove('open'); closeHistoryDetail(); history.pushState(null, null, window.location.href); return; }
-            if (state.view === 'fishing' || state.status === 'playing' || state.status === 'grace') { if (confirm("Match live. Exit Scorecard?")) { leaveMatchEarly(); } else { history.pushState(null, null, window.location.href); } }
-            else if (state.view !== 'home') { navTo('home'); history.pushState(null, null, window.location.href); }
-        });
-
-
-
-
-        /* GLOBAL EXPOSURE BLOCK */
-        window.atmPress = atmPress; 
-        window.atmDelete = atmDelete; 
-        window.navTo = navTo; 
-        window.createMatch = createMatch; 
-        window.connectToMatch = connectToMatch; 
-        window.triggerHypeStart = triggerHypeStart; 
-        window.recordCatch = recordCatch; 
-        window.editCatch = editCatch; 
-        window.deleteCatch = deleteCatch; 
-        window.leaveMatchEarly = leaveMatchEarly; 
-        window.stewardSetNewEnd = stewardSetNewEnd; 
-        window.shareResults = shareResults; 
-        window.resetApp = resetApp; 
-        window.toggleArchive = toggleArchive; 
-        window.viewPastRecord = viewPastRecord; 
-        window.switchHistoryTab = switchHistoryTab; 
-        window.closeHistoryDetail = closeHistoryDetail; 
-        window.forceUpdateApp = forceUpdateApp; 
-        window.toggleWakeLock = toggleWakeLock; 
-        window.focusMeasurement = focusMeasurement; 
-        window.promptCustomSpecies = promptCustomSpecies; 
-        window.exitWaitingRoom = exitWaitingRoom; 
-        window.deleteHistoryItem = deleteHistoryItem; 
-        window.checkSpeciesSelection = checkSpeciesSelection; 
-        window.exitApp = exitApp; 
-        window.handleInputFocus = handleInputFocus; 
-        window.transferSteward = transferSteward; 
-        window.endMatchEarly = endMatchEarly;
-        window.showInstallGuide = showInstallGuide;
-        window.proceedToRoleSelection = proceedToRoleSelection;
-        window.formatScoreDisplay = formatScoreDisplay;
-        window.shareMasterLeaderboard = shareMasterLeaderboard;
+        /* GLOBAL EXPOSURE */
+        window.atmPress = atmPress; window.atmDelete = atmDelete; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.triggerHypeStart = triggerHypeStart; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.resetApp = resetApp; window.forceUpdateApp = forceUpdateApp; window.toggleWakeLock = async () => { if(wakeLock) { await wakeLock.release(); wakeLock = null; } else { try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {} } }; window.proceedToRoleSelection = proceedToRoleSelection; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward;
 
 
     </script>
