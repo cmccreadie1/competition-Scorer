@@ -185,13 +185,14 @@
         <div class="match-card w-full max-w-sm p-6 space-y-5 border-2 border-amber">
             <div class="text-center">
                 <i class="fa-solid fa-clock-rotate-left text-amber text-3xl mb-2"></i>
-                <h3 class="text-lg font-black uppercase tracking-tight text-white">Change Ending Time</h3>
-                <p class="text-slate-400 text-[10px] mt-1 leading-relaxed">Modify the tournament clock for all connected devices.</p>
+                <h3 class="text-lg font-black uppercase tracking-tight text-white">Adjust Match Clock</h3>
+                <p class="text-slate-400 text-[10px] mt-1 leading-relaxed">Broadcast a timing change to all connected devices.</p>
             </div>
             <div class="grid grid-cols-1 gap-2.5">
-                <button onclick="stewardSetNewEnd(1)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">1 MINUTE LEFT</button>
-                <button onclick="stewardSetNewEnd(5)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">5 MINUTES LEFT</button>
-                <button onclick="stewardSetNewEnd(10)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">10 MINUTES LEFT</button>
+                <button onclick="stewardSetNewEnd(15)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">15 MINUTES REMAINING</button>
+                <button onclick="stewardSetNewEnd(30)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">30 MINUTES REMAINING</button>
+                <button onclick="stewardSetNewEnd(60)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">1 HOUR REMAINING</button>
+                <button onclick="stewardSetExactEnd()" class="bg-blue-600 py-3.5 rounded-lg font-black text-white active:bg-blue-700 transition uppercase tracking-widest text-[11px]"><i class="fa-solid fa-keyboard mr-2"></i> ENTER FINISH TIME (HH:MM)</button>
                 <button onclick="stewardSetNewEnd(0)" class="bg-red-600 py-3.5 rounded-lg font-black text-white active:bg-red-700 transition uppercase tracking-widest text-[10px] leading-none">STRIKE NOW<br><span class="text-[8px] opacity-60">(Activates 3 Min Grace)</span></button>
             </div>
             <button onclick="document.getElementById('customEndModal').classList.add('hidden')" class="w-full text-slate-500 font-black uppercase text-[9px] tracking-[0.3em] pt-3">Return</button>
@@ -219,7 +220,7 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white">Match Edition Pro</h1>
-                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.1.9</div>
+                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.0</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -306,9 +307,9 @@
             </div>
             <div class="match-card p-5 space-y-4 text-center">
                 <div>
-                    <label class="block text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] mb-1.5 text-left">Tournament Hours</label>
+                    <label class="block text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] mb-1.5 text-left">Tournament Duration</label>
                     <select id="hostDuration" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-base font-black appearance-none text-white text-center shadow-inner">
-                        <option value="1">1.0 Hour</option><option value="2">2.0 Hours</option><option value="3">3.0 Hours</option><option value="4" selected>4.0 Hours</option><option value="5">5.0 Hours</option>
+                        <option value="1">1.0 Hour</option><option value="2">2.0 Hours</option><option value="3">3.0 Hours</option><option value="4" selected>4.0 Hours</option><option value="5">5.0 Hours</option><option value="6">6.0 Hours</option>
                     </select>
                 </div>
                 <div>
@@ -567,7 +568,7 @@
                 <hr class="border-slate-800">
                 <button onclick="transferSteward()" class="w-full bg-slate-900 border-2 border-slate-800 text-slate-400 font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:text-amber transition"><i class="fa-solid fa-right-left mr-3 text-amber"></i> Transfer Control</button>
                 <hr class="border-slate-800 pt-4">
-                <button onclick="endMatchEarly(true)" class="w-full bg-amber text-slate-900 font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-base leading-tight active:scale-95 transition-transform">Change Ending Time</button>
+                <button onclick="endMatchEarly(true)" class="w-full bg-amber text-slate-900 font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-base leading-tight active:scale-95 transition-transform">Adjust Match Clock</button>
                 <hr class="border-slate-800 pt-4">
                 <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:bg-blue-700 transition"><i class="fa-solid fa-file-export mr-3"></i> Master Export</button>
             </div>
@@ -1136,6 +1137,27 @@
             else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); }
         }
 
+        function stewardSetExactEnd() {
+            let inputTime = prompt("Enter specific Finish Time (24hr format, e.g. 21:30):");
+            if (inputTime) {
+                const parts = inputTime.split(':');
+                if (parts.length === 2) {
+                    const hh = parseInt(parts[0]);
+                    const mm = parseInt(parts[1]);
+                    if (!isNaN(hh) && !isNaN(mm) && hh >= 0 && hh <= 23 && mm >= 0 && mm <= 59) {
+                        const targetDate = new Date();
+                        targetDate.setHours(hh, mm, 0, 0);
+                        // If target time is earlier than current time, assume it's for tomorrow (overnight match)
+                        if (targetDate.getTime() < Date.now()) {
+                            targetDate.setDate(targetDate.getDate() + 1);
+                        }
+                        update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: targetDate.getTime(), graceEndTime: null });
+                        document.getElementById('customEndModal').classList.add('hidden');
+                    } else { alert("Invalid Time format. Use HH:MM"); }
+                } else { alert("Invalid Time format. Use HH:MM"); }
+            }
+        }
+
         function transferSteward() {
             if(!globalMatchData || !globalMatchData.anglers) return;
             let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name }));
@@ -1309,6 +1331,7 @@
         window.deleteCatch = deleteCatch;
         window.leaveMatchEarly = leaveMatchEarly;
         window.stewardSetNewEnd = stewardSetNewEnd;
+        window.stewardSetExactEnd = stewardSetExactEnd;
         window.shareResults = shareResults;
         window.resetApp = resetApp;
         window.toggleArchive = toggleArchive;
