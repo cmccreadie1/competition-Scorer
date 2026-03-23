@@ -1,9 +1,8 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 5.1.9 - ACCESSIBILITY UPDATE
-   FULL VOLUME SERVICE WORKER
+   VERSION 5.2.0 - PRECISION TIMING UPDATE
 */
 
-const CACHE_NAME = 'match-edition-v5.1.9-gold';
+const CACHE_NAME = 'match-edition-v5.2.0';
 
 const ASSETS = [
   './',
