@@ -260,7 +260,7 @@
             <div class="text-center mt-6 text-center">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1 text-center"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60 text-center">Gold Master V5.1.1</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60 text-center">Gold Master V5.1.2</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -465,7 +465,7 @@
                             </optgroup>
                             
                             <optgroup label="Bass & Bream">
-                                <option value="European Bass">European Bass</option><option value="Black Bream">Black Bream</option><option value="Gilthead Bream">Gilthead Bream</option><option value="Red Bream">Red Bream</option><option value="Couch’s Bream">Couch’s Bream</option>
+                                <option value="Black Bream">Black Bream</option><option value="Gilthead Bream">Gilthead Bream</option><option value="Red Bream">Red Bream</option><option value="Couch’s Bream">Couch’s Bream</option>
                             </optgroup>
                             
                             <optgroup label="Flatfish">
@@ -626,7 +626,7 @@
 
                 <section class="text-center">
                     <h4 class="text-amber font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center">1. Purpose of the Application</h4>
-                    <p class="text-xs leading-relaxed text-center">Sea Diary: Match Edition Pro is a specialized platform designed for managing sea angling tournaments in real-time. This version (v5.1.1) features restored UI Persistence and the Scottish common species list.</p>
+                    <p class="text-xs leading-relaxed text-center">Sea Diary: Match Edition Pro is a specialized platform designed for managing sea angling tournaments in real-time. Features include a static Scottish common species list, precision weight engines, and an automated predictive focus tool for fast data entry on the shore.</p>
                 </section>
                 <section class="text-center">
                     <h4 class="text-blue-400 font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center">2. The Marshall’s Perspective (Steward)</h4>
@@ -644,7 +644,7 @@
             </button>
             <div class="flex-none flex bg-slate-900 p-2 space-x-2 border-b border-slate-800 shadow-md text-center text-center">
                 <button id="tab-standings" onclick="switchHistoryTab('standings')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase text-center">Leader Board</button>
-                <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase text-center text-center text-center">Diary</button>
+                <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase text-center text-center">Diary</button>
             </div>
             <div id="historyContent" class="scrollable-area p-6 text-center text-center"></div>
         </div>
@@ -1659,20 +1659,28 @@
                     if (['playing', 'grace', 'hype', 'waiting'].includes(oldState.status)) {
                         state = oldState; listenToCloud(); navTo(state.view);
                         
-                        /* V5.1.1 UI PERSISTENCE FIX */
+                        /* UI PERSISTENCE FIX */
                         const label = document.getElementById('labelSize');
                         const sizeDeck = document.getElementById('deckSizeInputs');
                         if (state.format === 'speciesHunt') {
-                            sizeDeck.classList.add('hidden');
+                            if(sizeDeck) sizeDeck.classList.add('hidden');
                             if (document.getElementById('bountyContainer')) document.getElementById('bountyContainer').classList.add('hidden');
                         } else {
-                            sizeDeck.classList.remove('hidden');
-                            document.getElementById('deckLength').classList.add('hidden'); 
-                            document.getElementById('deckWeightLb').classList.add('hidden'); 
-                            document.getElementById('deckWeightKg').classList.add('hidden'); 
-                            if (state.format === 'weightLb') { document.getElementById('deckWeightLb').classList.remove('hidden'); label.innerText = "Weight (Lbs/Oz)"; } 
-                            else if (state.format === 'weightKg') { document.getElementById('deckWeightKg').classList.remove('hidden'); label.innerText = "Weight (Kg/g)"; } 
-                            else { document.getElementById('deckLength').classList.remove('hidden'); label.innerText = "Measurement (cm)"; }
+                            if(sizeDeck) sizeDeck.classList.remove('hidden');
+                            if(document.getElementById('deckLength')) document.getElementById('deckLength').classList.add('hidden'); 
+                            if(document.getElementById('deckWeightLb')) document.getElementById('deckWeightLb').classList.add('hidden'); 
+                            if(document.getElementById('deckWeightKg')) document.getElementById('deckWeightKg').classList.add('hidden'); 
+                            
+                            if (state.format === 'weightLb') { 
+                                if(document.getElementById('deckWeightLb')) document.getElementById('deckWeightLb').classList.remove('hidden'); 
+                                if(label) label.innerText = "Weight (Lbs/Oz)"; 
+                            } else if (state.format === 'weightKg') { 
+                                if(document.getElementById('deckWeightKg')) document.getElementById('deckWeightKg').classList.remove('hidden'); 
+                                if(label) label.innerText = "Weight (Kg/g)"; 
+                            } else { 
+                                if(document.getElementById('deckLength')) document.getElementById('deckLength').classList.remove('hidden'); 
+                                if(label) label.innerText = "Measurement (cm)"; 
+                            }
                             if (document.getElementById('bountyContainer')) document.getElementById('bountyContainer').classList.remove('hidden');
                         }
 
