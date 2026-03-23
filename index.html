@@ -260,7 +260,7 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1 text-center"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.1.5</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.1.6</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -305,15 +305,17 @@
             </div>
             
             <div class="flex-1 flex flex-col justify-center space-y-5 max-w-sm mx-auto w-full pb-20">
-                <button onclick="navTo('join')" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-xl py-8 rounded-2xl shadow-xl uppercase tracking-wide active:scale-95 transition-transform flex flex-col items-center justify-center text-center">
-                    <i class="fa-solid fa-user-tag text-4xl mb-3"></i>
+                <button onclick="navTo('join')" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-2xl py-10 rounded-2xl shadow-xl uppercase tracking-wide active:scale-95 transition-transform flex flex-col items-center justify-center text-center">
+                    <i class="fa-solid fa-user-tag text-5xl mb-4"></i>
                     Join as Competitor
                 </button>
                 
-                <button onclick="navTo('host')" class="w-full bg-slate-900 border-2 border-slate-700 text-amber font-black text-xl py-8 rounded-2xl shadow-xl uppercase tracking-wide active:bg-slate-800 transition-transform flex flex-col items-center justify-center text-center">
-                    <i class="fa-solid fa-crown text-4xl mb-3"></i>
-                    Host as Steward
-                </button>
+                <div class="pt-8">
+                    <button onclick="navTo('host')" class="w-3/4 mx-auto bg-slate-900 border border-slate-700 text-amber font-bold text-sm py-4 rounded-xl shadow-md uppercase tracking-widest active:bg-slate-800 transition-transform flex flex-col items-center justify-center text-center opacity-80">
+                        <i class="fa-solid fa-crown text-2xl mb-1.5"></i>
+                        Host as Steward
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -1641,6 +1643,7 @@
 
 
 
+        /* 5.1.6: VAULT UPDATE - Dynamic Points and Catch Order Tags */
         function viewPastRecord(id) {
             activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === id);
             if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); }
@@ -1653,8 +1656,30 @@
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); });
             document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
-            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Score Table</h4><div class="space-y-2.5 text-center">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md text-center"><span class="uppercase text-white font-bold text-sm text-left">${i+1}.</b> ${a.name}</span><b class="text-white text-lg text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; }
-            else { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Capture Diary</h4><div class="space-y-2.5 text-center">${m.personalCatches.map(c => `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner text-center"><div class="text-left"><b class="text-white text-base uppercase text-left">${c.species}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest text-left">${c.time}</span></div><div class="text-right"><b class="text-white text-base text-right">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest text-right">Points</span></div></div>`).join('')}</div>`; }
+            
+            if(tab === 'standings') { 
+                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Score Table</h4><div class="space-y-2.5 text-center">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md text-center"><span class="uppercase text-white font-bold text-sm text-left">${i+1}.</b> ${a.name}</span><b class="text-white text-lg text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; 
+            } else { 
+                let displayCatches = JSON.parse(JSON.stringify(m.personalCatches)).reverse();
+                let counts = {};
+                displayCatches.forEach(c => {
+                    counts[c.species] = (counts[c.species] || 0) + 1;
+                    c.orderCount = counts[c.species];
+                });
+                displayCatches.reverse();
+                
+                let listHtml = displayCatches.map(c => {
+                    let spec = c.species;
+                    if(m.format === 'speciesHunt') {
+                        let ord = c.orderCount;
+                        let sfx = ord === 1 ? '(1st)' : ord === 2 ? '(2nd)' : ord === 3 ? '(3rd)' : '(4th+)';
+                        spec += ` <span class="text-blue-400 text-[10px] ml-1 tracking-tighter">${sfx}</span>`;
+                    }
+                    let ptTxt = m.format.includes('weight') ? 'Recorded' : `${c.points} Pts`;
+                    return `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner text-center"><div class="text-left"><b class="text-white text-base uppercase text-left">${spec}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest text-left">${c.time}</span></div><div class="text-right"><b class="text-white text-base text-right">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest text-right">${ptTxt}</span></div></div>`;
+                }).join('');
+                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Capture Diary</h4><div class="space-y-2.5 text-center">${listHtml}</div>`; 
+            }
         }
 
 
