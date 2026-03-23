@@ -260,7 +260,7 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1 text-center"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.1.3</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.1.4</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -741,43 +741,6 @@
         let isArchiveOpen = false;
 
 
-        /* GLOBAL EXPOSURE BLOCK (SAFE BOTTOM BINDING) */
-        window.proceedToRoleSelection = proceedToRoleSelection;
-        window.triggerHypeStart = triggerHypeStart;
-        window.navTo = navTo;
-        window.createMatch = createMatch;
-        window.connectToMatch = connectToMatch;
-        window.recordCatch = recordCatch;
-        window.editCatch = editCatch;
-        window.deleteCatch = deleteCatch;
-        window.leaveMatchEarly = leaveMatchEarly;
-        window.stewardSetNewEnd = stewardSetNewEnd;
-        window.shareResults = shareResults;
-        window.resetApp = resetApp;
-        window.toggleArchive = toggleArchive;
-        window.viewPastRecord = viewPastRecord;
-        window.switchHistoryTab = switchHistoryTab;
-        window.closeHistoryDetail = closeHistoryDetail;
-        window.forceUpdateApp = forceUpdateApp;
-        window.toggleWakeLock = toggleWakeLock;
-        window.adjustSize = adjustSize;
-        window.focusMeasurement = focusMeasurement;
-        window.promptCustomSpecies = promptCustomSpecies;
-        window.exitWaitingRoom = exitWaitingRoom;
-        window.deleteHistoryItem = deleteHistoryItem;
-        window.checkSpeciesSelection = checkSpeciesSelection;
-        window.exitApp = exitApp;
-        window.handleInputFocus = handleInputFocus;
-        window.transferSteward = transferSteward;
-        window.endMatchEarly = endMatchEarly;
-        window.showInstallGuide = showInstallGuide;
-        window.formatScoreDisplay = formatScoreDisplay;
-        window.shareMasterLeaderboard = shareMasterLeaderboard;
-        window.updateRecentCaptures = updateRecentCaptures;
-        window.atmPress = atmPress; 
-        window.atmDelete = atmDelete; 
-
-
         function saveState() {
             localStorage.setItem('matchState', JSON.stringify(state));
         }
@@ -795,11 +758,6 @@
 
 
         function proceedToRoleSelection() {
-            /* * VERSION 5.1.3: REMOVED .blur() COMMAND HERE 
-             * This prevents Android Chrome from swallowing the click event
-             * when trying to force-hide the virtual keyboard while processing the jump.
-             */
-            
             let pName = document.getElementById('playerName').value || "";
             let vName = document.getElementById('venueName').value || "";
             
@@ -812,7 +770,7 @@
             state.name = pName; 
             state.venue = vName;
             
-            if(navigator.vibrate) navigator.vibrate(20);
+            try { if(navigator.vibrate) navigator.vibrate(20); } catch(e) {}
             saveState();
             navTo('role');
         }
@@ -920,7 +878,7 @@
         function atmPress(num) {
             if (atmPin.length < 4) {
                 atmPin += num;
-                if(navigator.vibrate) navigator.vibrate(10);
+                try { if(navigator.vibrate) navigator.vibrate(10); } catch(e) {}
                 updateAtm();
                 if (atmPin.length === 4) {
                     connectToMatch();
@@ -931,7 +889,7 @@
 
         function atmDelete() {
             atmPin = atmPin.slice(0, -1);
-            if(navigator.vibrate) navigator.vibrate(10);
+            try { if(navigator.vibrate) navigator.vibrate(10); } catch(e) {}
             updateAtm();
         }
 
@@ -1099,15 +1057,23 @@
         function exitWaitingRoom() { if (confirm("Cancel session?")) { if (state.isHost) { remove(ref(db, 'matches/' + state.pin)); } resetApp(); } }
 
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        /* 5.1.4: SECURE AUDIO CONTEXT */
+        let audioCtx;
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {}
+
         function playTone(freq, duration) {
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + duration);
+            if(!audioCtx) return;
+            try {
+                if(audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
         }
         function playHorn() { playTone(200, 1.5); }
         function playAlert() { playTone(880, 0.4); playTone(440, 0.4); }
@@ -1134,14 +1100,14 @@
             let count = 5;
             document.getElementById('hypeCount').innerText = count;
             playTone(400, 0.1);
-            if(navigator.vibrate) navigator.vibrate(50);
+            try { if(navigator.vibrate) navigator.vibrate(50); } catch(e) {}
             
             hypeInterval = setInterval(() => {
                 count--;
                 if (count > 0) { 
                     document.getElementById('hypeCount').innerText = count; 
                     playTone(400, 0.1); 
-                    if(navigator.vibrate) navigator.vibrate(50);
+                    try { if(navigator.vibrate) navigator.vibrate(50); } catch(e) {}
                 }
                 else { 
                     clearInterval(hypeInterval);
@@ -1157,7 +1123,7 @@
             document.getElementById('hypeCount').classList.add('hidden');
             document.getElementById('hypeSplash').classList.remove('hidden');
             playHorn();
-            if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+            try { if(navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch(e) {}
             
             setTimeout(() => {
                 countdownActive = false;
@@ -1236,13 +1202,13 @@
                 
                 if (state.format === 'weightLb') { 
                     document.getElementById('deckWeightLb').classList.remove('hidden'); 
-                    label.innerText = "Weight (Lbs/Oz)"; 
+                    if(label) label.innerText = "Weight (Lbs/Oz)"; 
                 } else if (state.format === 'weightKg') {
                     document.getElementById('deckWeightKg').classList.remove('hidden'); 
-                    label.innerText = "Weight (Kg/g)"; 
+                    if(label) label.innerText = "Weight (Kg/g)"; 
                 } else { 
                     document.getElementById('deckLength').classList.remove('hidden'); 
-                    label.innerText = "Measurement (cm)"; 
+                    if(label) label.innerText = "Measurement (cm)"; 
                 }
             }
 
@@ -1297,7 +1263,7 @@
         function recordCatch() {
             let species = document.getElementById('inputSpecies').value;
             if(!species) {
-                if(navigator.vibrate) navigator.vibrate(200); 
+                try { if(navigator.vibrate) navigator.vibrate(200); } catch(e) {}
                 return alert("Select species first!");
             }
             
@@ -1329,7 +1295,7 @@
 
 
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { 
-                if(navigator.vibrate) navigator.vibrate(200); 
+                try { if(navigator.vibrate) navigator.vibrate(200); } catch(e) {}
                 alert("MEASUREMENT REQUIRED."); return; 
             }
 
@@ -1359,7 +1325,7 @@
             document.getElementById('inputGrammes').value = "";
             document.activeElement.blur(); 
             
-            if(navigator.vibrate) navigator.vibrate([50, 30, 50]);
+            try { if(navigator.vibrate) navigator.vibrate([50, 30, 50]); } catch(e) {}
             
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
@@ -1747,6 +1713,43 @@
             if (state.view === 'fishing' || state.status === 'playing' || state.status === 'grace') { if (confirm("Match live. Exit Scorecard?")) { leaveMatchEarly(); } else { history.pushState(null, null, window.location.href); } }
             else if (state.view !== 'home') { navTo('home'); history.pushState(null, null, window.location.href); }
         });
+
+
+        /* GLOBAL EXPOSURE BLOCK (SAFE BOTTOM BINDING) */
+        window.proceedToRoleSelection = proceedToRoleSelection;
+        window.triggerHypeStart = triggerHypeStart;
+        window.navTo = navTo;
+        window.createMatch = createMatch;
+        window.connectToMatch = connectToMatch;
+        window.recordCatch = recordCatch;
+        window.editCatch = editCatch;
+        window.deleteCatch = deleteCatch;
+        window.leaveMatchEarly = leaveMatchEarly;
+        window.stewardSetNewEnd = stewardSetNewEnd;
+        window.shareResults = shareResults;
+        window.resetApp = resetApp;
+        window.toggleArchive = toggleArchive;
+        window.viewPastRecord = viewPastRecord;
+        window.switchHistoryTab = switchHistoryTab;
+        window.closeHistoryDetail = closeHistoryDetail;
+        window.forceUpdateApp = forceUpdateApp;
+        window.toggleWakeLock = toggleWakeLock;
+        window.adjustSize = adjustSize;
+        window.focusMeasurement = focusMeasurement;
+        window.promptCustomSpecies = promptCustomSpecies;
+        window.exitWaitingRoom = exitWaitingRoom;
+        window.deleteHistoryItem = deleteHistoryItem;
+        window.checkSpeciesSelection = checkSpeciesSelection;
+        window.exitApp = exitApp;
+        window.handleInputFocus = handleInputFocus;
+        window.transferSteward = transferSteward;
+        window.endMatchEarly = endMatchEarly;
+        window.showInstallGuide = showInstallGuide;
+        window.formatScoreDisplay = formatScoreDisplay;
+        window.shareMasterLeaderboard = shareMasterLeaderboard;
+        window.updateRecentCaptures = updateRecentCaptures;
+        window.atmPress = atmPress; 
+        window.atmDelete = atmDelete; 
 
 
     </script>
