@@ -260,7 +260,7 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1 text-center"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.1.4</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.1.5</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -739,6 +739,43 @@
         let countdownActive = false;
         let alert20Played = false;
         let isArchiveOpen = false;
+
+
+        /* GLOBAL EXPOSURE BLOCK (SAFE BOTTOM BINDING) */
+        window.proceedToRoleSelection = proceedToRoleSelection;
+        window.triggerHypeStart = triggerHypeStart;
+        window.navTo = navTo;
+        window.createMatch = createMatch;
+        window.connectToMatch = connectToMatch;
+        window.recordCatch = recordCatch;
+        window.editCatch = editCatch;
+        window.deleteCatch = deleteCatch;
+        window.leaveMatchEarly = leaveMatchEarly;
+        window.stewardSetNewEnd = stewardSetNewEnd;
+        window.shareResults = shareResults;
+        window.resetApp = resetApp;
+        window.toggleArchive = toggleArchive;
+        window.viewPastRecord = viewPastRecord;
+        window.switchHistoryTab = switchHistoryTab;
+        window.closeHistoryDetail = closeHistoryDetail;
+        window.forceUpdateApp = forceUpdateApp;
+        window.toggleWakeLock = toggleWakeLock;
+        window.adjustSize = adjustSize;
+        window.focusMeasurement = focusMeasurement;
+        window.promptCustomSpecies = promptCustomSpecies;
+        window.exitWaitingRoom = exitWaitingRoom;
+        window.deleteHistoryItem = deleteHistoryItem;
+        window.checkSpeciesSelection = checkSpeciesSelection;
+        window.exitApp = exitApp;
+        window.handleInputFocus = handleInputFocus;
+        window.transferSteward = transferSteward;
+        window.endMatchEarly = endMatchEarly;
+        window.showInstallGuide = showInstallGuide;
+        window.formatScoreDisplay = formatScoreDisplay;
+        window.shareMasterLeaderboard = shareMasterLeaderboard;
+        window.updateRecentCaptures = updateRecentCaptures;
+        window.atmPress = atmPress; 
+        window.atmDelete = atmDelete; 
 
 
         function saveState() {
@@ -1445,6 +1482,19 @@
 
 
 
+        /* 5.1.5: ADMIN LAYERING FIX - Closes drawer to allow modal to surface */
+        function endMatchEarly(grace) { 
+            if(state.isHost && state.pin) { 
+                if(grace) { 
+                    document.getElementById('stewardDrawer').classList.remove('open');
+                    document.getElementById('customEndModal').classList.remove('hidden'); 
+                } 
+            } 
+        }
+
+
+
+
         function stewardSetNewEnd(mins) {
             document.getElementById('customEndModal').classList.add('hidden');
             document.getElementById('stewardDrawer').classList.remove('open');
@@ -1713,43 +1763,6 @@
             if (state.view === 'fishing' || state.status === 'playing' || state.status === 'grace') { if (confirm("Match live. Exit Scorecard?")) { leaveMatchEarly(); } else { history.pushState(null, null, window.location.href); } }
             else if (state.view !== 'home') { navTo('home'); history.pushState(null, null, window.location.href); }
         });
-
-
-        /* GLOBAL EXPOSURE BLOCK (SAFE BOTTOM BINDING) */
-        window.proceedToRoleSelection = proceedToRoleSelection;
-        window.triggerHypeStart = triggerHypeStart;
-        window.navTo = navTo;
-        window.createMatch = createMatch;
-        window.connectToMatch = connectToMatch;
-        window.recordCatch = recordCatch;
-        window.editCatch = editCatch;
-        window.deleteCatch = deleteCatch;
-        window.leaveMatchEarly = leaveMatchEarly;
-        window.stewardSetNewEnd = stewardSetNewEnd;
-        window.shareResults = shareResults;
-        window.resetApp = resetApp;
-        window.toggleArchive = toggleArchive;
-        window.viewPastRecord = viewPastRecord;
-        window.switchHistoryTab = switchHistoryTab;
-        window.closeHistoryDetail = closeHistoryDetail;
-        window.forceUpdateApp = forceUpdateApp;
-        window.toggleWakeLock = toggleWakeLock;
-        window.adjustSize = adjustSize;
-        window.focusMeasurement = focusMeasurement;
-        window.promptCustomSpecies = promptCustomSpecies;
-        window.exitWaitingRoom = exitWaitingRoom;
-        window.deleteHistoryItem = deleteHistoryItem;
-        window.checkSpeciesSelection = checkSpeciesSelection;
-        window.exitApp = exitApp;
-        window.handleInputFocus = handleInputFocus;
-        window.transferSteward = transferSteward;
-        window.endMatchEarly = endMatchEarly;
-        window.showInstallGuide = showInstallGuide;
-        window.formatScoreDisplay = formatScoreDisplay;
-        window.shareMasterLeaderboard = shareMasterLeaderboard;
-        window.updateRecentCaptures = updateRecentCaptures;
-        window.atmPress = atmPress; 
-        window.atmDelete = atmDelete; 
 
 
     </script>
