@@ -224,7 +224,7 @@
                 <button onclick="stewardSetNewEnd(1)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">1 MINUTE LEFT</button>
                 <button onclick="stewardSetNewEnd(5)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">5 MINUTES LEFT</button>
                 <button onclick="stewardSetNewEnd(10)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">10 MINUTES LEFT</button>
-                <button onclick="stewardSetNewEnd(0)" class="bg-red-600 py-3.5 rounded-lg font-black text-white active:bg-red-700 transition uppercase tracking-widest text-[10px] leading-none text-center">STRIKE NOW<br><span class="text-[8px] opacity-60 text-center">(Activates 5 Min Grace)</span></button>
+                <button onclick="stewardSetNewEnd(0)" class="bg-red-600 py-3.5 rounded-lg font-black text-white active:bg-red-700 transition uppercase tracking-widest text-[10px] leading-none text-center">STRIKE NOW<br><span class="text-[8px] opacity-60 text-center">(Activates 3 Min Grace)</span></button>
             </div>
             <button onclick="document.getElementById('customEndModal').classList.add('hidden')" class="w-full text-slate-500 font-black uppercase text-[9px] tracking-[0.3em] pt-3 text-center">Return</button>
         </div>
@@ -260,7 +260,7 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1 text-center"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.1.6</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.1.7</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -994,6 +994,8 @@
                     document.getElementById('graceLabel').classList.add('hidden');
                     document.getElementById('app-container').classList.remove('grace-active');
                     document.getElementById('mainTimer').classList.remove('grace-pulse');
+                    const btnRecord = document.getElementById('btnRecord');
+                    if(btnRecord) { btnRecord.classList.add('bg-blue-600'); btnRecord.classList.remove('grace-btn-pulse'); }
                     showNotification("MATCH RESUMED: Time adjusted.");
                 }
                 state.endTime = globalMatchData.endTime;
@@ -1016,7 +1018,10 @@
                 document.getElementById('app-container').classList.add('grace-active');
                 document.getElementById('mainTimer').classList.add('grace-pulse');
                 
-                showNotification("5 MINUTE GRACE: Log final fish.");
+                const btnRecord = document.getElementById('btnRecord');
+                if(btnRecord) { btnRecord.classList.remove('bg-blue-600'); btnRecord.classList.add('grace-btn-pulse'); }
+                
+                showNotification("3 MINUTE GRACE: Log final fish.");
                 saveState();
             }
 
@@ -1270,7 +1275,7 @@
                 if (state.status === 'playing') {
                     let remaining = state.endTime - now;
                     if (remaining <= 1200000 && remaining > 1198000 && !alert20Played) { alert20Played = true; playAlert(); showNotification("⚠️ 20 MINUTES LEFT!"); }
-                    if (remaining <= 0) { playHorn(); if (state.isHost) { let grace = Date.now() + 300000; update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: grace }); } }
+                    if (remaining <= 0) { playHorn(); if (state.isHost) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: grace }); } }
                     else { updateTimerDisplay(remaining); }
                 } else if (state.status === 'grace') {
                     let graceRem = state.graceEndTime - now;
@@ -1500,7 +1505,7 @@
         function stewardSetNewEnd(mins) {
             document.getElementById('customEndModal').classList.add('hidden');
             document.getElementById('stewardDrawer').classList.remove('open');
-            if(mins === 0) { let grace = Date.now() + 300000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); }
+            if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); }
             else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); }
         }
 
@@ -1562,7 +1567,7 @@
                 playerName: state.name, 
                 isLive: isL,
                 endTime: state.endTime,
-                graceEndTime: state.graceEndTime || (state.endTime + 300000)
+                graceEndTime: state.graceEndTime || (state.endTime + 180000)
             });
             localStorage.setItem('matchHistory', JSON.stringify(h));
         }
@@ -1579,7 +1584,7 @@
             if(h.length === 0) { r.innerHTML = '<p class="text-slate-400 py-24 font-black uppercase text-[10px] tracking-widest text-center text-center text-center">History Empty</p>'; return; }
             
             h.forEach((m, i) => {
-                const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 300000));
+                const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 180000));
                 let card = document.createElement('div');
                 card.className = "match-card p-5 flex flex-col items-center active:bg-slate-900 transition relative overflow-hidden mb-3 text-center";
                 let headerText = isStillActuallyLive ? "" : "<p class='text-[9px] font-black text-slate-500 mb-1.5 uppercase tracking-[0.4em] text-center'>MATCH ENDED</p>";
@@ -1619,7 +1624,7 @@
                 h.forEach(m => {
                     const timerEl = document.getElementById(`hist-timer-${m.id}`);
                     if (timerEl) {
-                        let totalEnd = m.graceEndTime || (m.endTime + 300000);
+                        let totalEnd = m.graceEndTime || (m.endTime + 180000);
                         let diff = totalEnd - now;
                         if (diff <= 0) { renderHistory(); }
                         else {
@@ -1773,6 +1778,8 @@
                             if (state.status === 'grace') { 
                                 document.getElementById('app-container').classList.add('grace-active'); 
                                 document.getElementById('mainTimer').classList.add('grace-pulse'); 
+                                const btnRecord = document.getElementById('btnRecord');
+                                if(btnRecord) { btnRecord.classList.remove('bg-blue-600'); btnRecord.classList.add('grace-btn-pulse'); }
                             } 
                         }
                     }
