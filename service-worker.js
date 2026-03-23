@@ -1,10 +1,10 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 5.3.3 - THE FAIL-SAFE BUILD
+   VERSION 5.4.0 - THE PROFESSIONAL MARSHALL BUILD
    FULL VOLUME SERVICE WORKER
 */
 
 
-const CACHE_NAME = 'match-edition-v5.3.3-gold';
+const CACHE_NAME = 'match-edition-v5.4.0-gold';
 
 
 const ASSETS = [
@@ -18,13 +18,12 @@ const ASSETS = [
 self.addEventListener('install', (event) => {
 
 
-  /* Force immediate takeover for zero-lag workflow */
   self.skipWaiting();
   
   
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching Gold Master 5.3.3 Assets');
+      console.log('SW: Caching Gold Master 5.4.0 Assets');
       return cache.addAll(ASSETS);
     })
   );
@@ -50,7 +49,6 @@ self.addEventListener('activate', (event) => {
   );
   
   
-  /* Synchronize all clients for real-time history stability */
   self.clients.claim();
 
 
@@ -62,13 +60,9 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(event.request).then((response) => {
-      /* Priority 1: Speed - Instant load from cache */
       if (response) {
         return response;
       }
-      
-      
-      /* Priority 2: Sync - Live fetch for cloud updates */
       return fetch(event.request);
     })
   );
