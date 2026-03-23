@@ -205,8 +205,8 @@
     <div id="broadcastToast" class="fixed top-4 inset-x-4 z-[200] bg-blue-600 text-white p-4 rounded-xl shadow-2xl flex items-center space-x-4 border-2 border-white/20">
         <i class="fa-solid fa-bullhorn text-xl animate-bounce"></i>
         <div class="flex-1">
-            <p class="font-black uppercase text-[9px] tracking-widest leading-none opacity-80">Match Alert</p>
-            <p id="broadcastMsg" class="font-bold text-xs leading-tight mt-1"></p>
+            <p class="font-black uppercase text-[9px] tracking-widest leading-none opacity-80 text-center">Match Alert</p>
+            <p id="broadcastMsg" class="font-bold text-xs leading-tight mt-1 text-center"></p>
         </div>
     </div>
 
@@ -224,7 +224,7 @@
                 <button onclick="stewardSetNewEnd(1)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">1 MINUTE LEFT</button>
                 <button onclick="stewardSetNewEnd(5)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">5 MINUTES LEFT</button>
                 <button onclick="stewardSetNewEnd(10)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">10 MINUTES LEFT</button>
-                <button onclick="stewardSetNewEnd(0)" class="bg-red-600 py-3.5 rounded-lg font-black text-white active:bg-red-700 transition uppercase tracking-widest text-[10px] leading-none text-center">STRIKE NOW<br><span class="text-[8px] opacity-60">(Activates 5 Min Grace)</span></button>
+                <button onclick="stewardSetNewEnd(0)" class="bg-red-600 py-3.5 rounded-lg font-black text-white active:bg-red-700 transition uppercase tracking-widest text-[10px] leading-none text-center">STRIKE NOW<br><span class="text-[8px] opacity-60 text-center">(Activates 5 Min Grace)</span></button>
             </div>
             <button onclick="document.getElementById('customEndModal').classList.add('hidden')" class="w-full text-slate-500 font-black uppercase text-[9px] tracking-[0.3em] pt-3 text-center">Return</button>
         </div>
@@ -235,10 +235,10 @@
 
     <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-5 border-2 border-blue-500">
-            <div class="text-center">
-                <i class="fa-solid fa-mobile-screen-button text-blue-400 text-4xl mb-2"></i>
+            <div class="text-center text-center">
+                <i class="fa-solid fa-mobile-screen-button text-blue-400 text-4xl mb-2 text-center"></i>
                 <h3 class="text-lg font-black uppercase tracking-tight text-white text-center">Device Installation</h3>
-                <p id="installInstructionText" class="text-slate-400 text-xs mt-3 leading-relaxed text-center"></p>
+                <p id="installInstructionText" class="text-slate-400 text-xs mt-3 leading-relaxed text-center text-center"></p>
             </div>
             <button onclick="document.getElementById('installModal').classList.add('hidden')" class="w-full bg-blue-600 text-white font-black py-3.5 rounded-lg uppercase tracking-widest text-[10px] text-center">Got it</button>
         </div>
@@ -257,39 +257,39 @@
             </button>
 
 
-            <div class="text-center mt-6">
-                <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
+            <div class="text-center mt-6 text-center">
+                <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1 text-center"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.0.0</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60 text-center">Gold Master V5.1.0</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
-                <div class="match-card p-5 space-y-3 text-center shadow-lg">
+                <div class="match-card p-5 space-y-3 text-center shadow-lg text-center">
                     <div>
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1 text-center">Angler Profile</label>
-                        <input type="text" id="playerName" onkeydown="if(event.key === 'Enter'){ document.getElementById('venueName').focus(); }" placeholder="Your Name" class="w-full bg-slate-900 border border-slate-700 text-white font-bold text-lg rounded-lg p-3 text-center focus:border-blue-500 outline-none shadow-inner text-center">
+                        <input type="text" id="playerName" onkeydown="if(event.key === 'Enter'){ document.getElementById('venueName').focus(); }" placeholder="Your Name" class="w-full bg-slate-900 border border-slate-700 text-white font-bold text-lg rounded-lg p-3 text-center focus:border-blue-500 outline-none shadow-inner">
                     </div>
                     <div>
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1 text-center">Venue Rememory</label>
-                        <input type="text" id="venueName" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Venue Name" class="w-full bg-slate-900 border border-slate-700 text-white font-bold text-lg rounded-lg p-3 text-center focus:border-amber outline-none shadow-inner text-center">
+                        <input type="text" id="venueName" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Venue Name" class="w-full bg-slate-900 border border-slate-700 text-white font-bold text-lg rounded-lg p-3 text-center focus:border-amber outline-none shadow-inner">
                     </div>
-                    <button onclick="proceedToRoleSelection()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-lg py-4 rounded-xl shadow-md uppercase tracking-wide active:scale-95 transition-transform text-center mt-2">
-                        Continue to Match <i class="fa-solid fa-arrow-right ml-2"></i>
+                    <button onclick="proceedToRoleSelection()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-lg py-4 rounded-xl shadow-md uppercase tracking-wide active:scale-95 transition-transform text-center">
+                        Continue to Match <i class="fa-solid fa-arrow-right ml-2 text-center"></i>
                     </button>
                 </div>
                 
-                <div class="flex space-x-2.5 pt-2">
+                <div class="flex space-x-2.5 pt-2 text-center">
                     <button onclick="navTo('history')" class="flex-1 bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[10px] uppercase border border-slate-700 active:bg-slate-700 transition tracking-widest text-center">
-                        <i class="fa-solid fa-book mr-1.5 text-blue-400"></i> History
+                        <i class="fa-solid fa-book mr-1.5 text-blue-400 text-center"></i> History
                     </button>
                     <button onclick="document.getElementById('guideDrawer').classList.add('open')" class="flex-1 bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[9px] uppercase border border-slate-700 active:bg-slate-700 transition tracking-widest text-center">
-                        <i class="fa-solid fa-circle-info mr-1 text-amber"></i> Guide & Update
+                        <i class="fa-solid fa-circle-info mr-1 text-amber text-center"></i> Guide & Update
                     </button>
                 </div>
 
 
                 <button id="btnInstallGuide" onclick="showInstallGuide()" class="hidden w-full bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[10px] uppercase border border-slate-700 active:bg-blue-600 active:text-white transition tracking-widest text-center mt-2.5">
-                    <i class="fa-solid fa-mobile-screen mr-1.5 text-blue-400"></i> Install App
+                    <i class="fa-solid fa-mobile-screen mr-1.5 text-blue-400 text-center"></i> Install App
                 </button>
             </div>
         </div>
@@ -298,20 +298,20 @@
 
 
         <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-[#020617]">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
-                <button onclick="navTo('home')" class="text-slate-500 text-xl px-2 text-left text-center"><i class="fa-solid fa-arrow-left"></i></button>
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1 text-center">
+                <button onclick="navTo('home')" class="text-slate-500 text-xl px-2 text-left text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
                 <h2 class="text-lg font-black uppercase tracking-tight text-white text-center text-center">Select Role</h2>
-                <button onclick="exitApp()" class="text-red-500 text-xl px-2 text-right text-center"><i class="fa-solid fa-power-off"></i></button>
+                <button onclick="exitApp()" class="text-red-500 text-xl px-2 text-right text-center"><i class="fa-solid fa-power-off text-center"></i></button>
             </div>
             
-            <div class="flex-1 flex flex-col justify-center space-y-5 max-w-sm mx-auto w-full pb-20">
-                <button onclick="navTo('join')" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-xl py-8 rounded-2xl shadow-xl uppercase tracking-wide active:scale-95 transition-transform flex flex-col items-center justify-center">
-                    <i class="fa-solid fa-user-tag text-4xl mb-3"></i>
+            <div class="flex-1 flex flex-col justify-center space-y-5 max-w-sm mx-auto w-full pb-20 text-center">
+                <button onclick="navTo('join')" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-xl py-8 rounded-2xl shadow-xl uppercase tracking-wide active:scale-95 transition-transform flex flex-col items-center justify-center text-center">
+                    <i class="fa-solid fa-user-tag text-4xl mb-3 text-center"></i>
                     Join as Competitor
                 </button>
                 
-                <button onclick="navTo('host')" class="w-full bg-slate-900 border-2 border-slate-700 text-amber font-black text-xl py-8 rounded-2xl shadow-xl uppercase tracking-wide active:bg-slate-800 transition-transform flex flex-col items-center justify-center">
-                    <i class="fa-solid fa-crown text-4xl mb-3"></i>
+                <button onclick="navTo('host')" class="w-full bg-slate-900 border-2 border-slate-700 text-amber font-black text-xl py-8 rounded-2xl shadow-xl uppercase tracking-wide active:bg-slate-800 transition-transform flex flex-col items-center justify-center text-center">
+                    <i class="fa-solid fa-crown text-4xl mb-3 text-center"></i>
                     Host as Steward
                 </button>
             </div>
@@ -321,8 +321,8 @@
 
 
         <div id="view-join" class="hidden view-frame p-4 bg-[#020617]">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
-                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2 text-center text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1 text-center">
+                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2 text-center text-center text-center"><i class="fa-solid fa-arrow-left text-center text-center"></i></button>
                 <h2 class="text-lg font-black uppercase tracking-tight text-white text-center text-center">Authentication</h2>
                 <div class="w-6 text-center"></div>
             </div>
@@ -339,7 +339,7 @@
                 <button class="atm-btn" onclick="atmPress(1)">1</button><button class="atm-btn" onclick="atmPress(2)">2</button><button class="atm-btn" onclick="atmPress(3)">3</button>
                 <button class="atm-btn" onclick="atmPress(4)">4</button><button class="atm-btn" onclick="atmPress(5)">5</button><button class="atm-btn" onclick="atmPress(6)">6</button>
                 <button class="atm-btn" onclick="atmPress(7)">7</button><button class="atm-btn" onclick="atmPress(8)">8</button><button class="atm-btn" onclick="atmPress(9)">9</button>
-                <button class="atm-btn text-red-500 text-center" onclick="navTo('role')"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="atmPress(0)">0</button><button class="atm-btn text-amber text-center" onclick="atmDelete()"><i class="fa-solid fa-delete-left"></i></button>
+                <button class="atm-btn text-red-500 text-center" onclick="navTo('role')"><i class="fa-solid fa-xmark text-center"></i></button><button class="atm-btn" onclick="atmPress(0)">0</button><button class="atm-btn text-amber text-center" onclick="atmDelete()"><i class="fa-solid fa-delete-left text-center"></i></button>
             </div>
             <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto bg-blue-600 text-white font-black text-xl py-4 rounded-xl mb-8 shadow-xl uppercase tracking-widest active:scale-95 transition-transform text-center">Validate</button>
         </div>
@@ -348,9 +348,9 @@
 
 
         <div id="view-host" class="hidden view-frame p-5 space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3 text-white text-center">
-                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2 text-center text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
-                <h2 class="text-lg font-black uppercase tracking-tight text-white text-center text-center">Match Creator</h2>
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3 text-white text-center text-center">
+                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2 text-center text-center text-center"><i class="fa-solid fa-arrow-left text-center text-center"></i></button>
+                <h2 class="text-lg font-black uppercase tracking-tight text-white text-center text-center text-center">Match Creator</h2>
                 <div class="w-6 text-center"></div>
             </div>
             <div class="match-card p-5 space-y-4 text-center">
@@ -375,7 +375,7 @@
 
         <div id="view-waiting" class="hidden view-frame p-5 space-y-4">
             <div class="flex justify-between items-center w-full text-center">
-                <button onclick="exitWaitingRoom()" class="text-slate-500 text-xl px-2 text-center text-center"><i class="fa-solid fa-arrow-left text-center"></i></button>
+                <button onclick="exitWaitingRoom()" class="text-slate-500 text-xl px-2 text-center text-center text-center"><i class="fa-solid fa-arrow-left text-center text-center"></i></button>
                 <div class="text-amber font-black tracking-[0.2em] bg-slate-800 px-5 py-1.5 rounded-lg border border-slate-700 shadow-md text-center" id="displayPin">0000</div>
             </div>
             <div class="flex-1 flex flex-col items-center space-y-5 pt-3 text-center">
@@ -385,7 +385,7 @@
                     <button onclick="triggerHypeStart()" class="w-full bg-red-600 text-white font-black text-xl py-4 rounded-2xl animate-pulse shadow-xl uppercase active:scale-95 transition-transform text-center">🚀 START MATCH</button>
                 </div>
                 <div id="joinerWaitingText" class="w-full max-w-sm pb-5 text-center">
-                    <p class="text-base font-bold text-slate-400 italic text-center">Linked... Waiting for Steward.</p>
+                    <p class="text-base font-bold text-slate-400 italic text-center text-center">Linked... Waiting for Steward.</p>
                 </div>
             </div>
         </div>
@@ -395,8 +395,8 @@
 
         <div id="view-hype" class="hidden view-frame items-center justify-center bg-black text-center">
             <div id="hypeContainer" class="flex flex-col items-center justify-center text-center">
-                <div id="hypeCount" class="hype-number flex items-center justify-center w-48 h-48 text-center">5</div>
-                <div id="hypeSplash" class="hidden splash-text mt-6 text-center">MATCH STARTED!</div>
+                <div id="hypeCount" class="hype-number flex items-center justify-center w-48 h-48 text-center text-center">5</div>
+                <div id="hypeSplash" class="hidden splash-text mt-6 text-center text-center">MATCH STARTED!</div>
             </div>
         </div>
 
@@ -438,14 +438,34 @@
                         <select id="inputSpecies" onchange="checkSpeciesSelection()" class="w-full bg-slate-900 border-2 border-slate-800 p-2.5 rounded-lg text-base font-black appearance-none text-white focus:border-blue-500 transition shadow-inner text-center">
                             <option value="" disabled selected>-- Select Fish --</option>
                             
-                            <optgroup label="🎣 RECENT CAPTURES" id="recentCapturesGroup" class="hidden"></optgroup>
-                            
+                            <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SCOTTISH SPECIES">
+                                <option value="Cod">Cod</option>
+                                <option value="Whiting">Whiting</option>
+                                <option value="Coalfish (Saithe)">Coalfish (Saithe)</option>
+                                <option value="Pollock">Pollock</option>
+                                <option value="Haddock">Haddock</option>
+                                <option value="Poor Cod">Poor Cod</option>
+                                <option value="Conger Eel">Conger Eel</option>
+                                <option value="Flounder">Flounder</option>
+                                <option value="Dab">Dab</option>
+                                <option value="Plaice">Plaice</option>
+                                <option value="Lesser Spotted Dogfish">Lesser Spotted Dogfish</option>
+                                <option value="Smoothhound">Smoothhound</option>
+                                <option value="Spurdog">Spurdog</option>
+                                <option value="Thornback Ray">Thornback Ray</option>
+                                <option value="Grey Gurnard">Grey Gurnard</option>
+                                <option value="Red Gurnard">Red Gurnard</option>
+                                <option value="Mackerel">Mackerel</option>
+                                <option value="Ballan Wrasse">Ballan Wrasse</option>
+                            </optgroup>
+
+
                             <optgroup label="Roundfish">
-                                <option value="Cod">Cod</option><option value="Whiting">Whiting</option><option value="Haddock">Haddock</option><option value="Pollock">Pollock</option><option value="Coalfish (Saithe)">Coalfish (Saithe)</option><option value="Ling">Ling</option><option value="Pouting">Pouting</option><option value="Poor Cod">Poor Cod</option>
+                                <option value="Cod">Cod</option><option value="Whiting">Whiting</option><option value="Haddock">Haddock</option><option value="Pollock">Pollock</option><option value="Coalfish (Saithe)">Coalfish (Saithe)</option><option value="European Bass">European Bass</option><option value="Ling">Ling</option><option value="Pouting">Pouting</option><option value="Poor Cod">Poor Cod</option>
                             </optgroup>
                             
                             <optgroup label="Bass & Bream">
-                                <option value="European Bass">European Bass</option><option value="Black Bream">Black Bream</option><option value="Gilthead Bream">Gilthead Bream</option><option value="Red Bream">Red Bream</option><option value="Couch’s Bream">Couch’s Bream</option>
+                                <option value="Black Bream">Black Bream</option><option value="Gilthead Bream">Gilthead Bream</option><option value="Red Bream">Red Bream</option><option value="Couch’s Bream">Couch’s Bream</option>
                             </optgroup>
                             
                             <optgroup label="Flatfish">
@@ -479,18 +499,18 @@
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-[0.3em] mb-1.5 ml-1 text-center" id="labelSize">Capture Record</label>
                         
                         <div id="deckLength" class="text-center">
-                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-4 rounded-lg text-2xl font-black text-center text-white focus:border-amber outline-none shadow-inner" placeholder="0">
+                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-4 rounded-lg text-2xl font-black text-center text-white focus:border-amber outline-none shadow-inner text-center" placeholder="0">
                         </div>
                         
                         <div id="deckWeightLb" class="hidden flex space-x-2 text-center">
-                            <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
-                            <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
+                            <div class="flex-1 text-center"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner text-center"></div>
+                            <div class="flex-1 text-center"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner text-center"></div>
                         </div>
 
 
                         <div id="deckWeightKg" class="hidden flex space-x-2 text-center">
-                            <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
-                            <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" placeholder="Grammes" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
+                            <div class="flex-1 text-center"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner text-center"></div>
+                            <div class="flex-1 text-center"><input type="number" id="inputGrammes" inputmode="numeric" placeholder="Grammes" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner text-center"></div>
                         </div>
 
 
@@ -606,27 +626,11 @@
 
                 <section class="text-center">
                     <h4 class="text-amber font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center">1. Purpose of the Application</h4>
-                    <p class="text-xs leading-relaxed text-center">Sea Diary: Match Edition Pro is a specialized, cloud-synchronized platform designed to manage sea angling tournaments in real-time. By moving away from traditional paper scorecards, the app provides instant transparency through a <b>Live Leader Board</b>, automated time management, and a centralized reporting system for Marshalls. It is built to work reliably in coastal environments, offering offline resilience and high-visibility controls for use in direct sunlight.</p>
+                    <p class="text-xs leading-relaxed text-center">Sea Diary: Match Edition Pro is a specialized platform designed for managing sea angling tournaments in real-time. Features include a static Scottish common species list, precision weight engines, and an automated predictive focus tool for fast data entry on the shore.</p>
                 </section>
                 <section class="text-center">
                     <h4 class="text-blue-400 font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center">2. The Marshall’s Perspective (Steward)</h4>
-                    <p class="text-xs leading-relaxed mb-3 text-center">As the Steward, you are the "Master of the Room." You control the tournament clock and the scoring parameters.</p>
-                    <ul class="space-y-3 text-[11px] leading-relaxed text-center">
-                        <li><b>Initialization:</b> Enter your name and venue. Navigate to the Steward section to select match duration and scoring format.</li>
-                        <li><b>PIN System:</b> Creating a session generates a unique 4-digit code. Competitors require this to link.</li>
-                        <li><b>Starting:</b> Once anglers are in the lobby, tap Start Match to trigger a synchronized 5-second countdown on every phone.</li>
-                        <li><b>Ending:</b> Allow clock to reach zero or use "Strike Now" to activate the <b>5-Minute Grace Period</b>.</li>
-                    </ul>
-                </section>
-                <section class="text-center">
-                    <h4 class="text-red-500 font-black uppercase tracking-widest mb-3 border-b border-slate-800 pb-2 text-center">3. The Competitor’s Perspective (Angler)</h4>
-                    <p class="text-xs leading-relaxed mb-3 text-center">As an Angler, your focus is logging catches accurately and monitoring standings.</p>
-                    <ul class="space-y-3 text-[11px] leading-relaxed text-center">
-                        <li><b>Joining:</b> Enter name and venue, then provide the PIN from your Marshall.</li>
-                        <li><b>Scorecard:</b> Select species and enter measurement. Entries without size logs are blocked. For unlisted fish, use <b>"[Add Other Species...]"</b> at the bottom of the dropdown.</li>
-                        <li><b>Standings:</b> Tap the trophy to view the Live Leader Board and the "Match Biggest Fish."</li>
-                        <li><b>Grace Period:</b> At expiration, the screen turns Maroon. You have 5 mins to submit captures before locking.</li>
-                    </ul>
+                    <p class="text-xs leading-relaxed mb-3 text-center">As the Steward, you are the "Master of the Room." Access the **Admin Desk** drawer to manage match times or transfer control to another competitor.</p>
                 </section>
             </div>
         </div>
@@ -938,7 +942,7 @@
                 if (list) {
                     let anglers = Object.values(globalMatchData.anglers);
                     list.innerHTML = anglers.map(a => `
-                        <div class="match-card p-4 font-bold text-slate-100 flex justify-between items-center text-center">
+                        <div class="match-card p-4 font-bold text-slate-100 flex justify-between items-center text-center text-center">
                             <span><i class="fa-solid fa-user-check text-green-500 mr-3 animate-pulse text-center"></i> ${a.name}</span>
                             <span class="text-[8px] text-slate-400 uppercase tracking-widest text-center">Linked</span>
                         </div>`).join('');
@@ -1149,7 +1153,7 @@
             } else {
                 focusMeasurement(); 
             }
-            /* V5.0.0 No blur here to allow keyboard to stay up for jump */
+            /* V5.0.0 Predictve focus logic - no blur */
         }
 
 
@@ -1243,7 +1247,9 @@
         }
 
 
-        /* Removed AdjustSize Function - +/- buttons deleted for UX speed */
+
+
+        function adjustSize(val) { let input = document.getElementById('inputSize'); input.value = (parseFloat(input.value) || 0) + val; }
 
 
 
@@ -1305,7 +1311,6 @@
                 state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }); 
             }
             
-            /* Reset UI & Dismiss Keyboard */
             document.getElementById('inputSpecies').value = ""; 
             document.getElementById('inputSize').value = ""; 
             document.getElementById('inputLbs').value = ""; 
@@ -1347,7 +1352,7 @@
 
 
         function deleteCatch(id) {
-            if (!confirm("Delete this capture from record?")) return;
+            if (!confirm("Delete this capture?")) return;
             state.myCatches = state.myCatches.filter(x => x.id !== id);
             if (state.format === 'speciesHunt') {
                 let counts = {}; let temp = [...state.myCatches].reverse();
@@ -1361,34 +1366,22 @@
 
 
         function updateRecentCaptures() {
+            /* V5.1.0 Dynamically removed for static Scottish list header */
             const group = document.getElementById('recentCapturesGroup');
-            if (!group) return;
-            
-            let recents = [...new Set(state.myCatches.map(c => c.species))].slice(0, 5);
-            
-            if (recents.length === 0) {
-                group.classList.add('hidden');
-                group.innerHTML = '';
-            } else {
-                group.classList.remove('hidden');
-                group.innerHTML = recents.map(sp => `<option value="${sp}">${sp}</option>`).join('');
-            }
+            if (group) group.classList.add('hidden');
         }
 
 
 
 
         function renderCatchList() {
-            updateRecentCaptures();
-            
             const list = document.getElementById('localCatchList'); if (!list) return;
             list.innerHTML = "";
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
-                div.className = "match-card p-3.5 flex justify-between items-center transition mb-1 shadow-md text-center";
+                div.className = "match-card p-3.5 flex justify-between items-center transition mb-1 shadow-md text-center text-center";
                 let ptLabel = state.format === 'speciesHunt' ? `(${c.points})` : (c.points === 0 ? '(0)' : '');
                 
-                /* V5.0.0 INDIVIDUAL EDIT (PENCIL) AND DELETE (TRASH) ICONS */
                 div.innerHTML = `
                     <div class="flex-1 text-center">
                         <span class="font-black text-white text-base uppercase tracking-tight text-center">${c.species}</span>
@@ -1396,8 +1389,8 @@
                         <span class="text-[10px] text-amber ml-2 font-black text-center">${ptLabel}</span>
                     </div>
                     <div class="flex items-center space-x-1">
-                        <button onclick="editCatch('${c.id}')" class="text-blue-400 p-2 active:scale-90 transition"><i class="fa-solid fa-pencil text-base"></i></button>
-                        <button onclick="deleteCatch('${c.id}')" class="text-amber p-2 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-base"></i></button>
+                        <button onclick="editCatch('${c.id}')" class="text-blue-400 p-2 active:scale-90 transition"><i class="fa-solid fa-pencil text-base text-center"></i></button>
+                        <button onclick="deleteCatch('${c.id}')" class="text-amber p-2 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-base text-center"></i></button>
                     </div>`;
                 list.appendChild(div);
             });
@@ -1412,12 +1405,12 @@
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
             
             list.innerHTML = arr.map((a, i) => `
-                <div class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 flex justify-between items-center mb-1.5 shadow-sm border-l-4 ${i===0?'border-l-amber': i===1?'border-l-slate-300': i===2?'border-l-orange-700':'border-l-blue-600'} text-center">
-                    <div class="flex items-center truncate w-2/3 text-center">
+                <div class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 flex justify-between items-center mb-1.5 shadow-sm border-l-4 ${i===0?'border-l-amber': i===1?'border-l-slate-300': i===2?'border-l-orange-700':'border-l-blue-600'} text-center text-center text-center">
+                    <div class="flex items-center truncate w-2/3 text-center text-center">
                         <span class="font-bold ${i===0?'text-amber':'text-slate-500'} text-sm w-6 text-left text-center">${i+1}.</span>
                         <span class="font-bold text-slate-100 text-sm uppercase tracking-wide truncate text-left text-center">${a.name}</span>
                     </div>
-                    <div class="font-bold text-lg text-white text-right w-1/3 text-center">
+                    <div class="font-bold text-lg text-white text-right w-1/3 text-center text-center">
                         ${formatScoreDisplay(a.score, state.format)} <span class="text-[10px] text-slate-500 ml-1 text-center">${(state.format === 'weightLb' || state.format === 'weightKg') ? '' : 'pts'}</span>
                     </div>
                 </div>
@@ -1609,8 +1602,8 @@
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); });
             document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
-            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Score Table</h4><div class="space-y-2.5 text-center">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md text-center text-center"><span class="uppercase text-white font-bold text-sm text-center text-center"><b class="text-amber mr-2 text-center text-center">${i+1}.</b> ${a.name}</span><b class="text-white text-lg text-center text-center">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; }
-            else { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Capture Diary</h4><div class="space-y-2.5 text-center text-center">${m.personalCatches.map(c => `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner text-center"><div class="text-left text-center text-center"><b class="text-white text-base uppercase text-center text-center">${c.species}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest text-center text-center">${c.time}</span></div><div class="text-right text-center text-center"><b class="text-white text-base text-center text-center">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest text-center text-center">Points</span></div></div>`).join('')}</div>`; }
+            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Score Table</h4><div class="space-y-2.5 text-center">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md text-center"><span class="uppercase text-white font-bold text-sm text-center"><b class="text-amber mr-2 text-center">${i+1}.</b> ${a.name}</span><b class="text-white text-lg text-center">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; }
+            else { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Capture Diary</h4><div class="space-y-2.5 text-center text-center">${m.personalCatches.map(c => `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner text-center"><div class="text-left text-center"><b class="text-white text-base uppercase text-center">${c.species}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest text-center">${c.time}</span></div><div class="text-right text-center"><b class="text-white text-base text-center">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest text-center">Points</span></div></div>`).join('')}</div>`; }
         }
 
 
