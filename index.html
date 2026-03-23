@@ -10,7 +10,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        /* HARDWARE SYSTEM LOCKS */
         html, body {
             font-family: 'Inter', sans-serif;
             background-color: #020617; 
@@ -35,7 +34,6 @@
             transition: background-color 0.6s ease;
         }
 
-        /* GRACE PERIOD RED ALERT */
         #app-container.grace-active {
             background-color: #450a0a !important; 
         }
@@ -57,7 +55,6 @@
             box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
         }
 
-        /* KEYBOARD SCROLL PROTECTION */
         .scrollable-area {
             flex: 1;
             min-height: 0; 
@@ -80,7 +77,6 @@
             border: 1px solid #334155; 
             border-radius: 1rem;
             box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.6);
-            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
         input:focus, select:focus {
@@ -179,37 +175,37 @@
 
     <div id="broadcastToast" class="fixed top-4 inset-x-4 z-[200] bg-blue-600 text-white p-4 rounded-xl shadow-2xl flex items-center space-x-4 border-2 border-white/20">
         <i class="fa-solid fa-bullhorn text-xl animate-bounce"></i>
-        <div class="flex-1">
-            <p class="font-black uppercase text-[9px] tracking-widest leading-none opacity-80 text-center">Match Alert</p>
-            <p id="broadcastMsg" class="font-bold text-xs leading-tight mt-1 text-center"></p>
+        <div class="flex-1 text-center">
+            <p class="font-black uppercase text-[9px] tracking-widest leading-none opacity-80">Match Alert</p>
+            <p id="broadcastMsg" class="font-bold text-xs leading-tight mt-1"></p>
         </div>
     </div>
 
     <div id="customEndModal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-5 border-2 border-amber">
             <div class="text-center">
-                <i class="fa-solid fa-clock-rotate-left text-amber text-3xl mb-2 text-center"></i>
-                <h3 class="text-lg font-black uppercase tracking-tight text-white text-center">Change Ending Time</h3>
-                <p class="text-slate-400 text-[10px] mt-1 leading-relaxed text-center">Modify the tournament clock for all connected devices.</p>
+                <i class="fa-solid fa-clock-rotate-left text-amber text-3xl mb-2"></i>
+                <h3 class="text-lg font-black uppercase tracking-tight text-white">Change Ending Time</h3>
+                <p class="text-slate-400 text-[10px] mt-1 leading-relaxed">Modify the tournament clock for all connected devices.</p>
             </div>
             <div class="grid grid-cols-1 gap-2.5">
-                <button onclick="stewardSetNewEnd(1)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">1 MINUTE LEFT</button>
-                <button onclick="stewardSetNewEnd(5)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">5 MINUTES LEFT</button>
-                <button onclick="stewardSetNewEnd(10)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px] text-center">10 MINUTES LEFT</button>
-                <button onclick="stewardSetNewEnd(0)" class="bg-red-600 py-3.5 rounded-lg font-black text-white active:bg-red-700 transition uppercase tracking-widest text-[10px] leading-none text-center">STRIKE NOW<br><span class="text-[8px] opacity-60 text-center">(Activates 3 Min Grace)</span></button>
+                <button onclick="stewardSetNewEnd(1)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">1 MINUTE LEFT</button>
+                <button onclick="stewardSetNewEnd(5)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">5 MINUTES LEFT</button>
+                <button onclick="stewardSetNewEnd(10)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">10 MINUTES LEFT</button>
+                <button onclick="stewardSetNewEnd(0)" class="bg-red-600 py-3.5 rounded-lg font-black text-white active:bg-red-700 transition uppercase tracking-widest text-[10px] leading-none">STRIKE NOW<br><span class="text-[8px] opacity-60">(Activates 3 Min Grace)</span></button>
             </div>
-            <button onclick="document.getElementById('customEndModal').classList.add('hidden')" class="w-full text-slate-500 font-black uppercase text-[9px] tracking-[0.3em] pt-3 text-center">Return</button>
+            <button onclick="document.getElementById('customEndModal').classList.add('hidden')" class="w-full text-slate-500 font-black uppercase text-[9px] tracking-[0.3em] pt-3">Return</button>
         </div>
     </div>
 
     <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-5 border-2 border-blue-500">
             <div class="text-center">
-                <i class="fa-solid fa-mobile-screen-button text-blue-400 text-4xl mb-2 text-center"></i>
-                <h3 class="text-lg font-black uppercase tracking-tight text-white text-center">Device Installation</h3>
-                <p id="installInstructionText" class="text-slate-400 text-xs mt-3 leading-relaxed text-center"></p>
+                <i class="fa-solid fa-mobile-screen-button text-blue-400 text-4xl mb-2"></i>
+                <h3 class="text-lg font-black uppercase tracking-tight text-white">Device Installation</h3>
+                <p id="installInstructionText" class="text-slate-400 text-xs mt-3 leading-relaxed"></p>
             </div>
-            <button onclick="document.getElementById('installModal').classList.add('hidden')" class="w-full bg-blue-600 text-white font-black py-3.5 rounded-lg uppercase tracking-widest text-[10px] text-center">Got it</button>
+            <button onclick="document.getElementById('installModal').classList.add('hidden')" class="w-full bg-blue-600 text-white font-black py-3.5 rounded-lg uppercase tracking-widest text-[10px]">Got it</button>
         </div>
     </div>
 
@@ -221,9 +217,9 @@
             </button>
 
             <div class="text-center mt-6">
-                <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1 text-center"></i>
-                <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white text-center">Match Edition Pro</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest text-center uppercase opacity-60">Gold Master V5.1.8</div>
+                <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
+                <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white">Match Edition Pro</h1>
+                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.1.9</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -236,21 +232,21 @@
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1 text-left">Venue Rememory</label>
                         <input type="text" id="venueName" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Venue Name" class="w-full bg-slate-900 border border-slate-700 text-white font-bold text-lg rounded-lg p-3 text-center focus:border-amber outline-none shadow-inner">
                     </div>
-                    <button onclick="proceedToRoleSelection()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-lg py-4 rounded-xl shadow-md uppercase tracking-wide active:scale-95 transition-transform text-center">
+                    <button onclick="proceedToRoleSelection()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-lg py-4 rounded-xl shadow-md uppercase tracking-wide active:scale-95 transition-transform">
                         Continue to Match <i class="fa-solid fa-arrow-right ml-2"></i>
                     </button>
                 </div>
                 
                 <div class="flex space-x-2.5 pt-2">
-                    <button onclick="navTo('history')" class="flex-1 bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[10px] uppercase border border-slate-700 active:bg-slate-700 transition tracking-widest text-center">
+                    <button onclick="navTo('history')" class="flex-1 bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[10px] uppercase border border-slate-700 active:bg-slate-700 transition tracking-widest">
                         <i class="fa-solid fa-book mr-1.5 text-blue-400"></i> History
                     </button>
-                    <button onclick="document.getElementById('guideDrawer').classList.add('open')" class="flex-1 bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[9px] uppercase border border-slate-700 active:bg-slate-700 transition tracking-widest text-center">
+                    <button onclick="document.getElementById('guideDrawer').classList.add('open')" class="flex-1 bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[9px] uppercase border border-slate-700 active:bg-slate-700 transition tracking-widest">
                         <i class="fa-solid fa-circle-info mr-1 text-amber"></i> Quick Start Guide
                     </button>
                 </div>
 
-                <button id="btnInstallGuide" onclick="showInstallGuide()" class="hidden w-full bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[10px] uppercase border border-slate-700 active:bg-blue-600 active:text-white transition tracking-widest text-center mt-2.5">
+                <button id="btnInstallGuide" onclick="showInstallGuide()" class="hidden w-full bg-slate-800 text-slate-300 font-black py-3.5 rounded-lg text-[10px] uppercase border border-slate-700 active:bg-blue-600 active:text-white transition tracking-widest mt-2.5">
                     <i class="fa-solid fa-mobile-screen mr-1.5 text-blue-400"></i> Install App
                 </button>
             </div>
@@ -258,19 +254,19 @@
 
         <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-[#020617]">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
-                <button onclick="navTo('home')" class="text-slate-500 text-xl px-2 text-left"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-lg font-black uppercase tracking-tight text-white text-center">Select Role</h2>
-                <button onclick="exitApp()" class="text-red-500 text-xl px-2 text-right"><i class="fa-solid fa-power-off"></i></button>
+                <button onclick="navTo('home')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 class="text-lg font-black uppercase tracking-tight text-white">Select Role</h2>
+                <button onclick="exitApp()" class="text-red-500 text-xl px-2"><i class="fa-solid fa-power-off"></i></button>
             </div>
             
             <div class="flex-1 flex flex-col justify-center space-y-5 max-w-sm mx-auto w-full pb-20">
-                <button onclick="navTo('join')" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-2xl py-10 rounded-2xl shadow-xl uppercase tracking-wide active:scale-95 transition-transform flex flex-col items-center justify-center text-center">
+                <button onclick="navTo('join')" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-2xl py-10 rounded-2xl shadow-xl uppercase tracking-wide active:scale-95 transition-transform flex flex-col items-center justify-center">
                     <i class="fa-solid fa-user-tag text-5xl mb-4"></i>
                     Join as Competitor
                 </button>
                 
                 <div class="pt-8">
-                    <button onclick="navTo('host')" class="w-3/4 mx-auto bg-slate-900 border border-slate-700 text-amber font-bold text-sm py-4 rounded-xl shadow-md uppercase tracking-widest active:bg-slate-800 transition-transform flex flex-col items-center justify-center text-center opacity-80">
+                    <button onclick="navTo('host')" class="w-3/4 mx-auto bg-slate-900 border border-slate-700 text-amber font-bold text-sm py-4 rounded-xl shadow-md uppercase tracking-widest active:bg-slate-800 transition-transform flex flex-col items-center justify-center opacity-80">
                         <i class="fa-solid fa-crown text-2xl mb-1.5"></i>
                         Host as Steward
                     </button>
@@ -280,32 +276,32 @@
 
         <div id="view-join" class="hidden view-frame p-4 bg-[#020617]">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
-                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2 text-center"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-lg font-black uppercase tracking-tight text-white text-center">Authentication</h2>
+                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 class="text-lg font-black uppercase tracking-tight text-white">Authentication</h2>
                 <div class="w-6"></div>
             </div>
             <div class="text-center pt-6 pb-3">
                 <h2 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] mb-3">Enter Room PIN</h2>
                 <div class="flex justify-center space-x-2">
-                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md text-center" id="pin-1"></div>
-                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md text-center" id="pin-2"></div>
-                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md text-center" id="pin-3"></div>
-                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md text-center" id="pin-4"></div>
+                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md" id="pin-1"></div>
+                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md" id="pin-2"></div>
+                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md" id="pin-3"></div>
+                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white shadow-md" id="pin-4"></div>
                 </div>
             </div>
             <div class="flex-1 grid grid-cols-3 gap-2.5 p-3 max-w-sm mx-auto w-full content-center">
                 <button class="atm-btn" onclick="atmPress(1)">1</button><button class="atm-btn" onclick="atmPress(2)">2</button><button class="atm-btn" onclick="atmPress(3)">3</button>
                 <button class="atm-btn" onclick="atmPress(4)">4</button><button class="atm-btn" onclick="atmPress(5)">5</button><button class="atm-btn" onclick="atmPress(6)">6</button>
                 <button class="atm-btn" onclick="atmPress(7)">7</button><button class="atm-btn" onclick="atmPress(8)">8</button><button class="atm-btn" onclick="atmPress(9)">9</button>
-                <button class="atm-btn text-red-500 text-center" onclick="navTo('role')"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="atmPress(0)">0</button><button class="atm-btn text-amber text-center" onclick="atmDelete()"><i class="fa-solid fa-delete-left"></i></button>
+                <button class="atm-btn text-red-500" onclick="navTo('role')"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="atmPress(0)">0</button><button class="atm-btn text-amber" onclick="atmDelete()"><i class="fa-solid fa-delete-left"></i></button>
             </div>
-            <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto bg-blue-600 text-white font-black text-xl py-4 rounded-xl mb-8 shadow-xl uppercase tracking-widest active:scale-95 transition-transform text-center">Validate</button>
+            <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto bg-blue-600 text-white font-black text-xl py-4 rounded-xl mb-8 shadow-xl uppercase tracking-widest active:scale-95 transition-transform">Validate</button>
         </div>
 
         <div id="view-host" class="hidden view-frame p-5 space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3 text-white text-center">
-                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2 text-center"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-lg font-black uppercase tracking-tight text-white text-center">Match Creator</h2>
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 class="text-lg font-black uppercase tracking-tight text-white">Match Creator</h2>
                 <div class="w-6"></div>
             </div>
             <div class="match-card p-5 space-y-4 text-center">
@@ -321,31 +317,31 @@
                         <option value="length">Length Only (cm)</option><option value="length10">Length + 10 Pts</option><option value="weightLb">Weight (Lbs & Oz)</option><option value="weightKg">Weight (Kg & g)</option><option value="speciesHunt" selected>Species Hunt</option>
                     </select>
                 </div>
-                <button onclick="createMatch()" class="w-full bg-amber text-slate-900 font-black text-lg py-4 rounded-xl mt-3 shadow-lg uppercase active:scale-95 transition-transform text-center">Initialize Match</button>
+                <button onclick="createMatch()" class="w-full bg-amber text-slate-900 font-black text-lg py-4 rounded-xl mt-3 shadow-lg uppercase active:scale-95 transition-transform">Initialize Match</button>
             </div>
         </div>
 
         <div id="view-waiting" class="hidden view-frame p-5 space-y-4">
-            <div class="flex justify-between items-center w-full text-center">
-                <button onclick="exitWaitingRoom()" class="text-slate-500 text-xl px-2 text-center"><i class="fa-solid fa-arrow-left"></i></button>
-                <div class="text-amber font-black tracking-[0.2em] bg-slate-800 px-5 py-1.5 rounded-lg border border-slate-700 shadow-md text-center" id="displayPin">0000</div>
+            <div class="flex justify-between items-center w-full">
+                <button onclick="exitWaitingRoom()" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <div class="text-amber font-black tracking-[0.2em] bg-slate-800 px-5 py-1.5 rounded-lg border border-slate-700 shadow-md" id="displayPin">0000</div>
             </div>
             <div class="flex-1 flex flex-col items-center space-y-5 pt-3">
-                <h3 class="text-xl font-black text-white uppercase tracking-tight text-center">Angler Lobby</h3>
-                <div id="attendanceList" class="w-full max-w-sm flex-1 bg-slate-800/40 rounded-2xl border border-slate-800 p-4 space-y-2.5 overflow-y-auto shadow-inner text-center"></div>
-                <div id="hostControls" class="hidden w-full max-w-sm pb-5 text-center">
-                    <button onclick="triggerHypeStart()" class="w-full bg-red-600 text-white font-black text-xl py-4 rounded-2xl animate-pulse shadow-xl uppercase active:scale-95 transition-transform text-center">🚀 START MATCH</button>
+                <h3 class="text-xl font-black text-white uppercase tracking-tight">Angler Lobby</h3>
+                <div id="attendanceList" class="w-full max-w-sm flex-1 bg-slate-800/40 rounded-2xl border border-slate-800 p-4 space-y-2.5 overflow-y-auto shadow-inner"></div>
+                <div id="hostControls" class="hidden w-full max-w-sm pb-5">
+                    <button onclick="triggerHypeStart()" class="w-full bg-red-600 text-white font-black text-xl py-4 rounded-2xl animate-pulse shadow-xl uppercase active:scale-95 transition-transform">🚀 START MATCH</button>
                 </div>
                 <div id="joinerWaitingText" class="w-full max-w-sm pb-5 text-center">
-                    <p class="text-base font-bold text-slate-400 italic text-center">Linked... Waiting for Steward.</p>
+                    <p class="text-base font-bold text-slate-400 italic">Linked... Waiting for Steward.</p>
                 </div>
             </div>
         </div>
 
-        <div id="view-hype" class="hidden view-frame items-center justify-center bg-black text-center">
+        <div id="view-hype" class="hidden view-frame items-center justify-center bg-black">
             <div id="hypeContainer" class="flex flex-col items-center justify-center text-center">
-                <div id="hypeCount" class="hype-number flex items-center justify-center w-48 h-48 text-center">5</div>
-                <div id="hypeSplash" class="hidden splash-text mt-6 text-center">MATCH STARTED!</div>
+                <div id="hypeCount" class="hype-number flex items-center justify-center w-48 h-48">5</div>
+                <div id="hypeSplash" class="hidden splash-text mt-6">MATCH STARTED!</div>
             </div>
         </div>
 
@@ -353,33 +349,32 @@
             <div class="flex-none bg-slate-900 border-b border-slate-800 px-4 py-2 flex justify-between items-center z-20 shadow-md">
                 <div class="flex flex-col items-start">
                     <div class="flex items-center space-x-2">
-                        <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse text-center"></div>
-                        <div class="text-base font-black tabular-nums tracking-tighter text-white leading-none text-center" id="mainTimer">00:00:00</div>
+                        <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                        <div class="text-base font-black tabular-nums tracking-tighter text-white leading-none" id="mainTimer">00:00:00</div>
                     </div>
-                    <span id="graceLabel" class="hidden text-[10px] font-black text-red-500 uppercase tracking-widest mt-1 ml-4 animate-pulse text-left">GRACE PERIOD</span>
+                    <span id="graceLabel" class="hidden text-[10px] font-black text-red-500 uppercase tracking-widest mt-1 ml-4 animate-pulse">GRACE PERIOD</span>
                 </div>
-                <div class="flex items-center space-x-2.5 text-center">
-                    <i id="cloudSignal" class="fa-solid fa-cloud text-slate-700 text-base text-center"></i>
-                    <div class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-1 flex flex-col items-center justify-center min-w-[85px] shadow-inner text-center">
-                        <span class="text-[8px] font-black uppercase text-slate-500 tracking-widest leading-none mb-0.5 text-center">Total Points</span>
-                        <span class="text-lg font-black text-white leading-none text-center" id="liveTallyBox">0</span>
+                <div class="flex items-center space-x-2.5">
+                    <i id="cloudSignal" class="fa-solid fa-cloud text-slate-700 text-base"></i>
+                    <div class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-1 flex flex-col items-center justify-center min-w-[85px] shadow-inner">
+                        <span class="text-[8px] font-black uppercase text-slate-500 tracking-widest leading-none mb-0.5">Total Points</span>
+                        <span class="text-lg font-black text-white leading-none" id="liveTallyBox">0</span>
                     </div>
                 </div>
-                <button id="wakeLockBtn" onclick="toggleWakeLock()" class="text-slate-400 border border-slate-800 px-2.5 py-1 rounded-md text-[9px] font-black uppercase text-center"><i class="fa-solid fa-moon"></i></button>
+                <button id="wakeLockBtn" onclick="toggleWakeLock()" class="text-slate-400 border border-slate-800 px-2.5 py-1 rounded-md text-[9px] font-black uppercase"><i class="fa-solid fa-moon"></i></button>
             </div>
             
-            <div class="flex-none w-full bg-slate-900 border-b border-slate-800 z-10 p-2.5 text-center shadow-lg">
-                <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="w-full bg-amber text-slate-900 font-black py-3.5 rounded-xl text-sm uppercase tracking-[0.2em] shadow-[0_0_15px_rgba(245,158,11,0.4)] active:scale-95 transition-transform flex items-center justify-center text-center">
+            <div class="flex-none w-full bg-slate-900 border-b border-slate-800 z-10 p-2.5">
+                <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="w-full bg-amber text-slate-900 font-black py-3.5 rounded-xl text-sm uppercase tracking-[0.2em] shadow-[0_0_15px_rgba(245,158,11,0.4)] active:scale-95 transition-transform flex items-center justify-center">
                     <i class="fa-solid fa-trophy mr-2.5 animate-bounce"></i> View Live Leader Board
                 </button>
             </div>
 
-            <div id="loggingArea" class="scrollable-area p-4 space-y-4 text-center">
+            <div id="loggingArea" class="scrollable-area p-4 space-y-4">
                 
-                <div class="match-card p-4 space-y-3.5 text-center">
+                <div class="match-card p-4 space-y-3.5">
                     <div>
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1 text-left">Fish Species</label>
-                        
                         <select id="inputSpecies" onchange="checkSpeciesSelection()" class="w-full bg-slate-900 border-2 border-slate-800 p-2.5 rounded-lg text-base font-black appearance-none text-white focus:border-blue-500 transition shadow-inner text-center">
                             <option value="" disabled selected>-- Select Fish --</option>
                             <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SCOTTISH SPECIES">
@@ -400,87 +395,87 @@
                         </select>
                     </div>
 
-                    <div id="deckSizeInputs" class="text-center">
+                    <div id="deckSizeInputs">
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-[0.3em] mb-1.5 ml-1 text-left" id="labelSize">Capture Record</label>
-                        <div id="deckLength" class="text-center">
-                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-4 rounded-lg text-2xl font-black text-center text-white focus:border-amber outline-none shadow-inner text-center" placeholder="0">
+                        <div id="deckLength">
+                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-4 rounded-lg text-2xl font-black text-center text-white focus:border-amber outline-none shadow-inner" placeholder="0">
                         </div>
-                        <div id="deckWeightLb" class="hidden flex space-x-2 text-center">
+                        <div id="deckWeightLb" class="hidden flex space-x-2">
                             <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
                             <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
                         </div>
-                        <div id="deckWeightKg" class="hidden flex space-x-2 text-center">
+                        <div id="deckWeightKg" class="hidden flex space-x-2">
                             <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
                             <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" placeholder="Grammes" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-900 border-2 border-slate-800 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
                         </div>
                     </div>
-                    <button id="btnRecord" onclick="recordCatch()" class="w-full bg-blue-600 text-white font-black text-lg py-4 rounded-lg shadow-lg transition uppercase active:scale-95 text-center">Record Catch</button>
+                    <button id="btnRecord" onclick="recordCatch()" class="w-full bg-blue-600 text-white font-black text-lg py-4 rounded-lg shadow-lg transition uppercase active:scale-95">Record Catch</button>
                 </div>
 
-                <div class="pt-1 text-center">
+                <div class="pt-1">
                     <h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.4em] mb-2 ml-1 opacity-60 text-left">Match Journal</h3>
                     <div id="localCatchList" class="space-y-2 pb-5"></div>
                 </div>
 
-                <div class="pt-6 pb-24 text-center">
-                    <button onclick="leaveMatchEarly()" class="w-full border-2 border-slate-800 text-slate-400 font-black py-4 rounded-2xl active:bg-slate-950 transition shadow-sm text-[9px] uppercase tracking-[0.5em] text-center">
+                <div class="pt-6 pb-24">
+                    <button onclick="leaveMatchEarly()" class="w-full border-2 border-slate-800 text-slate-400 font-black py-4 rounded-2xl active:bg-slate-950 transition shadow-sm text-[9px] uppercase tracking-[0.5em]">
                         <i class="fa-solid fa-person-walking-arrow-right mr-1"></i> Leave Match Early
                     </button>
                 </div>
             </div>
 
             <div id="btnStewardPanelContainer" class="hidden fixed bottom-0 left-0 right-0 p-4 bg-slate-950/90 backdrop-blur-md border-t border-slate-800 z-50">
-                <button onclick="document.getElementById('stewardDrawer').classList.add('open')" class="w-full bg-slate-900 border border-slate-700 text-amber font-black py-3.5 rounded-xl shadow-lg active:bg-slate-800 transition flex items-center justify-center space-x-2 text-center">
+                <button onclick="document.getElementById('stewardDrawer').classList.add('open')" class="w-full bg-slate-900 border border-slate-700 text-amber font-black py-3.5 rounded-xl shadow-lg active:bg-slate-800 transition flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-user-shield text-blue-400"></i>
                     <span class="tracking-widest uppercase text-[10px]">Admin: Steward Desk</span>
                 </button>
             </div>
         </div>
 
-        <div id="view-results" class="hidden view-frame bg-[#020617] text-white p-5 justify-center text-center space-y-5">
-            <h1 class="text-4xl font-black uppercase text-amber border-b-4 border-slate-900 pb-5 tracking-tighter">Final Result</h1>
+        <div id="view-results" class="hidden view-frame bg-[#020617] text-white p-5 justify-center space-y-5">
+            <h1 class="text-4xl font-black uppercase text-amber border-b-4 border-slate-900 pb-5 tracking-tighter text-center">Final Result</h1>
             <div class="match-card p-6 shadow-[0_0_40px_rgba(59,130,246,0.15)] text-center">
                 <p class="text-slate-500 font-black uppercase tracking-[0.3em] text-[9px] mb-2">Tournament Total Score</p>
-                <p class="text-6xl font-black text-white text-center" id="finalScore">0</p>
+                <p class="text-6xl font-black text-white" id="finalScore">0</p>
             </div>
             
-            <div class="grid grid-cols-2 gap-3 text-center">
+            <div class="grid grid-cols-2 gap-3">
                 <div class="match-card p-3 flex flex-col items-center">
-                    <span class="text-[9px] font-black uppercase text-slate-500 tracking-widest mb-1 text-center">Fish Count</span>
-                    <span class="text-2xl font-black text-white text-center" id="finalCount">0</span>
+                    <span class="text-[9px] font-black uppercase text-slate-500 tracking-widest mb-1">Fish Count</span>
+                    <span class="text-2xl font-black text-white" id="finalCount">0</span>
                 </div>
                 <div class="match-card p-3 flex flex-col items-center">
-                    <span class="text-[9px] font-black uppercase text-slate-500 tracking-widest mb-1 text-center">Unique Species</span>
-                    <span class="text-2xl font-black text-blue-400 text-center" id="finalSpecies">0</span>
+                    <span class="text-[9px] font-black uppercase text-slate-500 tracking-widest mb-1">Unique Species</span>
+                    <span class="text-2xl font-black text-blue-400" id="finalSpecies">0</span>
                 </div>
             </div>
 
-            <button id="btnMasterExport" onclick="shareMasterLeaderboard()" class="hidden w-full bg-blue-600 text-white font-black text-lg py-4 rounded-2xl shadow-lg mt-3 active:bg-blue-700 uppercase tracking-widest text-center">Export Full Leaderboard</button>
-            <button onclick="shareResults()" class="w-full bg-green-600 text-white font-black text-xl py-4 rounded-2xl shadow-lg mt-3 active:bg-green-700 uppercase tracking-widest text-center">Share My Results</button>
-            <button onclick="resetApp()" class="text-slate-400 font-black mt-6 border-b border-slate-900 pb-1 active:text-white uppercase text-[11px] tracking-[0.5em] text-center">Return Home</button>
+            <button id="btnMasterExport" onclick="shareMasterLeaderboard()" class="hidden w-full bg-blue-600 text-white font-black text-lg py-4 rounded-2xl shadow-lg mt-3 active:bg-blue-700 uppercase tracking-widest">Export Full Leaderboard</button>
+            <button onclick="shareResults()" class="w-full bg-green-600 text-white font-black text-xl py-4 rounded-2xl shadow-lg mt-3 active:bg-green-700 uppercase tracking-widest">Share My Results</button>
+            <button onclick="resetApp()" class="text-slate-400 font-black mt-6 border-b border-slate-900 pb-1 active:text-white uppercase text-center text-[11px] tracking-[0.5em]">Return Home</button>
         </div>
 
-        <div id="view-history" class="hidden view-frame p-5 bg-[#020617] text-center">
+        <div id="view-history" class="hidden view-frame p-5 bg-[#020617]">
             <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-5 text-white">
                 <button onclick="navTo('home')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-lg font-black uppercase tracking-[0.1em] text-center">History</h2>
+                <h2 class="text-lg font-black uppercase tracking-[0.1em]">History</h2>
                 <div class="w-6"></div>
             </div>
-            <div class="scrollable-area space-y-6 pb-10 text-center">
-                <div id="historyRecentList" class="space-y-3 px-1 text-center"></div>
-                <div id="archiveContainer" class="hidden px-1 text-center">
+            <div class="scrollable-area space-y-6 pb-10">
+                <div id="historyRecentList" class="space-y-3 px-1"></div>
+                <div id="archiveContainer" class="hidden px-1">
                     <button onclick="toggleArchive()" class="w-full flex justify-between items-center bg-slate-950/50 p-4 rounded-xl border-2 border-slate-800 active:bg-slate-900 transition shadow-md">
                         <span class="font-black text-[10px] uppercase tracking-[0.3em] text-slate-400"><i class="fa-solid fa-box-archive mr-2 text-amber opacity-40"></i> Older Storage</span>
                         <i class="fa-solid fa-chevron-down text-slate-600 transition-transform duration-300" id="archiveChevron"></i>
                     </button>
-                    <div id="historyArchiveList" class="hidden pt-5 space-y-3 text-center"></div>
+                    <div id="historyArchiveList" class="hidden pt-5 space-y-3"></div>
                 </div>
             </div>
         </div>
 
-        <div id="view-kill" class="hidden view-frame items-center justify-center bg-black p-6 text-center">
-            <i class="fa-solid fa-power-off text-red-600 text-5xl mb-5 animate-pulse text-center"></i>
-            <h1 class="text-2xl font-black uppercase text-white tracking-widest mb-3 text-center">Session Cleared</h1>
+        <div id="view-kill" class="hidden view-frame items-center justify-center bg-black p-6">
+            <i class="fa-solid fa-power-off text-red-600 text-5xl mb-5 animate-pulse"></i>
+            <h1 class="text-2xl font-black uppercase text-white tracking-widest mb-3">Session Cleared</h1>
             <p class="text-slate-400 font-bold text-xs leading-relaxed mb-6 text-center">Your connection is safely closed and your battery is no longer being used.</p>
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-left shadow-lg">
                 <p class="text-amber font-black uppercase tracking-widest text-[10px] mb-3 border-b border-slate-800 pb-2">To fully exit the app:</p>
@@ -490,61 +485,76 @@
         </div>
 
         <div id="guideDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[250] flex flex-col shadow-2xl">
-            <button onclick="document.getElementById('guideDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 py-6 font-black uppercase tracking-[0.4em] text-white border-b border-slate-700 flex justify-center items-center text-center">
+            <button onclick="document.getElementById('guideDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 py-6 font-black uppercase tracking-[0.4em] text-white border-b border-slate-700 flex justify-center items-center">
                 <i class="fa-solid fa-arrow-left mr-3"></i> Back to Lobby
             </button>
-            <div class="scrollable-area p-6 space-y-8 text-slate-300">
-                <section class="space-y-4">
-                    <h4 class="text-green-500 font-black uppercase tracking-widest border-b border-slate-800 pb-2 text-center">🎣 ANGLER'S QUICK START</h4>
-                    <ul class="space-y-3 text-[11px] leading-relaxed">
-                        <li><b>1. Join:</b> Enter Name, tap <b>Join as Competitor</b>, enter the 4-digit PIN.</li>
-                        <li><b>2. Stay Awake:</b> Tap the <i class="fa-solid fa-moon"></i> icon so it turns into a <i class="fa-solid fa-sun text-amber"></i>. This stops your screen locking.</li>
-                        <li><b>3. Log Fish:</b> Select Species, enter Size/Weight, hit <b>Record Catch</b>.</li>
-                        <li><b>4. Match End:</b> If the screen turns RED, you have 3 minutes to log your final fish before the board locks.</li>
-                        <li><b>5. Retained Data:</b> Leaving early? Tap "Leave Match Early". Your score remains on the leaderboard until the match ends.</li>
-                    </ul>
+            <div class="scrollable-area p-8 space-y-10 text-white">
+                <section class="space-y-6">
+                    <h4 class="text-green-500 font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">🎣 Angler's Quick Start</h4>
+                    <div class="space-y-6 text-sm leading-relaxed">
+                        <p><b>Step 1: Join the Match</b><br>On the front page, enter your Name and the Venue. Tap <b>"Join as Competitor"</b> and type in the 4-digit PIN provided by your Steward.</p>
+                        
+                        <p class="bg-amber/10 border-l-4 border-amber p-4 italic text-amber-100"><b>THE GOLDEN RULE:</b> Tap the <i class="fa-solid fa-moon"></i> icon at the top right until it becomes a <i class="fa-solid fa-sun text-amber"></i>. This stops your phone from locking during the match.</p>
+                        
+                        <p><b>Step 2: Log Your Catch</b><br>Select the fish species from the list. Enter the size or weight, then hit <b>"Record Catch"</b>. Your total will update instantly.</p>
+                        
+                        <p><b>Step 3: The Leaderboard</b><br>Tap the big Amber button at the top to see the live standings. You can see who is winning and who has the biggest fish at any time.</p>
+                        
+                        <p><b>Step 4: The Final Whistle</b><br>When time runs out, the screen will turn <b>RED</b>. You have 3 minutes to log your final fish before the board locks forever.</p>
+                        
+                        <p class="text-xs text-slate-400 uppercase tracking-widest pt-4"><b>RETAINED DATA:</b> If you need to leave early, just tap "Leave Match Early". Your score remains on the Steward's board until the end of the day.</p>
+                    </div>
                 </section>
+                
                 <hr class="border-slate-800">
-                <section class="space-y-4">
-                    <h4 class="text-amber font-black uppercase tracking-widest border-b border-slate-800 pb-2 text-center">👑 MARSHALL'S COMMAND GUIDE</h4>
-                    <ul class="space-y-3 text-[11px] leading-relaxed">
-                        <li><b>1. Create:</b> Tap <b>Host as Steward</b>, select time/format, tap Initialize.</li>
-                        <li><b>2. Lobby:</b> Call out the PIN. Wait for all names to appear with a green checkmark.</li>
-                        <li><b>3. Start:</b> Tap <b>🚀 START MATCH</b> to sound the horn on all phones.</li>
-                        <li><b>4. Control:</b> Use the <b>Steward Desk</b> (bottom button) to adjust time or end the match early (Strike Now).</li>
-                        <li><b>5. Export:</b> Once finished, tap <b>Master Export</b> to send the full leaderboard to your group chat.</li>
-                    </ul>
+                
+                <section class="space-y-6">
+                    <h4 class="text-amber font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">👑 Steward's Guide</h4>
+                    <div class="space-y-6 text-sm leading-relaxed">
+                        <p><b>Step 1: Setup</b><br>Tap <b>"Host as Steward"</b>. Choose your match duration and the scoring format (Points, Weight, or Species Hunt).</p>
+                        
+                        <p><b>Step 2: The Lobby</b><br>Call out the PIN displayed on your screen. As anglers join, you will see their names appear with a green checkmark.</p>
+                        
+                        <p><b>Step 3: Starting</b><br>When everyone is ready, tap <b>"START MATCH"</b>. This triggers a 5-second countdown and sounds the horn on everyone's phone simultaneously.</p>
+                        
+                        <p><b>Step 4: Management</b><br>Use the <b>"Steward Desk"</b> button at the bottom of the fishing screen to add more time, end the match early, or transfer control to another person.</p>
+                        
+                        <p><b>Step 5: Exporting</b><br>When the match ends, tap <b>"Master Export"</b> to share the full final leaderboard to your WhatsApp group or social media.</p>
+                    </div>
                 </section>
+
                 <hr class="border-slate-800">
+                
                 <section class="pt-4">
-                    <button onclick="forceUpdateApp()" class="w-full flex items-center justify-center space-x-2 bg-slate-900 text-slate-400 border border-slate-700 font-black py-4 rounded-lg active:text-amber transition shadow-inner">
-                        <i class="fa-solid fa-rotate text-lg" id="updateSpinnerInternal"></i>
-                        <span class="text-[10px] uppercase tracking-widest">Wipe Cache & Update Version</span>
+                    <button onclick="forceUpdateApp()" class="w-full flex items-center justify-center space-x-3 bg-slate-900 text-slate-400 border border-slate-700 font-black py-5 rounded-lg active:text-amber transition shadow-inner">
+                        <i class="fa-solid fa-rotate text-xl" id="updateSpinnerInternal"></i>
+                        <span class="text-xs uppercase tracking-widest">Wipe Cache & Update Version</span>
                     </button>
+                    <p class="text-[9px] text-slate-600 text-center mt-4 uppercase tracking-[0.2em]">Sea Diary Match Pro • Match Location: Kilsyth</p>
                 </section>
             </div>
         </div>
 
-        <div id="historyDetailDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[150] flex flex-col shadow-2xl hidden text-center">
-            <button onclick="closeHistoryDetail()" class="flex-none w-full bg-slate-900 py-6 font-black uppercase tracking-[0.4em] text-slate-400 border-b border-slate-800 flex justify-center items-center active:bg-slate-800 transition text-center">
+        <div id="historyDetailDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[150] flex flex-col shadow-2xl hidden">
+            <button onclick="closeHistoryDetail()" class="flex-none w-full bg-slate-900 py-6 font-black uppercase tracking-[0.4em] text-slate-400 border-b border-slate-800 flex justify-center items-center active:bg-slate-800 transition">
                 <i class="fa-solid fa-xmark mr-3"></i> Exit Vault
             </button>
             <div class="flex-none flex bg-slate-900 p-2 space-x-2 border-b border-slate-800 shadow-md">
-                <button id="tab-standings" onclick="switchHistoryTab('standings')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase text-center">Leader Board</button>
-                <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase text-center">Diary</button>
+                <button id="tab-standings" onclick="switchHistoryTab('standings')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase">Leader Board</button>
+                <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase">Diary</button>
             </div>
-            <div id="historyContent" class="scrollable-area p-6 text-center"></div>
+            <div id="historyContent" class="scrollable-area p-6"></div>
         </div>
 
         <div id="leaderboardDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[101] flex flex-col shadow-2xl">
-            <button onclick="document.getElementById('leaderboardDrawer').classList.remove('open')" class="flex-none w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 uppercase tracking-[0.2em] text-[10px] flex justify-center items-center active:bg-blue-800 transition text-center">
-                <i class="fa-solid fa-arrow-left mr-2 animate-pulse text-center"></i> RETURN TO SCORECARD
+            <button onclick="document.getElementById('leaderboardDrawer').classList.remove('open')" class="flex-none w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 uppercase tracking-[0.2em] text-[10px] flex justify-center items-center active:bg-blue-800 transition">
+                <i class="fa-solid fa-arrow-left mr-2 animate-pulse"></i> RETURN TO SCORECARD
             </button>
             <div class="flex-none p-3 bg-slate-900 flex justify-center items-center border-b border-slate-800 shadow-sm">
-                <h2 class="font-bold text-sm tracking-widest text-slate-100 uppercase text-center">Live Leader Board</h2>
+                <h2 class="font-bold text-sm tracking-widest text-slate-100 uppercase">Live Leader Board</h2>
             </div>
-            <div class="flex-none bg-amber text-slate-900 py-3 px-4 border-b-4 border-yellow-600 shadow-md flex flex-col items-center justify-center text-center" id="bountyContainer">
-                <span class="text-[10px] font-black uppercase tracking-widest mb-1 opacity-80 text-center">👑 Match Biggest Fish</span>
+            <div class="flex-none bg-amber text-slate-900 py-3 px-4 border-b-4 border-yellow-600 shadow-md flex flex-col items-center justify-center" id="bountyContainer">
+                <span class="text-[10px] font-black uppercase tracking-widest mb-1 opacity-80">👑 Match Biggest Fish</span>
                 <span class="font-black text-base leading-tight text-center" id="bountyBanner">Waiting...</span>
             </div>
             <div id="leaderboardList" class="scrollable-area p-3 space-y-1.5"></div>
@@ -553,13 +563,13 @@
         <div id="stewardDrawer" class="drawer-left fixed inset-0 w-full bg-[#020617] z-[101] flex flex-col shadow-2xl">
             <button onclick="document.getElementById('stewardDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center active:bg-slate-900 border-b border-slate-800 transition"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN</button>
             <div class="flex-none p-4 bg-slate-950 border-b border-slate-900 text-center shadow-sm"><h2 class="font-black text-lg text-blue-400 uppercase tracking-[0.2em]"><i class="fa-solid fa-user-shield mr-2"></i> Steward Desk</h2></div>
-            <div class="scrollable-area p-8 space-y-8 text-center">
+            <div class="scrollable-area p-8 space-y-8">
                 <hr class="border-slate-800">
                 <button onclick="transferSteward()" class="w-full bg-slate-900 border-2 border-slate-800 text-slate-400 font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:text-amber transition"><i class="fa-solid fa-right-left mr-3 text-amber"></i> Transfer Control</button>
                 <hr class="border-slate-800 pt-4">
-                <button onclick="endMatchEarly(true)" class="w-full bg-amber text-slate-900 font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-base leading-tight active:scale-95 transition-transform text-center">Change Ending Time</button>
-                <hr class="border-slate-800 pt-4 text-center">
-                <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:bg-blue-700 transition"><i class="fa-solid fa-file-export mr-3 text-center"></i> Master Export</button>
+                <button onclick="endMatchEarly(true)" class="w-full bg-amber text-slate-900 font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-base leading-tight active:scale-95 transition-transform">Change Ending Time</button>
+                <hr class="border-slate-800 pt-4">
+                <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:bg-blue-700 transition"><i class="fa-solid fa-file-export mr-3"></i> Master Export</button>
             </div>
         </div>
 
@@ -774,9 +784,9 @@
                 if (list) {
                     let anglers = Object.values(globalMatchData.anglers);
                     list.innerHTML = anglers.map(a => `
-                        <div class="match-card p-4 font-bold text-slate-100 flex justify-between items-center text-center">
-                            <span><i class="fa-solid fa-user-check text-green-500 mr-3 animate-pulse text-center"></i> ${a.name}</span>
-                            <span class="text-[8px] text-slate-400 uppercase tracking-widest text-center">Linked</span>
+                        <div class="match-card p-4 font-bold text-slate-100 flex justify-between items-center">
+                            <span><i class="fa-solid fa-user-check text-green-500 mr-3 animate-pulse"></i> ${a.name}</span>
+                            <span class="text-[8px] text-slate-400 uppercase tracking-widest">Linked</span>
                         </div>`).join('');
                 }
             }
@@ -1025,8 +1035,6 @@
             if (document.getElementById('mainTimer')) { document.getElementById('mainTimer').innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`; }
         }
 
-        function adjustSize(val) { let input = document.getElementById('inputSize'); input.value = (parseFloat(input.value) || 0) + val; }
-
         function recordCatch() {
             let species = document.getElementById('inputSpecies').value;
             if(!species) { try { if(navigator.vibrate) navigator.vibrate(200); } catch(e) {} return alert("Select species first!"); }
@@ -1093,9 +1101,9 @@
             list.innerHTML = "";
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
-                div.className = "match-card p-3.5 flex justify-between items-center transition mb-1 shadow-md text-center";
+                div.className = "match-card p-3.5 flex justify-between items-center transition mb-1 shadow-md";
                 let ptLabel = state.format === 'speciesHunt' ? `(${c.points})` : (c.points === 0 ? '(0)' : '');
-                div.innerHTML = `<div class="flex-1 text-left pl-2"><span class="font-black text-white text-base uppercase tracking-tight">${c.species}</span><span class="text-xs ml-2 text-slate-400 font-bold">${c.display || c.size}</span><span class="text-[10px] text-amber ml-2 font-black">${ptLabel}</span></div><div class="flex items-center space-x-1 text-center"><button onclick="editCatch('${c.id}')" class="text-blue-400 p-2 active:scale-90 transition text-center"><i class="fa-solid fa-pencil text-base text-center"></i></button><button onclick="deleteCatch('${c.id}')" class="text-amber p-2 active:text-red-500 active:scale-90 transition text-center"><i class="fa-solid fa-trash-can text-base text-center"></i></button></div>`;
+                div.innerHTML = `<div class="flex-1 text-left pl-2"><span class="font-black text-white text-base uppercase tracking-tight">${c.species}</span><span class="text-xs ml-2 text-slate-400 font-bold">${c.display || c.size}</span><span class="text-[10px] text-amber ml-2 font-black">${ptLabel}</span></div><div class="flex items-center space-x-1"><button onclick="editCatch('${c.id}')" class="text-blue-400 p-2 active:scale-90 transition"><i class="fa-solid fa-pencil text-base"></i></button><button onclick="deleteCatch('${c.id}')" class="text-amber p-2 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-base"></i></button></div>`;
                 list.appendChild(div);
             });
         }
@@ -1104,7 +1112,7 @@
             if(!globalMatchData || !globalMatchData.anglers) return;
             const list = document.getElementById('leaderboardList'); if (!list) return;
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            list.innerHTML = arr.map((a, i) => `<div class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 flex justify-between items-center mb-1.5 shadow-sm border-l-4 ${i===0?'border-l-amber': i===1?'border-l-slate-300': i===2?'border-l-orange-700':'border-l-blue-600'} text-center"><div class="flex items-center truncate w-2/3 text-left pl-1"><span class="font-bold ${i===0?'text-amber':'text-slate-500'} text-sm w-6 text-left">${i+1}.</span><span class="font-bold text-slate-100 text-sm uppercase tracking-wide truncate text-left">${a.name}</span></div><div class="font-bold text-lg text-white text-right w-1/3 text-center">${formatScoreDisplay(a.score, state.format)} <span class="text-[10px] text-slate-500 ml-1">${(state.format === 'weightLb' || state.format === 'weightKg') ? '' : 'pts'}</span></div></div>`).join('');
+            list.innerHTML = arr.map((a, i) => `<div class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 flex justify-between items-center mb-1.5 shadow-sm border-l-4 ${i===0?'border-l-amber': i===1?'border-l-slate-300': i===2?'border-l-orange-700':'border-l-blue-600'}"><div class="flex items-center truncate w-2/3 text-left pl-1"><span class="font-bold ${i===0?'text-amber':'text-slate-500'} text-sm w-6">${i+1}.</span><span class="font-bold text-slate-100 text-sm uppercase tracking-wide truncate">${a.name}</span></div><div class="font-bold text-lg text-white text-right w-1/3">${formatScoreDisplay(a.score, state.format)} <span class="text-[10px] text-slate-500 ml-1">${(state.format === 'weightLb' || state.format === 'weightKg') ? '' : 'pts'}</span></div></div>`).join('');
             if(state.format !== 'speciesHunt') {
                 let biggestVal = 0, biggestStr = "No Captures Yet";
                 arr.forEach(angler => { if(angler.catches) { const catchList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches); catchList.forEach(fish => { if(fish.size > biggestVal) { biggestVal = fish.size; biggestStr = `${angler.name} - ${fish.species} - ${fish.display || fish.size}`; } }); } });
@@ -1169,10 +1177,10 @@
             h.forEach((m, i) => {
                 const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 180000));
                 let card = document.createElement('div');
-                card.className = "match-card p-5 flex flex-col items-center active:bg-slate-900 transition relative overflow-hidden mb-3 text-center";
-                let headerText = isStillActuallyLive ? "" : "<p class='text-[9px] font-black text-slate-500 mb-1.5 uppercase tracking-[0.4em] text-center'>MATCH ENDED</p>";
-                let timerDisplay = isStillActuallyLive ? `<p id="hist-timer-${m.id}" class="text-amber font-black text-[10px] tabular-nums mb-0.5 text-center">Checking Clock...</p>` : "";
-                card.innerHTML = `${headerText}<div class="w-full flex justify-between items-center text-center"><div class="flex-1 text-left pl-1" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-base uppercase tracking-tight">${m.date}</span> ${isStillActuallyLive ? '<span class="text-[8px] bg-red-600 px-2 py-0.5 rounded-full text-white font-black ml-2 animate-pulse text-center">LIVE</span>' : ''}<br><span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || 'No Venue'}</span><br><span class="text-[10px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span>${timerDisplay}</div><div class="text-right flex items-center space-x-4 text-center"><div onclick="viewPastRecord('${m.id}')" class="text-center"><div class="text-2xl font-black text-white text-center">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[9px] text-amber uppercase font-black text-center">Total</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1 py-3 text-center"><i class="fa-solid fa-trash-can text-base text-center"></i></button></div></div>`;
+                card.className = "match-card p-5 flex flex-col items-center active:bg-slate-900 transition relative overflow-hidden mb-3";
+                let headerText = isStillActuallyLive ? "" : "<p class='text-[9px] font-black text-slate-500 mb-1.5 uppercase tracking-[0.4em]'>MATCH ENDED</p>";
+                let timerDisplay = isStillActuallyLive ? `<p id="hist-timer-${m.id}" class="text-amber font-black text-[10px] tabular-nums mb-0.5">Checking Clock...</p>` : "";
+                card.innerHTML = `${headerText}<div class="w-full flex justify-between items-center"><div class="flex-1 text-left pl-1" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-base uppercase tracking-tight">${m.date}</span> ${isStillActuallyLive ? '<span class="text-[8px] bg-red-600 px-2 py-0.5 rounded-full text-white font-black ml-2 animate-pulse">LIVE</span>' : ''}<br><span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || 'No Venue'}</span><br><span class="text-[10px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span>${timerDisplay}</div><div class="text-right flex items-center space-x-4"><div onclick="viewPastRecord('${m.id}')"><div class="text-2xl font-black text-white">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[9px] text-amber uppercase font-black text-center">Total</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1 py-3"><i class="fa-solid fa-trash-can text-base"></i></button></div></div>`;
                 if(i < 6) r.appendChild(card); else a.appendChild(card);
             });
             document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 6);
@@ -1211,7 +1219,7 @@
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); });
             document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
             if(tab === 'standings') { 
-                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Score Table</h4><div class="space-y-2.5 text-center">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md text-center"><span class="uppercase text-white font-bold text-sm text-left">${i+1}.</b> ${a.name}</span><b class="text-white text-lg text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; 
+                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest">Score Table</h4><div class="space-y-2.5">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md"><span class="uppercase text-white font-bold text-sm text-left">${i+1}.</b> ${a.name}</span><b class="text-white text-lg text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; 
             } else { 
                 let displayCatches = JSON.parse(JSON.stringify(m.personalCatches)).reverse(), counts = {};
                 displayCatches.forEach(c => { counts[c.species] = (counts[c.species] || 0) + 1; c.orderCount = counts[c.species]; });
@@ -1223,9 +1231,9 @@
                         spec += ` <span class="text-blue-400 text-[10px] ml-1 tracking-tighter">${sfx}</span>`;
                     }
                     let ptTxt = m.format.includes('weight') ? 'Recorded' : `${c.points} Pts`;
-                    return `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner text-center"><div class="text-left"><b class="text-white text-base uppercase text-left">${spec}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest text-left">${c.time}</span></div><div class="text-right"><b class="text-white text-base text-right">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest text-right">${ptTxt}</span></div></div>`;
+                    return `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner"><div class="text-left"><b class="text-white text-base uppercase">${spec}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest">${c.time}</span></div><div class="text-right"><b class="text-white text-base">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest">${ptTxt}</span></div></div>`;
                 }).join('');
-                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest text-center">Capture Diary</h4><div class="space-y-2.5 text-center">${listHtml}</div>`; 
+                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest">Capture Diary</h4><div class="space-y-2.5">${listHtml}</div>`; 
             }
         }
 
@@ -1233,8 +1241,8 @@
 
         let wakeLock = null;
         async function toggleWakeLock() {
-            if(wakeLock) { await wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon text-center"></i>`; document.getElementById('wakeLockBtn').classList.remove('text-amber'); }
-            else { try { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber text-center"></i>`; } catch(e) {} }
+            if(wakeLock) { await wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon"></i>`; document.getElementById('wakeLockBtn').classList.remove('text-amber'); }
+            else { try { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber"></i>`; } catch(e) {} }
         }
 
         function shareResults() {
@@ -1291,7 +1299,6 @@
             else if (state.view !== 'home') { navTo('home'); history.pushState(null, null, window.location.href); }
         });
 
-        /* GLOBAL EXPOSURE BLOCK */
         window.proceedToRoleSelection = proceedToRoleSelection;
         window.triggerHypeStart = triggerHypeStart;
         window.navTo = navTo;
@@ -1310,7 +1317,6 @@
         window.closeHistoryDetail = closeHistoryDetail;
         window.forceUpdateApp = forceUpdateApp;
         window.toggleWakeLock = toggleWakeLock;
-        window.adjustSize = adjustSize;
         window.focusMeasurement = focusMeasurement;
         window.promptCustomSpecies = promptCustomSpecies;
         window.exitWaitingRoom = exitWaitingRoom;
