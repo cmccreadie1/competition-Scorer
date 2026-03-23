@@ -1,10 +1,10 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 5.1.5 - THE ADMIN LAYERING FIX
+   VERSION 5.1.6 - THE VAULT & UI FOCUS UPDATE
    FULL VOLUME SERVICE WORKER
 */
 
 
-const CACHE_NAME = 'match-edition-v5.1.5-gold';
+const CACHE_NAME = 'match-edition-v5.1.6-gold';
 
 
 const ASSETS = [
@@ -24,7 +24,7 @@ self.addEventListener('install', (event) => {
   
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching Gold Master 5.1.5 Assets');
+      console.log('SW: Caching Gold Master 5.1.6 Assets');
       return cache.addAll(ASSETS);
     })
   );
