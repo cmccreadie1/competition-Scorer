@@ -288,7 +288,7 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white">Match Edition Pro</h1>
-                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.3</div>
+                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.4</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -574,44 +574,31 @@
                     <h4 class="text-green-500 font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">🎣 Angler's Quick Start</h4>
                     <div class="space-y-6 text-sm leading-relaxed">
                         <p><b>Step 1: Join the Match</b><br>On the front page, enter your Name and the Venue. Tap <b>"Join as Competitor"</b> and type in the 4-digit PIN provided by your Steward.</p>
-                        
                         <p class="bg-amber/10 border-l-4 border-amber p-4 italic text-amber-100"><b>THE GOLDEN RULE:</b> Tap the <i class="fa-solid fa-moon"></i> icon at the top right until it becomes a <i class="fa-solid fa-sun text-amber"></i>. This stops your phone from locking during the match.</p>
-                        
                         <p><b>Step 2: Log Your Catch</b><br>Select the fish species from the list. Enter the size or weight, then hit <b>"Record Catch"</b>. Your total will update instantly.</p>
-                        
                         <p><b>Step 3: The Leaderboard</b><br>Tap the big Amber button at the top to see the live standings. You can see who is winning and who has the biggest fish at any time.</p>
-                        
                         <p><b>Step 4: The Final Whistle</b><br>When time runs out, the screen will turn <b>RED</b>. You have 3 minutes to log your final fish before the board locks forever.</p>
-                        
                         <p class="text-xs text-slate-400 uppercase tracking-widest pt-4"><b>RETAINED DATA:</b> If you need to leave early, just tap "Leave Match Early". Your score remains on the Steward's board until the end of the day.</p>
                     </div>
                 </section>
-                
                 <hr class="border-slate-800">
-                
                 <section class="space-y-6">
                     <h4 class="text-amber font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">👑 Steward's Guide</h4>
                     <div class="space-y-6 text-sm leading-relaxed">
                         <p><b>Step 1: Setup</b><br>Tap <b>"Host as Steward"</b>. Choose your match duration and the scoring format (Points, Weight, or Species Hunt).</p>
-                        
                         <p><b>Step 2: The Lobby</b><br>Call out the PIN displayed on your screen. As anglers join, you will see their names appear with a green checkmark.</p>
-                        
                         <p><b>Step 3: Starting</b><br>When everyone is ready, tap <b>"START MATCH"</b>. This triggers a 5-second countdown and sounds the horn on everyone's phone simultaneously.</p>
-                        
                         <p><b>Step 4: Management</b><br>Use the <b>"Steward Desk"</b> button at the bottom of the fishing screen to add more time, end the match early, or type in a specific finish time (e.g., 22:00).</p>
-                        
                         <p><b>Step 5: Exporting</b><br>When the match ends, tap <b>"Master Export"</b> to share the full final leaderboard to your WhatsApp group or social media.</p>
                     </div>
                 </section>
-
                 <hr class="border-slate-800">
-                
                 <section class="pt-4">
                     <button onclick="forceUpdateApp()" class="w-full flex items-center justify-center space-x-3 bg-slate-900 text-slate-400 border border-slate-600 font-black py-5 rounded-lg active:text-amber transition shadow-inner">
                         <i class="fa-solid fa-rotate text-xl" id="updateSpinnerInternal"></i>
                         <span class="text-xs uppercase tracking-widest">Wipe Cache & Update Version</span>
                     </button>
-                    <p class="text-[9px] text-slate-600 text-center mt-4 uppercase tracking-[0.2em]">Sea Diary Match Pro • Match Location: Kilsyth</p>
+                    <p class="text-[9px] text-slate-600 text-center mt-4 uppercase tracking-[0.2em]">Sea Diary Match Pro</p>
                 </section>
             </div>
         </div>
@@ -932,7 +919,7 @@
             setTimeout(() => { toast.classList.remove('show'); }, 8000);
         }
 
-        // --- RENDER TICKER FUNCTION ---
+        // --- SMART TICKER ENGINE ---
         function renderTicker() {
             if(!globalMatchData || !globalMatchData.anglers) {
                 renderPlaceholderTicker();
@@ -940,11 +927,17 @@
             }
 
             let allCatches = [];
+            let allAnglerNames = [];
+            
+            // 1. Gather all names and catches
             Object.values(globalMatchData.anglers).forEach(angler => {
+                let anglerNameTrimmed = angler.name.trim();
+                allAnglerNames.push(anglerNameTrimmed);
+                
                 if (angler.catches) {
                     let cList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches);
                     cList.forEach(c => {
-                        allCatches.push({ ...c, anglerName: angler.name });
+                        allCatches.push({ ...c, anglerName: anglerNameTrimmed });
                     });
                 }
             });
@@ -954,7 +947,25 @@
                 return;
             }
 
-            // Sort by ID which is the Date.now() string
+            // 2. Build the Smart Name Map (Count first names)
+            let firstNameCounts = {};
+            allAnglerNames.forEach(name => {
+                let first = name.split(' ')[0].toLowerCase();
+                firstNameCounts[first] = (firstNameCounts[first] || 0) + 1;
+            });
+
+            // Helper function to resolve name collisions
+            function getSmartName(fullName) {
+                let parts = fullName.split(' ');
+                let first = parts[0];
+                // If there are multiple people with this first name, append the last initial
+                if (firstNameCounts[first.toLowerCase()] > 1 && parts.length > 1) {
+                    return `${first} ${parts[1].charAt(0).toUpperCase()}`;
+                }
+                return first;
+            }
+
+            // 3. Sort and slice top 10
             allCatches.sort((a,b) => parseInt(b.id) - parseInt(a.id)); 
             let top10 = allCatches.slice(0, 10);
 
@@ -967,20 +978,25 @@
                 let catchColor = isNewest ? 'text-white' : 'text-slate-200';
                 
                 let catchDisplay = `${c.species} (${c.display || c.size})`;
+                let displayName = getSmartName(c.anglerName);
 
                 html += `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
                             <div class="text-[9px] font-black uppercase tracking-widest ${timeColor} mb-0.5 flex items-center">
-                                ${dot} ${c.time} • <span class="${nameColor} ml-1">${c.anglerName}</span>
+                                ${dot} ${c.time} • <span class="${nameColor} ml-1">${displayName}</span>
                             </div>
                             <div class="text-sm font-black ${catchColor}">${catchDisplay}</div>
                          </div>`;
             });
 
+            // 4. The Lightning Bolt Separator
+            let separator = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-slate-700">
+                                <i class="fa-solid fa-bolt text-sm"></i>
+                             </div>`;
+
             const track = document.getElementById('tickerTrack');
-            // Duplicate HTML allows the marquee to loop seamlessly. Triple it if catches are few so screen is filled.
-            track.innerHTML = html + html + html + html; 
+            // Duplicate the block to ensure the marquee loops cleanly
+            track.innerHTML = html + separator + html + separator + html + separator; 
             
-            // Smart Pacing Engine
             let duration = top10.length * 3.5; 
             if(duration < 15) duration = 15; 
             track.style.animationDuration = duration + 's';
@@ -994,7 +1010,12 @@
                             </div>
                             <div class="text-sm font-black text-slate-400 italic">Awaiting first catch...</div>
                         </div>`;
-            track.innerHTML = html + html + html + html; 
+            
+            let separator = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-slate-700">
+                                <i class="fa-solid fa-bolt text-sm"></i>
+                             </div>`;
+
+            track.innerHTML = html + separator + html + separator + html + separator; 
             track.style.animationDuration = '15s';
         }
 
