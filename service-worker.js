@@ -1,8 +1,8 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 5.2.1 - STABLE POLISH UPDATE
+   VERSION 5.2.2 - THE UI POLISH UPDATE
 */
 
-const CACHE_NAME = 'match-edition-v5.2.1';
+const CACHE_NAME = 'match-edition-v5.2.2';
 
 const ASSETS = [
   './',
