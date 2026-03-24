@@ -38,6 +38,22 @@
             background-color: #450a0a !important; 
         }
 
+        /* LIVE TICKER ANIMATION */
+        @keyframes ticker-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .ticker-track {
+            display: inline-flex;
+            height: 100%;
+            width: max-content;
+            animation: ticker-scroll linear infinite;
+            will-change: transform;
+        }
+        .ticker-track:active {
+            animation-play-state: paused;
+        }
+
         /* GREEN TICK SUCCESS OVERLAY */
         #successOverlay {
             position: fixed;
@@ -91,7 +107,7 @@
 
         .match-card {
             background-color: #1e293b; 
-            border: 1px solid #475569; /* Brighter border for better contrast */
+            border: 1px solid #475569; 
             border-radius: 1rem;
             box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.6);
         }
@@ -272,7 +288,7 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white">Match Edition Pro</h1>
-                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.2</div>
+                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.3</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -403,6 +419,7 @@
         </div>
 
         <div id="view-fishing" class="hidden view-frame relative bg-[#020617]">
+            
             <div class="flex-none bg-slate-900 border-b border-slate-800 px-4 py-2 flex justify-between items-center z-20 shadow-md">
                 <div class="flex flex-col items-start">
                     <div class="flex items-center space-x-2">
@@ -421,9 +438,16 @@
                 <button id="wakeLockBtn" onclick="toggleWakeLock()" class="text-slate-400 border border-slate-600 px-2.5 py-1 rounded-md text-[9px] font-black uppercase"><i class="fa-solid fa-moon"></i></button>
             </div>
             
-            <div class="flex-none w-full bg-slate-900 border-b border-slate-800 z-10 p-2.5">
-                <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="w-full bg-amber text-slate-900 font-black py-3.5 rounded-xl text-sm uppercase tracking-[0.2em] shadow-[0_0_15px_rgba(245,158,11,0.4)] active:scale-95 transition-transform flex items-center justify-center">
-                    <i class="fa-solid fa-trophy mr-2.5 animate-bounce"></i> View Live Leader Board
+            <div id="liveTickerContainer" class="flex-none bg-slate-950 border-b border-slate-800 h-[46px] overflow-hidden relative z-10 shadow-inner">
+                <div class="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none"></div>
+                <div class="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none"></div>
+                <div id="tickerTrack" class="ticker-track h-full items-center">
+                    </div>
+            </div>
+
+            <div class="flex-none w-full bg-slate-900 border-b border-slate-800 z-10 p-1.5">
+                <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="w-full bg-amber text-slate-900 font-black py-2 rounded-lg text-xs uppercase tracking-[0.2em] shadow-[0_0_10px_rgba(245,158,11,0.3)] active:scale-95 transition-transform flex items-center justify-center">
+                    <i class="fa-solid fa-trophy mr-2 animate-bounce"></i> View Live Leader Board
                 </button>
             </div>
 
@@ -908,6 +932,72 @@
             setTimeout(() => { toast.classList.remove('show'); }, 8000);
         }
 
+        // --- RENDER TICKER FUNCTION ---
+        function renderTicker() {
+            if(!globalMatchData || !globalMatchData.anglers) {
+                renderPlaceholderTicker();
+                return;
+            }
+
+            let allCatches = [];
+            Object.values(globalMatchData.anglers).forEach(angler => {
+                if (angler.catches) {
+                    let cList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches);
+                    cList.forEach(c => {
+                        allCatches.push({ ...c, anglerName: angler.name });
+                    });
+                }
+            });
+
+            if (allCatches.length === 0) {
+                renderPlaceholderTicker();
+                return;
+            }
+
+            // Sort by ID which is the Date.now() string
+            allCatches.sort((a,b) => parseInt(b.id) - parseInt(a.id)); 
+            let top10 = allCatches.slice(0, 10);
+
+            let html = '';
+            top10.forEach((c, index) => {
+                let isNewest = (index === 0);
+                let dot = isNewest ? `<i class="fa-solid fa-circle text-red-500 animate-pulse text-[6px] mr-1.5"></i>` : `<i class="fa-solid fa-caret-right text-slate-600 text-[8px] mr-1"></i>`;
+                let timeColor = isNewest ? 'text-amber' : 'text-slate-400';
+                let nameColor = isNewest ? 'text-amber' : 'text-slate-300';
+                let catchColor = isNewest ? 'text-white' : 'text-slate-200';
+                
+                let catchDisplay = `${c.species} (${c.display || c.size})`;
+
+                html += `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
+                            <div class="text-[9px] font-black uppercase tracking-widest ${timeColor} mb-0.5 flex items-center">
+                                ${dot} ${c.time} • <span class="${nameColor} ml-1">${c.anglerName}</span>
+                            </div>
+                            <div class="text-sm font-black ${catchColor}">${catchDisplay}</div>
+                         </div>`;
+            });
+
+            const track = document.getElementById('tickerTrack');
+            // Duplicate HTML allows the marquee to loop seamlessly. Triple it if catches are few so screen is filled.
+            track.innerHTML = html + html + html + html; 
+            
+            // Smart Pacing Engine
+            let duration = top10.length * 3.5; 
+            if(duration < 15) duration = 15; 
+            track.style.animationDuration = duration + 's';
+        }
+
+        function renderPlaceholderTicker() {
+            const track = document.getElementById('tickerTrack');
+            let html = `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
+                            <div class="text-[9px] font-black uppercase tracking-widest text-green-500 mb-0.5 flex items-center">
+                                <i class="fa-solid fa-circle animate-pulse text-[6px] mr-1.5"></i> MATCH LIVE
+                            </div>
+                            <div class="text-sm font-black text-slate-400 italic">Awaiting first catch...</div>
+                        </div>`;
+            track.innerHTML = html + html + html + html; 
+            track.style.animationDuration = '15s';
+        }
+
         function processCloudUpdate() {
             if (state.view === 'waiting' && globalMatchData.anglers) {
                 const list = document.getElementById('attendanceList');
@@ -965,7 +1055,9 @@
                 const stewardBtn = document.getElementById('btnStewardPanelContainer');
                 if (stewardBtn) { stewardBtn.classList.add('hidden'); }
             }
+            
             renderGlobalLeaderboard();
+            renderTicker(); 
         }
 
         function updateLiveTally() {
@@ -1436,7 +1528,6 @@
         // SILENT BACK SWIPE INTERCEPTOR
         window.addEventListener('popstate', () => {
             history.pushState(null, null, window.location.href);
-            // Notice: The toast pop-up has been removed for a smooth, silent failure UX.
             
             if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open') || document.getElementById('guideDrawer').classList.contains('open') || !document.getElementById('historyDetailDrawer').classList.contains('hidden')) { 
                 document.getElementById('leaderboardDrawer').classList.remove('open'); 
