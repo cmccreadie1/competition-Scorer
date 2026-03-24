@@ -288,7 +288,7 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white">Match Edition Pro</h1>
-                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.4</div>
+                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.5</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -479,15 +479,15 @@
                     <div id="deckSizeInputs">
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-[0.3em] mb-1.5 ml-1 text-left" id="labelSize">Capture Record</label>
                         <div id="deckLength">
-                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-800 border-2 border-slate-600 p-4 rounded-lg text-2xl font-black text-center text-white focus:border-amber outline-none shadow-inner" placeholder="0">
+                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner" placeholder="0">
                         </div>
                         <div id="deckWeightLb" class="hidden flex space-x-2">
-                            <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="w-full bg-slate-800 border-2 border-slate-600 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
-                            <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-800 border-2 border-slate-600 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
+                            <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="w-full bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-lg font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
+                            <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-lg font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
                         </div>
                         <div id="deckWeightKg" class="hidden flex space-x-2">
-                            <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="w-full bg-slate-800 border-2 border-slate-600 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
-                            <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" placeholder="Grammes" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-800 border-2 border-slate-600 p-3 rounded-lg text-xl font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
+                            <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="w-full bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-lg font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
+                            <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" placeholder="Grammes" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="w-full bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-lg font-black text-center text-white focus:border-amber outline-none shadow-inner"></div>
                         </div>
                     </div>
                     <button id="btnRecord" onclick="recordCatch()" class="w-full bg-blue-600 text-white font-black text-lg py-4 rounded-lg shadow-lg transition uppercase active:scale-95">Record Catch</button>
@@ -495,12 +495,12 @@
 
                 <div class="pt-1">
                     <h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.4em] mb-2 ml-1 opacity-60 text-left">Match Journal</h3>
-                    <div id="localCatchList" class="space-y-2 pb-5"></div>
+                    <div id="localCatchList" class="space-y-1 pb-5"></div>
                 </div>
 
                 <div class="pt-6 pb-24">
-                    <button onclick="leaveMatchEarly()" class="w-full border-2 border-slate-800 text-slate-400 font-black py-4 rounded-2xl active:bg-slate-950 transition shadow-sm text-[9px] uppercase tracking-[0.5em]">
-                        <i class="fa-solid fa-person-walking-arrow-right mr-1"></i> Leave Match Early
+                    <button onclick="leaveMatchEarly()" class="w-full bg-slate-900 border-2 border-slate-700 text-slate-300 font-black py-4 rounded-xl active:bg-slate-800 transition shadow-md text-[11px] uppercase tracking-[0.3em]">
+                        <i class="fa-solid fa-person-walking-arrow-right mr-2 text-red-500 opacity-80"></i> Leave Match Early
                     </button>
                 </div>
             </div>
@@ -574,25 +574,38 @@
                     <h4 class="text-green-500 font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">🎣 Angler's Quick Start</h4>
                     <div class="space-y-6 text-sm leading-relaxed">
                         <p><b>Step 1: Join the Match</b><br>On the front page, enter your Name and the Venue. Tap <b>"Join as Competitor"</b> and type in the 4-digit PIN provided by your Steward.</p>
+                        
                         <p class="bg-amber/10 border-l-4 border-amber p-4 italic text-amber-100"><b>THE GOLDEN RULE:</b> Tap the <i class="fa-solid fa-moon"></i> icon at the top right until it becomes a <i class="fa-solid fa-sun text-amber"></i>. This stops your phone from locking during the match.</p>
+                        
                         <p><b>Step 2: Log Your Catch</b><br>Select the fish species from the list. Enter the size or weight, then hit <b>"Record Catch"</b>. Your total will update instantly.</p>
+                        
                         <p><b>Step 3: The Leaderboard</b><br>Tap the big Amber button at the top to see the live standings. You can see who is winning and who has the biggest fish at any time.</p>
+                        
                         <p><b>Step 4: The Final Whistle</b><br>When time runs out, the screen will turn <b>RED</b>. You have 3 minutes to log your final fish before the board locks forever.</p>
+                        
                         <p class="text-xs text-slate-400 uppercase tracking-widest pt-4"><b>RETAINED DATA:</b> If you need to leave early, just tap "Leave Match Early". Your score remains on the Steward's board until the end of the day.</p>
                     </div>
                 </section>
+                
                 <hr class="border-slate-800">
+                
                 <section class="space-y-6">
                     <h4 class="text-amber font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">👑 Steward's Guide</h4>
                     <div class="space-y-6 text-sm leading-relaxed">
                         <p><b>Step 1: Setup</b><br>Tap <b>"Host as Steward"</b>. Choose your match duration and the scoring format (Points, Weight, or Species Hunt).</p>
+                        
                         <p><b>Step 2: The Lobby</b><br>Call out the PIN displayed on your screen. As anglers join, you will see their names appear with a green checkmark.</p>
+                        
                         <p><b>Step 3: Starting</b><br>When everyone is ready, tap <b>"START MATCH"</b>. This triggers a 5-second countdown and sounds the horn on everyone's phone simultaneously.</p>
+                        
                         <p><b>Step 4: Management</b><br>Use the <b>"Steward Desk"</b> button at the bottom of the fishing screen to add more time, end the match early, or type in a specific finish time (e.g., 22:00).</p>
+                        
                         <p><b>Step 5: Exporting</b><br>When the match ends, tap <b>"Master Export"</b> to share the full final leaderboard to your WhatsApp group or social media.</p>
                     </div>
                 </section>
+
                 <hr class="border-slate-800">
+                
                 <section class="pt-4">
                     <button onclick="forceUpdateApp()" class="w-full flex items-center justify-center space-x-3 bg-slate-900 text-slate-400 border border-slate-600 font-black py-5 rounded-lg active:text-amber transition shadow-inner">
                         <i class="fa-solid fa-rotate text-xl" id="updateSpinnerInternal"></i>
@@ -919,7 +932,7 @@
             setTimeout(() => { toast.classList.remove('show'); }, 8000);
         }
 
-        // --- SMART TICKER ENGINE ---
+        // --- SMART TICKER ENGINE (Updated Speed & Font) ---
         function renderTicker() {
             if(!globalMatchData || !globalMatchData.anglers) {
                 renderPlaceholderTicker();
@@ -929,7 +942,6 @@
             let allCatches = [];
             let allAnglerNames = [];
             
-            // 1. Gather all names and catches
             Object.values(globalMatchData.anglers).forEach(angler => {
                 let anglerNameTrimmed = angler.name.trim();
                 allAnglerNames.push(anglerNameTrimmed);
@@ -947,25 +959,21 @@
                 return;
             }
 
-            // 2. Build the Smart Name Map (Count first names)
             let firstNameCounts = {};
             allAnglerNames.forEach(name => {
                 let first = name.split(' ')[0].toLowerCase();
                 firstNameCounts[first] = (firstNameCounts[first] || 0) + 1;
             });
 
-            // Helper function to resolve name collisions
             function getSmartName(fullName) {
                 let parts = fullName.split(' ');
                 let first = parts[0];
-                // If there are multiple people with this first name, append the last initial
                 if (firstNameCounts[first.toLowerCase()] > 1 && parts.length > 1) {
                     return `${first} ${parts[1].charAt(0).toUpperCase()}`;
                 }
                 return first;
             }
 
-            // 3. Sort and slice top 10
             allCatches.sort((a,b) => parseInt(b.id) - parseInt(a.id)); 
             let top10 = allCatches.slice(0, 10);
 
@@ -981,42 +989,41 @@
                 let displayName = getSmartName(c.anglerName);
 
                 html += `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
-                            <div class="text-[9px] font-black uppercase tracking-widest ${timeColor} mb-0.5 flex items-center">
+                            <div class="text-[10px] font-black uppercase tracking-widest ${timeColor} mb-0.5 flex items-center">
                                 ${dot} ${c.time} • <span class="${nameColor} ml-1">${displayName}</span>
                             </div>
                             <div class="text-sm font-black ${catchColor}">${catchDisplay}</div>
                          </div>`;
             });
 
-            // 4. The Lightning Bolt Separator
-            let separator = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-slate-700">
-                                <i class="fa-solid fa-bolt text-sm"></i>
+            let separator = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-yellow-500 opacity-90">
+                                <i class="fa-solid fa-bolt text-lg"></i>
                              </div>`;
 
             const track = document.getElementById('tickerTrack');
-            // Duplicate the block to ensure the marquee loops cleanly
             track.innerHTML = html + separator + html + separator + html + separator; 
             
-            let duration = top10.length * 3.5; 
-            if(duration < 15) duration = 15; 
+            // Adjusted Speed: Faster scrolling base
+            let duration = top10.length * 2.5; 
+            if(duration < 12) duration = 12; 
             track.style.animationDuration = duration + 's';
         }
 
         function renderPlaceholderTicker() {
             const track = document.getElementById('tickerTrack');
             let html = `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
-                            <div class="text-[9px] font-black uppercase tracking-widest text-green-500 mb-0.5 flex items-center">
+                            <div class="text-[10px] font-black uppercase tracking-widest text-green-500 mb-0.5 flex items-center">
                                 <i class="fa-solid fa-circle animate-pulse text-[6px] mr-1.5"></i> MATCH LIVE
                             </div>
                             <div class="text-sm font-black text-slate-400 italic">Awaiting first catch...</div>
                         </div>`;
             
-            let separator = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-slate-700">
-                                <i class="fa-solid fa-bolt text-sm"></i>
+            let separator = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-yellow-500 opacity-90">
+                                <i class="fa-solid fa-bolt text-lg"></i>
                              </div>`;
 
             track.innerHTML = html + separator + html + separator + html + separator; 
-            track.style.animationDuration = '15s';
+            track.style.animationDuration = '12s';
         }
 
         function processCloudUpdate() {
@@ -1353,9 +1360,20 @@
             list.innerHTML = "";
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
-                div.className = "match-card p-3.5 flex justify-between items-center transition mb-1 shadow-md";
+                div.className = "match-card p-2 flex justify-between items-center transition mb-1 shadow-sm";
                 let ptLabel = state.format === 'speciesHunt' ? `(${c.points})` : (c.points === 0 ? '(0)' : '');
-                div.innerHTML = `<div class="flex-1 text-left pl-2"><span class="font-black text-white text-base uppercase tracking-tight">${c.species}</span><span class="text-xs ml-2 text-slate-400 font-bold">${c.display || c.size}</span><span class="text-[10px] text-amber ml-2 font-black">${ptLabel}</span></div><div class="flex items-center space-x-1"><button onclick="editCatch('${c.id}')" class="text-blue-400 p-2 active:scale-90 transition"><i class="fa-solid fa-pencil text-base"></i></button><button onclick="deleteCatch('${c.id}')" class="text-amber p-2 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-base"></i></button></div>`;
+                
+                div.innerHTML = `
+                    <div class="flex-1 text-left pl-2">
+                        <span class="font-black text-white text-sm uppercase tracking-tight">${c.species}</span>
+                        <span class="text-[10px] ml-2 text-slate-300 font-bold">${c.display || c.size}</span>
+                        <span class="text-[9px] text-slate-500 ml-2 font-bold">${c.time}</span>
+                        <span class="text-[9px] text-amber ml-2 font-black">${ptLabel}</span>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <button onclick="editCatch('${c.id}')" class="text-blue-400 p-1.5 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button>
+                        <button onclick="deleteCatch('${c.id}')" class="text-amber p-1.5 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                    </div>`;
                 list.appendChild(div);
             });
         }
