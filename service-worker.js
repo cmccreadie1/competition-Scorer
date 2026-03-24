@@ -1,8 +1,8 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 5.2.2 - IDIOT-PROOF SHUTDOWN UPDATE
+   VERSION 5.2.3 - RESILIENCE UPDATE
 */
 
-const CACHE_NAME = 'match-edition-v5.2.2';
+const CACHE_NAME = 'match-edition-v5.2.3';
 
 const ASSETS = [
   './',
