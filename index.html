@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sea Diary: Match Pro | Kilsyth Angling</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -15,10 +21,10 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 50; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
         .modal.active { display: flex; }
         
-        /* New Generic Button Styles */
-        .btn-ios { border-color: rgba(37, 99, 235, 0.3); } /* Blue accent */
+        /* Generic Platform Theming */
+        .btn-ios { border-color: rgba(37, 99, 235, 0.3); }
         .btn-ios:active { background: rgba(37, 99, 235, 0.1); }
-        .btn-android { border-color: rgba(16, 185, 129, 0.3); } /* Emerald Green accent */
+        .btn-android { border-color: rgba(16, 185, 129, 0.3); }
         .btn-android:active { background: rgba(16, 185, 129, 0.1); }
     </style>
 </head>
@@ -66,7 +72,7 @@
     </div>
 
     <div class="w-full max-w-xs space-y-5 px-6">
-        <p class="text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6">Install App to Participate</p>
+        <p class="text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6 font-bold">Install App to Participate</p>
         
         <button onclick="showModal('apple')" class="btn-ios w-full bg-black border rounded-2xl px-5 py-4 flex items-center space-x-4 active:scale-95 transition-transform shadow-xl">
             <i class="fa-solid fa-mobile-screen-button text-4xl text-blue-400 flex-none"></i>
@@ -94,12 +100,12 @@
             <h2 class="text-2xl font-black mb-6 tracking-tight text-blue-600">iPhone Setup</h2>
             <div class="space-y-6">
                 <div class="flex items-center space-x-4">
-                    <div class="w-9 h-9 bg-slate-100 text-blue-600 border border-slate-200 rounded-full flex items-center justify-center font-black">1</div>
+                    <div class="w-9 h-9 bg-slate-100 text-blue-600 border border-slate-200 rounded-full flex items-center justify-center font-black flex-none">1</div>
                     <p class="font-bold">Tap the <i class="fa-solid fa-arrow-up-from-bracket text-blue-600 text-lg mx-1"></i> (Share Icon) at the bottom.</p>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <div class="w-9 h-9 bg-slate-100 text-blue-600 border border-slate-200 rounded-full flex items-center justify-center font-black">2</div>
-                    <p class="font-bold">Select 'Add to Home Screen'.</p>
+                    <div class="w-9 h-9 bg-slate-100 text-blue-600 border border-slate-200 rounded-full flex items-center justify-center font-black flex-none">2</div>
+                    <p class="font-bold text-slate-800">Select 'Add to Home Screen'.</p>
                 </div>
             </div>
 
@@ -108,7 +114,7 @@
                 <span class="text-sm font-bold uppercase tracking-widest">Watch Help Video (15s)</span>
             </a>
 
-            <button onclick="closeModal()" class="w-full mt-5 bg-slate-100 text-slate-500 font-bold py-3 rounded-xl text-xs uppercase tracking-widest hover:bg-slate-200">Close</button>
+            <button onclick="closeModal()" class="w-full mt-5 bg-slate-100 text-slate-500 font-bold py-3 rounded-xl text-xs uppercase tracking-widest">Close</button>
         </div>
     </div>
 
@@ -117,35 +123,45 @@
             <h2 class="text-2xl font-black mb-6 tracking-tight text-emerald-600">Android Setup</h2>
             <div class="space-y-6">
                 <div class="flex items-center space-x-4">
-                    <div class="w-9 h-9 bg-slate-100 text-emerald-600 border border-slate-200 rounded-full flex items-center justify-center font-black">1</div>
-                    <p class="font-bold">Tap the <i class="fa-solid fa-ellipsis-vertical mx-1"></i> (Three Dots) in your corner.</p>
+                    <div class="w-9 h-9 bg-slate-100 text-emerald-600 border border-slate-200 rounded-full flex items-center justify-center font-black flex-none">1</div>
+                    <p class="font-bold">Tap the <i class="fa-solid fa-ellipsis-vertical mx-1 text-emerald-600"></i> (Three Dots) in your corner.</p>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <div class="w-9 h-9 bg-slate-100 text-emerald-600 border border-slate-200 rounded-full flex items-center justify-center font-black">2</div>
-                    <p class="font-bold">Tap 'Install App' or 'Add to Phone'.</p>
+                    <div class="w-9 h-9 bg-slate-100 text-emerald-600 border border-slate-200 rounded-full flex items-center justify-center font-black flex-none">2</div>
+                    <p class="font-bold text-slate-800">Tap 'Install App' or 'Add to Phone'.</p>
                 </div>
             </div>
-            <p class="mt-6 text-[11px] text-slate-400 italic">Samsung users: This is often located in your bottom menu.</p>
 
             <a href="https://www.youtube.com/watch?v=DFHm9IZb-LQ" target="_blank" class="w-full mt-10 bg-black text-white px-6 py-4 rounded-xl flex items-center justify-center space-x-3 active:scale-95 transition">
                 <i class="fa-solid fa-circle-play text-amber-500 text-xl"></i>
                 <span class="text-sm font-bold uppercase tracking-widest">Watch Help Video (15s)</span>
             </a>
 
-            <button onclick="closeModal()" class="w-full mt-5 bg-slate-100 text-slate-500 font-bold py-3 rounded-xl text-xs uppercase tracking-widest hover:bg-slate-200">Close</button>
+            <button onclick="closeModal()" class="w-full mt-5 bg-slate-100 text-slate-500 font-bold py-3 rounded-xl text-xs uppercase tracking-widest">Close</button>
         </div>
     </div>
 
     <script>
+        // Modal Logic
         function showModal(type) {
             document.getElementById('modal-' + type).classList.add('active');
         }
         function closeModal() {
             document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
         }
+
         // Auto-redirect if already installed
         if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
             window.location.href = 'app.html';
+        }
+
+        // PWA 'Handshake' Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Match Pro: Offline Engine Ready'))
+                    .catch(err => console.log('Match Pro: Registration Error', err));
+            });
         }
     </script>
 </body>
