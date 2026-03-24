@@ -462,19 +462,86 @@
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1 text-left">Fish Species</label>
                         <select id="inputSpecies" onchange="checkSpeciesSelection()" class="w-full bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-base font-black appearance-none text-white focus:border-blue-500 transition shadow-inner text-center">
                             <option value="" disabled selected>-- Select Fish --</option>
-                            <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SCOTTISH SPECIES">
-                                <option value="Cod">Cod</option><option value="Whiting">Whiting</option><option value="Coalfish (Saithe)">Coalfish (Saithe)</option><option value="Pollock">Pollock</option><option value="Haddock">Haddock</option><option value="Poor Cod">Poor Cod</option><option value="Conger Eel">Conger Eel</option><option value="Flounder">Flounder</option><option value="Dab">Dab</option><option value="Plaice">Plaice</option><option value="Lesser Spotted Dogfish">Lesser Spotted Dogfish</option><option value="Smoothhound">Smoothhound</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Grey Gurnard">Grey Gurnard</option><option value="Red Gurnard">Red Gurnard</option><option value="Mackerel">Mackerel</option><option value="Ballan Wrasse">Ballan Wrasse</option>
+                            <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
+                                <option value="Codling / Cod">Codling / Cod</option>
+                                <option value="Whiting">Whiting</option>
+                                <option value="Mackerel">Mackerel</option>
+                                <option value="Pollack">Pollack</option>
+                                <option value="Coalfish">Coalfish</option>
+                                <option value="Lesser Spotted Dogfish (LSD)">Lesser Spotted Dogfish (LSD)</option>
+                                <option value="Bull Huss">Bull Huss</option>
+                                <option value="Thornback Ray">Thornback Ray</option>
+                                <option value="Conger Eel">Conger Eel</option>
+                                <option value="Flounder">Flounder</option>
+                                <option value="Dab">Dab</option>
+                                <option value="Plaice">Plaice</option>
+                                <option value="Pouting">Pouting</option>
                             </optgroup>
-                            <optgroup label="Roundfish">
-                                <option value="Cod">Cod</option><option value="Whiting">Whiting</option><option value="Haddock">Haddock</option><option value="Pollock">Pollock</option><option value="Coalfish (Saithe)">Coalfish (Saithe)</option><option value="European Bass">European Bass</option><option value="Ling">Ling</option><option value="Pouting">Pouting</option><option value="Poor Cod">Poor Cod</option>
+                            <optgroup label="FULL SPECIES LIST (A-Z)">
+                                <option value="Baillon's Wrasse">Baillon's Wrasse</option>
+                                <option value="Ballan Wrasse">Ballan Wrasse</option>
+                                <option value="Bass">Bass</option>
+                                <option value="Black Goby">Black Goby</option>
+                                <option value="Blackmouth Dogfish">Blackmouth Dogfish</option>
+                                <option value="Blonde Ray">Blonde Ray</option>
+                                <option value="Blue Shark">Blue Shark</option>
+                                <option value="Blue Whiting">Blue Whiting</option>
+                                <option value="Brill">Brill</option>
+                                <option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option>
+                                <option value="Common Goby">Common Goby</option>
+                                <option value="Common Skate">Common Skate</option>
+                                <option value="Common Smooth-hound">Common Smooth-hound</option>
+                                <option value="Corkwing Wrasse">Corkwing Wrasse</option>
+                                <option value="Cuckoo Ray">Cuckoo Ray</option>
+                                <option value="Cuckoo Wrasse">Cuckoo Wrasse</option>
+                                <option value="Dover Sole">Dover Sole</option>
+                                <option value="Dragonet">Dragonet</option>
+                                <option value="Five-bearded Rockling">Five-bearded Rockling</option>
+                                <option value="Four-bearded Rockling">Four-bearded Rockling</option>
+                                <option value="Garfish">Garfish</option>
+                                <option value="Goldsinny Wrasse">Goldsinny Wrasse</option>
+                                <option value="Golden-grey Mullet">Golden-grey Mullet</option>
+                                <option value="Grey Gurnard">Grey Gurnard</option>
+                                <option value="Halibut">Halibut</option>
+                                <option value="Herring">Herring</option>
+                                <option value="John Dory">John Dory</option>
+                                <option value="Lemon Sole">Lemon Sole</option>
+                                <option value="Leopard-spotted Goby">Leopard-spotted Goby</option>
+                                <option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option>
+                                <option value="Lumpsucker">Lumpsucker</option>
+                                <option value="Megrim">Megrim</option>
+                                <option value="Montagu's Blenny">Montagu's Blenny</option>
+                                <option value="Northern Rockling">Northern Rockling</option>
+                                <option value="Painted Goby">Painted Goby</option>
+                                <option value="Porbeagle Shark">Porbeagle Shark</option>
+                                <option value="Red Gurnard">Red Gurnard</option>
+                                <option value="Red Mullet">Red Mullet</option>
+                                <option value="Rock Cook Wrasse">Rock Cook Wrasse</option>
+                                <option value="Rock Goby">Rock Goby</option>
+                                <option value="Sand Goby">Sand Goby</option>
+                                <option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
+                                <option value="Shanny (Common Blenny)">Shanny (Common Blenny)</option>
+                                <option value="Shore Rockling">Shore Rockling</option>
+                                <option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option>
+                                <option value="Silver Eel">Silver Eel</option>
+                                <option value="Small-eyed Ray">Small-eyed Ray</option>
+                                <option value="Spotted Ray">Spotted Ray</option>
+                                <option value="Spurdog">Spurdog</option>
+                                <option value="Starry Smooth-hound">Starry Smooth-hound</option>
+                                <option value="Stingray">Stingray</option>
+                                <option value="Tadpole Fish">Tadpole Fish</option>
+                                <option value="Thick-lipped Grey Mullet">Thick-lipped Grey Mullet</option>
+                                <option value="Thin-lipped Grey Mullet">Thin-lipped Grey Mullet</option>
+                                <option value="Three-bearded Rockling">Three-bearded Rockling</option>
+                                <option value="Tompot Blenny">Tompot Blenny</option>
+                                <option value="Tope">Tope</option>
+                                <option value="Tub Gurnard">Tub Gurnard</option>
+                                <option value="Turbot">Turbot</option>
+                                <option value="Two-spotted Goby">Two-spotted Goby</option>
+                                <option value="Undulate Ray">Undulate Ray</option>
+                                <option value="15-spined Stickleback">15-spined Stickleback</option>
                             </optgroup>
-                            <optgroup label="Flatfish">
-                                <option value="Flounder">Flounder</option><option value="Plaice">Plaice</option><option value="Dab">Dab</option><option value="Turbot">Turbot</option><option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
-                            </optgroup>
-                            <optgroup label="Eels & Gurnards">
-                                <option value="Conger Eel">Conger Eel</option><option value="Common Eel">Common Eel</option><option value="Grey Gurnard">Grey Gurnard</option><option value="Tub Gurnard">Tub Gurnard</option><option value="Red Gurnard">Red Gurnard</option>
-                            </optgroup>
-                            <optgroup label="Unlisted / Custom" id="customSpeciesGroup">
+                            <optgroup label="UNLISTED / CUSTOM" id="customSpeciesGroup">
                                 <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
                             </optgroup>
                         </select>
@@ -495,6 +562,10 @@
                         </div>
                     </div>
                     <button id="btnRecord" onclick="recordCatch()" class="w-full bg-blue-600 text-white font-black text-lg py-4 rounded-lg shadow-lg transition uppercase active:scale-95">Record Catch</button>
+                    
+                    <button onclick="promptCustomSpecies()" class="w-full bg-slate-800 border border-slate-700 text-slate-400 font-black py-3 rounded-lg text-[10px] uppercase tracking-[0.2em] active:bg-slate-700 active:text-amber transition flex items-center justify-center">
+                        <i class="fa-solid fa-plus-circle mr-2"></i> Add Unlisted Species
+                    </button>
                 </div>
 
                 <div class="pt-1">
@@ -1081,9 +1152,11 @@
         function promptCustomSpecies() {
             let name = prompt("Name of Unusual Species:");
             if (name) {
+                let ptsStr = prompt("Points value for this species?", "5");
+                let pts = parseInt(ptsStr) || 5;
                 let grp = document.getElementById('customSpeciesGroup');
                 let opt = document.createElement('option');
-                opt.value = name; opt.innerText = name; opt.selected = true;
+                opt.value = name; opt.innerText = name; opt.dataset.customPoints = pts; opt.selected = true;
                 grp.insertBefore(opt, grp.lastElementChild); 
                 if (state.format !== 'speciesHunt') focusMeasurement(); else document.getElementById('btnRecord').focus();
             } else { document.getElementById('inputSpecies').value = ""; }
@@ -1130,7 +1203,8 @@
         }
 
         function recordCatch() {
-            let species = document.getElementById('inputSpecies').value;
+            let selectEl = document.getElementById('inputSpecies');
+            let species = selectEl.value;
             if(!species) { return alert("Select species first!"); }
             let finalSize = 0, displaySize = "", pts = 0;
             if (state.format === 'weightLb') { let lbs = parseInt(document.getElementById('inputLbs').value) || 0, oz = parseInt(document.getElementById('inputOz').value) || 0; finalSize = (lbs * 16) + oz; displaySize = `${lbs}lb ${oz}oz`; pts = finalSize; } 
@@ -1138,10 +1212,18 @@
             else if (state.format === 'speciesHunt') { finalSize = 1; displaySize = "Captured"; } 
             else { finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = finalSize.toString(); pts = finalSize; if (state.format === 'length10') pts = finalSize + 10; }
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
+            
+            // Check for custom point values
+            let selectedOpt = selectEl.options[selectEl.selectedIndex];
+            if(selectedOpt && selectedOpt.dataset.customPoints) {
+                pts = parseInt(selectedOpt.dataset.customPoints);
+            }
+
             if (state.format === 'speciesHunt') { 
                 let existing = state.myCatches.filter(x => x.species === species && x.id !== state.editingId).length; 
                 pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; 
             } else if (species === 'Mackerel') { if (state.myCatches.filter(x => x.species === 'Mackerel' && x.id !== state.editingId).length >= 3) { pts = 0; } }
+            
             if (state.editingId) { 
                 let obj = state.myCatches.find(x => x.id === state.editingId); 
                 if(obj) { obj.species = species; obj.size = finalSize; obj.display = displaySize; obj.points = pts; } 
