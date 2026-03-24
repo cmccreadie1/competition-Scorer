@@ -38,17 +38,21 @@
             background-color: #450a0a !important; 
         }
 
-        /* LIVE TICKER ANIMATION */
+        /* HARDWARE ACCELERATED TICKER */
         @keyframes ticker-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
         }
         .ticker-track {
             display: inline-flex;
             height: 100%;
             width: max-content;
             animation: ticker-scroll linear infinite;
+            /* GPU KICKSTART */
+            backface-visibility: hidden;
+            perspective: 1000px;
             will-change: transform;
+            transform: translate3d(0, 0, 0);
         }
         .ticker-track:active {
             animation-play-state: paused;
@@ -281,14 +285,14 @@
     <div id="app-container">
 
         <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative">
-            <button onclick="exitApp()" class="absolute top-5 right-5 bg-slate-800 border border-slate-600 text-slate-400 font-black px-3 py-2 rounded-lg text-[9px] uppercase tracking-[0.2em] active:bg-red-600 active:text-white transition shadow-md z-[50]">
+            <button onclick="exitApp()" class="absolute top-5 right-5 bg-slate-900 border border-slate-600 text-slate-400 font-black px-3 py-2 rounded-lg text-[9px] uppercase tracking-[0.2em] active:bg-red-600 active:text-white transition shadow-md z-[50]">
                 Close App <i class="fa-solid fa-xmark ml-1"></i>
             </button>
 
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white">Match Edition Pro</h1>
-                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.5</div>
+                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.6</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -505,7 +509,7 @@
                 </div>
             </div>
 
-            <div id="btnStewardPanelContainer" class="hidden fixed bottom-0 left-0 right-0 p-4 bg-slate-950/90 backdrop-blur-md border-t border-slate-700 z-50">
+            <div id="btnStewardPanelContainer" class="hidden fixed bottom-0 left-0 right-0 p-4 bg-slate-950/90 backdrop-blur-md border-t border-slate-800 z-50">
                 <button onclick="document.getElementById('stewardDrawer').classList.add('open')" class="w-full bg-slate-900 border border-slate-600 text-amber font-black py-3.5 rounded-xl shadow-lg active:bg-slate-800 transition flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-user-shield text-blue-400"></i>
                     <span class="tracking-widest uppercase text-[10px]">Admin: Steward Desk</span>
@@ -574,38 +578,21 @@
                     <h4 class="text-green-500 font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">🎣 Angler's Quick Start</h4>
                     <div class="space-y-6 text-sm leading-relaxed">
                         <p><b>Step 1: Join the Match</b><br>On the front page, enter your Name and the Venue. Tap <b>"Join as Competitor"</b> and type in the 4-digit PIN provided by your Steward.</p>
-                        
-                        <p class="bg-amber/10 border-l-4 border-amber p-4 italic text-amber-100"><b>THE GOLDEN RULE:</b> Tap the <i class="fa-solid fa-moon"></i> icon at the top right until it becomes a <i class="fa-solid fa-sun text-amber"></i>. This stops your phone from locking during the match.</p>
-                        
                         <p><b>Step 2: Log Your Catch</b><br>Select the fish species from the list. Enter the size or weight, then hit <b>"Record Catch"</b>. Your total will update instantly.</p>
-                        
                         <p><b>Step 3: The Leaderboard</b><br>Tap the big Amber button at the top to see the live standings. You can see who is winning and who has the biggest fish at any time.</p>
-                        
                         <p><b>Step 4: The Final Whistle</b><br>When time runs out, the screen will turn <b>RED</b>. You have 3 minutes to log your final fish before the board locks forever.</p>
-                        
-                        <p class="text-xs text-slate-400 uppercase tracking-widest pt-4"><b>RETAINED DATA:</b> If you need to leave early, just tap "Leave Match Early". Your score remains on the Steward's board until the end of the day.</p>
                     </div>
                 </section>
-                
                 <hr class="border-slate-800">
-                
                 <section class="space-y-6">
                     <h4 class="text-amber font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">👑 Steward's Guide</h4>
                     <div class="space-y-6 text-sm leading-relaxed">
                         <p><b>Step 1: Setup</b><br>Tap <b>"Host as Steward"</b>. Choose your match duration and the scoring format (Points, Weight, or Species Hunt).</p>
-                        
-                        <p><b>Step 2: The Lobby</b><br>Call out the PIN displayed on your screen. As anglers join, you will see their names appear with a green checkmark.</p>
-                        
-                        <p><b>Step 3: Starting</b><br>When everyone is ready, tap <b>"START MATCH"</b>. This triggers a 5-second countdown and sounds the horn on everyone's phone simultaneously.</p>
-                        
-                        <p><b>Step 4: Management</b><br>Use the <b>"Steward Desk"</b> button at the bottom of the fishing screen to add more time, end the match early, or type in a specific finish time (e.g., 22:00).</p>
-                        
-                        <p><b>Step 5: Exporting</b><br>When the match ends, tap <b>"Master Export"</b> to share the full final leaderboard to your WhatsApp group or social media.</p>
+                        <p><b>Step 2: Starting</b><br>When everyone is ready, tap <b>"START MATCH"</b>. This triggers a 5-second countdown and sounds the horn on everyone's phone simultaneously.</p>
+                        <p><b>Step 3: Management</b><br>Use the <b>"Steward Desk"</b> button at the bottom of the fishing screen to add more time, end the match early, or type in a specific finish time (e.g., 22:00).</p>
                     </div>
                 </section>
-
                 <hr class="border-slate-800">
-                
                 <section class="pt-4">
                     <button onclick="forceUpdateApp()" class="w-full flex items-center justify-center space-x-3 bg-slate-900 text-slate-400 border border-slate-600 font-black py-5 rounded-lg active:text-amber transition shadow-inner">
                         <i class="fa-solid fa-rotate text-xl" id="updateSpinnerInternal"></i>
@@ -713,9 +700,7 @@
             document.querySelectorAll('.view-frame').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
             state.view = viewId;
-            if (viewId === 'history') { 
-                renderHistory(); 
-            }
+            if (viewId === 'history') { renderHistory(); }
             saveState();
         }
 
@@ -728,7 +713,6 @@
             document.getElementById('venueName').value = vName;
             state.name = pName; 
             state.venue = vName;
-            try { if(navigator.vibrate) navigator.vibrate(20); } catch(e) {}
             saveState();
             navTo('role');
         }
@@ -811,17 +795,13 @@
         function atmPress(num) {
             if (atmPin.length < 4) {
                 atmPin += num;
-                try { if(navigator.vibrate) navigator.vibrate(10); } catch(e) {}
                 updateAtm();
-                if (atmPin.length === 4) {
-                    connectToMatch();
-                }
+                if (atmPin.length === 4) { connectToMatch(); }
             }
         }
 
         function atmDelete() {
             atmPin = atmPin.slice(0, -1);
-            try { if(navigator.vibrate) navigator.vibrate(10); } catch(e) {}
             updateAtm();
         }
 
@@ -846,21 +826,17 @@
             if (pending.length === 1 && num >= 2) { pending = "0" + num; }
             if (pending.length === 2) { let h = parseInt(pending); if (h < 1 || h > 12) return; }
             if (pending.length === 3) { let m1 = parseInt(num); if (m1 > 5) return; }
-            
             timeAtmInput = pending;
-            try { if(navigator.vibrate) navigator.vibrate(10); } catch(e) {}
             updateTimeAtmDisplay();
         }
 
         function timeAtmDelete() {
             timeAtmInput = timeAtmInput.slice(0, -1);
-            try { if(navigator.vibrate) navigator.vibrate(10); } catch(e) {}
             updateTimeAtmDisplay();
         }
 
         function timeAtmToggleAMPM() {
             timeAtmIsPM = !timeAtmIsPM;
-            try { if(navigator.vibrate) navigator.vibrate(10); } catch(e) {}
             updateTimeAtmDisplay();
         }
 
@@ -881,38 +857,21 @@
             if(timeAtmInput.length !== 4) return;
             let hh = parseInt(timeAtmInput.slice(0,2));
             let mm = parseInt(timeAtmInput.slice(2,4));
-            
             if (timeAtmIsPM && hh !== 12) hh += 12;
             if (!timeAtmIsPM && hh === 12) hh = 0;
-
             const targetDate = new Date();
             targetDate.setHours(hh, mm, 0, 0);
-            
-            if (targetDate.getTime() < Date.now()) {
-                targetDate.setDate(targetDate.getDate() + 1); 
-            }
-            
+            if (targetDate.getTime() < Date.now()) { targetDate.setDate(targetDate.getDate() + 1); }
             update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: targetDate.getTime(), graceEndTime: null });
             document.getElementById('timeKeypadModal').classList.add('hidden');
             document.getElementById('stewardDrawer').classList.remove('open');
-            
-            let dispAMPM = timeAtmIsPM ? 'PM' : 'AM';
-            showNotification(`Match finish time broadcasted as ${timeAtmInput.slice(0,2)}:${timeAtmInput.slice(2,4)} ${dispAMPM}`);
+            showNotification(`Match finish time broadcasted.`);
         }
 
-        function closeTimeKeypad() {
-            document.getElementById('timeKeypadModal').classList.add('hidden');
-        }
+        function closeTimeKeypad() { document.getElementById('timeKeypadModal').classList.add('hidden'); }
 
         function listenToCloud() {
             if(!state.pin) return;
-            const connectedRef = ref(db, ".info/connected");
-            onValue(connectedRef, (snap) => {
-                const icon = document.getElementById('cloudSignal');
-                if (icon) {
-                    icon.style.color = (snap.val() === true) ? '#22c55e' : '#ef4444';
-                }
-            });
             onValue(ref(db, 'matches/' + state.pin), (snapshot) => {
                 if (snapshot.exists()) {
                     globalMatchData = snapshot.val();
@@ -932,39 +891,25 @@
             setTimeout(() => { toast.classList.remove('show'); }, 8000);
         }
 
-        // --- SMART TICKER ENGINE (Updated Speed & Font) ---
+        // --- BUTTER-SMOOTH CLONE-BLOCK TICKER ---
         function renderTicker() {
-            if(!globalMatchData || !globalMatchData.anglers) {
-                renderPlaceholderTicker();
-                return;
-            }
-
+            if(!globalMatchData || !globalMatchData.anglers) { renderPlaceholderTicker(); return; }
             let allCatches = [];
             let allAnglerNames = [];
-            
             Object.values(globalMatchData.anglers).forEach(angler => {
                 let anglerNameTrimmed = angler.name.trim();
                 allAnglerNames.push(anglerNameTrimmed);
-                
                 if (angler.catches) {
                     let cList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches);
-                    cList.forEach(c => {
-                        allCatches.push({ ...c, anglerName: anglerNameTrimmed });
-                    });
+                    cList.forEach(c => { allCatches.push({ ...c, anglerName: anglerNameTrimmed }); });
                 }
             });
-
-            if (allCatches.length === 0) {
-                renderPlaceholderTicker();
-                return;
-            }
-
+            if (allCatches.length === 0) { renderPlaceholderTicker(); return; }
             let firstNameCounts = {};
             allAnglerNames.forEach(name => {
                 let first = name.split(' ')[0].toLowerCase();
                 firstNameCounts[first] = (firstNameCounts[first] || 0) + 1;
             });
-
             function getSmartName(fullName) {
                 let parts = fullName.split(' ');
                 let first = parts[0];
@@ -973,37 +918,26 @@
                 }
                 return first;
             }
-
             allCatches.sort((a,b) => parseInt(b.id) - parseInt(a.id)); 
             let top10 = allCatches.slice(0, 10);
-
-            let html = '';
+            let htmlBlock = '';
             top10.forEach((c, index) => {
                 let isNewest = (index === 0);
                 let dot = isNewest ? `<i class="fa-solid fa-circle text-red-500 animate-pulse text-[6px] mr-1.5"></i>` : `<i class="fa-solid fa-caret-right text-slate-600 text-[8px] mr-1"></i>`;
                 let timeColor = isNewest ? 'text-amber' : 'text-slate-400';
                 let nameColor = isNewest ? 'text-amber' : 'text-slate-300';
                 let catchColor = isNewest ? 'text-white' : 'text-slate-200';
-                
                 let catchDisplay = `${c.species} (${c.display || c.size})`;
                 let displayName = getSmartName(c.anglerName);
-
-                html += `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
-                            <div class="text-[10px] font-black uppercase tracking-widest ${timeColor} mb-0.5 flex items-center">
-                                ${dot} ${c.time} • <span class="${nameColor} ml-1">${displayName}</span>
-                            </div>
+                htmlBlock += `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
+                            <div class="text-[10px] font-black uppercase tracking-widest ${timeColor} mb-0.5 flex items-center">${dot} ${c.time} • <span class="${nameColor} ml-1">${displayName}</span></div>
                             <div class="text-sm font-black ${catchColor}">${catchDisplay}</div>
                          </div>`;
             });
-
-            let separator = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-yellow-500 opacity-90">
-                                <i class="fa-solid fa-bolt text-lg"></i>
-                             </div>`;
-
+            let separator = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-yellow-500 opacity-90"><i class="fa-solid fa-bolt text-lg"></i></div>`;
             const track = document.getElementById('tickerTrack');
-            track.innerHTML = html + separator + html + separator + html + separator; 
-            
-            // Adjusted Speed: Faster scrolling base
+            const fullSet = htmlBlock + separator;
+            track.innerHTML = fullSet + fullSet; // PIXEL PERFECT CLONING
             let duration = top10.length * 2.5; 
             if(duration < 12) duration = 12; 
             track.style.animationDuration = duration + 's';
@@ -1011,18 +945,12 @@
 
         function renderPlaceholderTicker() {
             const track = document.getElementById('tickerTrack');
-            let html = `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
-                            <div class="text-[10px] font-black uppercase tracking-widest text-green-500 mb-0.5 flex items-center">
-                                <i class="fa-solid fa-circle animate-pulse text-[6px] mr-1.5"></i> MATCH LIVE
-                            </div>
+            let block = `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
+                            <div class="text-[10px] font-black uppercase tracking-widest text-green-500 mb-0.5 flex items-center"><i class="fa-solid fa-circle animate-pulse text-[6px] mr-1.5"></i> MATCH LIVE</div>
                             <div class="text-sm font-black text-slate-400 italic">Awaiting first catch...</div>
                         </div>`;
-            
-            let separator = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-yellow-500 opacity-90">
-                                <i class="fa-solid fa-bolt text-lg"></i>
-                             </div>`;
-
-            track.innerHTML = html + separator + html + separator + html + separator; 
+            let sep = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-yellow-500 opacity-90"><i class="fa-solid fa-bolt text-lg"></i></div>`;
+            track.innerHTML = (block + sep) + (block + sep); 
             track.style.animationDuration = '12s';
         }
 
@@ -1031,131 +959,81 @@
                 const list = document.getElementById('attendanceList');
                 if (list) {
                     let anglers = Object.values(globalMatchData.anglers);
-                    list.innerHTML = anglers.map(a => `
-                        <div class="match-card p-4 font-bold text-slate-100 flex justify-between items-center text-center">
-                            <span><i class="fa-solid fa-user-check text-green-500 mr-3 animate-pulse"></i> ${a.name}</span>
-                            <span class="text-[8px] text-slate-400 uppercase tracking-widest">Linked</span>
-                        </div>`).join('');
+                    list.innerHTML = anglers.map(a => `<div class="match-card p-4 font-bold text-slate-100 flex justify-between items-center text-center"><span><i class="fa-solid fa-user-check text-green-500 mr-3 animate-pulse"></i> ${a.name}</span><span class="text-[8px] text-slate-400 uppercase tracking-widest">Linked</span></div>`).join('');
                 }
             }
-
             if (globalMatchData.status === 'playing') {
                 if (state.status === 'grace') {
-                    state.status = 'playing';
-                    state.graceEndTime = null;
-                    document.getElementById('graceLabel').classList.add('hidden');
-                    document.getElementById('app-container').classList.remove('grace-active');
+                    state.status = 'playing'; state.graceEndTime = null;
+                    document.getElementById('graceLabel').classList.add('hidden'); document.getElementById('app-container').classList.remove('grace-active');
                     document.getElementById('mainTimer').classList.remove('grace-pulse');
-                    const btnRecord = document.getElementById('btnRecord');
-                    if(btnRecord) { btnRecord.classList.add('bg-blue-600'); btnRecord.classList.remove('grace-btn-pulse'); }
-                    showNotification("MATCH RESUMED: Time adjusted.");
+                    const btnRecord = document.getElementById('btnRecord'); if(btnRecord) { btnRecord.classList.add('bg-blue-600'); btnRecord.classList.remove('grace-btn-pulse'); }
                 }
                 state.endTime = globalMatchData.endTime;
                 if (state.view !== 'fishing' && state.status !== 'hype') { beginFishing(false); }
             }
-
-            if (globalMatchData.status === 'hype' && state.status !== 'hype') { 
-                runGlobalCountdown(); 
-            }
-
+            if (globalMatchData.status === 'hype' && state.status !== 'hype') { runGlobalCountdown(); }
             if (globalMatchData.status === 'grace' && state.status !== 'grace') {
-                state.graceEndTime = globalMatchData.graceEndTime;
-                state.endTime = globalMatchData.endTime; 
-                state.status = 'grace';
+                state.graceEndTime = globalMatchData.graceEndTime; state.endTime = globalMatchData.endTime; state.status = 'grace';
                 if(state.view !== 'fishing') { navTo('fishing'); }
-                document.getElementById('graceLabel').classList.remove('hidden');
-                document.getElementById('app-container').classList.add('grace-active');
+                document.getElementById('graceLabel').classList.remove('hidden'); document.getElementById('app-container').classList.add('grace-active');
                 document.getElementById('mainTimer').classList.add('grace-pulse');
-                const btnRecord = document.getElementById('btnRecord');
-                if(btnRecord) { btnRecord.classList.remove('bg-blue-600'); btnRecord.classList.add('grace-btn-pulse'); }
-                showNotification("3 MINUTE GRACE: Log final fish.");
-                saveState();
+                const btnRecord = document.getElementById('btnRecord'); if(btnRecord) { btnRecord.classList.remove('bg-blue-600'); btnRecord.classList.add('grace-btn-pulse'); }
+                showNotification("3 MINUTE GRACE: Log final fish."); saveState();
             }
-
             if (globalMatchData.status === 'finished' && state.status !== 'finished') { lockdownMatch(false); }
-            
             if (globalMatchData.hostId === uid) {
-                state.isHost = true;
-                const stewardBtn = document.getElementById('btnStewardPanelContainer');
+                state.isHost = true; const stewardBtn = document.getElementById('btnStewardPanelContainer');
                 if (stewardBtn && (state.status === 'playing' || state.status === 'grace')) { stewardBtn.classList.remove('hidden'); }
-            } else {
-                state.isHost = false;
-                const stewardBtn = document.getElementById('btnStewardPanelContainer');
-                if (stewardBtn) { stewardBtn.classList.add('hidden'); }
-            }
-            
-            renderGlobalLeaderboard();
-            renderTicker(); 
+            } else { state.isHost = false; const stewardBtn = document.getElementById('btnStewardPanelContainer'); if (stewardBtn) { stewardBtn.classList.add('hidden'); } }
+            renderGlobalLeaderboard(); renderTicker(); 
         }
 
         function updateLiveTally() {
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
-            const box = document.getElementById('liveTallyBox');
-            if (box) { box.innerText = formatScoreDisplay(total, state.format); }
+            const box = document.getElementById('liveTallyBox'); if (box) { box.innerText = formatScoreDisplay(total, state.format); }
         }
 
         function pushMyScoreToCloud() {
-            if(!state.pin) return;
-            updateLiveTally();
+            if(!state.pin) return; updateLiveTally();
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
             update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name || "Angler", score: total, catches: state.myCatches });
         }
 
         function createMatch() {
             state.name = document.getElementById('playerName').value || "Steward";
-            state.venue = document.getElementById('venueName').value || "Unknown Venue";
-            state.isHost = true;
-            state.format = document.getElementById('hostFormat').value;
-            state.pin = Math.floor(1000 + Math.random() * 9000).toString(); 
-            set(ref(db, 'matches/' + state.pin), { 
-                hostId: uid, 
-                format: state.format, 
-                status: 'waiting', 
-                anglers: { [uid]: { name: state.name, score: 0 } } 
-            }).then(() => {
-                state.status = 'waiting';
-                listenToCloud();
-                document.getElementById('displayPin').innerText = state.pin;
-                document.getElementById('hostControls').classList.remove('hidden');
-                document.getElementById('joinerWaitingText').classList.add('hidden');
-                navTo('waiting');
+            state.venue = document.getElementById('venueName').value || "Venue";
+            state.isHost = true; state.format = document.getElementById('hostFormat').value; state.pin = Math.floor(1000 + Math.random() * 9000).toString(); 
+            set(ref(db, 'matches/' + state.pin), { hostId: uid, format: state.format, status: 'waiting', anglers: { [uid]: { name: state.name, score: 0 } } }).then(() => {
+                state.status = 'waiting'; listenToCloud(); document.getElementById('displayPin').innerText = state.pin;
+                document.getElementById('hostControls').classList.remove('hidden'); document.getElementById('joinerWaitingText').classList.add('hidden'); navTo('waiting');
             });
         }
 
         function connectToMatch() {
             state.name = document.getElementById('playerName').value || "Angler";
-            state.venue = document.getElementById('venueName').value || "Match Location";
-            state.pin = atmPin;
-            state.status = 'waiting';
+            state.venue = document.getElementById('venueName').value || "Location";
+            state.pin = atmPin; state.status = 'waiting';
             get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
                 if (snapshot.exists()) {
-                    state.format = snapshot.val().format;
-                    listenToCloud();
-                    update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name, score: 0 });
-                    if(snapshot.val().status === 'playing' || snapshot.val().status === 'grace') {
-                        state.endTime = snapshot.val().endTime;
-                        state.status = snapshot.val().status;
-                        beginFishing(false);
-                    } else { navTo('waiting'); }
+                    state.format = snapshot.val().format; listenToCloud(); update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name, score: 0 });
+                    if(snapshot.val().status === 'playing' || snapshot.val().status === 'grace') { state.endTime = snapshot.val().endTime; state.status = snapshot.val().status; beginFishing(false); }
+                    else { navTo('waiting'); }
                 } else { alert("Invalid PIN."); atmPin = ""; updateAtm(); }
             });
         }
 
         function exitWaitingRoom() { if (confirm("Cancel session?")) { if (state.isHost) { remove(ref(db, 'matches/' + state.pin)); } resetApp(); } }
 
-        let audioCtx;
-        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+        let audioCtx; try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
 
         function playTone(freq, duration) {
             if(!audioCtx) return;
             try {
                 if(audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + duration);
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration);
             } catch(e) {}
         }
         function playHorn() { playTone(200, 1.5); }
@@ -1169,38 +1047,21 @@
 
         function runGlobalCountdown() {
             if (countdownActive) return;
-            countdownActive = true;
-            state.status = 'hype';
-            navTo('hype');
-            document.getElementById('hypeCount').classList.remove('hidden');
-            document.getElementById('hypeSplash').classList.add('hidden');
-            let count = 5;
-            document.getElementById('hypeCount').innerText = count;
+            countdownActive = true; state.status = 'hype'; navTo('hype');
+            document.getElementById('hypeCount').classList.remove('hidden'); document.getElementById('hypeSplash').classList.add('hidden');
+            let count = 5; document.getElementById('hypeCount').innerText = count;
             playTone(400, 0.1);
-            try { if(navigator.vibrate) navigator.vibrate(50); } catch(e) {}
             hypeInterval = setInterval(() => {
                 count--;
-                if (count > 0) { 
-                    document.getElementById('hypeCount').innerText = count; 
-                    playTone(400, 0.1); 
-                    try { if(navigator.vibrate) navigator.vibrate(50); } catch(e) {}
-                } else { 
-                    clearInterval(hypeInterval);
-                    triggerSplashSequence();
-                }
+                if (count > 0) { document.getElementById('hypeCount').innerText = count; playTone(400, 0.1); } 
+                else { clearInterval(hypeInterval); triggerSplashSequence(); }
             }, 1000);
         }
 
         function triggerSplashSequence() {
-            document.getElementById('hypeCount').classList.add('hidden');
-            document.getElementById('hypeSplash').classList.remove('hidden');
+            document.getElementById('hypeCount').classList.add('hidden'); document.getElementById('hypeSplash').classList.remove('hidden');
             playHorn();
-            try { if(navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch(e) {}
-            setTimeout(() => {
-                countdownActive = false;
-                if(state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'playing' }); }
-                beginFishing(false);
-            }, 1500);
+            setTimeout(() => { countdownActive = false; if(state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'playing' }); } beginFishing(false); }, 1500);
         }
 
         function focusMeasurement() {
@@ -1224,8 +1085,7 @@
                 let opt = document.createElement('option');
                 opt.value = name; opt.innerText = name; opt.selected = true;
                 grp.insertBefore(opt, grp.lastElementChild); 
-                if (state.format !== 'speciesHunt') focusMeasurement();
-                else document.getElementById('btnRecord').focus();
+                if (state.format !== 'speciesHunt') focusMeasurement(); else document.getElementById('btnRecord').focus();
             } else { document.getElementById('inputSpecies').value = ""; }
         }
 
@@ -1234,29 +1094,16 @@
             const stewardBtn = document.getElementById('btnStewardPanelContainer');
             if(state.isHost && stewardBtn) { stewardBtn.classList.remove('hidden'); }
             pushMyScoreToCloud();
-            const label = document.getElementById('labelSize');
-            const sizeDeck = document.getElementById('deckSizeInputs');
-            if (state.format === 'speciesHunt') {
-                if(sizeDeck) sizeDeck.classList.add('hidden');
-            } else {
+            const label = document.getElementById('labelSize'), sizeDeck = document.getElementById('deckSizeInputs');
+            if (state.format === 'speciesHunt') { if(sizeDeck) sizeDeck.classList.add('hidden'); } else {
                 if(sizeDeck) sizeDeck.classList.remove('hidden');
                 document.getElementById('deckLength').classList.add('hidden'); 
-                document.getElementById('deckWeightLb').classList.add('hidden'); 
-                document.getElementById('deckWeightKg').classList.add('hidden'); 
-                if (state.format === 'weightLb') { 
-                    document.getElementById('deckWeightLb').classList.remove('hidden'); 
-                    if(label) label.innerText = "Weight (Lbs/Oz)"; 
-                } else if (state.format === 'weightKg') {
-                    document.getElementById('deckWeightKg').classList.remove('hidden'); 
-                    if(label) label.innerText = "Weight (Kg/g)"; 
-                } else { 
-                    document.getElementById('deckLength').classList.remove('hidden'); 
-                    if(label) label.innerText = "Measurement (cm)"; 
-                }
+                document.getElementById('deckWeightLb').classList.add('hidden'); document.getElementById('deckWeightKg').classList.add('hidden'); 
+                if (state.format === 'weightLb') { document.getElementById('deckWeightLb').classList.remove('hidden'); if(label) label.innerText = "Weight (Lbs/Oz)"; } 
+                else if (state.format === 'weightKg') { document.getElementById('deckWeightKg').classList.remove('hidden'); if(label) label.innerText = "Weight (Kg/g)"; } 
+                else { document.getElementById('deckLength').classList.remove('hidden'); if(label) label.innerText = "Measurement (cm)"; }
             }
-            if (document.getElementById('bountyContainer')) { 
-                document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); 
-            }
+            if (document.getElementById('bountyContainer')) { document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); }
             startClock();
         }
 
@@ -1278,58 +1125,33 @@
         }
 
         function updateTimerDisplay(ms) {
-            let totalSec = Math.max(0, Math.floor(ms / 1000));
-            let hours = Math.floor(totalSec / 3600);
-            let mins = Math.floor((totalSec % 3600) / 60);
-            let secs = totalSec % 60;
+            let totalSec = Math.max(0, Math.floor(ms / 1000)), hours = Math.floor(totalSec / 3600), mins = Math.floor((totalSec % 3600) / 60), secs = totalSec % 60;
             if (document.getElementById('mainTimer')) { document.getElementById('mainTimer').innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`; }
-        }
-
-        function triggerSuccessFlash() {
-            const el = document.getElementById('successOverlay');
-            el.classList.add('show');
-            setTimeout(() => { el.classList.remove('show'); }, 600);
         }
 
         function recordCatch() {
             let species = document.getElementById('inputSpecies').value;
-            if(!species) { try { if(navigator.vibrate) navigator.vibrate(200); } catch(e) {} return alert("Select species first!"); }
+            if(!species) { return alert("Select species first!"); }
             let finalSize = 0, displaySize = "", pts = 0;
-            if (state.format === 'weightLb') { 
-                let lbs = parseInt(document.getElementById('inputLbs').value) || 0, oz = parseInt(document.getElementById('inputOz').value) || 0; 
-                finalSize = (lbs * 16) + oz; displaySize = `${lbs}lb ${oz}oz`; pts = finalSize;
-            } else if (state.format === 'weightKg') {
-                let kg = parseInt(document.getElementById('inputKg').value) || 0, g = parseInt(document.getElementById('inputGrammes').value) || 0; 
-                finalSize = (kg * 1000) + g; displaySize = `${kg}kg ${g}g`; pts = finalSize;
-            } else if (state.format === 'speciesHunt') {
-                finalSize = 1; displaySize = "Captured";
-            } else { 
-                finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = finalSize.toString(); pts = finalSize;
-                if (state.format === 'length10') pts = finalSize + 10;
-            }
-            if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { try { if(navigator.vibrate) navigator.vibrate(200); } catch(e) {} alert("MEASUREMENT REQUIRED."); return; }
+            if (state.format === 'weightLb') { let lbs = parseInt(document.getElementById('inputLbs').value) || 0, oz = parseInt(document.getElementById('inputOz').value) || 0; finalSize = (lbs * 16) + oz; displaySize = `${lbs}lb ${oz}oz`; pts = finalSize; } 
+            else if (state.format === 'weightKg') { let kg = parseInt(document.getElementById('inputKg').value) || 0, g = parseInt(document.getElementById('inputGrammes').value) || 0; finalSize = (kg * 1000) + g; displaySize = `${kg}kg ${g}g`; pts = finalSize; } 
+            else if (state.format === 'speciesHunt') { finalSize = 1; displaySize = "Captured"; } 
+            else { finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = finalSize.toString(); pts = finalSize; if (state.format === 'length10') pts = finalSize + 10; }
+            if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
             if (state.format === 'speciesHunt') { 
                 let existing = state.myCatches.filter(x => x.species === species && x.id !== state.editingId).length; 
                 pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; 
-            } else if (species === 'Mackerel') { 
-                if (state.myCatches.filter(x => x.species === 'Mackerel' && x.id !== state.editingId).length >= 3) { pts = 0; } 
-            }
+            } else if (species === 'Mackerel') { if (state.myCatches.filter(x => x.species === 'Mackerel' && x.id !== state.editingId).length >= 3) { pts = 0; } }
             if (state.editingId) { 
                 let obj = state.myCatches.find(x => x.id === state.editingId); 
                 if(obj) { obj.species = species; obj.size = finalSize; obj.display = displaySize; obj.points = pts; } 
                 state.editingId = null; document.getElementById('btnRecord').innerText = "Record Catch"; 
-            } else { 
-                state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }); 
-            }
-            document.getElementById('inputSpecies').value = ""; 
-            document.getElementById('inputSize').value = ""; 
-            document.getElementById('inputLbs').value = ""; document.getElementById('inputOz').value = "";
-            document.getElementById('inputKg').value = ""; document.getElementById('inputGrammes').value = "";
-            
+            } else { state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }); }
+            document.getElementById('inputSpecies').value = ""; document.getElementById('inputSize').value = ""; document.getElementById('inputLbs').value = ""; document.getElementById('inputOz').value = ""; document.getElementById('inputKg').value = ""; document.getElementById('inputGrammes').value = "";
             document.activeElement.blur(); 
-            triggerSuccessFlash(); 
-            
-            try { if(navigator.vibrate) navigator.vibrate([50, 30, 50]); } catch(e) {}
+            const successOverlay = document.getElementById('successOverlay');
+            successOverlay.classList.add('show');
+            setTimeout(() => { successOverlay.classList.remove('show'); }, 600);
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
 
@@ -1362,18 +1184,7 @@
                 let div = document.createElement('div');
                 div.className = "match-card p-2 flex justify-between items-center transition mb-1 shadow-sm";
                 let ptLabel = state.format === 'speciesHunt' ? `(${c.points})` : (c.points === 0 ? '(0)' : '');
-                
-                div.innerHTML = `
-                    <div class="flex-1 text-left pl-2">
-                        <span class="font-black text-white text-sm uppercase tracking-tight">${c.species}</span>
-                        <span class="text-[10px] ml-2 text-slate-300 font-bold">${c.display || c.size}</span>
-                        <span class="text-[9px] text-slate-500 ml-2 font-bold">${c.time}</span>
-                        <span class="text-[9px] text-amber ml-2 font-black">${ptLabel}</span>
-                    </div>
-                    <div class="flex items-center space-x-1">
-                        <button onclick="editCatch('${c.id}')" class="text-blue-400 p-1.5 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button>
-                        <button onclick="deleteCatch('${c.id}')" class="text-amber p-1.5 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button>
-                    </div>`;
+                div.innerHTML = `<div class="flex-1 text-left pl-2"><span class="font-black text-white text-sm uppercase tracking-tight">${c.species}</span><span class="text-[10px] ml-2 text-slate-300 font-bold">${c.display || c.size}</span><span class="text-[9px] text-slate-500 ml-2 font-bold">${c.time}</span><span class="text-[9px] text-amber ml-2 font-black">${ptLabel}</span></div><div class="flex items-center space-x-1"><button onclick="editCatch('${c.id}')" class="text-blue-400 p-1.5 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button><button onclick="deleteCatch('${c.id}')" class="text-amber p-1.5 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`;
                 list.appendChild(div);
             });
         }
@@ -1390,231 +1201,72 @@
             }
         }
 
-        function endMatchEarly(grace) { 
-            if(state.isHost && state.pin) { 
-                if(grace) { 
-                    document.getElementById('stewardDrawer').classList.remove('open');
-                    document.getElementById('customEndModal').classList.remove('hidden'); 
-                } 
-            } 
-        }
-
-        function stewardSetNewEnd(mins) {
-            document.getElementById('customEndModal').classList.add('hidden');
-            document.getElementById('stewardDrawer').classList.remove('open');
-            if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); }
-            else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); }
-        }
-
-        function transferSteward() {
-            if(!globalMatchData || !globalMatchData.anglers) return;
-            let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name }));
-            if(options.length === 0) { alert("No other competitors linked."); return; }
-            let message = "Select Angler Number to Transfer Control:\n\n";
-            options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; });
-            let choice = prompt(message);
-            let selectedIndex = parseInt(choice) - 1;
-            if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) {
-                if(confirm(`Transfer Steward control to ${options[selectedIndex].name}?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); document.getElementById('stewardDrawer').classList.remove('open'); }
-            }
-        }
-
+        function endMatchEarly(grace) { if(state.isHost && state.pin) { if(grace) { document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('customEndModal').classList.remove('hidden'); } } }
+        function stewardSetNewEnd(mins) { document.getElementById('customEndModal').classList.add('hidden'); document.getElementById('stewardDrawer').classList.remove('open'); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
+        function transferSteward() { if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); document.getElementById('stewardDrawer').classList.remove('open'); } } }
         function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); resetApp(); } }
-
-        function lockdownMatch(isHostPushing) {
-            clearInterval(clockInterval); if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); }
-            saveHistory(false); state.status = 'finished'; saveState();
-            let totalPts = state.myCatches.reduce((s,c) => s + c.points, 0);
-            document.getElementById('finalScore').innerText = formatScoreDisplay(totalPts, state.format);
-            document.getElementById('finalCount').innerText = state.myCatches.length;
-            document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size;
-            if (state.isHost && document.getElementById('btnMasterExport')) { document.getElementById('btnMasterExport').classList.remove('hidden'); }
-            navTo('results');
-        }
-
-        function saveHistory(isL) {
-            let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
-            h.unshift({ id: 'match_' + Date.now(), pin: state.pin, venue: state.venue, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), format: state.format, score: state.myCatches.reduce((s,c) => s+c.points, 0), personalCatches: [...state.myCatches], standings: globalMatchData?.anglers ? Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score) : [], playerName: state.name, isLive: isL, endTime: state.endTime, graceEndTime: state.graceEndTime || (state.endTime + 180000) });
-            localStorage.setItem('matchHistory', JSON.stringify(h));
-        }
-
+        function lockdownMatch(isHostPushing) { clearInterval(clockInterval); if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } saveHistory(false); state.status = 'finished'; saveState(); let totalPts = state.myCatches.reduce((s,c) => s + c.points, 0); document.getElementById('finalScore').innerText = formatScoreDisplay(totalPts, state.format); document.getElementById('finalCount').innerText = state.myCatches.length; document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; if (state.isHost && document.getElementById('btnMasterExport')) { document.getElementById('btnMasterExport').classList.remove('hidden'); } navTo('results'); }
+        function saveHistory(isL) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); h.unshift({ id: 'match_' + Date.now(), pin: state.pin, venue: state.venue, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), format: state.format, score: state.myCatches.reduce((s,c) => s+c.points, 0), personalCatches: [...state.myCatches], standings: globalMatchData?.anglers ? Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score) : [], playerName: state.name, isLive: isL, endTime: state.endTime, graceEndTime: state.graceEndTime || (state.endTime + 180000) }); localStorage.setItem('matchHistory', JSON.stringify(h)); }
         function renderHistory() {
-            let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
-            const r = document.getElementById('historyRecentList'), a = document.getElementById('historyArchiveList');
-            const now = Date.now();
-            r.innerHTML = ""; a.innerHTML = "";
+            let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); const r = document.getElementById('historyRecentList'), a = document.getElementById('historyArchiveList'), now = Date.now(); r.innerHTML = ""; a.innerHTML = "";
             if(h.length === 0) { r.innerHTML = '<p class="text-slate-400 py-24 font-black uppercase text-[10px] tracking-widest text-center">History Empty</p>'; return; }
-            h.forEach((m, i) => {
-                const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 180000));
-                let card = document.createElement('div');
-                card.className = "match-card p-5 flex flex-col items-center active:bg-slate-900 transition relative overflow-hidden mb-3 text-center";
-                let headerText = isStillActuallyLive ? "" : "<p class='text-[9px] font-black text-slate-500 mb-1.5 uppercase tracking-[0.4em]'>MATCH ENDED</p>";
-                let timerDisplay = isStillActuallyLive ? `<p id="hist-timer-${m.id}" class="text-amber font-black text-[10px] tabular-nums mb-0.5">Checking Clock...</p>` : "";
-                card.innerHTML = `${headerText}<div class="w-full flex justify-between items-center text-center"><div class="flex-1 text-left pl-1" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-base uppercase tracking-tight">${m.date}</span> ${isStillActuallyLive ? '<span class="text-[8px] bg-red-600 px-2 py-0.5 rounded-full text-white font-black ml-2 animate-pulse">LIVE</span>' : ''}<br><span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || 'No Venue'}</span><br><span class="text-[10px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span>${timerDisplay}</div><div class="text-right flex items-center space-x-4"><div onclick="viewPastRecord('${m.id}')"><div class="text-2xl font-black text-white">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[9px] text-amber uppercase font-black text-center">Total</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1 py-3"><i class="fa-solid fa-trash-can text-base"></i></button></div></div>`;
-                if(i < 6) r.appendChild(card); else a.appendChild(card);
-            });
-            document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 6);
-            startHistoryTimers();
+            h.forEach((m, i) => { const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 180000)); let card = document.createElement('div'); card.className = "match-card p-5 flex flex-col items-center active:bg-slate-900 transition relative overflow-hidden mb-3 text-center"; let headerText = isStillActuallyLive ? "" : "<p class='text-[9px] font-black text-slate-500 mb-1.5 uppercase tracking-[0.4em]'>MATCH ENDED</p>"; let timerDisplay = isStillActuallyLive ? `<p id="hist-timer-${m.id}" class="text-amber font-black text-[10px] tabular-nums mb-0.5">Checking Clock...</p>` : ""; card.innerHTML = `${headerText}<div class="w-full flex justify-between items-center text-center"><div class="flex-1 text-left pl-1" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-base uppercase tracking-tight">${m.date}</span> ${isStillActuallyLive ? '<span class="text-[8px] bg-red-600 px-2 py-0.5 rounded-full text-white font-black ml-2 animate-pulse">LIVE</span>' : ''}<br><span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || 'Venue'}</span><br><span class="text-[10px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span>${timerDisplay}</div><div class="text-right flex items-center space-x-4"><div onclick="viewPastRecord('${m.id}')"><div class="text-2xl font-black text-white">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[9px] text-amber uppercase font-black text-center">Total</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1 py-3"><i class="fa-solid fa-trash-can text-base"></i></button></div></div>`; if(i < 6) r.appendChild(card); else a.appendChild(card); });
+            document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 6); startHistoryTimers();
         }
-
-        function startHistoryTimers() {
-            clearInterval(historyUpdateInterval);
-            historyUpdateInterval = setInterval(() => {
-                const now = Date.now();
-                let h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
-                h.forEach(m => {
-                    const timerEl = document.getElementById(`hist-timer-${m.id}`);
-                    if (timerEl) {
-                        let totalEnd = m.graceEndTime || (m.endTime + 180000), diff = totalEnd - now;
-                        if (diff <= 0) { renderHistory(); }
-                        else {
-                            let s = Math.floor(diff / 1000), hours = Math.floor(s / 3600), mins = Math.floor((s % 3600) / 60), secs = s % 60;
-                            timerEl.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')} Remaining`;
-                        }
-                    }
-                });
-            }, 1000);
-        }
-
+        function startHistoryTimers() { clearInterval(historyUpdateInterval); historyUpdateInterval = setInterval(() => { const now = Date.now(); let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); h.forEach(m => { const timerEl = document.getElementById(`hist-timer-${m.id}`); if (timerEl) { let totalEnd = m.graceEndTime || (m.endTime + 180000), diff = totalEnd - now; if (diff <= 0) { renderHistory(); } else { let s = Math.floor(diff / 1000), hours = Math.floor(s / 3600), mins = Math.floor((s % 3600) / 60), secs = s % 60; timerEl.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')} Remaining`; } } }); }, 1000); }
         function deleteHistoryItem(id) { if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
         function toggleArchive() { isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
-
-        function viewPastRecord(id) {
-            activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === id);
-            if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); }
-        }
-
+        function viewPastRecord(id) { activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === id); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
         function switchHistoryTab(tab) {
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
-            document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); });
-            document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
-            if(tab === 'standings') { 
-                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest">Score Table</h4><div class="space-y-2.5">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md text-center"><span class="uppercase text-white font-bold text-sm text-left">${i+1}.</b> ${a.name}</span><b class="text-white text-lg text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; 
-            } else { 
-                let displayCatches = JSON.parse(JSON.stringify(m.personalCatches)).reverse(), counts = {};
-                displayCatches.forEach(c => { counts[c.species] = (counts[c.species] || 0) + 1; c.orderCount = counts[c.species]; });
-                displayCatches.reverse();
-                let listHtml = displayCatches.map(c => {
-                    let spec = c.species;
-                    if(m.format === 'speciesHunt') {
-                        let ord = c.orderCount, sfx = ord === 1 ? '(1st)' : ord === 2 ? '(2nd)' : ord === 3 ? '(3rd)' : '(4th+)';
-                        spec += ` <span class="text-blue-400 text-[10px] ml-1 tracking-tighter">${sfx}</span>`;
-                    }
-                    let ptTxt = m.format.includes('weight') ? 'Recorded' : `${c.points} Pts`;
-                    return `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner text-center"><div class="text-left"><b class="text-white text-base uppercase text-left">${spec}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest text-left">${c.time}</span></div><div class="text-right"><b class="text-white text-base text-right">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest text-right">${ptTxt}</span></div></div>`;
-                }).join('');
+            document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); }); document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
+            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest">Score Table</h4><div class="space-y-2.5">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md text-center"><span class="uppercase text-white font-bold text-sm text-left">${i+1}.</b> ${a.name}</span><b class="text-white text-lg text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; } 
+            else { 
+                let displayCatches = JSON.parse(JSON.stringify(m.personalCatches)).reverse(), counts = {}; displayCatches.forEach(c => { counts[c.species] = (counts[c.species] || 0) + 1; c.orderCount = counts[c.species]; }); displayCatches.reverse();
+                let listHtml = displayCatches.map(c => { let spec = c.species; if(m.format === 'speciesHunt') { let ord = c.orderCount, sfx = ord === 1 ? '(1st)' : ord === 2 ? '(2nd)' : ord === 3 ? '(3rd)' : '(4th+)'; spec += ` <span class="text-blue-400 text-[10px] ml-1 tracking-tighter">${sfx}</span>`; } let ptTxt = m.format.includes('weight') ? 'Recorded' : `${c.points} Pts`; return `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner text-center"><div class="text-left"><b class="text-white text-base uppercase text-left">${spec}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest text-left">${c.time}</span></div><div class="text-right"><b class="text-white text-base text-right">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest text-right">${ptTxt}</span></div></div>`; }).join('');
                 document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest">Capture Diary</h4><div class="space-y-2.5 text-center">${listHtml}</div>`; 
             }
         }
-
         function closeHistoryDetail() { document.getElementById('historyDetailDrawer').classList.remove('open'); setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); }
-
-        let wakeLock = null;
-        async function toggleWakeLock() {
-            if(wakeLock) { await wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon"></i>`; document.getElementById('wakeLockBtn').classList.remove('text-amber'); }
-            else { try { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber"></i>`; } catch(e) {} }
-        }
-
-        function shareResults() {
-            let t = `🏆 Match Summary: ${state.name}\nScore: ${document.getElementById('finalScore').innerText} Pts\nLogs: ${document.getElementById('finalCount').innerText}\nLogged via Match Edition Pro.`;
-            if (navigator.share) { navigator.share({ title: 'Results', text: t }); }
-            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
-        }
-        
-        function shareMasterLeaderboard() {
-            if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
-            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score), t = `🏆 Official Match Results: ${state.venue}\nSteward: ${state.name}\n\n`;
-            arr.forEach((a, i) => { t += `${i+1}. ${a.name} - ${formatScoreDisplay(a.score, state.format)} ${(state.format === 'weightLb' || state.format === 'weightKg') ? '' : 'pts'}\n`; });
-            t += `\nGenerated via Match Edition Pro.`;
-            if (navigator.share) { navigator.share({ title: 'Official Results', text: t }); }
-            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
-        }
-
+        let wakeLock = null; async function toggleWakeLock() { if(wakeLock) { await wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon"></i>`; } else { try { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber"></i>`; } catch(e) {} } }
+        function shareResults() { let t = `🏆 Match Summary: ${state.name}\nScore: ${document.getElementById('finalScore').innerText} Pts\nLogs: ${document.getElementById('finalCount').innerText}\nLogged via Match Edition Pro.`; if (navigator.share) { navigator.share({ title: 'Results', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); } }
+        function shareMasterLeaderboard() { if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available."); let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score), t = `🏆 Official Match Results: ${state.venue}\nSteward: ${state.name}\n\n`; arr.forEach((a, i) => { t += `${i+1}. ${a.name} - ${formatScoreDisplay(a.score, state.format)} ${(state.format === 'weightLb' || state.format === 'weightKg') ? '' : 'pts'}\n`; }); if (navigator.share) { navigator.share({ title: 'Official Results', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); } }
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
 
         window.onload = () => {
-            history.pushState(null, null, window.location.href);
-
-            checkInstallStatus();
-            const saved = localStorage.getItem('matchState');
+            history.pushState(null, null, window.location.href); checkInstallStatus(); const saved = localStorage.getItem('matchState');
             if (saved) {
                 try {
                     let oldState = JSON.parse(saved);
                     state.name = oldState.name || ""; state.venue = oldState.venue || "";
                     document.getElementById('playerName').value = state.name; document.getElementById('venueName').value = state.venue;
-                    if (['playing', 'grace', 'hype', 'waiting'].includes(oldState.status)) {
+                    if (['playing', 'hype', 'waiting'].includes(oldState.status) || oldState.status === 'grace') {
                         state = oldState; listenToCloud(); navTo(state.view);
                         const label = document.getElementById('labelSize'), sizeDeck = document.getElementById('deckSizeInputs');
-                        if (state.format === 'speciesHunt') { if(sizeDeck) sizeDeck.classList.add('hidden'); } 
-                        else {
+                        if (state.format === 'speciesHunt') { if(sizeDeck) sizeDeck.classList.add('hidden'); } else {
                             if(sizeDeck) sizeDeck.classList.remove('hidden');
-                            document.getElementById('deckLength').classList.add('hidden'); 
-                            document.getElementById('deckWeightLb').classList.add('hidden'); 
-                            document.getElementById('deckWeightKg').classList.add('hidden'); 
+                            document.getElementById('deckLength').classList.add('hidden'); document.getElementById('deckWeightLb').classList.add('hidden'); document.getElementById('deckWeightKg').classList.add('hidden'); 
                             if (state.format === 'weightLb') { document.getElementById('deckWeightLb').classList.remove('hidden'); if(label) label.innerText = "Weight (Lbs/Oz)"; } 
                             else if (state.format === 'weightKg') { document.getElementById('deckWeightKg').classList.remove('hidden'); if(label) label.innerText = "Weight (Kg/g)"; } 
                             else { document.getElementById('deckLength').classList.remove('hidden'); if(label) label.innerText = "Measurement (cm)"; }
                         }
                         if (state.status === 'playing' || state.status === 'grace') { 
                             renderCatchList(); startClock(); updateLiveTally(); 
-                            if (state.status === 'grace') { document.getElementById('app-container').classList.add('grace-active'); document.getElementById('mainTimer').classList.add('grace-pulse'); const btnRecord = document.getElementById('btnRecord'); if(btnRecord) { btnRecord.classList.remove('bg-blue-600'); btnRecord.classList.add('grace-btn-pulse'); } } 
+                            if (state.status === 'grace') { document.getElementById('app-container').classList.add('grace-active'); document.getElementById('mainTimer').classList.add('grace-pulse'); const btnRecord = document.getElementById('btnRecord'); if(btnRecord) { btnRecord.classList.add('grace-btn-pulse'); } } 
                         }
                     }
                 } catch(e) { resetApp(); }
             }
         };
 
-        // SILENT BACK SWIPE INTERCEPTOR
         window.addEventListener('popstate', () => {
             history.pushState(null, null, window.location.href);
-            
             if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open') || document.getElementById('guideDrawer').classList.contains('open') || !document.getElementById('historyDetailDrawer').classList.contains('hidden')) { 
-                document.getElementById('leaderboardDrawer').classList.remove('open'); 
-                document.getElementById('stewardDrawer').classList.remove('open'); 
-                document.getElementById('guideDrawer').classList.remove('open'); 
-                closeHistoryDetail(); 
+                document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('guideDrawer').classList.remove('open'); closeHistoryDetail(); 
             }
         });
 
-        window.proceedToRoleSelection = proceedToRoleSelection;
-        window.triggerHypeStart = triggerHypeStart;
-        window.navTo = navTo;
-        window.createMatch = createMatch;
-        window.connectToMatch = connectToMatch;
-        window.recordCatch = recordCatch;
-        window.editCatch = editCatch;
-        window.deleteCatch = deleteCatch;
-        window.leaveMatchEarly = leaveMatchEarly;
-        window.stewardSetNewEnd = stewardSetNewEnd;
-        window.shareResults = shareResults;
-        window.resetApp = resetApp;
-        window.toggleArchive = toggleArchive;
-        window.viewPastRecord = viewPastRecord;
-        window.switchHistoryTab = switchHistoryTab;
-        window.closeHistoryDetail = closeHistoryDetail;
-        window.forceUpdateApp = forceUpdateApp;
-        window.toggleWakeLock = toggleWakeLock;
-        window.focusMeasurement = focusMeasurement;
-        window.promptCustomSpecies = promptCustomSpecies;
-        window.exitWaitingRoom = exitWaitingRoom;
-        window.deleteHistoryItem = deleteHistoryItem;
-        window.checkSpeciesSelection = checkSpeciesSelection;
-        window.exitApp = exitApp;
-        window.handleInputFocus = handleInputFocus;
-        window.transferSteward = transferSteward;
-        window.endMatchEarly = endMatchEarly;
-        window.showInstallGuide = showInstallGuide;
-        window.formatScoreDisplay = formatScoreDisplay;
-        window.shareMasterLeaderboard = shareMasterLeaderboard;
-        window.atmPress = atmPress; 
-        window.atmDelete = atmDelete; 
-        
-        window.openTimeKeypad = openTimeKeypad;
-        window.timeAtmPress = timeAtmPress;
-        window.timeAtmDelete = timeAtmDelete;
-        window.timeAtmToggleAMPM = timeAtmToggleAMPM;
-        window.submitTimeAtm = submitTimeAtm;
-        window.closeTimeKeypad = closeTimeKeypad;
+        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.toggleWakeLock = toggleWakeLock; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad;
     </script>
 </body>
 </html>
