@@ -1,22 +1,20 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 5.2.5 - IRONCLAD PWA UPDATE
-   NETWORK-FIRST STRATEGY WITH FORCED CACHE BUSTING
+   VERSION 5.2.0 - PRECISION TIMING UPDATE
 */
 
-const CACHE_NAME = 'match-edition-v5.2.5';
+const CACHE_NAME = 'match-edition-v5.2.0';
 
 const ASSETS = [
-  './?v=5.2.5',
-  './index.html?v=5.2.5',
-  '/competition-Scorer/manifest.json?v=5.2.5',
-  '/competition-Scorer/icon.png?v=5.2.5'
+  './',
+  './index.html',
+  '/competition-Scorer/manifest.json',
+  '/competition-Scorer/icon.png'
 ];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Caching V5.2.5 Assets');
       return cache.addAll(ASSETS);
     })
   );
@@ -28,7 +26,6 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('SW: Purging old cache ->', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -38,24 +35,10 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-/* NETWORK FIRST, FALLBACK TO CACHE */
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    fetch(event.request)
-      .then((networkResponse) => {
-        /* If we get a good response from the internet, update the offline cache silently */
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return networkResponse;
-      })
-      .catch(() => {
-        /* If there is no internet signal (or fetch fails), pull from the offline cache */
-        console.log('SW: Network failed, falling back to cache');
-        return caches.match(event.request, { ignoreSearch: true });
-      })
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
   );
 });
