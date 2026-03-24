@@ -38,6 +38,23 @@
             background-color: #450a0a !important; 
         }
 
+        /* GREEN TICK SUCCESS OVERLAY */
+        #successOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(34, 197, 94, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease-in-out;
+        }
+        #successOverlay.show {
+            opacity: 1;
+        }
+
         @keyframes sync-pulse {
             0% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.7; transform: scale(0.98); }
@@ -173,6 +190,10 @@
 </head>
 <body>
 
+    <div id="successOverlay">
+        <i class="fa-solid fa-circle-check text-white text-9xl"></i>
+    </div>
+
     <div id="broadcastToast" class="fixed top-4 inset-x-4 z-[200] bg-blue-600 text-white p-4 rounded-xl shadow-2xl flex items-center space-x-4 border-2 border-white/20">
         <i class="fa-solid fa-bullhorn text-xl animate-bounce"></i>
         <div class="flex-1 text-center">
@@ -189,9 +210,9 @@
                 <p class="text-slate-400 text-[10px] mt-1 leading-relaxed">Broadcast a timing change to all connected devices.</p>
             </div>
             <div class="grid grid-cols-1 gap-2.5">
-                <button onclick="stewardSetNewEnd(15)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">15 MINUTES REMAINING</button>
-                <button onclick="stewardSetNewEnd(30)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">30 MINUTES REMAINING</button>
-                <button onclick="stewardSetNewEnd(60)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber active:text-slate-900 transition uppercase tracking-widest text-[11px]">1 HOUR REMAINING</button>
+                <button onclick="stewardSetNewEnd(15)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber transition uppercase tracking-widest text-[11px]">15 MINUTES REMAINING</button>
+                <button onclick="stewardSetNewEnd(30)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber transition uppercase tracking-widest text-[11px]">30 MINUTES REMAINING</button>
+                <button onclick="stewardSetNewEnd(60)" class="bg-slate-900 border border-slate-700 py-3.5 rounded-lg font-black text-white active:bg-amber transition uppercase tracking-widest text-[11px]">1 HOUR REMAINING</button>
                 <button onclick="stewardSetExactEnd()" class="bg-blue-600 py-3.5 rounded-lg font-black text-white active:bg-blue-700 transition uppercase tracking-widest text-[11px]"><i class="fa-solid fa-keyboard mr-2"></i> ENTER FINISH TIME (HH:MM)</button>
                 <button onclick="stewardSetNewEnd(0)" class="bg-red-600 py-3.5 rounded-lg font-black text-white active:bg-red-700 transition uppercase tracking-widest text-[10px] leading-none">STRIKE NOW<br><span class="text-[8px] opacity-60">(Activates 3 Min Grace)</span></button>
             </div>
@@ -220,7 +241,7 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white">Match Edition Pro</h1>
-                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.0</div>
+                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.1</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -315,7 +336,7 @@
                 <div>
                     <label class="block text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] mb-1.5 text-left">Rules Engine</label>
                     <select id="hostFormat" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-base font-black appearance-none text-white text-center shadow-inner">
-                        <option value="length">Length Only (cm)</option><option value="length10">Length + 10 Pts</option><option value="weightLb">Weight (Lbs & Oz)</option><option value="weightKg">Weight (Kg & g)</option><option value="speciesHunt" selected>Species Hunt</option>
+                        <option value="length" selected>Length Only (cm)</option><option value="length10">Length + 10 Pts</option><option value="weightLb">Weight (Lbs & Oz)</option><option value="weightKg">Weight (Kg & g)</option><option value="speciesHunt">Species Hunt</option>
                     </select>
                 </div>
                 <button onclick="createMatch()" class="w-full bg-amber text-slate-900 font-black text-lg py-4 rounded-xl mt-3 shadow-lg uppercase active:scale-95 transition-transform">Initialize Match</button>
@@ -435,7 +456,7 @@
 
         <div id="view-results" class="hidden view-frame bg-[#020617] text-white p-5 justify-center space-y-5 text-center">
             <h1 class="text-4xl font-black uppercase text-amber border-b-4 border-slate-900 pb-5 tracking-tighter">Final Result</h1>
-            <div class="match-card p-6 shadow-[0_0_40px_rgba(59,130,246,0.15)]">
+            <div class="match-card p-6 shadow-[0_0_40px_rgba(59,130,246,0.15)] text-center">
                 <p class="text-slate-500 font-black uppercase tracking-[0.3em] text-[9px] mb-2">Tournament Total Score</p>
                 <p class="text-6xl font-black text-white" id="finalScore">0</p>
             </div>
@@ -462,24 +483,24 @@
                 <h2 class="text-lg font-black uppercase tracking-[0.1em]">History</h2>
                 <div class="w-6"></div>
             </div>
-            <div class="scrollable-area space-y-6 pb-10">
-                <div id="historyRecentList" class="space-y-3 px-1"></div>
-                <div id="archiveContainer" class="hidden px-1">
+            <div class="scrollable-area space-y-6 pb-10 text-center">
+                <div id="historyRecentList" class="space-y-3 px-1 text-center"></div>
+                <div id="archiveContainer" class="hidden px-1 text-center">
                     <button onclick="toggleArchive()" class="w-full flex justify-between items-center bg-slate-950/50 p-4 rounded-xl border-2 border-slate-800 active:bg-slate-900 transition shadow-md">
                         <span class="font-black text-[10px] uppercase tracking-[0.3em] text-slate-400"><i class="fa-solid fa-box-archive mr-2 text-amber opacity-40"></i> Older Storage</span>
                         <i class="fa-solid fa-chevron-down text-slate-600 transition-transform duration-300" id="archiveChevron"></i>
                     </button>
-                    <div id="historyArchiveList" class="hidden pt-5 space-y-3"></div>
+                    <div id="historyArchiveList" class="hidden pt-5 space-y-3 text-center"></div>
                 </div>
             </div>
         </div>
 
-        <div id="view-kill" class="hidden view-frame items-center justify-center bg-black p-6">
+        <div id="view-kill" class="hidden view-frame items-center justify-center bg-black p-6 text-center">
             <i class="fa-solid fa-power-off text-red-600 text-5xl mb-5 animate-pulse"></i>
             <h1 class="text-2xl font-black uppercase text-white tracking-widest mb-3">Session Cleared</h1>
             <p class="text-slate-400 font-bold text-xs leading-relaxed mb-6 text-center">Your connection is safely closed and your battery is no longer being used.</p>
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl text-left shadow-lg">
-                <p class="text-amber font-black uppercase tracking-widest text-[10px] mb-3 border-b border-slate-800 pb-2">To fully exit the app:</p>
+                <p class="text-amber font-black uppercase tracking-widest text-[10px] mb-3 border-b border-slate-800 pb-2 text-center">To fully exit the app:</p>
                 <p class="text-slate-300 text-[11px] leading-relaxed mb-3"><b class="text-white text-xs">1.</b> Press your phone's <b>Recent Apps</b> button (usually ||| or a square at the bottom) <b>OR</b> swipe up slowly from the bottom edge of your screen and hold.</p>
                 <p class="text-slate-300 text-[11px] leading-relaxed"><b class="text-white text-xs">2.</b> Find this window in the list and <b>swipe it up and away</b> to close it completely.</p>
             </div>
@@ -489,7 +510,7 @@
             <button onclick="document.getElementById('guideDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 py-6 font-black uppercase tracking-[0.4em] text-white border-b border-slate-700 flex justify-center items-center">
                 <i class="fa-solid fa-arrow-left mr-3"></i> Back to Lobby
             </button>
-            <div class="scrollable-area p-8 space-y-10 text-white">
+            <div class="scrollable-area p-8 space-y-10 text-white text-left">
                 <section class="space-y-6">
                     <h4 class="text-green-500 font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">🎣 Angler's Quick Start</h4>
                     <div class="space-y-6 text-sm leading-relaxed">
@@ -544,33 +565,33 @@
                 <button id="tab-standings" onclick="switchHistoryTab('standings')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase">Leader Board</button>
                 <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase">Diary</button>
             </div>
-            <div id="historyContent" class="scrollable-area p-6"></div>
+            <div id="historyContent" class="scrollable-area p-6 text-center"></div>
         </div>
 
         <div id="leaderboardDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[101] flex flex-col shadow-2xl">
             <button onclick="document.getElementById('leaderboardDrawer').classList.remove('open')" class="flex-none w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 uppercase tracking-[0.2em] text-[10px] flex justify-center items-center active:bg-blue-800 transition">
                 <i class="fa-solid fa-arrow-left mr-2 animate-pulse"></i> RETURN TO SCORECARD
             </button>
-            <div class="flex-none p-3 bg-slate-900 flex justify-center items-center border-b border-slate-800 shadow-sm">
+            <div class="flex-none p-3 bg-slate-900 flex justify-center items-center border-b border-slate-800 shadow-sm text-center">
                 <h2 class="font-bold text-sm tracking-widest text-slate-100 uppercase">Live Leader Board</h2>
             </div>
-            <div class="flex-none bg-amber text-slate-900 py-3 px-4 border-b-4 border-yellow-600 shadow-md flex flex-col items-center justify-center" id="bountyContainer">
+            <div class="flex-none bg-amber text-slate-900 py-3 px-4 border-b-4 border-yellow-600 shadow-md flex flex-col items-center justify-center text-center" id="bountyContainer">
                 <span class="text-[10px] font-black uppercase tracking-widest mb-1 opacity-80">👑 Match Biggest Fish</span>
-                <span class="font-black text-base leading-tight text-center" id="bountyBanner">Waiting...</span>
+                <span class="font-black text-base leading-tight" id="bountyBanner">Waiting...</span>
             </div>
-            <div id="leaderboardList" class="scrollable-area p-3 space-y-1.5"></div>
+            <div id="leaderboardList" class="scrollable-area p-3 space-y-1.5 text-center"></div>
         </div>
 
         <div id="stewardDrawer" class="drawer-left fixed inset-0 w-full bg-[#020617] z-[101] flex flex-col shadow-2xl">
-            <button onclick="document.getElementById('stewardDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center active:bg-slate-900 border-b border-slate-800 transition"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN</button>
-            <div class="flex-none p-4 bg-slate-950 border-b border-slate-900 text-center shadow-sm"><h2 class="font-black text-lg text-blue-400 uppercase tracking-[0.2em]"><i class="fa-solid fa-user-shield mr-2"></i> Steward Desk</h2></div>
-            <div class="scrollable-area p-8 space-y-8">
+            <button onclick="document.getElementById('stewardDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center active:bg-slate-900 border-b border-slate-800 transition text-center"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN</button>
+            <div class="flex-none p-4 bg-slate-950 border-b border-slate-900 text-center shadow-sm text-center"><h2 class="font-black text-lg text-blue-400 uppercase tracking-[0.2em]"><i class="fa-solid fa-user-shield mr-2"></i> Steward Desk</h2></div>
+            <div class="scrollable-area p-8 space-y-8 text-center">
                 <hr class="border-slate-800">
                 <button onclick="transferSteward()" class="w-full bg-slate-900 border-2 border-slate-800 text-slate-400 font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:text-amber transition"><i class="fa-solid fa-right-left mr-3 text-amber"></i> Transfer Control</button>
                 <hr class="border-slate-800 pt-4">
                 <button onclick="endMatchEarly(true)" class="w-full bg-amber text-slate-900 font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-base leading-tight active:scale-95 transition-transform">Adjust Match Clock</button>
-                <hr class="border-slate-800 pt-4">
-                <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:bg-blue-700 transition"><i class="fa-solid fa-file-export mr-3"></i> Master Export</button>
+                <hr class="border-slate-800 pt-4 text-center">
+                <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:bg-blue-700 transition"><i class="fa-solid fa-file-export mr-3 text-center"></i> Master Export</button>
             </div>
         </div>
 
@@ -1036,6 +1057,13 @@
             if (document.getElementById('mainTimer')) { document.getElementById('mainTimer').innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`; }
         }
 
+        /* GREEN TICK FUNCTION */
+        function triggerSuccessFlash() {
+            const el = document.getElementById('successOverlay');
+            el.classList.add('show');
+            setTimeout(() => { el.classList.remove('show'); }, 600);
+        }
+
         function recordCatch() {
             let species = document.getElementById('inputSpecies').value;
             if(!species) { try { if(navigator.vibrate) navigator.vibrate(200); } catch(e) {} return alert("Select species first!"); }
@@ -1070,7 +1098,10 @@
             document.getElementById('inputSize').value = ""; 
             document.getElementById('inputLbs').value = ""; document.getElementById('inputOz').value = "";
             document.getElementById('inputKg').value = ""; document.getElementById('inputGrammes').value = "";
+            
             document.activeElement.blur(); 
+            triggerSuccessFlash();
+            
             try { if(navigator.vibrate) navigator.vibrate([50, 30, 50]); } catch(e) {}
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
@@ -1314,10 +1345,10 @@
             }
         };
 
+        /* BACK SWIPE LOCK: Traps the browser history to prevent closing */
         window.addEventListener('popstate', () => {
-            if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open') || document.getElementById('guideDrawer').classList.contains('open') || !document.getElementById('historyDetailDrawer').classList.contains('hidden')) { document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('guideDrawer').classList.remove('open'); closeHistoryDetail(); history.pushState(null, null, window.location.href); return; }
-            if (state.view === 'fishing' || state.status === 'playing' || state.status === 'grace') { if (confirm("Match live. Exit Scorecard?")) { leaveMatchEarly(); } else { history.pushState(null, null, window.location.href); } }
-            else if (state.view !== 'home') { navTo('home'); history.pushState(null, null, window.location.href); }
+            history.pushState(null, null, window.location.href);
+            showNotification("Navigation Locked. Please use the app's buttons.");
         });
 
         window.proceedToRoleSelection = proceedToRoleSelection;
