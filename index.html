@@ -238,7 +238,7 @@
             <div class="text-center mt-6">
                 <i class="fa-solid fa-stopwatch text-amber text-5xl mb-1"></i>
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white">Match Edition Pro</h1>
-                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.3</div>
+                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">Gold Master V5.2.4</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -513,7 +513,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="text-[9px] text-slate-600 uppercase tracking-[0.4em] pt-4">Sea Diary Match Pro • Version 5.2.3</p>
+                <p class="text-[9px] text-slate-600 uppercase tracking-[0.4em] pt-4">Sea Diary Match Pro • Version 5.2.4</p>
             </div>
         </div>
 
@@ -635,7 +635,6 @@
             saveState(); navTo('role');
         }
 
-        /* 5.2.3 CLOSE APP SAFETY FIX */
         function exitApp() {
             if (confirm("CLOSE APP COMPLETELY?\n\nThis will safely close your window. Your catch data is secured in the cloud and on this device.")) {
                 clearInterval(clockInterval); clearInterval(hypeInterval); clearInterval(historyUpdateInterval);
@@ -692,7 +691,6 @@
         }
 
         function processCloudUpdate() {
-            /* 5.2.3 SELF-HEALING SYNC ROUTINE */
             if (globalMatchData.anglers && globalMatchData.anglers[uid]) {
                 let cloudMe = globalMatchData.anglers[uid];
                 if (cloudMe.catches && state.myCatches.length === 0) {
@@ -971,7 +969,6 @@
         function shareResults() { let t = `🏆 Match Summary: ${state.name}\nScore: ${document.getElementById('finalScore').innerText} Pts\nLogs: ${document.getElementById('finalCount').innerText}\nLogged via Match Edition Pro.`; if (navigator.share) { navigator.share({ title: 'Results', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); } }
         function shareMasterLeaderboard() { if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available."); let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score), t = `🏆 Official Match Results: ${state.venue}\nSteward: ${state.name}\n\n`; arr.forEach((a, i) => { t += `${i+1}. ${a.name} - ${formatScoreDisplay(a.score, state.format)} ${(state.format === 'weightLb' || state.format === 'weightKg') ? '' : 'pts'}\n`; }); t += `\nGenerated via Match Edition Pro.`; if (navigator.share) { navigator.share({ title: 'Official Results', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); } }
         
-        /* 5.2.3 RESET SAFETY */
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
 
         window.onload = () => {
@@ -987,7 +984,6 @@
                             if (state.format === 'weightLb') { document.getElementById('deckWeightLb').classList.remove('hidden'); if(label) label.innerText = "Weight (Lbs/Oz)"; } else if (state.format === 'weightKg') { document.getElementById('deckWeightKg').classList.remove('hidden'); if(label) label.innerText = "Weight (Kg/g)"; } else { document.getElementById('deckLength').classList.remove('hidden'); if(label) label.innerText = "Measurement (cm)"; }
                         }
                         if (state.status === 'playing' || state.status === 'grace') { 
-                            /* 5.2.3 UI REDRAW ON LOAD */
                             renderCatchList(); startClock(); updateLiveTally(); 
                             if (state.status === 'grace') { document.getElementById('app-container').classList.add('grace-active'); document.getElementById('mainTimer').classList.add('grace-pulse'); const btnRecord = document.getElementById('btnRecord'); if(btnRecord) { btnRecord.classList.remove('bg-blue-600'); btnRecord.classList.add('grace-btn-pulse'); } } 
                         }
