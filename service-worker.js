@@ -1,8 +1,8 @@
 /* SEA DIARY: MATCH EDITION 
-   VERSION 5.2.3 - LIVE TICKER UPDATE
+   VERSION 5.2.4 - SMART TICKER UPDATE
 */
 
-const CACHE_NAME = 'match-edition-v5.2.3';
+const CACHE_NAME = 'match-edition-v5.2.4';
 
 const ASSETS = [
   './',
