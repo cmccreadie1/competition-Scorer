@@ -3,62 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sea Diary: Match Pro</title>
+    <title>Sea Diary: Match Pro | Kilsyth Angling</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #ffffff; overflow-x: hidden; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(71, 85, 105, 0.5); }
-        .amber-glow { box-shadow: 0 0 20px rgba(245, 158, 11, 0.2); }
-        @keyframes pulse-live { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        .live-dot { animation: pulse-live 2s infinite ease-in-out; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #ffffff; }
+        .amber-glow { box-shadow: 0 0 30px rgba(245, 158, 11, 0.1); }
+        .gold-text { background: linear-gradient(to bottom, #fde68a, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .feature-card { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.05); }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 50; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+        .modal.active { display: flex; }
+        
+        /* New Generic Button Styles */
+        .btn-ios { border-color: rgba(37, 99, 235, 0.3); } /* Blue accent */
+        .btn-ios:active { background: rgba(37, 99, 235, 0.1); }
+        .btn-android { border-color: rgba(16, 185, 129, 0.3); } /* Emerald Green accent */
+        .btn-android:active { background: rgba(16, 185, 129, 0.1); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center">
-    <div class="w-full max-w-lg px-6 pt-12 pb-8 text-center">
-        <div class="inline-flex items-center space-x-2 bg-slate-900 border border-slate-700 px-3 py-1 rounded-full mb-6">
-            <span class="w-2 h-2 bg-red-500 rounded-full live-dot"></span>
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-300">Live Match Engine</span>
-        </div>
-        <h1 class="text-4xl font-black tracking-tighter mb-2 italic uppercase">Sea Diary<br><span class="text-amber-500">Match Pro</span></h1>
-        <p class="text-slate-400 text-sm font-medium px-4">Professional shore match scoring and real-time leaderboards.</p>
+<body class="min-h-screen flex flex-col items-center pb-12">
+
+    <div class="w-full max-w-lg px-8 pt-16 pb-8 text-center">
+        <h1 class="text-5xl font-black tracking-tighter italic uppercase leading-none">
+            SEA DIARY<br>
+            <span class="gold-text uppercase">MATCH PRO</span>
+        </h1>
     </div>
 
-    <div class="w-full max-w-sm px-6">
-        <div class="glass rounded-3xl p-8 text-center amber-glow">
-            <div class="w-20 h-20 bg-amber-500 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-2xl rotate-3">
-                <i class="fa-solid fa-stopwatch text-slate-900 text-4xl"></i>
+    <div class="w-full max-w-lg px-6 grid grid-cols-1 gap-4 mb-12">
+        
+        <div class="feature-card rounded-3xl p-6 flex items-start space-x-5">
+            <div class="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center flex-none">
+                <i class="fa-solid fa-broadcast-tower text-amber-500 text-xl"></i>
             </div>
-            <div id="setup-content"><p class="text-slate-300 animate-pulse">Detecting device...</p></div>
-            <a href="app.html" class="inline-block mt-8 text-slate-500 text-[10px] font-black uppercase tracking-widest border-b border-slate-800 pb-1 active:text-white">Launch Web Version <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+            <div>
+                <h3 class="font-bold text-lg text-slate-100">Match Day "Radio" Feed</h3>
+                <p class="text-xs text-slate-400 leading-relaxed mt-1">See every catch logged across the whole beach as it happens on your screen. Stay connected to the action.</p>
+            </div>
+        </div>
+
+        <div class="feature-card rounded-3xl p-6 flex items-start space-x-5">
+            <div class="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center flex-none">
+                <i class="fa-solid fa-trophy text-blue-500 text-xl"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-lg text-slate-100">Live "Scales" Tally</h3>
+                <p class="text-xs text-slate-400 leading-relaxed mt-1">Know your exact position instantly. The leaderboard updates real-time, showing the Top 3 and "Biggest Fish" standings.</p>
+            </div>
+        </div>
+
+        <div class="feature-card rounded-3xl p-6 flex items-start space-x-5">
+            <div class="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center flex-none">
+                <i class="fa-solid fa-wifi-slash text-emerald-500 text-xl"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-lg text-slate-100">Works Without Signal</h3>
+                <p class="text-xs text-slate-400 leading-relaxed mt-1">Specifically built for remote shores. If you lose connection, your catches are saved and synced when signal returns.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="w-full max-w-xs space-y-5 px-6">
+        <p class="text-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6">Install App to Participate</p>
+        
+        <button onclick="showModal('apple')" class="btn-ios w-full bg-black border rounded-2xl px-5 py-4 flex items-center space-x-4 active:scale-95 transition-transform shadow-xl">
+            <i class="fa-solid fa-mobile-screen-button text-4xl text-blue-400 flex-none"></i>
+            <div class="text-left">
+                <p class="text-[11px] text-blue-300 font-extrabold uppercase tracking-widest leading-none">For iPhone</p>
+                <p class="text-xl text-white font-semibold leading-tight mt-1">Install Match App</p>
+            </div>
+        </button>
+
+        <button onclick="showModal('google')" class="btn-android w-full bg-black border rounded-2xl px-5 py-4 flex items-center space-x-4 active:scale-95 transition-transform shadow-xl">
+            <i class="fa-solid fa-mobile-button text-4xl text-emerald-400 flex-none"></i>
+            <div class="text-left pl-1">
+                <p class="text-[11px] text-emerald-300 font-extrabold uppercase tracking-widest leading-none">For Android</p>
+                <p class="text-xl text-white font-semibold leading-tight mt-1">Install Match App</p>
+            </div>
+        </button>
+
+        <div class="pt-8 text-center">
+            <a href="app.html" class="text-slate-600 text-[10px] font-black uppercase tracking-widest border-b border-slate-900 pb-1 hover:text-white transition">Or open web console <i class="fa-solid fa-arrow-right ml-1"></i></a>
         </div>
     </div>
 
-    <div class="w-full max-w-lg px-8 py-12 grid grid-cols-1 gap-6">
-        <div class="flex items-start space-x-4">
-            <div class="w-12 h-12 bg-blue-600/20 rounded-xl flex items-center justify-center flex-none"><i class="fa-solid fa-tower-broadcast text-blue-500"></i></div>
-            <div><h3 class="font-bold text-slate-100">Live Ticker Feed</h3><p class="text-xs text-slate-500">Real-time broadcast of every catch logged across the venue.</p></div>
-        </div>
-        <div class="flex items-start space-x-4">
-            <div class="w-12 h-12 bg-amber-600/20 rounded-xl flex items-center justify-center flex-none"><i class="fa-solid fa-trophy text-amber-500"></i></div>
-            <div><h3 class="font-bold text-slate-100">Instant Leaderboards</h3><p class="text-xs text-slate-500">Track your position and biggest fish live on your phone.</p></div>
+    <div id="modal-apple" class="modal" onclick="closeModal()">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-sm p-9 text-slate-900 shadow-2xl relative" onclick="event.stopPropagation()">
+            <h2 class="text-2xl font-black mb-6 tracking-tight text-blue-600">iPhone Setup</h2>
+            <div class="space-y-6">
+                <div class="flex items-center space-x-4">
+                    <div class="w-9 h-9 bg-slate-100 text-blue-600 border border-slate-200 rounded-full flex items-center justify-center font-black">1</div>
+                    <p class="font-bold">Tap the <i class="fa-solid fa-arrow-up-from-bracket text-blue-600 text-lg mx-1"></i> (Share Icon) at the bottom.</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-9 h-9 bg-slate-100 text-blue-600 border border-slate-200 rounded-full flex items-center justify-center font-black">2</div>
+                    <p class="font-bold">Select 'Add to Home Screen'.</p>
+                </div>
+            </div>
+
+            <a href="https://www.youtube.com/watch?v=lKbsY8hLVaw" target="_blank" class="w-full mt-10 bg-black text-white px-6 py-4 rounded-xl flex items-center justify-center space-x-3 active:scale-95 transition">
+                <i class="fa-solid fa-circle-play text-amber-500 text-xl"></i>
+                <span class="text-sm font-bold uppercase tracking-widest">Watch Help Video (15s)</span>
+            </a>
+
+            <button onclick="closeModal()" class="w-full mt-5 bg-slate-100 text-slate-500 font-bold py-3 rounded-xl text-xs uppercase tracking-widest hover:bg-slate-200">Close</button>
         </div>
     </div>
 
-    <div class="mt-auto py-10 text-center opacity-30"><p class="text-[9px] font-black uppercase tracking-[0.5em]">Kilsyth • Gold Master Edition</p></div>
+    <div id="modal-google" class="modal" onclick="closeModal()">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-sm p-9 text-slate-900 shadow-2xl relative" onclick="event.stopPropagation()">
+            <h2 class="text-2xl font-black mb-6 tracking-tight text-emerald-600">Android Setup</h2>
+            <div class="space-y-6">
+                <div class="flex items-center space-x-4">
+                    <div class="w-9 h-9 bg-slate-100 text-emerald-600 border border-slate-200 rounded-full flex items-center justify-center font-black">1</div>
+                    <p class="font-bold">Tap the <i class="fa-solid fa-ellipsis-vertical mx-1"></i> (Three Dots) in your corner.</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-9 h-9 bg-slate-100 text-emerald-600 border border-slate-200 rounded-full flex items-center justify-center font-black">2</div>
+                    <p class="font-bold">Tap 'Install App' or 'Add to Phone'.</p>
+                </div>
+            </div>
+            <p class="mt-6 text-[11px] text-slate-400 italic">Samsung users: This is often located in your bottom menu.</p>
+
+            <a href="https://www.youtube.com/watch?v=DFHm9IZb-LQ" target="_blank" class="w-full mt-10 bg-black text-white px-6 py-4 rounded-xl flex items-center justify-center space-x-3 active:scale-95 transition">
+                <i class="fa-solid fa-circle-play text-amber-500 text-xl"></i>
+                <span class="text-sm font-bold uppercase tracking-widest">Watch Help Video (15s)</span>
+            </a>
+
+            <button onclick="closeModal()" class="w-full mt-5 bg-slate-100 text-slate-500 font-bold py-3 rounded-xl text-xs uppercase tracking-widest hover:bg-slate-200">Close</button>
+        </div>
+    </div>
 
     <script>
-        const setupBox = document.getElementById('setup-content');
-        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) { window.location.href = 'app.html'; }
-        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-            setupBox.innerHTML = `<h2 class="text-xl font-black mb-3">Install on iPhone</h2><div class="space-y-4 text-left bg-slate-900/50 p-4 rounded-xl border border-slate-800 text-sm"><div class="flex items-center space-x-3"><span>1. Tap <b>Share</b> <i class="fa-solid fa-arrow-up-from-bracket text-blue-400 mx-1"></i></span></div><div class="flex items-center space-x-3"><span>2. Tap <b>'Add to Home Screen'</b>.</span></div></div>`;
-        } else if (/android/i.test(userAgent)) {
-            setupBox.innerHTML = `<h2 class="text-xl font-black mb-3">Ready to Install</h2><button id="installBtn" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl shadow-xl uppercase tracking-widest active:scale-95 transition">Install App</button>`;
-            let deferredPrompt; window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('installBtn').addEventListener('click', () => { deferredPrompt.prompt(); }); });
-        } else {
-            setupBox.innerHTML = `<h2 class="text-xl font-black mb-2">Mobile Match App</h2><p class="text-slate-400 text-xs">Scan the match QR code on your phone to install.</p>`;
+        function showModal(type) {
+            document.getElementById('modal-' + type).classList.add('active');
+        }
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+        }
+        // Auto-redirect if already installed
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            window.location.href = 'app.html';
         }
     </script>
 </body>
