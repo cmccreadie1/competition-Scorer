@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sea-diary-v1.0.6';
+const CACHE_NAME = 'sea-diary-v1.0.8';
 const ASSETS = [
   '/competition-Scorer/',
   '/competition-Scorer/index.html',
