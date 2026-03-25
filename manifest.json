@@ -1,10 +1,12 @@
 {
   "name": "Sea Diary: Match Edition Pro",
   "short_name": "Sea Diary",
-  "start_url": "/competition-Scorer/app.html",
+  "description": "Professional Sea Angling Match Scorer & Species Tracker",
+  "start_url": "/competition-Scorer/index.html",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#020617",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icon-512.jpg",
