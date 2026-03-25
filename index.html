@@ -3,16 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Sea Diary Pro | Sea Angling Match Scorer</title>
+    <title>Live Sea Score | Friendly Match Scorer</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#020617">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: white; margin: 0; padding: 0; overflow-x: hidden; }
-        .glass { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
-        .btn-glow { box-shadow: 0 0 20px rgba(37, 99, 235, 0.4); }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #020617; 
+            color: white; 
+            margin: 0; 
+            padding: 0; 
+            overflow-x: hidden; 
+        }
+        .glass { 
+            background: rgba(30, 41, 59, 0.6); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255,255,255,0.08); 
+        }
+        
+        /* Custom pulsing for Apple button to differentiate from Android */
+        @keyframes pulse-silver {
+            0%, 100% { box-shadow: 0 0 15px rgba(148, 163, 184, 0.2); border-color: rgba(148, 163, 184, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(148, 163, 184, 0.5); border-color: rgba(148, 163, 184, 0.8); }
+        }
+        .animate-pulse-silver {
+            animation: pulse-silver 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Smooth dropdown for Apple instructions */
+        .ios-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            opacity: 0;
+        }
+        .ios-dropdown.open {
+            max-height: 200px;
+            opacity: 1;
+        }
     </style>
     <script>
         // Redirect if already launched as an app
@@ -23,33 +54,71 @@
 </head>
 <body class="min-h-screen flex flex-col items-center p-6 pb-12">
 
-    <header class="text-center mt-8 mb-10">
+    <header class="text-center mt-8 mb-10 w-full max-w-sm">
         <div class="relative inline-block">
-            <img src="icon-512.png" alt="Logo" class="w-36 h-36 mx-auto rounded-[2.5rem] shadow-2xl border-2 border-blue-500/20 mb-6">
+            <img src="icon-512.png" alt="Live Sea Score Logo" class="w-36 h-36 mx-auto rounded-[2.5rem] shadow-2xl border-2 border-blue-500/20 mb-6">
             <div class="absolute -bottom-2 -right-2 bg-blue-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Pro</div>
         </div>
-        <h1 class="text-4xl font-black tracking-tighter uppercase italic leading-none">Match Edition</h1>
-        <p class="text-blue-500 font-bold text-xs tracking-[0.3em] uppercase mt-2">Scottish Species Scorer</p>
+        <h1 class="text-4xl font-black tracking-tighter uppercase italic leading-none">Live Sea Score</h1>
+        <p class="text-blue-500 font-bold text-xs tracking-[0.3em] uppercase mt-3">Friendly Match Engine</p>
     </header>
 
     <div class="w-full max-w-sm space-y-4">
-        <a href="app.html" class="block w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-center py-5 rounded-2xl shadow-xl transition-all active:scale-95 text-lg uppercase tracking-widest btn-glow">
-            Launch Scorecard <i class="fa-solid fa-circle-play ml-2"></i>
-        </a>
-        <button id="installBtn" class="hidden w-full glass text-amber-400 font-black py-4 rounded-2xl text-sm uppercase tracking-[0.2em] border border-amber-500/30 animate-pulse">
-            <i class="fa-solid fa-download mr-2"></i> Install App Now
+        
+        <button id="installBtnAndroid" class="hidden w-full glass text-amber-400 font-black py-4 rounded-2xl text-[13px] uppercase tracking-[0.1em] border border-amber-500/30 animate-pulse">
+            <i class="fa-brands fa-android text-lg mr-2"></i> Android: Install App
         </button>
+
+        <button id="installBtnApple" onclick="toggleAppleInstructions()" class="hidden w-full bg-slate-800 text-slate-200 font-black py-4 rounded-2xl text-[13px] uppercase tracking-[0.1em] border border-slate-400/30 animate-pulse-silver">
+            <i class="fa-brands fa-apple text-lg mr-2"></i> Apple iOS: Install Guide
+        </button>
+
+        <div id="appleInstructions" class="ios-dropdown w-full glass rounded-[1.5rem] px-6">
+            <div class="py-5">
+                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-center text-slate-400 mb-4">Manual iOS Installation</p>
+                <div class="text-xs leading-relaxed space-y-4 text-center px-2">
+                    <p class="text-slate-300 font-bold">You must be using the Safari Browser.</p>
+                    <div class="flex justify-center items-center gap-6 py-2">
+                        <div class="flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-share-from-square text-blue-400 text-2xl"></i>
+                            <span class="text-[9px] uppercase font-bold text-slate-500">1. Share</span>
+                        </div>
+                        <div class="text-slate-600 font-bold">▶</div>
+                        <div class="flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-square-plus text-slate-200 text-2xl"></i>
+                            <span class="text-[9px] uppercase font-bold text-slate-500">2. Add to Home</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-4">
+            <a href="app.html" class="block w-full bg-slate-900 border border-slate-800 text-slate-500 font-bold text-center py-4 rounded-2xl transition-all active:scale-95 text-[10px] uppercase tracking-[0.2em]">
+                Continue in Web Browser <i class="fa-solid fa-arrow-right ml-1"></i>
+            </a>
+        </div>
     </div>
 
     <div class="w-full max-w-sm mt-12 space-y-6">
-        <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] border-b border-slate-800 pb-3 ml-1">Tournament Engine</h3>
+        <h3 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.5em] border-b border-slate-800 pb-3 ml-1">App Features</h3>
+        
         <div class="flex items-start gap-4 p-2">
             <div class="bg-blue-600/10 p-3 rounded-2xl border border-blue-500/20"><i class="fa-solid fa-bolt-lightning text-blue-400 text-xl"></i></div>
             <div>
-                <h4 class="font-black text-sm uppercase tracking-tight">Sky Sports Ticker</h4>
-                <p class="text-xs text-slate-400 leading-relaxed mt-1">Real-time catch alerts with professional "Goal Style" animations for every angler.</p>
+                <h4 class="font-black text-sm uppercase tracking-tight">Sky Sports style Ticker</h4>
+                <p class="text-xs text-slate-400 leading-relaxed mt-1">Real-time catch alerts with professional broadcast animations for every angler.</p>
             </div>
         </div>
+
+        <div class="flex items-start gap-4 p-2">
+            <div class="bg-green-600/10 p-3 rounded-2xl border border-green-500/20"><i class="fa-solid fa-list-ol text-green-400 text-xl"></i></div>
+            <div>
+                <h4 class="font-black text-sm uppercase tracking-tight">Live Leaderboard</h4>
+                <p class="text-xs text-slate-400 leading-relaxed mt-1">Updates on the fly, keeping every angler updated of the score second by second. Perfect for a casual group of mates having a friendly competition on the beach. <span class="italic opacity-70">(Not intended for formal, sanctioned match verification).</span></p>
+            </div>
+        </div>
+
         <div class="flex items-start gap-4 p-2">
             <div class="bg-amber-600/10 p-3 rounded-2xl border border-amber-500/20"><i class="fa-solid fa-fish text-amber-400 text-xl"></i></div>
             <div>
@@ -59,63 +128,51 @@
         </div>
     </div>
 
-    <div id="instructions" class="mt-12 w-full max-w-sm">
-        <div class="glass p-6 rounded-[2rem] space-y-4">
-            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-center text-slate-500">Device Guide</p>
-            <div id="ios-info" class="hidden text-xs leading-relaxed space-y-4 text-center px-2">
-                <p class="text-slate-300">Apple users must install via Safari:</p>
-                <div class="flex justify-center items-center gap-6 py-2">
-                    <div class="flex flex-col items-center gap-2">
-                        <i class="fa-solid fa-share-from-square text-blue-400 text-2xl"></i>
-                        <span class="text-[9px] uppercase font-bold text-slate-500">1. Share</span>
-                    </div>
-                    <div class="text-slate-700 font-bold">▶</div>
-                    <div class="flex flex-col items-center gap-2">
-                        <i class="fa-solid fa-square-plus text-blue-400 text-2xl"></i>
-                        <span class="text-[9px] uppercase font-bold text-slate-500">2. Add to Home</span>
-                    </div>
-                </div>
-            </div>
-            <div id="android-info" class="hidden text-xs leading-relaxed space-y-3 text-center">
-                <p class="text-slate-300 italic">If the "Install" button doesn't appear above:</p>
-                <p class="font-bold">Tap the Chrome Menu <i class="fa-solid fa-ellipsis-vertical mx-1"></i> and select <span class="text-amber-400">"Install App"</span>.</p>
-            </div>
-        </div>
-    </div>
-
-    <footer class="mt-12 text-center">
-        <p class="text-[9px] font-black text-slate-600 uppercase tracking-[0.6em]">Sea Diary Match Pro • V5.2.6</p>
-        <p class="text-[8px] text-slate-700 uppercase tracking-widest mt-2">© 2026 Kilsyth Match Labs</p>
+    <footer class="mt-14 mb-4 text-center">
+        <p class="text-[9px] text-slate-700 uppercase tracking-[0.3em] font-bold">© 2026 Kilsyth Match Labs</p>
     </footer>
 
     <script>
-        let deferredPrompt;
-        const installBtn = document.getElementById('installBtn');
-        const iosInfo = document.getElementById('ios-info');
-        const androidInfo = document.getElementById('android-info');
-
+        // OS Detection Logic
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIOS) iosInfo.classList.remove('hidden');
-        else androidInfo.classList.remove('hidden');
+        const installBtnApple = document.getElementById('installBtnApple');
+        const installBtnAndroid = document.getElementById('installBtnAndroid');
 
+        if (isIOS) {
+            installBtnApple.classList.remove('hidden');
+        } else {
+            installBtnAndroid.classList.remove('hidden');
+        }
+
+        // Toggle Apple Instructions Dropdown
+        function toggleAppleInstructions() {
+            const dropdown = document.getElementById('appleInstructions');
+            dropdown.classList.toggle('open');
+        }
+
+        // PWA Android Install Logic
+        let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            installBtn.classList.remove('hidden');
         });
 
-        installBtn.addEventListener('click', async () => {
+        installBtnAndroid.addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
                 deferredPrompt = null;
-                installBtn.classList.add('hidden');
+            } else {
+                alert("Chrome is verifying the App. Please wait a few seconds and try again.");
             }
         });
 
+        // Register Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js');
+                navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log("Service Worker Registered."))
+                .catch(err => console.log("Service Worker Failed:", err));
             });
         }
     </script>
