@@ -1,15 +1,14 @@
-const CACHE_NAME = 'sea-diary-v1.0.5';
+const CACHE_NAME = 'sea-diary-v1.0.6';
 const ASSETS = [
   '/competition-Scorer/',
   '/competition-Scorer/index.html',
   '/competition-Scorer/app.html',
   '/competition-Scorer/manifest.json',
-  '/competition-Scorer/icon-512.jpg',
+  '/competition-Scorer/icon-512.png',
   'https://cdn.tailwindcss.com',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
 ];
 
-// Install Event
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -19,7 +18,6 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate Event (Cleanup old caches)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -30,7 +28,6 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
