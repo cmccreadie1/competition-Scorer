@@ -1,12 +1,13 @@
 {
-  "id": "/competition-Scorer/",
+  "id": "./",
   "name": "Sea Diary: Match Edition Pro",
   "short_name": "Sea Diary",
   "description": "Professional Sea Angling Match Scorer",
-  "start_url": "/competition-Scorer/index.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#020617",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icon-512.png",
