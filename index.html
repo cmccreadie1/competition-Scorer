@@ -5,113 +5,172 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Sea Diary Pro | Sea Angling Match Scorer</title>
     <link rel="manifest" href="/competition-Scorer/manifest.json">
+    <meta name="theme-color" content="#020617">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: white; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #020617; 
+            color: white; 
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .glass { 
+            background: rgba(30, 41, 59, 0.6); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255,255,255,0.08); 
+        }
+        .btn-glow {
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+        }
     </style>
     <script>
-        // SMART REDIRECT: If already installed and launched from icon, go straight to app.
+        // SMART REDIRECT
+        // If the user has already installed the app and opens it from the home screen,
+        // we skip the landing page and go straight to the scorecard.
         if (window.matchMedia('(display-mode: standalone)').matches) {
             window.location.href = 'app.html';
         }
     </script>
 </head>
-<body class="min-h-screen flex flex-col items-center p-6">
+<body class="min-h-screen flex flex-col items-center p-6 pb-12">
 
-    <header class="text-center mt-10 mb-8">
-        <img src="icon-512.jpg" alt="Logo" class="w-32 h-32 mx-auto rounded-3xl shadow-2xl border-2 border-blue-500/30 mb-4">
-        <h1 class="text-3xl font-black tracking-tighter uppercase italic">Match Edition <span class="text-blue-500">Pro</span></h1>
-        <p class="text-slate-400 text-sm font-bold tracking-widest uppercase mt-1">Official Scottish Species Scorer</p>
+    <header class="text-center mt-8 mb-10">
+        <div class="relative inline-block">
+            <img src="icon-512.png" alt="Sea Diary Logo" class="w-36 h-36 mx-auto rounded-[2.5rem] shadow-2xl border-2 border-blue-500/20 mb-6">
+            <div class="absolute -bottom-2 -right-2 bg-blue-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Pro</div>
+        </div>
+        <h1 class="text-4xl font-black tracking-tighter uppercase italic leading-none">Match Edition</h1>
+        <p class="text-blue-500 font-bold text-xs tracking-[0.3em] uppercase mt-2">Scottish Species Scorer</p>
     </header>
 
     <div class="w-full max-w-sm space-y-4">
-        <a href="app.html" class="block w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-center py-5 rounded-2xl shadow-xl transition-all active:scale-95 text-lg uppercase tracking-widest">
+        <a href="app.html" class="block w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-center py-5 rounded-2xl shadow-xl transition-all active:scale-95 text-lg uppercase tracking-widest btn-glow">
             Launch Scorecard <i class="fa-solid fa-circle-play ml-2"></i>
         </a>
         
-        <button id="installBtn" class="hidden w-full glass text-amber font-black py-4 rounded-2xl text-sm uppercase tracking-[0.2em] animate-pulse">
-            <i class="fa-solid fa-download mr-2"></i> Install to Home Screen
+        <button id="installBtn" class="hidden w-full glass text-amber-400 font-black py-4 rounded-2xl text-sm uppercase tracking-[0.2em] border border-amber-500/30 animate-pulse">
+            <i class="fa-solid fa-download mr-2"></i> Install App Now
         </button>
     </div>
 
     <div class="w-full max-w-sm mt-12 space-y-6">
-        <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] border-b border-slate-800 pb-2">Pro Features</h3>
+        <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.5em] border-b border-slate-800 pb-3 ml-1">Tournament Engine</h3>
         
-        <div class="flex items-start gap-4">
-            <div class="bg-blue-500/10 p-3 rounded-xl"><i class="fa-solid fa-tower-broadcast text-blue-400"></i></div>
+        <div class="flex items-start gap-4 p-2">
+            <div class="bg-blue-600/10 p-3 rounded-2xl border border-blue-500/20"><i class="fa-solid fa-bolt-lightning text-blue-400 text-xl"></i></div>
             <div>
-                <h4 class="font-bold text-sm">Sky Sports Live Ticker</h4>
-                <p class="text-xs text-slate-400 leading-relaxed">Real-time catch updates with professional broadcast animations.</p>
+                <h4 class="font-black text-sm uppercase tracking-tight">Sky Sports Ticker</h4>
+                <p class="text-xs text-slate-400 leading-relaxed mt-1">Real-time catch alerts with professional "Goal Style" animations for every angler.</p>
             </div>
         </div>
 
-        <div class="flex items-start gap-4">
-            <div class="bg-amber-500/10 p-3 rounded-xl"><i class="fa-solid fa-fish-fins text-amber-400"></i></div>
+        <div class="flex items-start gap-4 p-2">
+            <div class="bg-amber-600/10 p-3 rounded-2xl border border-amber-500/20"><i class="fa-solid fa-fish text-amber-400 text-xl"></i></div>
             <div>
-                <h4 class="font-bold text-sm">70+ Scottish Species</h4>
-                <p class="text-xs text-slate-400 leading-relaxed">Smart-categorized lists including Minis, Wrasse, and Sharks.</p>
+                <h4 class="font-black text-sm uppercase tracking-tight">70+ Local Species</h4>
+                <p class="text-xs text-slate-400 leading-relaxed mt-1">Full Scottish target list including categorized Rounds, Flats, Sharks, and Mini species.</p>
             </div>
         </div>
 
-        <div class="flex items-start gap-4">
-            <div class="bg-green-500/10 p-3 rounded-xl"><i class="fa-solid fa-trophy text-green-400"></i></div>
+        <div class="flex items-start gap-4 p-2">
+            <div class="bg-green-600/10 p-3 rounded-2xl border border-green-500/20"><i class="fa-solid fa-tower-broadcast text-green-400 text-xl"></i></div>
             <div>
-                <h4 class="font-bold text-sm">Multi-Format Scoring</h4>
-                <p class="text-xs text-slate-400 leading-relaxed">Supports Length, Points, Weight, and Species Hunt rules.</p>
+                <h4 class="font-black text-sm uppercase tracking-tight">Steward Sync</h4>
+                <p class="text-xs text-slate-400 leading-relaxed mt-1">Real-time Firebase leaderboards. Host matches with custom durations and automated grace periods.</p>
             </div>
         </div>
     </div>
 
-    <div id="instructions" class="mt-auto pt-10 w-full max-w-sm">
-        <div class="glass p-6 rounded-3xl space-y-4">
-            <p class="text-[10px] font-black uppercase tracking-widest text-center text-slate-400">Installation Guide</p>
+    <div id="instructions" class="mt-12 w-full max-w-sm">
+        <div class="glass p-6 rounded-[2rem] space-y-4">
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-center text-slate-500">Device Guide</p>
             
-            <div id="ios-info" class="hidden text-xs leading-relaxed space-y-2">
-                <p>1. Tap the <i class="fa-solid fa-share-from-square text-blue-400"></i> **Share** icon in Safari.</p>
-                <p>2. Scroll down and tap **'Add to Home Screen'**.</p>
+            <div id="ios-info" class="hidden text-xs leading-relaxed space-y-4 text-center px-2">
+                <p class="text-slate-300">Apple users must install via Safari:</p>
+                <div class="flex justify-center items-center gap-6 py-2">
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fa-solid fa-share-from-square text-blue-400 text-2xl"></i>
+                        <span class="text-[9px] uppercase font-bold text-slate-500">1. Share</span>
+                    </div>
+                    <div class="text-slate-700 font-bold">▶</div>
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="fa-solid fa-square-plus text-blue-400 text-2xl"></i>
+                        <span class="text-[9px] uppercase font-bold text-slate-500">2. Add to Home</span>
+                    </div>
+                </div>
             </div>
 
-            <div id="android-info" class="hidden text-xs leading-relaxed space-y-2">
-                <p>1. Tap the <i class="fa-solid fa-ellipsis-vertical text-slate-400"></i> **Menu** in Chrome.</p>
-                <p>2. Tap **'Install App'** or **'Add to Home Screen'**.</p>
+            <div id="android-info" class="hidden text-xs leading-relaxed space-y-3 text-center">
+                <p class="text-slate-300 italic">If the "Install" button doesn't appear above:</p>
+                <p class="font-bold">Tap the Chrome Menu <i class="fa-solid fa-ellipsis-vertical mx-1"></i> and select <span class="text-amber-400">"Install App"</span>.</p>
             </div>
         </div>
     </div>
+
+    <footer class="mt-12 text-center">
+        <p class="text-[9px] font-black text-slate-600 uppercase tracking-[0.6em]">Sea Diary Match Pro • V5.2.6</p>
+        <p class="text-[8px] text-slate-700 uppercase tracking-widest mt-2">© 2026 Kilsyth Match Labs</p>
+    </footer>
 
     <script>
-        // PWA Install Logic
         let deferredPrompt;
         const installBtn = document.getElementById('installBtn');
         const iosInfo = document.getElementById('ios-info');
         const androidInfo = document.getElementById('android-info');
 
-        // Detect OS
+        // Detect OS for instructions
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIOS) iosInfo.classList.remove('hidden');
-        else androidInfo.classList.remove('hidden');
+        if (isIOS) {
+            iosInfo.classList.remove('hidden');
+        } else {
+            androidInfo.classList.remove('hidden');
+        }
 
+        // PWA INSTALL LOGIC (The Secret Handshake)
         window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome from showing the tiny default bar
             e.preventDefault();
+            // Stash the event so we can trigger it later
             deferredPrompt = e;
+            // Update UI to show our nice button
             installBtn.classList.remove('hidden');
+            console.log("✅ PWA: Installation criteria met. Button activated.");
         });
 
         installBtn.addEventListener('click', async () => {
             if (deferredPrompt) {
+                // Show the official prompt
                 deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
                 const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to install: ${outcome}`);
+                // Clear the deferredPrompt variable
                 deferredPrompt = null;
+                // Hide the button
                 installBtn.classList.add('hidden');
+            } else {
+                alert("The App is still preparing. Please wait 10 seconds and try again.");
             }
         });
 
-        // Register Service Worker
+        // REGISTER SERVICE WORKER
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js');
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log("✅ PWA: Service Worker Registered."))
+                .catch(err => console.log("❌ PWA: Service Worker Failed:", err));
+            });
         }
+
+        // Listen for successful install
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('✅ PWA: Application installed successfully.');
+            installBtn.classList.add('hidden');
+        });
     </script>
 </body>
 </html>
