@@ -57,6 +57,16 @@
             animation-play-state: paused;
         }
 
+        /* SKY SPORTS FLASH ANIMATIONS */
+        @keyframes sky-flash-overlay {
+            0%, 28% { opacity: 1; z-index: 20; } /* 1 second of 3.5s */
+            29%, 100% { opacity: 0; z-index: 0; } /* 2.5 seconds hidden */
+        }
+        @keyframes sky-detail-reveal {
+            0%, 28% { opacity: 0; }
+            29%, 100% { opacity: 1; }
+        }
+
         /* GREEN TICK SUCCESS OVERLAY */
         #successOverlay {
             position: fixed;
@@ -970,7 +980,7 @@
             setTimeout(() => { toast.classList.remove('show'); }, 8000);
         }
 
-        // --- BUTTER-SMOOTH CLONE-BLOCK TICKER ---
+        // --- BUTTER-SMOOTH SKY SPORTS TICKER ---
         function renderTicker() {
             if(!globalMatchData || !globalMatchData.anglers) { renderPlaceholderTicker(); return; }
             let allCatches = [];
@@ -984,6 +994,7 @@
                 }
             });
             if (allCatches.length === 0) { renderPlaceholderTicker(); return; }
+            
             let firstNameCounts = {};
             allAnglerNames.forEach(name => {
                 let first = name.split(' ')[0].toLowerCase();
@@ -997,26 +1008,42 @@
                 }
                 return first;
             }
+
             allCatches.sort((a,b) => parseInt(b.id) - parseInt(a.id)); 
             let top10 = allCatches.slice(0, 10);
             let htmlBlock = '';
+            
             top10.forEach((c, index) => {
                 let isNewest = (index === 0);
-                let dot = isNewest ? `<i class="fa-solid fa-circle text-red-500 animate-pulse text-[6px] mr-1.5"></i>` : `<i class="fa-solid fa-caret-right text-slate-600 text-[8px] mr-1"></i>`;
-                let timeColor = isNewest ? 'text-amber' : 'text-slate-400';
-                let nameColor = isNewest ? 'text-amber' : 'text-slate-300';
-                let catchColor = isNewest ? 'text-white' : 'text-slate-200';
+                let dot = `<i class="fa-solid fa-circle text-red-500 animate-pulse text-[6px] mr-1.5"></i>`;
                 let catchDisplay = `${c.species} (${c.display || c.size})`;
                 let displayName = getSmartName(c.anglerName);
-                htmlBlock += `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
-                            <div class="text-[10px] font-black uppercase tracking-widest ${timeColor} mb-0.5 flex items-center">${dot} ${c.time} • <span class="${nameColor} ml-1">${displayName}</span></div>
-                            <div class="text-sm font-black ${catchColor}">${catchDisplay}</div>
-                         </div>`;
+
+                if (isNewest) {
+                    // THE FLASHING SKY SPORTS ITEM
+                    htmlBlock += `
+                    <div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-[190px] relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center bg-amber animate-[sky-flash-overlay_3.5s_infinite]">
+                            <span class="text-black font-black text-xs uppercase tracking-tighter">New Catch!</span>
+                        </div>
+                        <div class="animate-[sky-detail-reveal_3.5s_infinite] flex flex-col justify-center">
+                            <div class="text-[10px] font-black uppercase tracking-widest text-amber mb-0.5 flex items-center">${dot} ${c.time} • <span class="text-amber ml-1">${displayName}</span></div>
+                            <div class="text-sm font-black text-white truncate">${catchDisplay}</div>
+                        </div>
+                    </div>`;
+                } else {
+                    // STANDARD ITEMS
+                    htmlBlock += `<div class="inline-flex flex-col justify-center px-4 border-r border-slate-700 h-full min-w-max">
+                                <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-0.5 flex items-center"><i class="fa-solid fa-caret-right text-slate-600 text-[8px] mr-1"></i> ${c.time} • <span class="text-slate-300 ml-1">${displayName}</span></div>
+                                <div class="text-sm font-black text-slate-200">${catchDisplay}</div>
+                             </div>`;
+                }
             });
+
             let separator = `<div class="inline-flex flex-col justify-center px-6 border-r border-slate-700 h-full min-w-max text-yellow-500 opacity-90"><i class="fa-solid fa-bolt text-lg"></i></div>`;
             const track = document.getElementById('tickerTrack');
             const fullSet = htmlBlock + separator;
-            track.innerHTML = fullSet + fullSet; // PIXEL PERFECT CLONING
+            track.innerHTML = fullSet + fullSet;
             let duration = top10.length * 2.5; 
             if(duration < 12) duration = 12; 
             track.style.animationDuration = duration + 's';
@@ -1160,13 +1187,11 @@
         function promptCustomSpecies() {
             let name = prompt("Name of Unusual Species:");
             if (name) {
-                let ptsStr = prompt("Points value for this species?", "5");
-                let pts = parseInt(ptsStr) || 5;
                 let grp = document.getElementById('customSpeciesGroup');
                 let opt = document.createElement('option');
-                opt.value = name; opt.innerText = name; opt.dataset.customPoints = pts; opt.selected = true;
+                opt.value = name; opt.innerText = name; opt.selected = true;
                 grp.insertBefore(opt, grp.lastElementChild); 
-                if (state.format !== 'speciesHunt') focusMeasurement(); else document.getElementById('btnRecord').focus();
+                focusMeasurement(); // AUTO-FOCUS MAIN INPUT BOX
             } else { document.getElementById('inputSpecies').value = ""; }
         }
 
@@ -1221,12 +1246,6 @@
             else { finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = finalSize.toString(); pts = finalSize; if (state.format === 'length10') pts = finalSize + 10; }
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
             
-            // Check for custom point values
-            let selectedOpt = selectEl.options[selectEl.selectedIndex];
-            if(selectedOpt && selectedOpt.dataset.customPoints) {
-                pts = parseInt(selectedOpt.dataset.customPoints);
-            }
-
             if (state.format === 'speciesHunt') { 
                 let existing = state.myCatches.filter(x => x.species === species && x.id !== state.editingId).length; 
                 pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; 
