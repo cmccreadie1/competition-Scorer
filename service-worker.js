@@ -1,32 +1,21 @@
-const CACHE_NAME = 'sea-diary-v1.0.8';
-const ASSETS = [
-  '/competition-Scorer/',
-  '/competition-Scorer/index.html',
-  '/competition-Scorer/app.html',
-  '/competition-Scorer/manifest.json',
-  '/competition-Scorer/icon-512.png'
-];
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
-  );
-  self.skipWaiting();
+window.addEventListener('beforeinstallprompt', (e) => {
+    // This event ONLY fires if the manifest and service worker are 100% correct
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.classList.remove('hidden'); // Show your custom "Install Now" button
+    console.log("PWA Install criteria met! Button is now visible.");
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      );
-    })
-  );
-  return self.clients.claim();
-});
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => response || fetch(event.request))
-  );
+installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        installBtn.classList.add('hidden');
+    } else {
+        alert("Chrome hasn't verified the App yet. Try refreshing and wait 10 seconds.");
+    }
 });
