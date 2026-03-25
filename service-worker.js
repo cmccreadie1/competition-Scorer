@@ -4,16 +4,12 @@ const ASSETS = [
   '/competition-Scorer/index.html',
   '/competition-Scorer/app.html',
   '/competition-Scorer/manifest.json',
-  '/competition-Scorer/icon-512.png',
-  'https://cdn.tailwindcss.com',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
+  '/competition-Scorer/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
   self.skipWaiting();
 });
@@ -26,12 +22,11 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  return self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request).then((response) => response || fetch(event.request))
   );
 });
