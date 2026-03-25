@@ -1,4 +1,5 @@
 {
+  "id": "/competition-Scorer/",
   "name": "Sea Diary: Match Edition Pro",
   "short_name": "Sea Diary",
   "description": "Professional Sea Angling Match Scorer",
@@ -9,7 +10,7 @@
   "icons": [
     {
       "src": "icon-512.png",
-      "sizes": "192x192",
+      "sizes": "192x192 512x512",
       "type": "image/png",
       "purpose": "any"
     },
