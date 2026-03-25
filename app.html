@@ -708,7 +708,7 @@
                 <i class="fa-solid fa-arrow-left mr-2 animate-pulse"></i> RETURN TO SCORECARD
             </button>
             <div class="flex-none p-3 bg-slate-900 flex justify-center items-center border-b border-slate-800 shadow-sm text-center">
-                <h2 class="font-bold text-sm tracking-widest text-slate-100 uppercase">Live Leader Board</h2>
+                <h2 class="font-bold text-sm tracking-widest text-slate-100 uppercase flex justify-center items-center">Live Leader Board <span id="leaderboardPinDisplay" class="ml-3 text-[10px] text-amber border border-amber/30 bg-slate-800 px-2 py-1 rounded-md">PIN: ----</span></h2>
             </div>
             <div class="flex-none bg-amber text-slate-900 py-3 px-4 border-b-4 border-yellow-600 shadow-md flex flex-col items-center justify-center text-center" id="bountyContainer">
                 <span class="text-[10px] font-black uppercase tracking-widest mb-1 opacity-80">👑 Match Biggest Fish</span>
@@ -719,7 +719,9 @@
 
         <div id="stewardDrawer" class="drawer-left fixed inset-0 w-full bg-[#020617] z-[101] flex flex-col shadow-2xl">
             <button onclick="document.getElementById('stewardDrawer').classList.remove('open')" class="flex-none w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center active:bg-slate-900 border-b border-slate-800 transition text-center"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN</button>
-            <div class="flex-none p-4 bg-slate-950 border-b border-slate-900 text-center shadow-sm text-center"><h2 class="font-black text-lg text-blue-400 uppercase tracking-[0.2em]"><i class="fa-solid fa-user-shield mr-2"></i> Steward Desk</h2></div>
+            <div class="flex-none p-4 bg-slate-950 border-b border-slate-900 text-center shadow-sm flex justify-center items-center">
+                <h2 class="font-black text-lg text-blue-400 uppercase tracking-[0.2em] flex items-center"><i class="fa-solid fa-user-shield mr-2"></i> Steward Desk <span id="stewardPinDisplay" class="ml-3 text-[10px] text-slate-300 border border-slate-700 bg-slate-900 px-2 py-1 rounded-md">PIN: ----</span></h2>
+            </div>
             <div class="scrollable-area p-8 space-y-8 text-center">
                 <hr class="border-slate-800">
                 <button onclick="transferSteward()" class="w-full bg-slate-900 border-2 border-slate-800 text-slate-400 font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:text-amber transition"><i class="fa-solid fa-right-left mr-3 text-amber"></i> Transfer Control</button>
@@ -1199,6 +1201,10 @@
             state.status = 'playing'; navTo('fishing');
             const stewardBtn = document.getElementById('btnStewardPanelContainer');
             if(state.isHost && stewardBtn) { stewardBtn.classList.remove('hidden'); }
+            
+            if (document.getElementById('leaderboardPinDisplay')) document.getElementById('leaderboardPinDisplay').innerText = `PIN: ${state.pin}`;
+            if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
+
             pushMyScoreToCloud();
             const label = document.getElementById('labelSize'), sizeDeck = document.getElementById('deckSizeInputs');
             if (state.format === 'speciesHunt') { if(sizeDeck) sizeDeck.classList.add('hidden'); } else {
@@ -1361,6 +1367,11 @@
                         }
                         if (state.status === 'playing' || state.status === 'grace') { 
                             renderCatchList(); startClock(); updateLiveTally(); 
+                            
+                            // Load the PIN badge into memory on refresh!
+                            if (document.getElementById('leaderboardPinDisplay')) document.getElementById('leaderboardPinDisplay').innerText = `PIN: ${state.pin}`;
+                            if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
+
                             if (state.status === 'grace') { document.getElementById('app-container').classList.add('grace-active'); document.getElementById('mainTimer').classList.add('grace-pulse'); const btnRecord = document.getElementById('btnRecord'); if(btnRecord) { btnRecord.classList.add('grace-btn-pulse'); } } 
                         }
                     }
