@@ -48,7 +48,6 @@
             height: 100%;
             width: max-content;
             animation: ticker-scroll linear infinite;
-            /* GPU KICKSTART */
             backface-visibility: hidden;
             perspective: 1000px;
             will-change: transform;
@@ -463,83 +462,92 @@
                         <select id="inputSpecies" onchange="checkSpeciesSelection()" class="w-full bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-base font-black appearance-none text-white focus:border-blue-500 transition shadow-inner text-center">
                             <option value="" disabled selected>-- Select Fish --</option>
                             <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
-                                <option value="Codling / Cod">Codling / Cod</option>
-                                <option value="Whiting">Whiting</option>
-                                <option value="Mackerel">Mackerel</option>
-                                <option value="Pollack">Pollack</option>
-                                <option value="Coalfish">Coalfish</option>
-                                <option value="Lesser Spotted Dogfish (LSD)">Lesser Spotted Dogfish (LSD)</option>
-                                <option value="Bull Huss">Bull Huss</option>
-                                <option value="Thornback Ray">Thornback Ray</option>
-                                <option value="Conger Eel">Conger Eel</option>
-                                <option value="Flounder">Flounder</option>
-                                <option value="Dab">Dab</option>
-                                <option value="Plaice">Plaice</option>
-                                <option value="Pouting">Pouting</option>
-                            </optgroup>
-                            <optgroup label="FULL SPECIES LIST (A-Z)">
-                                <option value="Baillon's Wrasse">Baillon's Wrasse</option>
                                 <option value="Ballan Wrasse">Ballan Wrasse</option>
                                 <option value="Bass">Bass</option>
-                                <option value="Black Goby">Black Goby</option>
+                                <option value="Bull Huss">Bull Huss</option>
+                                <option value="Coalfish">Coalfish</option>
+                                <option value="Codling / Cod">Codling / Cod</option>
+                                <option value="Conger Eel">Conger Eel</option>
+                                <option value="Dab">Dab</option>
+                                <option value="Dogfish (LSD)">Dogfish (LSD)</option>
+                                <option value="Flounder">Flounder</option>
+                                <option value="Mackerel">Mackerel</option>
+                                <option value="Plaice">Plaice</option>
+                                <option value="Pollack">Pollack</option>
+                                <option value="Pouting">Pouting</option>
+                                <option value="Spurdog">Spurdog</option>
+                                <option value="Thornback Ray">Thornback Ray</option>
+                                <option value="Turbot">Turbot</option>
+                                <option value="Whiting">Whiting</option>
+                            </optgroup>
+                            <optgroup label="ROUNDFISH">
+                                <option value="Blue Whiting">Blue Whiting</option>
+                                <option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option>
+                                <option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option>
+                                <option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option>
+                                <option value="Gurnard (Grey)">Gurnard (Grey)</option>
+                                <option value="Gurnard (Red)">Gurnard (Red)</option>
+                                <option value="Gurnard (Tub)">Gurnard (Tub)</option>
+                                <option value="Haddock">Haddock</option>
+                                <option value="Herring">Herring</option>
+                                <option value="John Dory">John Dory</option>
+                                <option value="Poor Cod">Poor Cod</option>
+                                <option value="Red Mullet">Red Mullet</option>
+                                <option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
+                            </optgroup>
+                            <optgroup label="FLATFISH">
+                                <option value="Brill">Brill</option>
+                                <option value="Dover Sole">Dover Sole</option>
+                                <option value="Halibut">Halibut</option>
+                                <option value="Lemon Sole">Lemon Sole</option>
+                                <option value="Megrim">Megrim</option>
+                            </optgroup>
+                            <optgroup label="RAYS & SHARKS">
                                 <option value="Blackmouth Dogfish">Blackmouth Dogfish</option>
                                 <option value="Blonde Ray">Blonde Ray</option>
                                 <option value="Blue Shark">Blue Shark</option>
-                                <option value="Blue Whiting">Blue Whiting</option>
-                                <option value="Brill">Brill</option>
+                                <option value="Common Skate">Common Skate</option>
+                                <option value="Cuckoo Ray">Cuckoo Ray</option>
+                                <option value="Porbeagle Shark">Porbeagle Shark</option>
+                                <option value="Small-eyed Ray">Small-eyed Ray</option>
+                                <option value="Smooth-hound (Common)">Smooth-hound (Common)</option>
+                                <option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option>
+                                <option value="Spotted Ray">Spotted Ray</option>
+                                <option value="Stingray">Stingray</option>
+                                <option value="Tope">Tope</option>
+                                <option value="Undulate Ray">Undulate Ray</option>
+                            </optgroup>
+                            <optgroup label="WRASSE FAMILY">
+                                <option value="Baillon's Wrasse">Baillon's Wrasse</option>
+                                <option value="Corkwing Wrasse">Corkwing Wrasse</option>
+                                <option value="Cuckoo Wrasse">Cuckoo Wrasse</option>
+                                <option value="Goldsinny Wrasse">Goldsinny Wrasse</option>
+                                <option value="Rock Cook Wrasse">Rock Cook Wrasse</option>
+                            </optgroup>
+                            <optgroup label="MINI SPECIES">
+                                <option value="15-spined Stickleback">15-spined Stickleback</option>
+                                <option value="Black Goby">Black Goby</option>
                                 <option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option>
                                 <option value="Common Goby">Common Goby</option>
-                                <option value="Common Skate">Common Skate</option>
-                                <option value="Common Smooth-hound">Common Smooth-hound</option>
-                                <option value="Corkwing Wrasse">Corkwing Wrasse</option>
-                                <option value="Cuckoo Ray">Cuckoo Ray</option>
-                                <option value="Cuckoo Wrasse">Cuckoo Wrasse</option>
-                                <option value="Dover Sole">Dover Sole</option>
                                 <option value="Dragonet">Dragonet</option>
                                 <option value="Five-bearded Rockling">Five-bearded Rockling</option>
                                 <option value="Four-bearded Rockling">Four-bearded Rockling</option>
-                                <option value="Garfish">Garfish</option>
-                                <option value="Goldsinny Wrasse">Goldsinny Wrasse</option>
-                                <option value="Golden-grey Mullet">Golden-grey Mullet</option>
-                                <option value="Grey Gurnard">Grey Gurnard</option>
-                                <option value="Halibut">Halibut</option>
-                                <option value="Herring">Herring</option>
-                                <option value="John Dory">John Dory</option>
-                                <option value="Lemon Sole">Lemon Sole</option>
                                 <option value="Leopard-spotted Goby">Leopard-spotted Goby</option>
                                 <option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option>
                                 <option value="Lumpsucker">Lumpsucker</option>
-                                <option value="Megrim">Megrim</option>
                                 <option value="Montagu's Blenny">Montagu's Blenny</option>
                                 <option value="Northern Rockling">Northern Rockling</option>
                                 <option value="Painted Goby">Painted Goby</option>
-                                <option value="Porbeagle Shark">Porbeagle Shark</option>
-                                <option value="Red Gurnard">Red Gurnard</option>
-                                <option value="Red Mullet">Red Mullet</option>
-                                <option value="Rock Cook Wrasse">Rock Cook Wrasse</option>
                                 <option value="Rock Goby">Rock Goby</option>
                                 <option value="Sand Goby">Sand Goby</option>
-                                <option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
                                 <option value="Shanny (Common Blenny)">Shanny (Common Blenny)</option>
                                 <option value="Shore Rockling">Shore Rockling</option>
                                 <option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option>
                                 <option value="Silver Eel">Silver Eel</option>
-                                <option value="Small-eyed Ray">Small-eyed Ray</option>
-                                <option value="Spotted Ray">Spotted Ray</option>
-                                <option value="Spurdog">Spurdog</option>
-                                <option value="Starry Smooth-hound">Starry Smooth-hound</option>
-                                <option value="Stingray">Stingray</option>
                                 <option value="Tadpole Fish">Tadpole Fish</option>
-                                <option value="Thick-lipped Grey Mullet">Thick-lipped Grey Mullet</option>
-                                <option value="Thin-lipped Grey Mullet">Thin-lipped Grey Mullet</option>
                                 <option value="Three-bearded Rockling">Three-bearded Rockling</option>
                                 <option value="Tompot Blenny">Tompot Blenny</option>
-                                <option value="Tope">Tope</option>
-                                <option value="Tub Gurnard">Tub Gurnard</option>
-                                <option value="Turbot">Turbot</option>
                                 <option value="Two-spotted Goby">Two-spotted Goby</option>
-                                <option value="Undulate Ray">Undulate Ray</option>
-                                <option value="15-spined Stickleback">15-spined Stickleback</option>
                             </optgroup>
                             <optgroup label="UNLISTED / CUSTOM" id="customSpeciesGroup">
                                 <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
