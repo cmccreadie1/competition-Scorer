@@ -59,15 +59,14 @@
 
         /* SKY SPORTS FLASH ANIMATIONS */
         @keyframes sky-flash-overlay {
-            0%, 28% { opacity: 1; z-index: 20; }
-            29%, 100% { opacity: 0; z-index: 0; }
+            0%, 28% { opacity: 1; z-index: 20; } 
+            29%, 100% { opacity: 0; z-index: 0; } 
         }
         @keyframes sky-detail-reveal {
             0%, 28% { opacity: 0; }
             29%, 100% { opacity: 1; }
         }
 
-        /* GREEN TICK SUCCESS OVERLAY */
         #successOverlay {
             position: fixed;
             inset: 0;
@@ -301,7 +300,7 @@
             <div class="text-center mt-6">
                 <img src="icon-512.png" class="w-24 h-24 mx-auto rounded-2xl mb-3 shadow-lg border border-white/10">
                 <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white">Live Sea Score</h1>
-                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">V6.1.0</div>
+                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">V6.2.0</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -454,8 +453,7 @@
             <div id="liveTickerContainer" class="flex-none bg-slate-950 border-b border-slate-800 h-[46px] overflow-hidden relative z-10 shadow-inner">
                 <div class="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none"></div>
                 <div class="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none"></div>
-                <div id="tickerTrack" class="ticker-track h-full items-center">
-                    </div>
+                <div id="tickerTrack" class="ticker-track h-full items-center"></div>
             </div>
 
             <div class="flex-none w-full bg-slate-900 border-b border-slate-800 z-10 p-1.5">
@@ -466,98 +464,25 @@
 
             <div id="loggingArea" class="scrollable-area p-4 space-y-4">
                 
-                <div class="match-card p-4 space-y-3.5">
+                <div class="match-card p-4 space-y-3.5 text-center">
                     <div>
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1 text-left">Fish Species</label>
                         <select id="inputSpecies" onchange="checkSpeciesSelection()" class="w-full bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-base font-black appearance-none text-white focus:border-blue-500 transition shadow-inner text-center">
                             <option value="" disabled selected>-- Select Fish --</option>
                             <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
-                                <option value="Ballan Wrasse">Ballan Wrasse</option>
-                                <option value="Bass">Bass</option>
-                                <option value="Bull Huss">Bull Huss</option>
-                                <option value="Coalfish">Coalfish</option>
-                                <option value="Codling / Cod">Codling / Cod</option>
-                                <option value="Conger Eel">Conger Eel</option>
-                                <option value="Dab">Dab</option>
-                                <option value="Dogfish (LSD)">Dogfish (LSD)</option>
-                                <option value="Flounder">Flounder</option>
-                                <option value="Mackerel">Mackerel</option>
-                                <option value="Plaice">Plaice</option>
-                                <option value="Pollack">Pollack</option>
-                                <option value="Pouting">Pouting</option>
-                                <option value="Spurdog">Spurdog</option>
-                                <option value="Thornback Ray">Thornback Ray</option>
-                                <option value="Turbot">Turbot</option>
-                                <option value="Whiting">Whiting</option>
+                                <option value="Ballan Wrasse">Ballan Wrasse</option><option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
                             </optgroup>
                             <optgroup label="ROUNDFISH">
-                                <option value="Blue Whiting">Blue Whiting</option>
-                                <option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option>
-                                <option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option>
-                                <option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option>
-                                <option value="Gurnard (Grey)">Gurnard (Grey)</option>
-                                <option value="Gurnard (Red)">Gurnard (Red)</option>
-                                <option value="Gurnard (Tub)">Gurnard (Tub)</option>
-                                <option value="Haddock">Haddock</option>
-                                <option value="Herring">Herring</option>
-                                <option value="John Dory">John Dory</option>
-                                <option value="Poor Cod">Poor Cod</option>
-                                <option value="Red Mullet">Red Mullet</option>
-                                <option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
+                                <option value="Blue Whiting">Blue Whiting</option><option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option><option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option><option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option><option value="Gurnard (Grey)">Gurnard (Grey)</option><option value="Gurnard (Red)">Gurnard (Red)</option><option value="Gurnard (Tub)">Gurnard (Tub)</option><option value="Haddock">Haddock</option><option value="Herring">Herring</option><option value="John Dory">John Dory</option><option value="Poor Cod">Poor Cod</option><option value="Red Mullet">Red Mullet</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
                             </optgroup>
                             <optgroup label="FLATFISH">
-                                <option value="Brill">Brill</option>
-                                <option value="Dover Sole">Dover Sole</option>
-                                <option value="Halibut">Halibut</option>
-                                <option value="Lemon Sole">Lemon Sole</option>
-                                <option value="Megrim">Megrim</option>
+                                <option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Halibut">Halibut</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
                             </optgroup>
                             <optgroup label="RAYS & SHARKS">
-                                <option value="Blackmouth Dogfish">Blackmouth Dogfish</option>
-                                <option value="Blonde Ray">Blonde Ray</option>
-                                <option value="Blue Shark">Blue Shark</option>
-                                <option value="Common Skate">Common Skate</option>
-                                <option value="Cuckoo Ray">Cuckoo Ray</option>
-                                <option value="Porbeagle Shark">Porbeagle Shark</option>
-                                <option value="Small-eyed Ray">Small-eyed Ray</option>
-                                <option value="Smooth-hound">Smooth-hound</option>
-                                <option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option>
-                                <option value="Spotted Ray">Spotted Ray</option>
-                                <option value="Stingray">Stingray</option>
-                                <option value="Tope">Tope</option>
-                                <option value="Undulate Ray">Undulate Ray</option>
-                            </optgroup>
-                            <optgroup label="WRASSE FAMILY">
-                                <option value="Baillon's Wrasse">Baillon's Wrasse</option>
-                                <option value="Corkwing Wrasse">Corkwing Wrasse</option>
-                                <option value="Cuckoo Wrasse">Cuckoo Wrasse</option>
-                                <option value="Goldsinny Wrasse">Goldsinny Wrasse</option>
-                                <option value="Rock Cook Wrasse">Rock Cook Wrasse</option>
+                                <option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Blonde Ray">Blonde Ray</option><option value="Blue Shark">Blue Shark</option><option value="Common Skate">Common Skate</option><option value="Cuckoo Ray">Cuckoo Ray</option><option value="Porbeagle Shark">Porbeagle Shark</option><option value="Small-eyed Ray">Small-eyed Ray</option><option value="Smooth-hound">Smooth-hound</option><option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option><option value="Spotted Ray">Spotted Ray</option><option value="Stingray">Stingray</option><option value="Tope">Tope</option><option value="Undulate Ray">Undulate Ray</option>
                             </optgroup>
                             <optgroup label="MINI SPECIES">
-                                <option value="15-spined Stickleback">15-spined Stickleback</option>
-                                <option value="Black Goby">Black Goby</option>
-                                <option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option>
-                                <option value="Common Goby">Common Goby</option>
-                                <option value="Dragonet">Dragonet</option>
-                                <option value="Five-bearded Rockling">Five-bearded Rockling</option>
-                                <option value="Four-bearded Rockling">Four-bearded Rockling</option>
-                                <option value="Leopard-spotted Goby">Leopard-spotted Goby</option>
-                                <option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option>
-                                <option value="Lumpsucker">Lumpsucker</option>
-                                <option value="Montagu's Blenny">Montagu's Blenny</option>
-                                <option value="Northern Rockling">Northern Rockling</option>
-                                <option value="Painted Goby">Painted Goby</option>
-                                <option value="Rock Goby">Rock Goby</option>
-                                <option value="Sand Goby">Sand Goby</option>
-                                <option value="Shanny (Common Blenny)">Shanny (Common Blenny)</option>
-                                <option value="Shore Rockling">Shore Rockling</option>
-                                <option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option>
-                                <option value="Silver Eel">Silver Eel</option>
-                                <option value="Tadpole Fish">Tadpole Fish</option>
-                                <option value="Three-bearded Rockling">Three-bearded Rockling</option>
-                                <option value="Tompot Blenny">Tompot Blenny</option>
-                                <option value="Two-spotted Goby">Two-spotted Goby</option>
+                                <option value="Black Goby">Black Goby</option><option value="Dragonet">Dragonet</option><option value="Rockling (all)">Rockling (all)</option><option value="Sea Scorpion">Sea Scorpion</option><option value="Tompot Blenny">Tompot Blenny</option>
                             </optgroup>
                             <optgroup label="UNLISTED / CUSTOM" id="customSpeciesGroup">
                                 <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
@@ -587,7 +512,7 @@
                     <div id="localCatchList" class="space-y-0.5 pb-5"></div>
                 </div>
 
-                <div class="pt-6 pb-24">
+                <div class="pt-6 pb-24 text-center">
                     <button onclick="leaveMatchEarly()" class="w-full bg-slate-900 border-2 border-slate-700 text-slate-300 font-black py-4 rounded-xl active:bg-slate-800 transition shadow-md text-[11px] uppercase tracking-[0.3em]">
                         <i class="fa-solid fa-person-walking-arrow-right mr-2 text-red-500 opacity-80"></i> Leave Match Early
                     </button>
@@ -620,8 +545,7 @@
                 </div>
             </div>
 
-            <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black text-lg py-4 rounded-2xl shadow-lg mt-3 active:bg-blue-700 uppercase tracking-widest">Share Full Leaderboard</button>
-            <button onclick="shareResults()" class="w-full bg-green-600 text-white font-black text-xl py-4 rounded-2xl shadow-lg mt-3 active:bg-green-700 uppercase tracking-widest">Share My Results</button>
+            <button onclick="shareUnifiedReport()" class="w-full bg-blue-600 text-white font-black text-lg py-5 rounded-2xl shadow-lg mt-3 active:bg-blue-700 uppercase tracking-widest">Share Official Match Report</button>
             <button onclick="resetApp()" class="text-slate-400 font-black mt-6 border-b border-slate-900 pb-1 active:text-white uppercase text-[11px] tracking-[0.5em]">Return Home</button>
         </div>
 
@@ -631,14 +555,14 @@
                 <h2 class="text-lg font-black uppercase tracking-[0.1em]">History</h2>
                 <div class="w-6"></div>
             </div>
-            <div class="scrollable-area space-y-3 pb-10 text-center">
-                <div id="historyRecentList" class="space-y-2 px-1 text-center"></div>
+            <div class="scrollable-area space-y-2 pb-10 text-center">
+                <div id="historyRecentList" class="space-y-1.5 px-1 text-center"></div>
                 <div id="archiveContainer" class="hidden px-1 text-center">
                     <button onclick="toggleArchive()" class="w-full flex justify-between items-center bg-slate-950/50 p-3 rounded-xl border-2 border-slate-800 active:bg-slate-900 transition shadow-md">
                         <span class="font-black text-[10px] uppercase tracking-[0.3em] text-slate-400"><i class="fa-solid fa-box-archive mr-2 text-amber opacity-40"></i> Older Storage</span>
                         <i class="fa-solid fa-chevron-down text-slate-600 transition-transform duration-300" id="archiveChevron"></i>
                     </button>
-                    <div id="historyArchiveList" class="hidden pt-5 space-y-2 text-center"></div>
+                    <div id="historyArchiveList" class="hidden pt-3 space-y-1.5 text-center"></div>
                 </div>
             </div>
         </div>
@@ -730,7 +654,7 @@
                 <hr class="border-slate-800 pt-4">
                 <button onclick="endMatchEarly(true)" class="w-full bg-amber text-slate-900 font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-base leading-tight active:scale-95 transition-transform">Adjust Match Clock</button>
                 <hr class="border-slate-800 pt-4 text-center">
-                <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:bg-blue-700 transition"><i class="fa-solid fa-file-export mr-3 text-center"></i> Master Export</button>
+                <button onclick="shareUnifiedReport()" class="w-full bg-blue-600 text-white font-black py-5 rounded-2xl shadow-md flex justify-center items-center uppercase tracking-widest text-xs active:bg-blue-700 transition"><i class="fa-solid fa-file-export mr-3 text-center"></i> Share Unified Report</button>
             </div>
         </div>
 
@@ -880,6 +804,9 @@
                 let kg = Math.floor(val / 1000);
                 let g = val % 1000;
                 return `${kg}kg ${g}g`;
+            }
+            if (fmt === 'length' || fmt === 'length10') {
+                return `${val}cm`;
             }
             return val;
         }
@@ -1298,8 +1225,7 @@
                 let div = document.createElement('div');
                 div.className = "match-card p-1.5 flex justify-between items-center transition mb-0.5 shadow-sm";
                 let ptLabel = state.format === 'speciesHunt' ? `(${c.points})` : (c.points === 0 ? '(0)' : '');
-                // Time made slightly bigger (text-xs) and icons separated + bigger (text-sm + space-x-3)
-                div.innerHTML = `<div class="flex-1 text-left pl-2 leading-tight"><span class="font-black text-white text-sm uppercase tracking-tight">${c.species}</span><span class="text-xs ml-2 text-slate-100 font-black">${c.display || c.size}</span><span class="text-xs text-slate-400 ml-2 font-black italic">${c.time}</span><span class="text-[9px] text-amber ml-2 font-black">${ptLabel}</span></div><div class="flex items-center space-x-3 pr-2"><button onclick="editCatch('${c.id}')" class="text-blue-400 p-1 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button><button onclick="deleteCatch('${c.id}')" class="text-amber p-1 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`;
+                div.innerHTML = `<div class="flex-1 text-left pl-2 leading-tight"><span class="font-black text-white text-sm uppercase tracking-tight">${c.species}</span><span class="text-xs ml-2 text-slate-100 font-black">${c.display || c.size}</span><span class="text-[11px] text-slate-400 ml-2 font-black italic">${c.time}</span><span class="text-[9px] text-amber ml-2 font-black">${ptLabel}</span></div><div class="flex items-center space-x-5 pr-3"><button onclick="editCatch('${c.id}')" class="text-blue-400 p-1 active:scale-90 transition"><i class="fa-solid fa-pencil text-lg"></i></button><button onclick="deleteCatch('${c.id}')" class="text-amber p-1 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-lg"></i></button></div>`;
                 list.appendChild(div);
             });
         }
@@ -1324,25 +1250,59 @@
             if (document.getElementById('totalMatchFishCount')) document.getElementById('totalMatchFishCount').innerText = totalFish;
         }
 
+        function shareUnifiedReport() {
+            if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
+            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
+            
+            // 1. My Performance
+            let myRank = arr.findIndex(a => a.name === state.name) + 1;
+            let myData = arr.find(a => a.name === state.name);
+            let mySpecCount = new Set(state.myCatches.map(c => c.species)).size;
+
+            let t = `🏆 OFFICIAL MATCH REPORT: ${state.venue}\n`;
+            t += `📅 Date: ${new Date().toLocaleDateString()}\n\n`;
+            
+            if (myData) {
+                t += `👤 MY PERFORMANCE:\n`;
+                t += `Rank: ${myRank} | Score: ${formatScoreDisplay(state.myCatches.reduce((s,c)=>s+c.points,0), state.format)}\n`;
+                t += `Fish: ${state.myCatches.length} | Species: ${mySpecCount}\n\n`;
+            }
+
+            t += `📊 FULL STANDINGS:\n`;
+            arr.forEach((a, i) => { t += `${i+1}. ${a.name} - ${formatScoreDisplay(a.score, state.format)}\n`; });
+            
+            // 2. Biggest Fish
+            let biggestVal = 0, biggestStr = "N/A";
+            arr.forEach(angler => { if(angler.catches) { Object.values(angler.catches).forEach(f => { if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${angler.name} - ${f.species} (${f.display || f.size})`; } }); } });
+            
+            t += `\n👑 MATCH BIGGEST FISH:\n${biggestStr}\n\n`;
+            t += `*Logged via Live Sea Score Pro*`;
+
+            if (navigator.share) { navigator.share({ title: 'Match Report', text: t }); }
+            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
+        }
+
         function endMatchEarly(grace) { if(state.isHost && state.pin) { if(grace) { document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('customEndModal').classList.remove('hidden'); } } }
         function stewardSetNewEnd(mins) { document.getElementById('customEndModal').classList.add('hidden'); document.getElementById('stewardDrawer').classList.remove('open'); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
         function transferSteward() { if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); document.getElementById('stewardDrawer').classList.remove('open'); } } }
         function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); resetApp(); } }
         function lockdownMatch(isHostPushing) { clearInterval(clockInterval); if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } saveHistory(false); state.status = 'finished'; saveState(); let totalPts = state.myCatches.reduce((s,c) => s + c.points, 0); document.getElementById('finalScore').innerText = formatScoreDisplay(totalPts, state.format); document.getElementById('finalCount').innerText = state.myCatches.length; document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; navTo('results'); }
-        function saveHistory(isL) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); h.unshift({ id: 'match_' + Date.now(), pin: state.pin, venue: state.venue, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), format: state.format, score: state.myCatches.reduce((s,c) => s+c.points, 0), personalCatches: [...state.myCatches], standings: globalMatchData?.anglers ? Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score) : [], playerName: state.name, isLive: isL, endTime: state.endTime, graceEndTime: state.graceEndTime || (state.endTime + 180000) }); localStorage.setItem('matchHistory', JSON.stringify(h)); }
+        function saveHistory(isL) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); h.unshift({ id: 'match_' + Date.now(), pin: state.pin, venue: state.venue, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), format: state.format, score: state.myCatches.reduce((s,c) => s+c.points, 0), personalCatches: [...state.myCatches], standings: globalMatchData?.anglers ? Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score) : [], playerName: state.name, isLive: isL, endTime: state.endTime, graceEndTime: state.graceEndTime || (state.endTime ? state.endTime + 180000 : null) }); localStorage.setItem('matchHistory', JSON.stringify(h)); }
         
         function renderHistory() {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); const r = document.getElementById('historyRecentList'), a = document.getElementById('historyArchiveList'), now = Date.now(); r.innerHTML = ""; a.innerHTML = "";
             if(h.length === 0) { r.innerHTML = '<p class="text-slate-400 py-24 font-black uppercase text-[10px] tracking-widest text-center">History Empty</p>'; return; }
             h.forEach((m, i) => { 
-                const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 180000)); 
+                let isMatchActuallyFinished = !m.isLive;
+                if(m.isLive && m.endTime) { if (now >= (m.graceEndTime || m.endTime + 180000)) isMatchActuallyFinished = true; }
+                const showLive = !isMatchActuallyFinished;
                 let card = document.createElement('div'); 
-                card.className = "match-card p-3.5 flex flex-col items-center active:bg-slate-900 transition mb-2 text-center"; 
-                let headerText = isStillActuallyLive ? "" : "<p class='text-[8px] font-black text-slate-500 mb-1 uppercase tracking-[0.4em]'>MATCH ENDED</p>"; 
-                card.innerHTML = `${headerText}<div class="w-full flex justify-between items-center"><div class="flex-1 text-left pl-1" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-sm uppercase tracking-tight">${m.date}</span><br><span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || 'Venue'}</span><br><span class="text-[9px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span></div><div class="text-right flex items-center space-x-4"><div onclick="viewPastRecord('${m.id}')"><div class="text-xl font-black text-white">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[8px] text-amber uppercase font-black">Total</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1"><i class="fa-solid fa-trash-can text-sm"></i></button></div></div>`; 
-                if(i < 6) r.appendChild(card); else a.appendChild(card); 
+                card.className = "match-card p-3 flex flex-col items-center active:bg-slate-900 transition mb-1 text-center"; 
+                let headerText = showLive ? "" : "<p class='text-[7px] font-black text-slate-500 mb-0.5 uppercase tracking-[0.4em]'>MATCH ENDED</p>"; 
+                card.innerHTML = `${headerText}<div class="w-full flex justify-between items-center"><div class="flex-1 text-left pl-1" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-sm uppercase tracking-tight">${m.date}</span> ${showLive ? '<span class="text-[7px] bg-red-600 px-1.5 py-0.5 rounded-full text-white font-black ml-1 animate-pulse">LIVE</span>' : ''}<br><span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || 'Venue'}</span><br><span class="text-[9px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span></div><div class="text-right flex items-center space-x-4"><div onclick="viewPastRecord('${m.id}')"><div class="text-xl font-black text-white">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[8px] text-amber uppercase font-black">Total</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1"><i class="fa-solid fa-trash-can text-sm"></i></button></div></div>`; 
+                if(i < 8) r.appendChild(card); else a.appendChild(card); 
             });
-            document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 6); 
+            document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 8); 
         }
 
         function deleteHistoryItem(id) { if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
@@ -1352,21 +1312,20 @@
         function switchHistoryTab(tab) {
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); }); document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
-            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-4 text-center tracking-widest">Score Table</h4><div class="space-y-1.5">${m.standings.map((a, i) => `<div class="match-card p-3 flex justify-between items-center border border-slate-700 shadow-md"><span class="uppercase text-white font-bold text-sm text-left">${i+1}.</b> ${a.name}</span><b class="text-white text-base text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; } 
+            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-4 text-center tracking-widest">Score Table</h4><div class="space-y-1">${m.standings.map((a, i) => `<div class="match-card p-2.5 flex justify-between items-center border border-slate-700 shadow-md"><span class="uppercase text-white font-bold text-sm text-left">${i+1}.</b> ${a.name}</span><b class="text-white text-base text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; } 
             else { 
                 let listHtml = m.personalCatches.map(c => { 
                     let ptTxt = m.format.includes('weight') ? 'Recorded' : `${c.points} Pts`; 
-                    // History time made slightly bigger (text-[11px])
-                    return `<div class="match-card p-3 flex justify-between items-center border border-slate-800 mb-1 shadow-inner"><div class="text-left"><b class="text-white text-sm uppercase">${c.species}</b><br><span class="text-[11px] text-slate-400 font-black uppercase">${c.time}</span></div><div class="text-right"><b class="text-white text-sm text-right">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase">${ptTxt}</span></div></div>`; 
+                    return `<div class="match-card p-2.5 flex justify-between items-center border border-slate-800 mb-1 shadow-inner"><div class="text-left"><b class="text-white text-sm uppercase">${c.species}</b><br><span class="text-[12px] text-slate-400 font-black uppercase">${c.time}</span></div><div class="text-right"><b class="text-white text-sm text-right">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase">${ptTxt}</span></div></div>`; 
                 }).join('');
-                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-4 text-center tracking-widest">Catch Diary</h4><div class="space-y-1">${listHtml}</div>`; 
+                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-4 text-center tracking-widest">Catch Diary</h4><div class="space-y-0.5">${listHtml}</div>`; 
             }
         }
 
         function closeHistoryDetail() { document.getElementById('historyDetailDrawer').classList.remove('open'); setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); }
         let wakeLock = null; async function toggleWakeLock() { if(wakeLock) { await wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon"></i>`; } else { try { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber"></i>`; } catch(e) {} } }
-        function shareResults() { let t = `🏆 Match Summary: ${state.name}\nScore: ${document.getElementById('finalScore').innerText}\nLogs: ${document.getElementById('finalCount').innerText}\nLogged via Live Sea Score.`; if (navigator.share) { navigator.share({ title: 'Results', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); } }
-        function shareMasterLeaderboard() { if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available."); let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score), t = `🏆 Official Match Results: ${state.venue}\nSteward: ${state.name}\n\n`; arr.forEach((a, i) => { t += `${i+1}. ${a.name} - ${formatScoreDisplay(a.score, state.format)}\n`; }); if (navigator.share) { navigator.share({ title: 'Official Results', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); } }
+        function shareResults() { shareUnifiedReport(); }
+        function shareMasterLeaderboard() { shareUnifiedReport(); }
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
 
         window.onload = () => {
@@ -1376,7 +1335,7 @@
                     let oldState = JSON.parse(saved);
                     state.name = oldState.name || ""; state.venue = oldState.venue || "";
                     document.getElementById('playerName').value = state.name; document.getElementById('venueName').value = state.venue;
-                    if (['playing', 'hype', 'waiting', 'finished'].includes(oldState.status) || oldState.status === 'grace') {
+                    if (['playing', 'hype', 'waiting'].includes(oldState.status) || oldState.status === 'grace') {
                         state = oldState; listenToCloud(); navTo(state.view);
                         if (state.status === 'playing' || state.status === 'grace') { 
                             renderCatchList(); startClock(); updateLiveTally(); 
@@ -1395,7 +1354,7 @@
             }
         });
 
-        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.toggleWakeLock = toggleWakeLock; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad;
+        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.toggleWakeLock = toggleWakeLock; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport;
     </script>
     <script>
     if ('serviceWorker' in navigator) {
