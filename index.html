@@ -1,171 +1,459 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full overflow-hidden">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Live Sea Score | Friendly Match Scorer</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#020617">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Live Sea Score</title>
+    <link rel="manifest" href="/competition-Scorer/manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { 
-            font-family: 'Inter', sans-serif; 
+        
+        html, body {
+            font-family: 'Inter', sans-serif;
             background-color: #020617; 
-            color: white; 
-            margin: 0; 
-            padding: 0; 
-            overflow-x: hidden; 
-        }
-        .glass { 
-            background: rgba(30, 41, 59, 0.6); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255,255,255,0.08); 
-        }
-        
-        /* Custom pulsing for buttons */
-        @keyframes pulse-silver {
-            0%, 100% { box-shadow: 0 0 15px rgba(148, 163, 184, 0.2); border-color: rgba(148, 163, 184, 0.4); }
-            50% { box-shadow: 0 0 25px rgba(148, 163, 184, 0.5); border-color: rgba(148, 163, 184, 0.8); }
-        }
-        .animate-pulse-silver {
-            animation: pulse-silver 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            color: #ffffff;
+            -webkit-user-select: none;
+            user-select: none;
+            width: 100%;
+            height: 100dvh; 
+            position: fixed; 
+            overflow: hidden; 
+            overscroll-behavior: none;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Smooth dropdown for Apple instructions */
-        .ios-dropdown {
-            max-height: 0;
+        #app-container {
+            width: 100%;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
-            opacity: 0;
+            transition: background-color 0.6s ease;
         }
-        .ios-dropdown.open {
-            max-height: 200px;
-            opacity: 1;
+
+        #app-container.grace-active { background-color: #450a0a !important; }
+
+        @keyframes ticker-scroll { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }
+        .ticker-track { display: inline-flex; height: 100%; width: max-content; animation: ticker-scroll linear infinite; backface-visibility: hidden; will-change: transform; }
+
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
         }
+        .pulse-online { animation: pulse-green 2s infinite; border-radius: 50%; }
+
+        #successOverlay {
+            position: fixed; inset: 0; background: rgba(34, 197, 94, 0.85);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 500; opacity: 0; pointer-events: none; transition: opacity 0.2s ease-in-out;
+        }
+        #successOverlay.show { opacity: 1; }
+
+        .scrollable-area {
+            flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; 
+            overscroll-behavior-y: contain; padding-bottom: 100px;
+        }
+
+        .view-frame { display: flex; flex-direction: column; height: 100%; width: 100%; overflow: hidden; }
+
+        .match-card { background-color: #1e293b; border: 1px solid #475569; border-radius: 1rem; box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.6); }
+
+        .atm-btn {
+            background: #1e293b; border: 2px solid #475569; border-radius: 12px;
+            font-size: 1.5rem; font-weight: 900; display: flex; align-items: center;
+            justify-content: center; height: 60px; color: #f8fafc;
+        }
+        .atm-btn:active { background: #3b82f6; color: #ffffff; }
+
+        .drawer-right { transition: transform 0.3s ease-in-out; transform: translateX(100%); }
+        .drawer-right.open { transform: translateX(0); }
+
+        .drawer-left { transition: transform 0.3s ease-in-out; transform: translateX(-100%); }
+        .drawer-left.open { transform: translateX(0); }
+
+        /* SPLASH SCREEN STYLES */
+        .feature-card { background: #0f172a; border-left: 3px solid #3b82f6; padding: 14px; border-radius: 12px; margin-bottom: 10px; }
+        .badge-foss { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80; }
+        .preview-card { width: 160px; height: 260px; background: #0f172a; border-radius: 16px; flex-shrink: 0; scroll-snap-align: start; border: 1px solid #334155; display: flex; flex-direction: column; overflow: hidden; }
+        .screenshot-scroll { display: flex; overflow-x: auto; gap: 12px; scroll-snap-type: x mandatory; padding-bottom: 10px; }
+        .screenshot-scroll::-webkit-scrollbar { display: none; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .ios-arrow { animation: float 1.5s infinite ease-in-out; color: #3b82f6; }
     </style>
-    <script>
-        // Redirect if already launched as an app
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            window.location.href = 'app.html';
-        }
-    </script>
 </head>
-<body class="min-h-screen flex flex-col items-center p-6 pb-12">
+<body>
 
-    <header class="text-center mt-8 mb-8 w-full max-w-sm">
-        <div class="relative inline-block">
-            <img src="icon-512.png" alt="Live Sea Score Logo" class="w-36 h-36 mx-auto rounded-[2.5rem] shadow-2xl border-2 border-blue-500/20 mb-6">
-            <div class="absolute -bottom-2 -right-2 bg-blue-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">Pro</div>
-        </div>
-        <h1 class="text-4xl font-black tracking-tighter uppercase italic leading-none">Live Sea Score</h1>
-        <p class="text-blue-500 font-bold text-xs tracking-[0.3em] uppercase mt-3">Friendly Match Engine</p>
-    </header>
-
-    <div class="w-full max-w-sm mt-2 mb-10 space-y-6">
-        <h3 class="text-xs font-black text-slate-300 uppercase tracking-[0.4em] border-b border-slate-700 pb-3 ml-1">App Features</h3>
-        
-        <div class="flex items-start gap-4 p-2">
-            <div class="bg-blue-600/10 p-4 rounded-2xl border border-blue-500/20"><i class="fa-solid fa-bolt-lightning text-blue-400 text-2xl"></i></div>
-            <div class="mt-1">
-                <h4 class="font-black text-lg uppercase tracking-tight">Sky Sports style Ticker</h4>
-                <p class="text-base text-slate-400 leading-relaxed mt-1.5">Real-time catch alerts with professional broadcast animations for every angler.</p>
-            </div>
-        </div>
-
-        <div class="flex items-start gap-4 p-2">
-            <div class="bg-green-600/10 p-4 rounded-2xl border border-green-500/20"><i class="fa-solid fa-list-ol text-green-400 text-2xl"></i></div>
-            <div class="mt-1">
-                <h4 class="font-black text-lg uppercase tracking-tight">Live Leaderboard</h4>
-                <p class="text-base text-slate-400 leading-relaxed mt-1.5">Updates on the fly, keeping every angler updated of the score second by second. Perfect for a casual group of mates having a friendly competition on the beach. <span class="italic opacity-70">(Not intended for formal, sanctioned match verification).</span></p>
-            </div>
-        </div>
-
-        <div class="flex items-start gap-4 p-2">
-            <div class="bg-amber-600/10 p-4 rounded-2xl border border-amber-500/20"><i class="fa-solid fa-fish text-amber-400 text-2xl"></i></div>
-            <div class="mt-1">
-                <h4 class="font-black text-lg uppercase tracking-tight">70+ Local Species</h4>
-                <p class="text-base text-slate-400 leading-relaxed mt-1.5">Full Scottish target list including categorized Rounds, Flats, Sharks, and Mini species.</p>
-            </div>
-        </div>
+    <div id="successOverlay">
+        <i class="fa-solid fa-circle-check text-white text-9xl"></i>
     </div>
 
-    <div class="w-full max-w-sm space-y-4">
-        
-        <button id="installBtnAndroid" class="w-full bg-slate-800 text-slate-200 font-black py-4 rounded-2xl text-[13px] uppercase tracking-[0.1em] border border-slate-400/30 animate-pulse-silver">
-            <i class="fa-brands fa-android text-lg mr-2"></i> Android: Install App
-        </button>
+    <div id="store-landing" class="hidden fixed inset-0 z-[600] bg-[#020617] overflow-y-auto p-6 flex flex-col items-center">
+        <div class="w-full max-w-sm space-y-6">
+            
+            <div class="flex justify-between items-center px-1">
+                <div class="flex space-x-2">
+                    <span class="badge-foss px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest">No Tracking Data</span>
+                    <span class="badge-foss px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest">Ad Free</span>
+                </div>
+                <div class="flex items-center space-x-2 bg-slate-900/80 px-2 py-1 rounded-full border border-slate-700">
+                    <div class="w-2 h-2 bg-green-500 rounded-full pulse-online"></div>
+                    <span class="text-[8px] font-black text-green-500 uppercase tracking-tighter">Cloud Sync: Online</span>
+                </div>
+            </div>
 
-        <button id="installBtnApple" onclick="toggleAppleInstructions()" class="w-full bg-slate-800 text-slate-200 font-black py-4 rounded-2xl text-[13px] uppercase tracking-[0.1em] border border-slate-400/30 animate-pulse-silver">
-            <i class="fa-brands fa-apple text-lg mr-2"></i> Apple iOS: Install Guide
-        </button>
+            <div class="flex items-center space-x-4">
+                <div class="w-16 h-16 bg-[#0f172a] rounded-2xl flex items-center justify-center shadow-xl border border-blue-500/20">
+                     <i class="fa-solid fa-fish-fins text-3xl text-blue-500"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight uppercase">Live Sea Score</h1>
+                    <p class="text-blue-500 font-bold text-[9px] uppercase tracking-[0.2em]">Social Match Engine • V6.3.1</p>
+                </div>
+            </div>
 
-        <div id="appleInstructions" class="ios-dropdown w-full glass rounded-[1.5rem] px-6">
-            <div class="py-5">
-                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-center text-slate-400 mb-4">Manual iOS Installation</p>
-                <div class="text-xs leading-relaxed space-y-4 text-center px-2">
-                    <p class="text-slate-300 font-bold">You must be using the Safari Browser.</p>
-                    <div class="flex justify-center items-center gap-6 py-2">
-                        <div class="flex flex-col items-center gap-2">
-                            <i class="fa-solid fa-share-from-square text-blue-400 text-2xl"></i>
-                            <span class="text-[9px] uppercase font-bold text-slate-500">1. Share</span>
+            <div>
+                <h2 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-3 flex justify-between">
+                    <span>App Preview</span>
+                    <span class="text-blue-500 opacity-60 font-bold">Swipe <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                </h2>
+                <div class="screenshot-scroll">
+                    <div class="preview-card">
+                        <div class="bg-slate-800 h-2/3 flex items-center justify-center"><i class="fa-solid fa-trophy text-5xl text-amber-500 opacity-30"></i></div>
+                        <div class="p-3 bg-slate-900 flex-1">
+                            <p class="text-[10px] font-black uppercase text-blue-400">Dominate the Board</p>
+                            <p class="text-[9px] text-slate-500 leading-tight mt-1">Full live standings for every angler, updated in real-time.</p>
                         </div>
-                        <div class="text-slate-600 font-bold">▶</div>
-                        <div class="flex flex-col items-center gap-2">
-                            <i class="fa-solid fa-square-plus text-slate-200 text-2xl"></i>
-                            <span class="text-[9px] uppercase font-bold text-slate-500">2. Add to Home</span>
+                    </div>
+                    <div class="preview-card">
+                        <div class="bg-slate-800 h-2/3 flex items-center justify-center"><i class="fa-solid fa-bolt text-5xl text-blue-500 opacity-30"></i></div>
+                        <div class="p-3 bg-slate-900 flex-1">
+                            <p class="text-[10px] font-black uppercase text-blue-400">Log in Seconds</p>
+                            <p class="text-[9px] text-slate-500 leading-tight mt-1">Record catches fast with wet hands. High-contrast display for all conditions.</p>
+                        </div>
+                    </div>
+                    <div class="preview-card">
+                        <div class="bg-slate-800 h-2/3 flex items-center justify-center"><i class="fa-solid fa-shield-heart text-5xl text-green-500 opacity-30"></i></div>
+                        <div class="p-3 bg-slate-900 flex-1">
+                            <p class="text-[10px] font-black uppercase text-blue-400">Beach-Proof Data</p>
+                            <p class="text-[9px] text-slate-500 leading-tight mt-1">Cloud persistence and low battery drain ensure your data is always safe.</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="pt-4">
-            <a href="app.html" class="block w-full bg-slate-900 border border-slate-800 text-slate-500 font-bold text-center py-4 rounded-2xl transition-all active:scale-95 text-[10px] uppercase tracking-[0.2em]">
-                Continue in Web Browser <i class="fa-solid fa-arrow-right ml-1"></i>
-            </a>
+            <div class="bg-blue-600/10 border border-blue-500/30 p-4 rounded-2xl">
+                <h3 class="text-sm font-black uppercase text-blue-400 mb-1">Built for Social Fishing</h3>
+                <p class="text-[11px] text-slate-300 leading-relaxed italic">"Designed specifically for friendly club days, mates fishing together, and social matches where the spirit of angling comes first."</p>
+            </div>
+
+            <div class="space-y-2">
+                <div class="feature-card">
+                    <div class="flex items-center space-x-3 mb-1"><i class="fa-solid fa-bolt text-blue-500 text-xs"></i><h3 class="text-[10px] font-black uppercase text-blue-400">Instant Live Sync</h3></div>
+                    <p class="text-[10px] text-slate-400">The leaderboard updates on everyone's phone the split-second a fish is logged.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="flex items-center space-x-3 mb-1"><i class="fa-solid fa-shield-halved text-blue-500 text-xs"></i><h3 class="text-[10px] font-black uppercase text-blue-400">Bulletproof Persistence</h3></div>
+                    <p class="text-[10px] text-slate-400">Accidental closure or dead battery? Just reopen. Optimized for low battery drain.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="flex items-center space-x-3 mb-1"><i class="fa-solid fa-earth-americas text-blue-500 text-xs"></i><h3 class="text-[10px] font-black uppercase text-blue-400">Virtual Competitions</h3></div>
+                    <p class="text-[10px] text-slate-400">Fish against mates on different beaches or in different regions simultaneously.</p>
+                </div>
+            </div>
+
+            <div id="android-zone" class="hidden pb-10">
+                <button onclick="triggerPwaInstall()" class="w-full bg-blue-600 py-5 rounded-2xl font-black text-lg uppercase tracking-widest flex items-center justify-center space-x-3 active:scale-95 shadow-lg">
+                    <i class="fa-solid fa-mobile-screen"></i> <span>Install Match App</span>
+                </button>
+            </div>
+            <div id="ios-zone" class="hidden pb-32 flex-col items-center text-center space-y-3">
+                <div class="bg-blue-600 p-5 rounded-3xl shadow-2xl space-y-2">
+                    <p class="text-sm font-black uppercase">Ready to Start?</p>
+                    <p class="text-[11px] opacity-90">Tap <i class="fa-solid fa-arrow-up-from-bracket"></i> then select <b>'Add to Home Screen'</b> to install the engine.</p>
+                    <div class="ios-arrow pt-1"><i class="fa-solid fa-chevron-down text-xl"></i></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <footer class="mt-14 mb-4 text-center">
-        <p class="text-[9px] text-slate-700 uppercase tracking-[0.3em] font-bold">© 2026 Kilsyth Match Labs</p>
-    </footer>
+    <div id="app-container">
 
-    <script>
-        // Toggle Apple Instructions Dropdown
-        function toggleAppleInstructions() {
-            const dropdown = document.getElementById('appleInstructions');
-            dropdown.classList.toggle('open');
+        <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative">
+            <button onclick="exitApp()" class="absolute top-5 right-5 bg-slate-900 border border-slate-600 text-slate-400 font-black px-3 py-2 rounded-lg text-[9px] uppercase tracking-[0.2em] active:bg-red-600 transition shadow-md z-[50]">
+                Close App <i class="fa-solid fa-xmark ml-1"></i>
+            </button>
+            <div class="text-center mt-6">
+                <img src="icon-512.png" class="w-24 h-24 mx-auto rounded-2xl mb-3 shadow-lg border border-white/10">
+                <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white">Live Sea Score</h1>
+                <div class="text-slate-300 font-bold text-[10px] tracking-widest uppercase opacity-90">V6.3.1</div>
+            </div>
+            <div class="w-full max-w-sm space-y-3">
+                <div class="match-card p-5 space-y-3 text-center shadow-lg">
+                    <input type="text" id="playerName" placeholder="Your Name" class="w-full bg-slate-800 border border-slate-600 text-white font-bold text-lg rounded-lg p-3 text-center outline-none">
+                    <input type="text" id="venueName" placeholder="Venue Name" class="w-full bg-slate-800 border border-slate-600 text-white font-bold text-lg rounded-lg p-3 text-center outline-none">
+                    <button onclick="proceedToRoleSelection()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black text-lg py-4 rounded-xl shadow-md uppercase tracking-wide active:scale-95 transition-transform">Continue to Match</button>
+                </div>
+                <div class="flex space-x-2.5 pt-2">
+                    <button onclick="navTo('history')" class="flex-1 bg-slate-800 text-slate-300 font-black py-4 rounded-lg text-[10px] uppercase border border-slate-600 tracking-widest">History</button>
+                    <button onclick="document.getElementById('guideDrawer').classList.add('open')" class="flex-1 bg-slate-800 text-slate-300 font-black py-4 rounded-lg text-[9px] uppercase border border-slate-600 tracking-widest">Guide</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-[#020617]">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
+                <button onclick="navTo('home')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 class="text-lg font-black uppercase tracking-tight text-white">Select Role</h2>
+                <div class="w-6"></div>
+            </div>
+            <div class="flex-1 flex flex-col justify-center space-y-5 max-w-sm mx-auto w-full pb-20">
+                <button onclick="navTo('join')" class="w-full bg-green-600 text-white font-black text-2xl py-10 rounded-2xl shadow-xl uppercase flex flex-col items-center justify-center">
+                    <i class="fa-solid fa-user-tag text-5xl mb-4"></i> Join Competitor
+                </button>
+                <button onclick="navTo('host')" class="w-3/4 mx-auto bg-slate-800 border border-slate-600 text-amber font-bold text-sm py-4 rounded-xl shadow-md uppercase flex flex-col items-center justify-center">
+                    <i class="fa-solid fa-crown text-2xl mb-1.5"></i> Host Steward
+                </button>
+            </div>
+        </div>
+
+        <div id="view-join" class="hidden view-frame p-4 bg-[#020617]">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
+                <button onclick="navTo('role')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 class="text-lg font-black uppercase tracking-tight text-white">Authentication</h2>
+                <div class="w-6"></div>
+            </div>
+            <div class="text-center pt-10">
+                <div class="flex justify-center space-x-2">
+                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white" id="pin-1"></div>
+                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white" id="pin-2"></div>
+                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white" id="pin-3"></div>
+                    <div class="w-14 h-16 bg-slate-800 border-b-4 border-amber rounded-lg flex items-center justify-center text-3xl font-black text-white" id="pin-4"></div>
+                </div>
+            </div>
+            <div class="flex-1 grid grid-cols-3 gap-2.5 p-3 max-w-sm mx-auto w-full content-center">
+                <button class="atm-btn" onclick="atmPress(1)">1</button><button class="atm-btn" onclick="atmPress(2)">2</button><button class="atm-btn" onclick="atmPress(3)">3</button>
+                <button class="atm-btn" onclick="atmPress(4)">4</button><button class="atm-btn" onclick="atmPress(5)">5</button><button class="atm-btn" onclick="atmPress(6)">6</button>
+                <button class="atm-btn" onclick="atmPress(7)">7</button><button class="atm-btn" onclick="atmPress(8)">8</button><button class="atm-btn" onclick="atmPress(9)">9</button>
+                <button class="atm-btn text-red-500" onclick="navTo('role')"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="atmPress(0)">0</button><button class="atm-btn text-amber" onclick="atmDelete()"><i class="fa-solid fa-delete-left"></i></button>
+            </div>
+            <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto bg-blue-600 text-white font-black text-xl py-4 rounded-xl mb-8">Validate PIN</button>
+        </div>
+
+        <div id="view-fishing" class="hidden view-frame bg-[#020617]">
+            <div class="flex-none bg-slate-900 border-b border-slate-800 px-4 py-2 flex justify-between items-center z-20 shadow-md">
+                <div class="flex flex-col items-start">
+                    <div class="flex items-center space-x-2"><div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div><div class="text-base font-black text-white" id="mainTimer">00:00:00</div></div>
+                    <span id="graceLabel" class="hidden text-[10px] font-black text-red-500 uppercase tracking-widest mt-1 ml-4 animate-pulse">GRACE PERIOD</span>
+                </div>
+                <div class="bg-slate-800 border border-slate-600 rounded-lg px-4 py-1 flex flex-col items-center justify-center min-w-[85px]">
+                    <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-0.5">Total Points</span>
+                    <span class="text-lg font-black text-white leading-none" id="liveTallyBox">0</span>
+                </div>
+                <button id="wakeLockBtn" onclick="toggleWakeLock()" class="text-slate-400 border border-slate-600 px-2.5 py-1 rounded-md text-[9px] font-black uppercase"><i class="fa-solid fa-moon"></i></button>
+            </div>
+            
+            <div id="liveTickerContainer" class="flex-none bg-slate-950 border-b border-slate-800 h-[46px] overflow-hidden relative z-10">
+                <div id="tickerTrack" class="ticker-track h-full items-center"></div>
+            </div>
+
+            <div class="flex-none w-full bg-slate-900 border-b border-slate-800 z-10 p-1.5">
+                <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="w-full bg-amber text-slate-900 font-black py-2 rounded-lg text-xs uppercase tracking-[0.2em] shadow-lg flex items-center justify-center">
+                    <i class="fa-solid fa-trophy mr-2 animate-bounce"></i> Live Leader Board
+                </button>
+            </div>
+
+            <div id="loggingArea" class="scrollable-area p-4 space-y-4">
+                <div class="match-card p-4 space-y-3.5 text-center">
+                    <select id="inputSpecies" onchange="checkSpeciesSelection()" class="w-full bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-base font-black text-white text-center">
+                        <option value="" disabled selected>-- Select Fish --</option>
+                        <optgroup label="COMMON SPECIES"><option value="Ballan Wrasse">Ballan Wrasse</option><option value="Bass">Bass</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Thornback Ray">Thornback Ray</option><option value="Whiting">Whiting</option></optgroup>
+                        <optgroup label="UNLISTED / CUSTOM" id="customSpeciesGroup"><option value="[ADD OTHER]">-- [Add Other Species...] --</option></optgroup>
+                    </select>
+                    <div id="deckSizeInputs">
+                        <div id="deckLength"><input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" class="w-full bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-xl font-black text-center text-white" placeholder="Length cm"></div>
+                        <div id="deckWeightLb" class="hidden flex space-x-2"><input type="number" id="inputLbs" placeholder="Lbs" class="flex-1 bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-lg font-black text-center text-white"><input type="number" id="inputOz" placeholder="Oz" class="flex-1 bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-lg font-black text-center text-white"></div>
+                        <div id="deckWeightKg" class="hidden flex space-x-2"><input type="number" id="inputKg" placeholder="Kg" class="flex-1 bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-lg font-black text-center text-white"><input type="number" id="inputGrammes" placeholder="g" class="flex-1 bg-slate-800 border-2 border-slate-600 p-2.5 rounded-lg text-lg font-black text-center text-white"></div>
+                    </div>
+                    <button id="btnRecord" onclick="recordCatch()" class="w-full bg-blue-600 text-white font-black text-lg py-4 rounded-lg uppercase active:scale-95">Record Catch</button>
+                </div>
+
+                <div class="pt-1"><h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.4em] mb-2 ml-1 opacity-60">Match Journal</h3><div id="localCatchList" class="space-y-0.5 pb-5"></div></div>
+                <div class="pt-6 pb-24 text-center"><button onclick="leaveMatchEarly()" class="w-full bg-slate-900 border-2 border-slate-700 text-slate-300 font-black py-4 rounded-xl text-[11px] uppercase tracking-[0.3em]">Leave Match Early</button></div>
+            </div>
+        </div>
+
+        <div id="leaderboardDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[101] flex flex-col">
+            <button onclick="document.getElementById('leaderboardDrawer').classList.remove('open')" class="flex-none bg-blue-600 text-white font-bold py-4 uppercase text-[10px] flex justify-center items-center"><i class="fa-solid fa-arrow-left mr-2"></i> RETURN</button>
+            <div class="flex-none grid grid-cols-2 bg-amber text-slate-900 border-b-4 border-yellow-600 divide-x divide-yellow-700" id="bountyContainer">
+                <div class="py-2.5 px-3 flex flex-col items-center justify-center text-center"><span class="text-[8px] font-black uppercase mb-0.5 opacity-70 tracking-widest">Match Biggest Fish</span><span class="font-black text-[11px] leading-tight" id="bountyBanner">Waiting...</span></div>
+                <div class="py-2.5 px-3 flex flex-col items-center justify-center text-center"><span class="text-[8px] font-black uppercase mb-0.5 opacity-70 tracking-widest">Total Match Fish</span><span class="font-black text-sm" id="totalMatchFishCount">0</span></div>
+            </div>
+            <div id="leaderboardList" class="scrollable-area p-3 space-y-1.5 text-center"></div>
+        </div>
+
+        <div id="historyDetailDrawer" class="drawer-right fixed inset-0 w-full bg-[#020617] z-[150] flex flex-col hidden">
+            <button onclick="closeHistoryDetail()" class="flex-none bg-slate-900 py-6 font-black uppercase text-slate-400 flex justify-center items-center"><i class="fa-solid fa-xmark mr-3"></i> Exit Vault</button>
+            <div class="flex-none flex bg-slate-900 p-2 space-x-2 border-b border-slate-800">
+                <button id="tab-standings" onclick="switchHistoryTab('standings')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] bg-blue-600 text-white">Leader Board</button>
+                <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] bg-slate-800 text-slate-400">Individual Catch Record</button>
+            </div>
+            <div id="historyContent" class="scrollable-area p-6 text-center"></div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue, update, get, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyAEDi6Zr6eR88jfCiBE05zTiXaRtd3dioY", authDomain: "sea-diary-match.firebaseapp.com", databaseURL: "https://sea-diary-match-default-rtdb.europe-west1.firebasedatabase.app", projectId: "sea-diary-match", storageBucket: "sea-diary-match.firebasestorage.app", messagingSenderId: "32868968041", appId: "1:32868968041:web:a5c7547cbd69c323cb64f8" };
+        const app = initializeApp(firebaseConfig); const db = getDatabase(app);
+
+        let uid = localStorage.getItem('matchUid') || ('u_'+Date.now()+Math.floor(Math.random()*1000));
+        localStorage.setItem('matchUid', uid);
+
+        let state = { view:'home', name:'', venue:'', isHost:false, pin:'', format:'length', endTime:null, graceEndTime:null, myCatches:[], editingId:null, status:'idle' };
+        let globalMatchData = null; let clockInterval = null; let atmPin = ""; let deferredPrompt = null;
+
+        function saveState() { localStorage.setItem('matchState', JSON.stringify(state)); }
+
+        function checkPwaState() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+            if (!isStandalone) {
+                document.getElementById('store-landing').classList.remove('hidden');
+                const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+                document.getElementById(isIOS ? 'ios-zone' : 'android-zone').classList.remove('hidden');
+                document.getElementById(isIOS ? 'ios-zone' : 'android-zone').style.display = 'flex';
+            }
         }
 
-        // PWA Android Install Logic
-        let deferredPrompt;
-        const installBtnAndroid = document.getElementById('installBtnAndroid');
-        
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-        });
+        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+        window.triggerPwaInstall = async () => { if (deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; if (outcome === 'accepted') { document.getElementById('store-landing').classList.add('hidden'); } deferredPrompt = null; } };
 
-        installBtnAndroid.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-            } else {
-                alert("If the automatic install doesn't pop up, tap the 3 dots in your Chrome menu and select 'Install app' or 'Add to Home screen'.");
-            }
-        });
+        function navTo(viewId) {
+            document.querySelectorAll('.view-frame').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            state.view = viewId; saveState();
+        }
 
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
-                .then(reg => console.log("Service Worker Registered."))
-                .catch(err => console.log("Service Worker Failed:", err));
+        function formatScoreDisplay(val, fmt) {
+            if (fmt === 'weightLb') { let lbs = Math.floor(val/16), oz = val%16; return `${lbs}lb ${oz}oz`; }
+            if (fmt === 'weightKg') { let kg = Math.floor(val/1000), g = val%1000; return `${kg}kg ${g}g`; }
+            return (fmt === 'length' || fmt === 'length10') ? `${val}cm` : val;
+        }
+
+        function atmPress(num) { if (atmPin.length < 4) { atmPin += num; updateAtm(); if (atmPin.length === 4) connectToMatch(); } }
+        function atmDelete() { atmPin = atmPin.slice(0, -1); updateAtm(); }
+        function updateAtm() { for (let i = 1; i <= 4; i++) { document.getElementById(`pin-${i}`).innerText = atmPin[i-1] || ""; } }
+
+        function listenToCloud() {
+            if(!state.pin) return;
+            onValue(ref(db, 'matches/' + state.pin), (snapshot) => {
+                if (snapshot.exists()) { globalMatchData = snapshot.val(); processCloudUpdate(); }
             });
         }
+
+        function processCloudUpdate() {
+            if (globalMatchData.status === 'playing') { state.endTime = globalMatchData.endTime; if (state.view !== 'fishing') beginFishing(); }
+            renderGlobalLeaderboard(); renderTicker();
+        }
+
+        function createMatch() {
+            state.name = document.getElementById('playerName').value || "Steward";
+            state.venue = document.getElementById('venueName').value || "Venue";
+            state.pin = Math.floor(1000 + Math.random() * 9000).toString();
+            set(ref(db, 'matches/' + state.pin), { hostId: uid, format: document.getElementById('hostFormat').value, status: 'waiting', anglers: { [uid]: { name: state.name, score: 0 } } }).then(() => {
+                state.status = 'waiting'; listenToCloud(); navTo('waiting');
+            });
+        }
+
+        function connectToMatch() {
+            state.pin = atmPin;
+            get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    state.format = snapshot.val().format; listenToCloud(); update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: document.getElementById('playerName').value||"Angler", score: 0 });
+                    if(snapshot.val().status === 'playing') { state.endTime = snapshot.val().endTime; beginFishing(); } else navTo('waiting');
+                } else { alert("Invalid PIN"); atmPin = ""; updateAtm(); }
+            });
+        }
+
+        function beginFishing() {
+            state.status = 'playing'; navTo('fishing');
+            const format = state.format;
+            document.getElementById('deckLength').classList.toggle('hidden', format.includes('weight') || format === 'speciesHunt');
+            document.getElementById('deckWeightLb').classList.toggle('hidden', format !== 'weightLb');
+            document.getElementById('deckWeightKg').classList.toggle('hidden', format !== 'weightKg');
+            startClock();
+        }
+
+        function startClock() {
+            clearInterval(clockInterval);
+            clockInterval = setInterval(() => {
+                let now = Date.now();
+                if (state.status === 'playing') {
+                    let rem = state.endTime - now;
+                    if (rem > 0) updateTimerDisplay(rem);
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay(ms) {
+            let s = Math.max(0, Math.floor(ms/1000)), h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
+            document.getElementById('mainTimer').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+        }
+
+        function recordCatch() {
+            let species = document.getElementById('inputSpecies').value; if(!species) return alert("Select species!");
+            let sz = parseFloat(document.getElementById('inputSize').value)||0;
+            state.myCatches.unshift({ id: Date.now().toString(), species, size: sz, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
+            document.getElementById('inputSpecies').value = ""; document.getElementById('inputSize').value = "";
+            saveState(); renderCatchList(); pushMyScoreToCloud();
+            document.getElementById('successOverlay').classList.add('show'); setTimeout(() => document.getElementById('successOverlay').classList.remove('show'), 600);
+        }
+
+        function renderCatchList() {
+            const list = document.getElementById('localCatchList'); list.innerHTML = "";
+            state.myCatches.forEach(c => {
+                let div = document.createElement('div'); div.className = "match-card p-1.5 flex justify-between items-center transition mb-0.5 shadow-sm";
+                div.innerHTML = `<div class="flex-1 text-left pl-2"><span class="font-black text-white text-sm uppercase">${c.species}</span><span class="text-xs ml-2 text-slate-100 font-black">${c.size}cm</span><span class="text-[11px] text-slate-400 ml-2 font-black italic">${c.time}</span></div><div class="flex items-center space-x-5 pr-3"><button onclick="deleteCatch('${c.id}')" class="text-amber p-1"><i class="fa-solid fa-trash-can text-lg"></i></button></div>`;
+                list.appendChild(div);
+            });
+        }
+
+        function renderGlobalLeaderboard() {
+            if(!globalMatchData || !globalMatchData.anglers) return;
+            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
+            document.getElementById('leaderboardList').innerHTML = arr.map((a, i) => `<div class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 flex justify-between items-center mb-1 shadow-sm border-l-4 ${i===0?'border-l-amber': i===1?'border-l-slate-300': i===2?'border-l-orange-700':'border-l-blue-600'}"><div class="flex items-center truncate text-left pl-1"><span class="font-bold text-sm w-6">${i+1}.</span><span class="font-bold text-slate-100 text-sm uppercase truncate">${a.name}</span></div><div class="font-bold text-lg text-white">${formatScoreDisplay(a.score, state.format)}</div></div>`).join('');
+            let totalF = 0, bigV = 0, bigS = "N/A";
+            arr.forEach(ang => { if(ang.catches) { Object.values(ang.catches).forEach(f => { totalF++; if(f.size > bigV) { bigV=f.size; bigS=`${ang.name} (${f.species} ${f.size}cm)`; } }); } });
+            document.getElementById('bountyBanner').innerText = bigS; document.getElementById('totalMatchFishCount').innerText = totalF;
+        }
+
+        function shareUnifiedReport() {
+            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
+            let t = `🏆 OFFICIAL MATCH REPORT: ${state.venue}\n📅 ${new Date().toLocaleDateString()}\n\n📊 STANDINGS:\n`;
+            arr.forEach((a, i) => { t += `${i+1}. ${a.name} - ${formatScoreDisplay(a.score, state.format)}\n`; });
+            t += `\n👑 MATCH BIGGEST FISH:\n${document.getElementById('bountyBanner').innerText}\n\n*Logged via Live Sea Score Pro*`;
+            if (navigator.share) navigator.share({ text: t }); else window.open(`https://wa.me/?text=${encodeURIComponent(t)}`);
+        }
+
+        function pushMyScoreToCloud() { if(state.pin) { let total = state.myCatches.reduce((s,c)=>s+parseFloat(c.size),0); update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name||"Angler", score: total, catches: state.myCatches }); document.getElementById('liveTallyBox').innerText = formatScoreDisplay(total, state.format); } }
+        function deleteCatch(id) { if(confirm("Delete?")) { state.myCatches = state.myCatches.filter(x => x.id !== id); saveState(); renderCatchList(); pushMyScoreToCloud(); } }
+        function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
+        function exitApp() { if(confirm("Close?")) { resetApp(); } }
+
+        window.onload = () => {
+            checkPwaState();
+            const saved = localStorage.getItem('matchState');
+            if (saved) { state = JSON.parse(saved); if (['playing'].includes(state.status)) { listenToCloud(); navTo(state.view); renderCatchList(); startClock(); } }
+        };
+
+        window.proceedToRoleSelection = () => { state.name = document.getElementById('playerName').value; state.venue = document.getElementById('venueName').value; navTo('role'); };
+        window.atmPress = atmPress; window.atmDelete = atmDelete; window.createMatch = createMatch; window.recordCatch = recordCatch; window.navTo = navTo; window.shareUnifiedReport = shareUnifiedReport; window.resetApp = resetApp; window.exitApp = exitApp;
     </script>
 </body>
 </html>
