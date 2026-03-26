@@ -11,7 +11,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { background-color: #020617; font-family: 'Inter', sans-serif; color: white; margin: 0; padding: 0; }
         
-        .feature-box { background: #0f172a; border: 1px solid #1e293b; padding: 20px; border-radius: 20px; }
+        .feature-box { background: #0f172a; border: 1px solid #1e293b; padding: 22px; border-radius: 20px; }
         
         .btn-action { 
             background: #3b82f6; 
@@ -20,89 +20,114 @@
         }
         .btn-action:active { transform: scale(0.95); opacity: 0.9; }
 
-        #iosGuideModal {
-            background: rgba(2, 6, 23, 0.95);
-            backdrop-filter: blur(10px);
+        #iosGuideModal, #successScreen {
+            background: rgba(2, 6, 23, 0.98);
+            backdrop-filter: blur(15px);
         }
     </style>
 </head>
 <body class="flex flex-col items-center p-6 pb-24">
 
-    <div class="flex flex-col items-center text-center space-y-6 pt-10">
-        <img src="icon-512.png" alt="App Logo" class="w-32 h-32 rounded-[2.5rem] shadow-2xl border-2 border-slate-800">
-        <h1 class="text-4xl font-black tracking-tighter uppercase leading-none">Live Sea Score</h1>
-        <p class="text-slate-500 font-bold text-[10px] uppercase tracking-[0.4em]">Version 7.1.0</p>
+    <div id="mainContent" class="w-full max-w-sm flex flex-col items-center">
+        <div class="flex flex-col items-center text-center space-y-6 pt-10">
+            <img src="icon-512.png" alt="App Logo" class="w-32 h-32 rounded-[2.5rem] shadow-2xl border-2 border-slate-800">
+            <h1 class="text-4xl font-black tracking-tighter uppercase leading-none">Live Sea Score</h1>
+            <p class="text-slate-500 font-bold text-[10px] uppercase tracking-[0.4em]">Version 7.2.0</p>
+        </div>
+
+        <div class="w-full space-y-5 mt-12">
+            <h2 class="text-sm font-black text-slate-500 uppercase tracking-[0.5em] mb-6 text-center">App Specifications</h2>
+
+            <div class="feature-box space-y-2 border-l-4 border-green-500">
+                <div class="flex items-center space-x-3 text-green-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-shield-check"></i>
+                    <span>Privacy Guaranteed</span>
+                </div>
+                <p class="text-[12px] text-slate-400 leading-relaxed">This app is <b>100% Free</b>. We do not use trackers, we do not collect your personal data, and there are <b>zero advertisements</b>.</p>
+            </div>
+
+            <div class="feature-box space-y-2">
+                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-mug-hot"></i>
+                    <span>Friendly Competition</span>
+                </div>
+                <p class="text-[12px] text-slate-400 leading-relaxed">A casual match engine built for friends and club social days where the spirit of angling comes first.</p>
+            </div>
+
+            <div class="feature-box space-y-2">
+                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Instant Live Sync</span>
+                </div>
+                <p class="text-[12px] text-slate-400 leading-relaxed">Leaderboards update second-by-second. Includes a <b>Sky Sports style</b> live catch ticker for the ultimate match feel.</p>
+            </div>
+
+            <div class="feature-box space-y-2">
+                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-earth-europe"></i>
+                    <span>Virtual Comps</span>
+                </div>
+                <p class="text-[12px] text-slate-400 leading-relaxed">Not beach specific. Compete against mates on different coastlines or regions simultaneously via a shared PIN.</p>
+            </div>
+
+            <div class="feature-box space-y-2">
+                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-battery-bolt"></i>
+                    <span>Low Battery Usage</span>
+                </div>
+                <p class="text-[12px] text-slate-400 leading-relaxed">Engine optimized for minimal power drain. Built to last the duration of long sessions without killing your phone.</p>
+            </div>
+
+            <div class="feature-box space-y-2">
+                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-database"></i>
+                    <span>Data Resilience</span>
+                </div>
+                <p class="text-[12px] text-slate-400 leading-relaxed">Cloud persistence means your score is untouchable. Your data is safe even if your battery dies or the app is closed.</p>
+            </div>
+
+            <div class="feature-box space-y-2">
+                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Flexible Entry</span>
+                </div>
+                <p class="text-[12px] text-slate-400 leading-relaxed">Join late or leave the beach early. Your personal match journal is permanently saved to your local history vault.</p>
+            </div>
+
+            <div class="pt-8 pb-12">
+                <button id="mainActionButton" onclick="handleMainAction()" class="w-full btn-action py-5 rounded-2xl font-black text-lg uppercase tracking-widest flex items-center justify-center space-x-3">
+                    <span id="btnText">Launch Engine</span>
+                    <i id="btnIcon" class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="w-full max-w-sm space-y-4 mt-12">
-        <h2 class="text-[10px] font-black text-slate-600 uppercase tracking-[0.5em] mb-6 text-center">App Specifications</h2>
-
-        <div class="feature-box space-y-2 border-l-4 border-green-500">
-            <div class="flex items-center space-x-3 text-green-400 font-black uppercase text-[11px] tracking-widest">
-                <i class="fa-solid fa-shield-check"></i>
-                <span>Privacy Guaranteed</span>
-            </div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">This app is <b>100% Free</b>. We do not use trackers, we do not collect your personal data, and there are <b>zero advertisements</b>.</p>
+    <div id="successScreen" class="fixed inset-0 z-[2000] hidden flex flex-col items-center justify-center p-8 text-center">
+        <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mb-6 shadow-lg animate-bounce">
+            <i class="fa-solid fa-check text-5xl text-white"></i>
         </div>
-
-        <div class="feature-box space-y-2">
-            <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-[11px] tracking-widest">
-                <i class="fa-solid fa-bolt"></i>
-                <span>Instant Live Sync</span>
-            </div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Leaderboards update second-by-second. Features a <b>Sky Sports style</b> live catch ticker for real-time match updates.</p>
+        <h2 class="text-3xl font-black uppercase tracking-tight mb-4">Installation Started</h2>
+        <p class="text-slate-300 text-lg leading-relaxed mb-8">
+            Thank you for installing <br><b class="text-white">Live Sea Score</b>. 
+        </p>
+        <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl space-y-3">
+            <p class="text-xs text-slate-400 uppercase font-black tracking-widest">Next Steps</p>
+            <p class="text-sm text-slate-200">The app is now being added to your phone. You can find it on your <b>Home Screen</b> shortly.</p>
         </div>
-
-        <div class="feature-box space-y-2">
-            <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-[11px] tracking-widest">
-                <i class="fa-solid fa-earth-europe"></i>
-                <span>Virtual Competitions</span>
-            </div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Not beach specific. Compete against friends on different coastlines or regions simultaneously via a shared PIN.</p>
-        </div>
-
-        <div class="feature-box space-y-2">
-            <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-[11px] tracking-widest">
-                <i class="fa-solid fa-battery-bolt"></i>
-                <span>Low Battery Usage</span>
-            </div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Engine optimized for minimal power drain. Built to last the duration of long sessions without killing your battery.</p>
-        </div>
-
-        <div class="feature-box space-y-2">
-            <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-[11px] tracking-widest">
-                <i class="fa-solid fa-database"></i>
-                <span>Data Resilience</span>
-            </div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Never lose your score. Cloud persistence ensures your data is safe even if your phone dies or you accidentally close the app.</p>
-        </div>
-
-        <div class="feature-box space-y-2">
-            <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-[11px] tracking-widest">
-                <i class="fa-solid fa-right-to-bracket"></i>
-                <span>Flexible Match Entry</span>
-            </div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Dynamic entry for late arrivals. If you leave early, your personal match journal is permanently saved to your local history.</p>
-        </div>
-
-        <div class="pt-6">
-            <button id="mainActionButton" onclick="handleMainAction()" class="w-full btn-action py-5 rounded-2xl font-black text-lg uppercase tracking-widest flex items-center justify-center space-x-3">
-                <span id="btnText">Launch Engine</span>
-                <i id="btnIcon" class="fa-solid fa-arrow-right"></i>
-            </button>
-        </div>
+        <button onclick="window.location.href='app.html'" class="mt-10 text-blue-400 font-black uppercase text-xs tracking-[0.3em] border-b border-blue-400/30 pb-1">Open Web Version Anyway</button>
     </div>
 
     <div id="iosGuideModal" class="fixed inset-0 z-[1000] hidden flex items-center justify-center p-6">
         <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-3xl p-8 text-center space-y-6 shadow-2xl">
             <i class="fa-solid fa-mobile-screen-button text-5xl text-blue-400"></i>
             <h3 class="text-xl font-black uppercase tracking-tight">iPhone Installation</h3>
-            <div class="text-sm text-slate-300 space-y-4">
+            <div class="text-sm text-slate-300 space-y-5">
                 <p>1. Tap the <b class="text-white">Share icon</b> <i class="fa-solid fa-arrow-up-from-bracket mx-1 text-blue-400"></i> at the bottom of Safari.</p>
                 <p>2. Scroll down and select <b class="text-white">'Add to Home Screen'</b>.</p>
-                <p>3. Launch from your home screen for the full Pro experience.</p>
+                <p>3. Once added, your data is safe and the app will work offline.</p>
             </div>
-            <button onclick="toggleIosModal()" class="w-full bg-slate-800 py-4 rounded-xl font-black uppercase tracking-widest text-xs">Close</button>
+            <button onclick="toggleIosModal()" class="w-full bg-slate-800 py-4 rounded-xl font-black uppercase tracking-widest text-xs">Got it</button>
         </div>
     </div>
 
@@ -111,7 +136,7 @@
         const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
 
-        // 1. Android Install Detection
+        // Listen for the Android "Install" prompt
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -120,7 +145,11 @@
             }
         });
 
-        // 2. Initial Setup based on platform
+        // Listen for successful installation (Android/Chrome)
+        window.addEventListener('appinstalled', (evt) => {
+            showSuccessScreen();
+        });
+
         window.onload = () => {
             if (isStandalone) {
                 updateButton("Launch Engine", "fa-solid fa-play");
@@ -134,6 +163,11 @@
             document.getElementById('btnIcon').className = iconClass;
         }
 
+        function showSuccessScreen() {
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('successScreen').classList.remove('hidden');
+        }
+
         function handleMainAction() {
             if (isStandalone) {
                 window.location.href = 'app.html';
@@ -143,7 +177,7 @@
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
-                        updateButton("Launch Engine", "fa-solid fa-play");
+                        // The appinstalled event will fire shortly
                     }
                     deferredPrompt = null;
                 });
