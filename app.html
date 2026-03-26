@@ -59,8 +59,8 @@
 
         /* SKY SPORTS FLASH ANIMATIONS */
         @keyframes sky-flash-overlay {
-            0%, 28% { opacity: 1; z-index: 20; } 
-            29%, 100% { opacity: 0; z-index: 0; } 
+            0%, 28% { opacity: 1; z-index: 20; }
+            29%, 100% { opacity: 0; z-index: 0; }
         }
         @keyframes sky-detail-reveal {
             0%, 28% { opacity: 0; }
@@ -215,14 +215,6 @@
             letter-spacing: -0.05em;
             line-height: 1;
         }
-
-        /* LEAGUE TABLE STYLING */
-        .league-row:nth-child(even) { background-color: rgba(30, 41, 59, 0.5); }
-        .league-row.podium-1 { border-left: 4px solid #f59e0b; background-color: rgba(245, 158, 11, 0.1); }
-        .league-row.podium-2 { border-left: 4px solid #cbd5e1; }
-        .league-row.podium-3 { border-left: 4px solid #92400e; }
-        .league-col { padding: 12px 4px; font-weight: 800; text-transform: uppercase; font-size: 11px; }
-        .league-header { background-color: #0f172a; border-bottom: 2px solid #334155; }
     </style>
 </head>
 <body>
@@ -588,15 +580,11 @@
                         </div>
                     </div>
                     <button id="btnRecord" onclick="recordCatch()" class="w-full bg-blue-600 text-white font-black text-lg py-4 rounded-lg shadow-lg transition uppercase active:scale-95">Record Catch</button>
-                    
-                    <button onclick="promptCustomSpecies()" class="w-full bg-slate-800 border border-slate-700 text-slate-400 font-black py-3 rounded-lg text-[10px] uppercase tracking-[0.2em] active:bg-slate-700 active:text-amber transition flex items-center justify-center">
-                        <i class="fa-solid fa-plus-circle mr-2"></i> Add Unlisted Species
-                    </button>
                 </div>
 
                 <div class="pt-1">
                     <h3 class="text-slate-400 font-black text-[10px] uppercase tracking-[0.4em] mb-2 ml-1 opacity-60 text-left">Match Journal</h3>
-                    <div id="localCatchList" class="space-y-1 pb-5"></div>
+                    <div id="localCatchList" class="space-y-0.5 pb-5"></div>
                 </div>
 
                 <div class="pt-6 pb-24">
@@ -632,57 +620,9 @@
                 </div>
             </div>
 
-            <button onclick="generateLeaguePoster()" class="w-full bg-amber text-slate-900 font-black text-lg py-4 rounded-2xl shadow-lg mt-3 active:scale-95 transition-transform uppercase tracking-widest">Generate League Table</button>
+            <button onclick="shareMasterLeaderboard()" class="w-full bg-blue-600 text-white font-black text-lg py-4 rounded-2xl shadow-lg mt-3 active:bg-blue-700 uppercase tracking-widest">Share Full Leaderboard</button>
             <button onclick="shareResults()" class="w-full bg-green-600 text-white font-black text-xl py-4 rounded-2xl shadow-lg mt-3 active:bg-green-700 uppercase tracking-widest">Share My Results</button>
             <button onclick="resetApp()" class="text-slate-400 font-black mt-6 border-b border-slate-900 pb-1 active:text-white uppercase text-[11px] tracking-[0.5em]">Return Home</button>
-        </div>
-
-        <div id="view-poster" class="hidden view-frame bg-[#020617] text-white p-0 relative">
-            <button id="posterShowUi" onclick="toggleSnapshotMode(false)" class="hidden fixed top-4 right-4 z-[500] bg-slate-900/80 border border-slate-700 text-white px-4 py-2 rounded-full font-black text-[10px] uppercase tracking-widest">Show UI</button>
-
-            <div id="posterBranding" class="bg-blue-600 py-4 px-6 shadow-xl flex justify-between items-center">
-                <div class="text-left">
-                    <h1 class="text-2xl font-black uppercase tracking-tighter leading-none">OFFICIAL RESULTS</h1>
-                    <p class="text-[10px] font-bold uppercase tracking-widest opacity-80" id="posterSubhead">Venue Name • Date</p>
-                </div>
-                <img src="icon-512.png" class="w-10 h-10 rounded-lg border border-white/20">
-            </div>
-            
-            <div id="posterStats" class="grid grid-cols-2 border-b border-slate-800 bg-slate-900/50">
-                <div class="p-3 border-r border-slate-800 text-center">
-                    <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Match Biggest Fish</p>
-                    <p class="text-xs font-black text-amber" id="posterBiggestFish">Waiting...</p>
-                </div>
-                <div class="p-3 text-center">
-                    <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Total Catch Volume</p>
-                    <p class="text-xs font-black text-white" id="posterTotalFish">0 Fish Logged</p>
-                </div>
-            </div>
-
-            <div class="scrollable-area p-0">
-                <table class="w-full text-center border-collapse">
-                    <thead>
-                        <tr class="league-header">
-                            <th class="league-col w-12">POS</th>
-                            <th class="league-col text-left pl-4">ANGLER</th>
-                            <th class="league-col w-14">FISH</th>
-                            <th class="league-col w-14">SPEC</th>
-                            <th class="league-col w-20">PTS</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaguePosterBody">
-                    </tbody>
-                </table>
-                <div id="posterFooter" class="p-8 text-center opacity-40">
-                    <p class="text-[9px] font-black uppercase tracking-[0.5em]">Generated by Live Sea Score Pro</p>
-                </div>
-            </div>
-
-            <div id="posterControls" class="p-4 bg-slate-950 border-t border-slate-800 flex space-x-3">
-                <button onclick="navTo('results')" class="flex-1 bg-slate-800 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest">Back</button>
-                <button onclick="toggleSnapshotMode(true)" class="flex-1 bg-amber text-slate-900 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest">Snapshot Mode</button>
-                <button onclick="shareMasterLeaderboard()" class="flex-1 bg-blue-600 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest">Share Text</button>
-            </div>
         </div>
 
         <div id="view-history" class="hidden view-frame p-5 bg-[#020617]">
@@ -691,14 +631,14 @@
                 <h2 class="text-lg font-black uppercase tracking-[0.1em]">History</h2>
                 <div class="w-6"></div>
             </div>
-            <div class="scrollable-area space-y-6 pb-10 text-center">
-                <div id="historyRecentList" class="space-y-3 px-1 text-center"></div>
+            <div class="scrollable-area space-y-3 pb-10 text-center">
+                <div id="historyRecentList" class="space-y-2 px-1 text-center"></div>
                 <div id="archiveContainer" class="hidden px-1 text-center">
-                    <button onclick="toggleArchive()" class="w-full flex justify-between items-center bg-slate-950/50 p-4 rounded-xl border-2 border-slate-800 active:bg-slate-900 transition shadow-md">
+                    <button onclick="toggleArchive()" class="w-full flex justify-between items-center bg-slate-950/50 p-3 rounded-xl border-2 border-slate-800 active:bg-slate-900 transition shadow-md">
                         <span class="font-black text-[10px] uppercase tracking-[0.3em] text-slate-400"><i class="fa-solid fa-box-archive mr-2 text-amber opacity-40"></i> Older Storage</span>
                         <i class="fa-solid fa-chevron-down text-slate-600 transition-transform duration-300" id="archiveChevron"></i>
                     </button>
-                    <div id="historyArchiveList" class="hidden pt-5 space-y-3 text-center"></div>
+                    <div id="historyArchiveList" class="hidden pt-5 space-y-2 text-center"></div>
                 </div>
             </div>
         </div>
@@ -754,7 +694,7 @@
             </button>
             <div class="flex-none flex bg-slate-900 p-2 space-x-2 border-b border-slate-800 shadow-md">
                 <button id="tab-standings" onclick="switchHistoryTab('standings')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase">Leader Board</button>
-                <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase">Diary</button>
+                <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab flex-1 py-4 rounded-lg font-black text-[9px] uppercase tracking-[0.2em] transition bg-slate-800 text-slate-400 border border-slate-700 uppercase">Individual Catch Record</button>
             </div>
             <div id="historyContent" class="scrollable-area p-6 text-center"></div>
         </div>
@@ -766,9 +706,15 @@
             <div class="flex-none p-3 bg-slate-900 flex justify-center items-center border-b border-slate-800 shadow-sm text-center">
                 <h2 class="font-bold text-sm tracking-widest text-slate-100 uppercase flex justify-center items-center">Live Leader Board <span id="leaderboardPinDisplay" class="ml-3 text-[10px] text-amber border border-amber/30 bg-slate-800 px-2 py-1 rounded-md">PIN: ----</span></h2>
             </div>
-            <div class="flex-none bg-amber text-slate-900 py-3 px-4 border-b-4 border-yellow-600 shadow-md flex flex-col items-center justify-center text-center" id="bountyContainer">
-                <span class="text-[10px] font-black uppercase tracking-widest mb-1 opacity-80">👑 Match Biggest Fish</span>
-                <span class="font-black text-base leading-tight" id="bountyBanner">Waiting...</span>
+            <div class="flex-none grid grid-cols-2 bg-amber text-slate-900 border-b-4 border-yellow-600 shadow-md divide-x divide-yellow-700" id="bountyContainer">
+                <div class="py-2.5 px-3 flex flex-col items-center justify-center text-center">
+                    <span class="text-[8px] font-black uppercase tracking-widest mb-0.5 opacity-70">👑 Match Biggest Fish</span>
+                    <span class="font-black text-[11px] leading-tight" id="bountyBanner">Waiting...</span>
+                </div>
+                <div class="py-2.5 px-3 flex flex-col items-center justify-center text-center">
+                    <span class="text-[8px] font-black uppercase tracking-widest mb-0.5 opacity-70">🎣 Total Match Fish</span>
+                    <span class="font-black text-sm" id="totalMatchFishCount">0</span>
+                </div>
             </div>
             <div id="leaderboardList" class="scrollable-area p-3 space-y-1.5 text-center"></div>
         </div>
@@ -934,9 +880,6 @@
                 let kg = Math.floor(val / 1000);
                 let g = val % 1000;
                 return `${kg}kg ${g}g`;
-            }
-            if (fmt === 'length' || fmt === 'length10') {
-                return `${val}cm`;
             }
             return val;
         }
@@ -1353,9 +1296,9 @@
             list.innerHTML = "";
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
-                div.className = "match-card p-2 flex justify-between items-center transition mb-1 shadow-sm";
+                div.className = "match-card p-1.5 flex justify-between items-center transition mb-0.5 shadow-sm";
                 let ptLabel = state.format === 'speciesHunt' ? `(${c.points})` : (c.points === 0 ? '(0)' : '');
-                div.innerHTML = `<div class="flex-1 text-left pl-2"><span class="font-black text-white text-sm uppercase tracking-tight">${c.species}</span><span class="text-[10px] ml-2 text-slate-300 font-bold">${c.display || c.size}</span><span class="text-[9px] text-slate-500 ml-2 font-bold">${c.time}</span><span class="text-[9px] text-amber ml-2 font-black">${ptLabel}</span></div><div class="flex items-center space-x-1"><button onclick="editCatch('${c.id}')" class="text-blue-400 p-1.5 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button><button onclick="deleteCatch('${c.id}')" class="text-amber p-1.5 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`;
+                div.innerHTML = `<div class="flex-1 text-left pl-2 leading-tight"><span class="font-black text-white text-sm uppercase tracking-tight">${c.species}</span><span class="text-xs ml-2 text-slate-100 font-black">${c.display || c.size}</span><span class="text-[10px] text-slate-400 ml-2 font-black italic">${c.time}</span><span class="text-[9px] text-amber ml-2 font-black">${ptLabel}</span></div><div class="flex items-center space-x-1"><button onclick="editCatch('${c.id}')" class="text-blue-400 p-1 active:scale-90 transition"><i class="fa-solid fa-pencil text-xs"></i></button><button onclick="deleteCatch('${c.id}')" class="text-amber p-1 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-xs"></i></button></div>`;
                 list.appendChild(div);
             });
         }
@@ -1364,49 +1307,21 @@
             if(!globalMatchData || !globalMatchData.anglers) return;
             const list = document.getElementById('leaderboardList'); if (!list) return;
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            list.innerHTML = arr.map((a, i) => `<div class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 flex justify-between items-center mb-1.5 shadow-sm border-l-4 ${i===0?'border-l-amber': i===1?'border-l-slate-300': i===2?'border-l-orange-700':'border-l-blue-600'} text-center"><div class="flex items-center truncate w-2/3 text-left pl-1"><span class="font-bold ${i===0?'text-amber':'text-slate-500'} text-sm w-6">${i+1}.</span><span class="font-bold text-slate-100 text-sm uppercase tracking-wide truncate">${a.name}</span></div><div class="font-bold text-lg text-white text-right w-1/3">${formatScoreDisplay(a.score, state.format)}</div></div>`).join('');
-            if(state.format !== 'speciesHunt') {
-                let biggestVal = 0, biggestStr = "No Captures Yet";
-                arr.forEach(angler => { if(angler.catches) { const catchList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches); catchList.forEach(fish => { if(fish.size > biggestVal) { biggestVal = fish.size; biggestStr = `${angler.name} - ${fish.species} (${fish.display || fish.size})`; } }); } });
-                if (document.getElementById('bountyBanner')) { document.getElementById('bountyBanner').innerText = biggestStr; }
-            }
-        }
-
-        function generateLeaguePoster() {
-            if(!globalMatchData || !globalMatchData.anglers) return alert("No match data found.");
-            document.getElementById('posterSubhead').innerText = `${state.venue} • ${new Date().toLocaleDateString()}`;
-            let anglers = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            let totalMatchFish = 0, biggestFishVal = 0, biggestFishStr = "N/A";
-            let tableHtml = "";
-            anglers.forEach((a, i) => {
-                let fishCount = 0, speciesSet = new Set();
-                if (a.catches) {
-                    let catchesArr = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
-                    fishCount = catchesArr.length; totalMatchFish += fishCount;
-                    catchesArr.forEach(c => {
-                        speciesSet.add(c.species);
-                        if (c.size > biggestFishVal) { biggestFishVal = c.size; biggestFishStr = `${a.name} - ${c.species} (${c.display || c.size})`; }
-                    });
-                }
-                let podiumClass = (i === 0) ? "podium-1" : (i === 1) ? "podium-2" : (i === 2) ? "podium-3" : "";
-                tableHtml += `<tr class="league-row ${podiumClass}"><td class="league-col text-white">${i+1}</td><td class="league-col text-left pl-4 text-white truncate max-w-[100px]">${a.name}</td><td class="league-col text-slate-300">${fishCount}</td><td class="league-col text-slate-300">${speciesSet.size}</td><td class="league-col text-amber font-black">${formatScoreDisplay(a.score, state.format)}</td></tr>`;
+            list.innerHTML = arr.map((a, i) => `<div class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 flex justify-between items-center mb-1 shadow-sm border-l-4 ${i===0?'border-l-amber': i===1?'border-l-slate-300': i===2?'border-l-orange-700':'border-l-blue-600'} text-center"><div class="flex items-center truncate w-2/3 text-left pl-1"><span class="font-bold ${i===0?'text-amber':'text-slate-500'} text-sm w-6">${i+1}.</span><span class="font-bold text-slate-100 text-sm uppercase tracking-wide truncate">${a.name}</span></div><div class="font-bold text-lg text-white text-right w-1/3">${formatScoreDisplay(a.score, state.format)}</div></div>`).join('');
+            
+            // Calculate Stats for Banner
+            let totalFish = 0, biggestVal = 0, biggestStr = "No Captures";
+            arr.forEach(angler => { 
+                if(angler.catches) { 
+                    const catchList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches);
+                    totalFish += catchList.length;
+                    catchList.forEach(fish => { 
+                        if(fish.size > biggestVal) { biggestVal = fish.size; biggestStr = `${angler.name} - ${fish.species} (${fish.display || fish.size})`; } 
+                    }); 
+                } 
             });
-            document.getElementById('leaguePosterBody').innerHTML = tableHtml;
-            document.getElementById('posterBiggestFish').innerText = biggestFishStr;
-            document.getElementById('posterTotalFish').innerText = `${totalMatchFish} Fish Logged`;
-            navTo('poster');
-        }
-
-        function toggleSnapshotMode(active) {
-            const elements = ['posterBranding', 'posterStats', 'posterFooter', 'posterControls'];
-            const uiBtn = document.getElementById('posterShowUi');
-            if (active) {
-                elements.forEach(id => document.getElementById(id).classList.add('hidden'));
-                uiBtn.classList.remove('hidden');
-            } else {
-                elements.forEach(id => document.getElementById(id).classList.remove('hidden'));
-                uiBtn.classList.add('hidden');
-            }
+            if (document.getElementById('bountyBanner')) document.getElementById('bountyBanner').innerText = biggestStr;
+            if (document.getElementById('totalMatchFishCount')) document.getElementById('totalMatchFishCount').innerText = totalFish;
         }
 
         function endMatchEarly(grace) { if(state.isHost && state.pin) { if(grace) { document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('customEndModal').classList.remove('hidden'); } } }
@@ -1415,26 +1330,38 @@
         function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); resetApp(); } }
         function lockdownMatch(isHostPushing) { clearInterval(clockInterval); if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } saveHistory(false); state.status = 'finished'; saveState(); let totalPts = state.myCatches.reduce((s,c) => s + c.points, 0); document.getElementById('finalScore').innerText = formatScoreDisplay(totalPts, state.format); document.getElementById('finalCount').innerText = state.myCatches.length; document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; navTo('results'); }
         function saveHistory(isL) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); h.unshift({ id: 'match_' + Date.now(), pin: state.pin, venue: state.venue, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), format: state.format, score: state.myCatches.reduce((s,c) => s+c.points, 0), personalCatches: [...state.myCatches], standings: globalMatchData?.anglers ? Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score) : [], playerName: state.name, isLive: isL, endTime: state.endTime, graceEndTime: state.graceEndTime || (state.endTime + 180000) }); localStorage.setItem('matchHistory', JSON.stringify(h)); }
+        
         function renderHistory() {
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); const r = document.getElementById('historyRecentList'), a = document.getElementById('historyArchiveList'), now = Date.now(); r.innerHTML = ""; a.innerHTML = "";
             if(h.length === 0) { r.innerHTML = '<p class="text-slate-400 py-24 font-black uppercase text-[10px] tracking-widest text-center">History Empty</p>'; return; }
-            h.forEach((m, i) => { const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 180000)); let card = document.createElement('div'); card.className = "match-card p-5 flex flex-col items-center active:bg-slate-900 transition relative overflow-hidden mb-3 text-center"; let headerText = isStillActuallyLive ? "" : "<p class='text-[9px] font-black text-slate-500 mb-1.5 uppercase tracking-[0.4em]'>MATCH ENDED</p>"; let timerDisplay = isStillActuallyLive ? `<p id="hist-timer-${m.id}" class="text-amber font-black text-[10px] tabular-nums mb-0.5">Checking Clock...</p>` : ""; card.innerHTML = `${headerText}<div class="w-full flex justify-between items-center text-center"><div class="flex-1 text-left pl-1" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-base uppercase tracking-tight">${m.date}</span> ${isStillActuallyLive ? '<span class="text-[8px] bg-red-600 px-2 py-0.5 rounded-full text-white font-black ml-2 animate-pulse">LIVE</span>' : ''}<br><span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || 'Venue'}</span><br><span class="text-[10px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span>${timerDisplay}</div><div class="text-right flex items-center space-x-4"><div onclick="viewPastRecord('${m.id}')"><div class="text-2xl font-black text-white">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[9px] text-amber uppercase font-black text-center">Total</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1 py-3"><i class="fa-solid fa-trash-can text-base"></i></button></div></div>`; if(i < 6) r.appendChild(card); else a.appendChild(card); });
-            document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 6); startHistoryTimers();
+            h.forEach((m, i) => { 
+                const isStillActuallyLive = m.isLive && (now < (m.graceEndTime || m.endTime + 180000)); 
+                let card = document.createElement('div'); 
+                card.className = "match-card p-3.5 flex flex-col items-center active:bg-slate-900 transition mb-2 text-center"; 
+                let headerText = isStillActuallyLive ? "" : "<p class='text-[8px] font-black text-slate-500 mb-1 uppercase tracking-[0.4em]'>MATCH ENDED</p>"; 
+                card.innerHTML = `${headerText}<div class="w-full flex justify-between items-center"><div class="flex-1 text-left pl-1" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-sm uppercase tracking-tight">${m.date}</span><br><span class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">${m.venue || 'Venue'}</span><br><span class="text-[9px] text-amber font-black tracking-widest uppercase">PIN ${m.pin} • ${m.personalCatches.length} Catch</span></div><div class="text-right flex items-center space-x-4"><div onclick="viewPastRecord('${m.id}')"><div class="text-xl font-black text-white">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[8px] text-amber uppercase font-black">Total</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-amber px-1"><i class="fa-solid fa-trash-can text-sm"></i></button></div></div>`; 
+                if(i < 6) r.appendChild(card); else a.appendChild(card); 
+            });
+            document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 6); 
         }
-        function startHistoryTimers() { clearInterval(historyUpdateInterval); historyUpdateInterval = setInterval(() => { const now = Date.now(); let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); h.forEach(m => { const timerEl = document.getElementById(`hist-timer-${m.id}`); if (timerEl) { let totalEnd = m.graceEndTime || (m.endTime + 180000), diff = totalEnd - now; if (diff <= 0) { renderHistory(); } else { let s = Math.floor(diff / 1000), hours = Math.floor(s / 3600), mins = Math.floor((s % 3600) / 60), secs = s % 60; timerEl.innerText = `${hours.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')} Remaining`; } } }); }, 1000); }
+
         function deleteHistoryItem(id) { if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
         function toggleArchive() { isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
         function viewPastRecord(id) { activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === id); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
+        
         function switchHistoryTab(tab) {
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active', 'bg-blue-600', 'text-white'); t.classList.add('bg-slate-800', 'text-slate-400'); }); document.getElementById(`tab-${tab}`).classList.add('active', 'bg-blue-600', 'text-white');
-            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest">Score Table</h4><div class="space-y-2.5">${m.standings.map((a, i) => `<div class="match-card p-4 flex justify-between items-center border border-slate-700 shadow-md text-center"><span class="uppercase text-white font-bold text-sm text-left">${i+1}.</b> ${a.name}</span><b class="text-white text-lg text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; } 
+            if(tab === 'standings') { document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-4 text-center tracking-widest">Score Table</h4><div class="space-y-1.5">${m.standings.map((a, i) => `<div class="match-card p-3 flex justify-between items-center border border-slate-700 shadow-md"><span class="uppercase text-white font-bold text-sm text-left">${i+1}.</b> ${a.name}</span><b class="text-white text-base text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`; } 
             else { 
-                let displayCatches = JSON.parse(JSON.stringify(m.personalCatches)).reverse(), counts = {}; displayCatches.forEach(c => { counts[c.species] = (counts[c.species] || 0) + 1; c.orderCount = counts[c.species]; }); displayCatches.reverse();
-                let listHtml = displayCatches.map(c => { let spec = c.species; if(m.format === 'speciesHunt') { let ord = c.orderCount, sfx = ord === 1 ? '(1st)' : ord === 2 ? '(2nd)' : ord === 3 ? '(3rd)' : '(4th+)'; spec += ` <span class="text-blue-400 text-[10px] ml-1 tracking-tighter">${sfx}</span>`; } let ptTxt = m.format.includes('weight') ? 'Recorded' : `${c.points} Pts`; return `<div class="match-card p-4 flex justify-between items-center border border-slate-800 shadow-inner text-center"><div class="text-left"><b class="text-white text-base uppercase text-left">${spec}</b><br><span class="text-[9px] text-slate-400 font-black uppercase tracking-widest text-left">${c.time}</span></div><div class="text-right"><b class="text-white text-base text-right">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase tracking-widest text-right">${ptTxt}</span></div></div>`; }).join('');
-                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-5 text-center tracking-widest">Capture Diary</h4><div class="space-y-2.5 text-center">${listHtml}</div>`; 
+                let listHtml = m.personalCatches.map(c => { 
+                    let ptTxt = m.format.includes('weight') ? 'Recorded' : `${c.points} Pts`; 
+                    return `<div class="match-card p-3 flex justify-between items-center border border-slate-800 mb-1 shadow-inner"><div class="text-left"><b class="text-white text-sm uppercase">${c.species}</b><br><span class="text-[9px] text-slate-400 font-black uppercase">${c.time}</span></div><div class="text-right"><b class="text-white text-sm text-right">${c.display || c.size}</b><br><span class="text-[9px] text-amber font-black uppercase">${ptTxt}</span></div></div>`; 
+                }).join('');
+                document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-4 text-center tracking-widest">Catch Diary</h4><div class="space-y-1">${listHtml}</div>`; 
             }
         }
+
         function closeHistoryDetail() { document.getElementById('historyDetailDrawer').classList.remove('open'); setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); }
         let wakeLock = null; async function toggleWakeLock() { if(wakeLock) { await wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-moon"></i>`; } else { try { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').innerHTML = `<i class="fa-solid fa-sun text-amber"></i>`; } catch(e) {} } }
         function shareResults() { let t = `🏆 Match Summary: ${state.name}\nScore: ${document.getElementById('finalScore').innerText}\nLogs: ${document.getElementById('finalCount').innerText}\nLogged via Live Sea Score.`; if (navigator.share) { navigator.share({ title: 'Results', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); } }
@@ -1448,7 +1375,7 @@
                     let oldState = JSON.parse(saved);
                     state.name = oldState.name || ""; state.venue = oldState.venue || "";
                     document.getElementById('playerName').value = state.name; document.getElementById('venueName').value = state.venue;
-                    if (['playing', 'hype', 'waiting', 'finished', 'poster'].includes(oldState.status) || oldState.status === 'grace') {
+                    if (['playing', 'hype', 'waiting'].includes(oldState.status) || oldState.status === 'grace') {
                         state = oldState; listenToCloud(); navTo(state.view);
                         if (state.status === 'playing' || state.status === 'grace') { 
                             renderCatchList(); startClock(); updateLiveTally(); 
@@ -1467,7 +1394,7 @@
             }
         });
 
-        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.toggleWakeLock = toggleWakeLock; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.generateLeaguePoster = generateLeaguePoster; window.toggleSnapshotMode = toggleSnapshotMode;
+        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.toggleWakeLock = toggleWakeLock; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad;
     </script>
     <script>
     if ('serviceWorker' in navigator) {
