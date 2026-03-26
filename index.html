@@ -4,31 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Live Sea Score</title>
+    
+    <script>
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+            window.location.href = 'app.html';
+        }
+    </script>
+
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { background-color: #020617; font-family: 'Inter', sans-serif; color: white; margin: 0; padding: 0; }
-        
         .feature-box { background: #0f172a; border: 1px solid #1e293b; padding: 22px; border-radius: 20px; }
-        
-        .btn-action { 
-            background: #3b82f6; 
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3); 
-            transition: all 0.2s ease;
-        }
+        .btn-action { background: #3b82f6; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3); transition: all 0.2s ease; }
         .btn-action:active { transform: scale(0.95); opacity: 0.9; }
-
-        #iosGuideModal, #successScreen {
-            background: rgba(2, 6, 23, 0.99);
-            backdrop-filter: blur(20px);
-        }
-
-        @keyframes bounce-subtle {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        #iosGuideModal, #successScreen { background: rgba(2, 6, 23, 0.99); backdrop-filter: blur(20px); }
+        @keyframes bounce-subtle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-check { animation: bounce-subtle 2s infinite ease-in-out; }
     </style>
 </head>
@@ -38,7 +31,7 @@
         <div class="flex flex-col items-center text-center space-y-6 pt-10">
             <img src="icon-512.png" alt="App Logo" class="w-32 h-32 rounded-[2.5rem] shadow-2xl border-2 border-slate-800">
             <h1 class="text-4xl font-black tracking-tighter uppercase leading-none">Live Sea Score</h1>
-            <p class="text-slate-500 font-bold text-[10px] uppercase tracking-[0.4em]">Version 7.3.0</p>
+            <p class="text-slate-500 font-bold text-[10px] uppercase tracking-[0.4em]">Version 7.3.1</p>
         </div>
 
         <div class="w-full space-y-5 mt-12">
@@ -46,56 +39,49 @@
 
             <div class="feature-box space-y-2 border-l-4 border-green-500">
                 <div class="flex items-center space-x-3 text-green-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-shield-check"></i>
-                    <span>Privacy Guaranteed</span>
+                    <i class="fa-solid fa-shield-check"></i><span>Privacy Guaranteed</span>
                 </div>
                 <p class="text-[13px] text-slate-300 leading-relaxed"><b>100% Free</b>. No trackers, no data collection, and <b>zero advertisements</b>.</p>
             </div>
 
             <div class="feature-box space-y-2">
                 <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-mug-hot"></i>
-                    <span>Friendly Competition</span>
+                    <i class="fa-solid fa-mug-hot"></i><span>Friendly Competition</span>
                 </div>
                 <p class="text-[13px] text-slate-300 leading-relaxed">A casual match engine built for club social days and mates fishing together.</p>
             </div>
 
             <div class="feature-box space-y-2">
                 <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-bolt"></i>
-                    <span>Instant Live Sync</span>
+                    <i class="fa-solid fa-bolt"></i><span>Instant Live Sync</span>
                 </div>
                 <p class="text-[13px] text-slate-300 leading-relaxed">Leaderboards update second-by-second with a <b>Sky Sports style</b> live catch ticker.</p>
             </div>
 
             <div class="feature-box space-y-2">
                 <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-earth-europe"></i>
-                    <span>Virtual Comps</span>
+                    <i class="fa-solid fa-earth-europe"></i><span>Virtual Comps</span>
                 </div>
                 <p class="text-[13px] text-slate-300 leading-relaxed">Fish against mates on different beaches or regions simultaneously via a PIN.</p>
             </div>
 
             <div class="feature-box space-y-2">
                 <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-battery-bolt"></i>
-                    <span>Low Battery Usage</span>
+                    <i class="fa-solid fa-battery-bolt"></i><span>Low Battery Usage</span>
                 </div>
                 <p class="text-[13px] text-slate-300 leading-relaxed">Engine optimized for minimal power drain to last the duration of long sessions.</p>
             </div>
 
             <div class="feature-box space-y-2">
                 <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-database"></i>
-                    <span>Data Resilience</span>
+                    <i class="fa-solid fa-database"></i><span>Data Resilience</span>
                 </div>
                 <p class="text-[13px] text-slate-300 leading-relaxed">Cloud persistence ensures your score is safe even if your battery dies or the app is closed.</p>
             </div>
 
             <div class="feature-box space-y-2">
                 <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-right-to-bracket"></i>
-                    <span>Flexible Entry</span>
+                    <i class="fa-solid fa-right-to-bracket"></i><span>Flexible Entry</span>
                 </div>
                 <p class="text-[13px] text-slate-300 leading-relaxed">Join late or leave early. Your personal match journal is saved to your local history vault.</p>
             </div>
@@ -113,21 +99,20 @@
         <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mb-8 shadow-2xl animate-check">
             <i class="fa-solid fa-check text-5xl text-white"></i>
         </div>
-        <h2 class="text-3xl font-black uppercase tracking-tight mb-4">Installation Started</h2>
+        <h2 class="text-3xl font-black uppercase tracking-tight mb-4 text-green-400">Installation Started</h2>
         <p class="text-slate-300 text-lg leading-relaxed mb-10">
-            Thank you for installing <br><b class="text-white text-2xl">Live Sea Score</b>. 
+            Installation complete! You can now access the full engine via the <b class="text-white">Live Sea Score icon</b> on your home screen.
         </p>
         
-        <div class="w-full max-w-xs bg-slate-900 border border-slate-700 p-6 rounded-3xl space-y-4 mb-10">
-            <p class="text-sm text-slate-200">The app is being added to your phone. You can now close this tab and open the app from your <b>Home Screen</b>.</p>
-        </div>
-
         <div class="w-full max-w-xs space-y-3">
-            <button onclick="closeCurrentTab()" class="w-full bg-red-600 py-5 rounded-2xl font-black text-white uppercase tracking-widest shadow-lg">Close This Tab</button>
-            <button onclick="window.location.href='app.html'" class="w-full bg-slate-800 py-4 rounded-2xl font-black text-slate-400 uppercase text-[10px] tracking-[0.2em]">Continue in Browser</button>
+            <button onclick="window.close(); setTimeout(() => { document.getElementById('closeError').classList.remove('hidden'); }, 500);" class="w-full bg-red-600 py-5 rounded-2xl font-black text-white uppercase tracking-widest shadow-lg flex flex-col items-center">
+                <span>Close This Tab</span>
+                <span class="text-[9px] opacity-60 tracking-widest mt-0.5">App is now on your phone</span>
+            </button>
+            <button onclick="window.location.href='app.html'" class="w-full bg-slate-800 py-4 rounded-2xl font-black text-slate-400 uppercase text-[10px] tracking-[0.2em]">Open in Browser anyway</button>
         </div>
         
-        <p id="closeError" class="hidden mt-6 text-[10px] text-slate-500 uppercase font-black px-6">Phone Security Active: Please tap the 'X' or Tabs icon in your browser to close manually.</p>
+        <p id="closeError" class="hidden mt-8 text-[10px] text-slate-500 uppercase font-black px-6 italic">If this tab remains open, please close it manually using your browser controls.</p>
     </div>
 
     <div id="iosGuideModal" class="fixed inset-0 z-[1000] hidden flex items-center justify-center p-6">
@@ -137,7 +122,7 @@
             <div class="text-sm text-slate-300 space-y-5">
                 <p>1. Tap the <b class="text-white">Share icon</b> <i class="fa-solid fa-arrow-up-from-bracket mx-1 text-blue-400"></i> at the bottom of Safari.</p>
                 <p>2. Scroll down and select <b class="text-white">'Add to Home Screen'</b>.</p>
-                <p>3. Once added, launch from your home screen.</p>
+                <p>3. Once added, launch from your <b class="text-white">Home Screen icon</b>.</p>
             </div>
             <button onclick="toggleIosModal()" class="w-full bg-slate-800 py-4 rounded-xl font-black uppercase tracking-widest text-xs">Close</button>
         </div>
@@ -146,7 +131,7 @@
     <script>
         let deferredPrompt = null;
         const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -157,12 +142,13 @@
         });
 
         window.addEventListener('appinstalled', (evt) => {
-            showSuccessScreen();
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('successScreen').classList.remove('hidden');
         });
 
         window.onload = () => {
             if (isStandalone) {
-                updateButton("Launch Engine", "fa-solid fa-play");
+                window.location.href = 'app.html';
             } else if (isIOS) {
                 updateButton("How to Install", "fa-solid fa-circle-info");
             }
@@ -173,19 +159,6 @@
             document.getElementById('btnIcon').className = iconClass;
         }
 
-        function showSuccessScreen() {
-            document.getElementById('mainContent').classList.add('hidden');
-            document.getElementById('successScreen').classList.remove('hidden');
-        }
-
-        function closeCurrentTab() {
-            window.close();
-            // Fallback for mobile browsers that block window.close()
-            setTimeout(() => {
-                document.getElementById('closeError').classList.remove('hidden');
-            }, 500);
-        }
-
         function handleMainAction() {
             if (isStandalone) {
                 window.location.href = 'app.html';
@@ -193,10 +166,7 @@
                 toggleIosModal();
             } else if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((result) => {
-                    if (result.outcome === 'accepted') { /* Success handled by event listener */ }
-                    deferredPrompt = null;
-                });
+                deferredPrompt.userChoice.then((result) => { deferredPrompt = null; });
             } else {
                 window.location.href = 'app.html';
             }
