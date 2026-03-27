@@ -333,7 +333,7 @@
             <div class="text-center mt-6">
                 <img src="icon-512.png" class="w-24 h-24 mx-auto rounded-3xl mb-3 shadow-2xl border border-white/10">
                 <h1 class="text-3xl font-black tracking-tight mb-0.5 uppercase text-white">Live Sea Score</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest uppercase opacity-90 version-display">V7.4.0</div>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest uppercase opacity-90 version-display">V7.5.0</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3">
@@ -625,7 +625,7 @@
                         <i class="fa-solid fa-rotate text-lg mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-[10px] tracking-widest">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[9px] text-slate-600 mt-4 uppercase tracking-[0.2em] version-display">Sea Diary Match Pro</p>
+                    <p class="text-[9px] text-slate-600 mt-4 uppercase tracking-[0.2em] version-display">V7.5.0</p>
                 </section>
             </div>
         </div>
@@ -646,17 +646,16 @@
                 <i class="fa-solid fa-arrow-up mr-3 animate-bounce"></i> RETURN TO FISH LOG
             </button>
             
-            <div class="flex-none p-3 flex justify-between items-center mt-2 h-14 w-full px-4 overflow-hidden border-b border-slate-800/50">
-                <div class="flex-1 overflow-hidden relative h-full flex items-center mr-4 mask-fade-edges">
+            <div class="flex-none p-3 flex justify-center items-center mt-2 h-14 w-full px-4 overflow-hidden border-b border-slate-800/50">
+                <div class="flex-1 overflow-hidden relative h-full flex items-center mask-fade-edges w-full">
                     <div id="leaderboardMiniTicker" class="ticker-track font-black text-[11px] uppercase items-center">
                         <span class="text-slate-500">LIVE FEED: AWAITING CATCHES...</span>
                     </div>
                 </div>
-                <div id="leaderboardPinDisplay" class="flex-none text-[10px] text-amber font-black border border-amber/30 bg-slate-800 px-3 py-1.5 rounded-full shadow-inner tracking-widest">PIN: ----</div>
             </div>
 
-            <div class="flex-none grid grid-cols-3 bg-amber text-slate-900 rounded-2xl mx-3 mt-3 shadow-lg overflow-hidden" id="bountyContainer">
-                <div class="col-span-2 py-4 px-3 flex flex-col items-center text-center border-r border-yellow-700/50 justify-center">
+            <div class="flex-none grid grid-cols-4 bg-amber text-slate-900 rounded-2xl mx-3 mt-3 shadow-lg overflow-hidden" id="bountyContainer">
+                <div class="col-span-3 py-4 px-3 flex flex-col items-center text-center border-r border-yellow-700/50 justify-center">
                     <span class="text-[9px] font-black uppercase tracking-widest mb-1.5 opacity-70">👑 Match Biggest Fish</span>
                     <span class="font-black text-lg leading-tight truncate w-full" id="bountyBanner">Waiting...</span>
                 </div>
@@ -736,7 +735,6 @@
         let timeAtmInput = "";
         let timeAtmIsPM = true; 
         
-        // V7.4.0 Engine Variables
         let lastSyncCount = 0;
         let islandTapCount = parseInt(localStorage.getItem('islandTapCount') || '0');
         
@@ -745,7 +743,6 @@
         let isLongPress = false;
         let islandPressTimer;
 
-        // --- RELATIVE TIME ENGINE ---
         function formatCatchTime(c) {
             if (!c.ts) return c.time;
             let diffMins = Math.floor((Date.now() - c.ts) / 60000);
@@ -754,7 +751,6 @@
             return c.time;
         }
 
-        // --- THE "TOUCH GATE" LOGIC ---
         function handleIslandTouchStart(e) {
             if(islandEl.classList.contains('ticker-active')) return;
             isLongPress = false;
@@ -763,7 +759,7 @@
                 islandPressTimer = setTimeout(() => {
                     isLongPress = true;
                     document.getElementById('stewardDrawer').classList.add('open');
-                }, 600); // 600ms hold triggers Steward Deck
+                }, 600); 
             }
         }
         
@@ -773,7 +769,6 @@
             
             let duration = Date.now() - touchStartTime;
             if (!isLongPress && duration < 600) {
-                // Quick tap
                 islandTapCount++;
                 localStorage.setItem('islandTapCount', islandTapCount.toString());
                 document.getElementById('leaderboardDrawer').classList.add('open');
@@ -785,7 +780,6 @@
         islandEl.addEventListener('mousedown', handleIslandTouchStart);
         islandEl.addEventListener('mouseup', handleIslandTouchEnd);
 
-        // --- DYNAMIC ISLAND ROTATING HUD ---
         let hudState = 0;
         setInterval(() => {
             const rankTxt = document.getElementById('island-rank-text');
@@ -793,12 +787,10 @@
             const promptTxt = document.getElementById('island-prompt-text');
             
             if(rankTxt && gapTxt && promptTxt && !islandEl.classList.contains('ticker-active')) {
-                // Clear all
                 rankTxt.classList.replace('opacity-100', 'opacity-0');
                 gapTxt.classList.replace('opacity-100', 'opacity-0');
                 promptTxt.classList.replace('opacity-100', 'opacity-0');
                 
-                // Smart Learner Logic (Increased to 4 taps)
                 let maxStates = (islandTapCount < 4) ? 3 : 2; 
                 hudState = (hudState + 1) % maxStates;
                 
@@ -808,7 +800,6 @@
             }
         }, 4000);
 
-        // --- SYNC ON WAKE ---
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible' && state.pin) {
                 if (['playing', 'grace'].includes(state.status)) {
@@ -823,7 +814,6 @@
             }
         });
 
-        // --- BULLETPROOF TICKER LOGIC ---
         function checkAndFireTicker() {
             if(!globalMatchData || !globalMatchData.anglers) return;
             let allCatches = [];
@@ -857,7 +847,6 @@
 
             const track = document.getElementById('tickerTrack');
             
-            // CSS Animation Reset Fix
             track.classList.remove('scroll-active');
             void track.offsetWidth; 
             
@@ -876,7 +865,6 @@
                 active.classList.add('hidden');
                 dormant.classList.remove('hidden');
                 
-                // Force HUD reset
                 hudState = 0;
                 document.getElementById('island-rank-text').classList.replace('opacity-0', 'opacity-100');
                 document.getElementById('island-gap-text').classList.replace('opacity-100', 'opacity-0');
@@ -884,7 +872,6 @@
             }, 12000);
         }
 
-        // --- V7.4.0 LEADERBOARD MINI TICKER ---
         function updateMiniTicker(allCatches) {
             const track = document.getElementById('leaderboardMiniTicker');
             if(!track) return;
@@ -905,7 +892,7 @@
             });
             track.classList.remove('scroll-active');
             void track.offsetWidth;
-            track.innerHTML = htmlBlock + htmlBlock; // Double to loop seamlessly
+            track.innerHTML = htmlBlock + htmlBlock; 
             track.classList.add('scroll-active');
         }
 
@@ -1156,8 +1143,6 @@
 
         function updateLiveTally() {
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
-            
-            // Update Island Score
             const islandScore = document.getElementById('islandScore');
             if(islandScore) islandScore.innerHTML = formatScoreDisplay(total, state.format) + `<span class="telemetry-unit">pts</span>`;
         }
@@ -1260,7 +1245,6 @@
         function beginFishing(isPushing) {
             state.status = 'playing'; navTo('fishing');
             
-            if (document.getElementById('leaderboardPinDisplay')) document.getElementById('leaderboardPinDisplay').innerText = `PIN: ${state.pin}`;
             if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
 
             pushMyScoreToCloud();
@@ -1276,7 +1260,6 @@
             if (document.getElementById('bountyContainer')) { document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); }
             startClock();
             
-            // Initialize mini ticker
             if (globalMatchData) {
                 let allCatches = [];
                 Object.values(globalMatchData.anglers).forEach(angler => {
@@ -1379,7 +1362,6 @@
             const list = document.getElementById('leaderboardList'); if (!list) return;
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
             
-            // V7.4.0 HUD Calculations
             let myRank = arr.findIndex(a => a.name === state.name) + 1;
             const rankEl = document.getElementById('island-rank-text');
             if (rankEl) rankEl.innerText = `🏆 MY RANK: ${myRank}${myRank === 1 ? 'ST' : myRank === 2 ? 'ND' : myRank === 3 ? 'RD' : 'TH'}`;
@@ -1540,7 +1522,6 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href); checkInstallStatus(); const saved = localStorage.getItem('matchState');
             
-            // V7.4.0 Single Source of Truth Version Fetch
             fetch('/version.json')
                 .then(res => res.json())
                 .then(data => {
@@ -1558,7 +1539,6 @@
                             renderCatchList(); startClock(); updateLiveTally(); 
                             
                             if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
-                            if (document.getElementById('leaderboardPinDisplay')) document.getElementById('leaderboardPinDisplay').innerText = `PIN: ${state.pin}`;
                             
                             if (globalMatchData) {
                                 let allCatches = [];
