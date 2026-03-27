@@ -16,11 +16,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { background-color: #020617; font-family: 'Inter', sans-serif; color: white; margin: 0; padding: 0; }
+        body { background-color: #000000; font-family: 'Inter', sans-serif; color: white; margin: 0; padding: 0; }
         .feature-box { background: #0f172a; border: 1px solid #1e293b; padding: 22px; border-radius: 20px; }
         .btn-action { background: #3b82f6; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3); transition: all 0.2s ease; }
         .btn-action:active { transform: scale(0.95); opacity: 0.9; }
-        #iosGuideModal, #successScreen { background: rgba(2, 6, 23, 0.99); backdrop-filter: blur(20px); }
+        #iosGuideModal, #successScreen { background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(20px); }
         @keyframes bounce-subtle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .animate-check { animation: bounce-subtle 2s infinite ease-in-out; }
     </style>
@@ -29,61 +29,54 @@
 
     <div id="mainContent" class="w-full max-w-sm flex flex-col items-center">
         <div class="flex flex-col items-center text-center space-y-6 pt-10">
-            <img src="icon-512.png" alt="App Logo" class="w-32 h-32 rounded-[2.5rem] shadow-2xl border-2 border-slate-800">
+            <img src="icon-512.png" alt="App Logo" class="w-32 h-32 rounded-[2.5rem] shadow-[0_10px_40px_rgba(59,130,246,0.3)] border border-slate-800">
             <h1 class="text-4xl font-black tracking-tighter uppercase leading-none">Live Sea Score</h1>
-            <p class="text-slate-500 font-bold text-[10px] uppercase tracking-[0.4em]">Version 7.4.0</p>
+            <p id="versionDisplay" class="text-slate-500 font-bold text-[10px] uppercase tracking-[0.4em]">Version 7.4.0</p>
         </div>
 
         <div class="w-full space-y-5 mt-12">
             <h2 class="text-base font-black text-slate-500 uppercase tracking-[0.5em] mb-6 text-center">App Specifications</h2>
 
-            <div class="feature-box space-y-2 border-l-4 border-green-500">
+            <div class="feature-box space-y-2 border-l-4 border-amber-500">
+                <div class="flex items-center space-x-3 text-amber-500 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-layer-group"></i><span>Dynamic Island HUD</span>
+                </div>
+                <p class="text-[13px] text-slate-300 leading-relaxed">Real-time telemetry, target gaps, and your live match rank locked directly to the top of your screen.</p>
+            </div>
+
+            <div class="feature-box space-y-2">
+                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-bolt"></i><span>Bulletproof Sync Ticker</span>
+                </div>
+                <p class="text-[13px] text-slate-300 leading-relaxed">A continuously scrolling, <b>Sky Sports style</b> live catch ticker. Instantly know when the Biggest Fish benchmark is beaten.</p>
+            </div>
+
+            <div class="feature-box space-y-2">
+                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-battery-bolt"></i><span>OLED Battery Saver</span>
+                </div>
+                <p class="text-[13px] text-slate-300 leading-relaxed">Pure OLED black interface with <b>Sync-on-Wake</b> technology. No manual sleep button needed—built for marathon sessions.</p>
+            </div>
+            
+            <div class="feature-box space-y-2">
+                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-user-shield"></i><span>Steward Command Bridge</span>
+                </div>
+                <p class="text-[13px] text-slate-300 leading-relaxed">Match hosts can seamlessly adjust the match clock, trigger 3-minute grace periods, or transfer control mid-match.</p>
+            </div>
+
+            <div class="feature-box space-y-2">
+                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
+                    <i class="fa-solid fa-box-archive"></i><span>Offline History Vault</span>
+                </div>
+                <p class="text-[13px] text-slate-300 leading-relaxed">Cloud persistence backed by a secure local storage vault. Your match data is safe even if your connection drops or the app closes.</p>
+            </div>
+
+            <div class="feature-box space-y-2 border-l-4 border-green-500 mt-8">
                 <div class="flex items-center space-x-3 text-green-400 font-black uppercase text-sm tracking-widest">
                     <i class="fa-solid fa-shield-check"></i><span>Privacy Guaranteed</span>
                 </div>
                 <p class="text-[13px] text-slate-300 leading-relaxed"><b>100% Free</b>. No trackers, no data collection, and <b>zero advertisements</b>.</p>
-            </div>
-
-            <div class="feature-box space-y-2">
-                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-mug-hot"></i><span>Friendly Competition</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">A casual match engine built for club social days and mates fishing together.</p>
-            </div>
-
-            <div class="feature-box space-y-2">
-                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-bolt"></i><span>Instant Live Sync</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">Leaderboards update second-by-second with a <b>Sky Sports style</b> live catch ticker.</p>
-            </div>
-
-            <div class="feature-box space-y-2">
-                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-earth-europe"></i><span>Virtual Comps</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">Fish against mates on different beaches or regions simultaneously via a PIN.</p>
-            </div>
-
-            <div class="feature-box space-y-2">
-                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-battery-bolt"></i><span>Low Battery Usage</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">Engine optimized for minimal power drain to last the duration of long sessions.</p>
-            </div>
-
-            <div class="feature-box space-y-2">
-                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-database"></i><span>Data Resilience</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">Cloud persistence ensures your score is safe even if your battery dies or the app is closed.</p>
-            </div>
-
-            <div class="feature-box space-y-2">
-                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-right-to-bracket"></i><span>Flexible Entry</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">Join late or leave early. Your personal match journal is saved to your local history vault.</p>
             </div>
 
             <div class="pt-8 pb-12">
@@ -96,7 +89,7 @@
     </div>
 
     <div id="successScreen" class="fixed inset-0 z-[2000] hidden flex flex-col items-center justify-center p-8 text-center">
-        <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mb-8 shadow-2xl animate-check">
+        <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(34,197,94,0.4)] animate-check">
             <i class="fa-solid fa-check text-5xl text-white"></i>
         </div>
         <h2 class="text-3xl font-black uppercase tracking-tight mb-4 text-green-400">Installation Started</h2>
@@ -145,6 +138,16 @@
         });
 
         window.onload = () => {
+            // Version Fetch Integration
+            fetch('/version.json')
+                .then(res => res.json())
+                .then(data => {
+                    const verEl = document.getElementById('versionDisplay');
+                    if (verEl) verEl.innerText = `VERSION ${data.version}`;
+                })
+                .catch(err => console.log('Version fetch fallback.'));
+
+            // Standalone Checks
             if (isStandalone) {
                 window.location.href = 'app.html';
             } else if (isIOS) {
