@@ -470,21 +470,21 @@
                     
                     <div id="island-dormant" class="flex items-center justify-between w-full h-full">
                         <div class="flex items-center relative w-1/2 h-full overflow-hidden">
-                            <div id="island-rank-text" class="absolute inset-y-0 left-0 flex items-center text-sm font-black text-amber uppercase tracking-widest island-text-fade opacity-100">🏆 MY RANK: --</div>
-                            <div id="island-gap-text" class="absolute inset-y-0 left-0 flex items-center text-sm font-black text-blue-400 uppercase tracking-widest island-text-fade opacity-0">🎯 -- PTS TO NEXT</div>
-                            <div id="island-prompt-text" class="absolute inset-y-0 left-0 flex items-center text-sm font-black text-white uppercase tracking-tighter island-text-fade opacity-0">👆 TAP FOR LEADER BOARD</div>
+                            <div id="island-rank-text" class="absolute inset-y-0 left-0 flex items-center text-[11px] font-black text-amber uppercase tracking-widest island-text-fade opacity-100">🏆 MY RANK: --</div>
+                            <div id="island-gap-text" class="absolute inset-y-0 left-0 flex items-center text-[11px] font-black text-blue-400 uppercase tracking-widest island-text-fade opacity-0">🎯 -- PTS TO NEXT</div>
+                            <div id="island-prompt-text" class="absolute inset-y-0 left-0 flex items-center text-[11px] font-black text-white uppercase tracking-tighter island-text-fade opacity-0">👆 TAP FOR LEADER BOARD</div>
                         </div>
                         
                         <div class="flex items-center space-x-3 z-10 justify-end w-1/2">
                             <span id="graceLabel" class="hidden text-[10px] font-black text-red-500 uppercase tracking-widest animate-pulse">Grace</span>
-                            <span id="islandScore" class="text-base font-black text-white tracking-tight text-right truncate">0</span>
+                            <span id="islandScore" class="text-xs font-black text-white tracking-tight text-right truncate">0</span>
                             <div class="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.8)]"></div>
-                            <div class="text-lg font-black tabular-nums tracking-tighter text-white leading-none" id="mainTimer">00:00:00</div>
+                            <div class="text-sm font-black tabular-nums tracking-tighter text-white leading-none" id="mainTimer">00:00:00</div>
                         </div>
                     </div>
 
                     <div id="island-active" class="absolute inset-0 flex items-center justify-start hidden z-20 overflow-hidden rounded-full">
-                        <div id="tickerTrack" class="ticker-track text-sm uppercase items-center"></div>
+                        <div id="tickerTrack" class="ticker-track text-[11px] uppercase items-center"></div>
                     </div>
                 </div>
             </div>
@@ -603,20 +603,20 @@
             </button>
             <div class="scrollable-area p-8 space-y-10 text-white text-left">
                 <section class="space-y-6">
-                    <h4 class="text-green-500 font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">🎣 Angler's Quick Start</h4>
+                    <h4 class="text-green-500 font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">🎣 ANGLER'S QUICK START</h4>
                     <div class="space-y-6 text-sm leading-relaxed text-slate-300">
                         <p><b class="text-white">Step 1: Join the Match</b><br>Enter your Name and the Venue. Tap "Join as Competitor" and type in the 4-digit PIN provided by your Steward.</p>
-                        <p><b class="text-white">Step 2: Log Your Catch</b><br>Select the fish species. Enter the size or weight, then hit "Record Catch". The cloud syncs instantly.</p>
-                        <p><b class="text-white">Step 3: The Leaderboard</b><br>Tap the Dynamic Island pill at the top of the screen to unfold the live standings.</p>
-                        <p><b class="text-white">Step 4: The Final Whistle</b><br>When time runs out, the screen will turn RED. You have 3 minutes to log your final fish before the board locks.</p>
+                        <p><b class="text-white">Step 2: Log Your Catch</b><br>Select the fish species. Enter the size or weight, then hit "Record Catch". The app will instantly sync to the cloud.</p>
+                        <p><b class="text-white">Step 3: The Dynamic HUD & Leaderboard</b><br>The pill at the top of your screen is your tactical HUD. It shows your current points, match timer, and live rank. <b>Tap the pill</b> at any time to unfold the full Live Leaderboard.</p>
+                        <p><b class="text-white">Step 4: Smart Battery Saver</b><br>There is no sleep button. Put your phone in your pocket and let the screen turn off to save battery. The moment you wake your phone, the app will instantly sync and scroll any new catches across your screen.</p>
                     </div>
                 </section>
                 <hr class="border-slate-800">
                 <section class="space-y-6">
-                    <h4 class="text-amber font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">👑 Steward's Guide</h4>
+                    <h4 class="text-amber font-black text-xl uppercase tracking-widest border-b border-slate-800 pb-3">👑 STEWARD'S GUIDE</h4>
                     <div class="space-y-6 text-sm leading-relaxed text-slate-300">
-                        <p><b class="text-white">Step 1: Setup</b><br>Tap "Host as Steward". Choose duration and scoring format.</p>
-                        <p><b class="text-white">Step 2: Management</b><br>Long-press the Dynamic Island pill during the match to open the Steward Command Bridge. Adjust time or end the match.</p>
+                        <p><b class="text-white">Step 1: Setup</b><br>Tap "Host as Steward". Choose the match duration and scoring format, then give your anglers the Room PIN.</p>
+                        <p><b class="text-white">Step 2: Management (The Command Bridge)</b><br>During the match, <b>Press and Hold</b> the top HUD pill for 1 second to open the Steward Desk. From here, you can adjust the match clock, end the match early, or transfer Steward control to another angler.</p>
                     </div>
                 </section>
                 <hr class="border-slate-800">
@@ -745,6 +745,15 @@
         let isLongPress = false;
         let islandPressTimer;
 
+        // --- RELATIVE TIME ENGINE ---
+        function formatCatchTime(c) {
+            if (!c.ts) return c.time;
+            let diffMins = Math.floor((Date.now() - c.ts) / 60000);
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 15) return `${diffMins}m ago`;
+            return c.time;
+        }
+
         // --- THE "TOUCH GATE" LOGIC ---
         function handleIslandTouchStart(e) {
             if(islandEl.classList.contains('ticker-active')) return;
@@ -789,8 +798,8 @@
                 gapTxt.classList.replace('opacity-100', 'opacity-0');
                 promptTxt.classList.replace('opacity-100', 'opacity-0');
                 
-                // Learning Logic
-                let maxStates = (islandTapCount < 3) ? 3 : 2; 
+                // Smart Learner Logic (Increased to 4 taps)
+                let maxStates = (islandTapCount < 4) ? 3 : 2; 
                 hudState = (hudState + 1) % maxStates;
                 
                 if (hudState === 0) rankTxt.classList.replace('opacity-0', 'opacity-100');
@@ -838,10 +847,11 @@
             top10.forEach((c, index) => {
                 let isNewest = (index === 0);
                 let catchDisplay = `${c.species} (${c.display || c.size})`;
+                let timeStr = formatCatchTime(c);
                 if (isNewest) {
-                    htmlBlock += `<span class="text-amber font-black"><i class="fa-solid fa-sparkles mr-1.5"></i> NEW: ${c.anglerName} - ${catchDisplay.replace(/<[^>]*>?/gm, '')}</span> <span class="text-slate-600 mx-4">•</span> `;
+                    htmlBlock += `<span class="text-amber font-black"><i class="fa-solid fa-sparkles mr-1.5"></i> NEW: ${c.anglerName} - ${catchDisplay.replace(/<[^>]*>?/gm, '')} • ${timeStr}</span> <span class="text-slate-600 mx-4">•</span> `;
                 } else {
-                    htmlBlock += `<span class="text-slate-200 font-bold">${c.anglerName} - ${catchDisplay.replace(/<[^>]*>?/gm, '')}</span> <span class="text-slate-600 mx-4">•</span> `;
+                    htmlBlock += `<span class="text-slate-200 font-bold">${c.anglerName} - ${catchDisplay.replace(/<[^>]*>?/gm, '')} • ${timeStr}</span> <span class="text-slate-600 mx-4">•</span> `;
                 }
             });
 
@@ -886,15 +896,16 @@
             let htmlBlock = '';
             top10.forEach((c, i) => {
                 let display = `${c.species} (${c.display || c.size})`;
+                let timeStr = formatCatchTime(c);
                 if(i===0) {
-                    htmlBlock += `<span class="text-amber font-black"><i class="fa-solid fa-sparkles mr-1"></i> NEW: ${c.anglerName} - ${display.replace(/<[^>]*>?/gm, '')}</span> <span class="text-slate-700 mx-4">•</span> `;
+                    htmlBlock += `<span class="text-amber font-black"><i class="fa-solid fa-sparkles mr-1"></i> NEW: ${c.anglerName} - ${display.replace(/<[^>]*>?/gm, '')} • ${timeStr}</span> <span class="text-slate-700 mx-4">•</span> `;
                 } else {
-                    htmlBlock += `<span class="text-slate-300">${c.anglerName} - ${display.replace(/<[^>]*>?/gm, '')}</span> <span class="text-slate-700 mx-4">•</span> `;
+                    htmlBlock += `<span class="text-slate-300">${c.anglerName} - ${display.replace(/<[^>]*>?/gm, '')} • ${timeStr}</span> <span class="text-slate-700 mx-4">•</span> `;
                 }
             });
             track.classList.remove('scroll-active');
             void track.offsetWidth;
-            track.innerHTML = htmlBlock + htmlBlock; // Double to loop seamlessly in small area
+            track.innerHTML = htmlBlock + htmlBlock; // Double to loop seamlessly
             track.classList.add('scroll-active');
         }
 
@@ -1265,7 +1276,7 @@
             if (document.getElementById('bountyContainer')) { document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); }
             startClock();
             
-            // Initial call to check catches and update mini ticker
+            // Initialize mini ticker
             if (globalMatchData) {
                 let allCatches = [];
                 Object.values(globalMatchData.anglers).forEach(angler => {
@@ -1320,7 +1331,7 @@
                 let obj = state.myCatches.find(x => x.id === state.editingId); 
                 if(obj) { obj.species = species; obj.size = finalSize; obj.display = displaySize; obj.points = pts; } 
                 state.editingId = null; document.getElementById('btnRecord').innerText = "Record Catch"; 
-            } else { state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) }); }
+            } else { state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now() }); }
             document.getElementById('inputSpecies').value = ""; document.getElementById('inputSize').value = ""; document.getElementById('inputLbs').value = ""; document.getElementById('inputOz').value = ""; document.getElementById('inputKg').value = ""; document.getElementById('inputGrammes').value = "";
             document.activeElement.blur(); 
             const successOverlay = document.getElementById('successOverlay');
@@ -1546,11 +1557,9 @@
                         if (state.status === 'playing' || state.status === 'grace') { 
                             renderCatchList(); startClock(); updateLiveTally(); 
                             
-                            // Populate PINs immediately upon re-entering match state
                             if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
                             if (document.getElementById('leaderboardPinDisplay')) document.getElementById('leaderboardPinDisplay').innerText = `PIN: ${state.pin}`;
                             
-                            // Initialize Ticker from saved data if present
                             if (globalMatchData) {
                                 let allCatches = [];
                                 Object.values(globalMatchData.anglers).forEach(angler => {
