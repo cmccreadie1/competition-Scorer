@@ -1,63 +1,58 @@
-const CACHE_NAME = 'live-sea-score-v6.0.0';
-
-// List of files required for offline use
-const ASSETS = [
-    '/',
-    '/index.html',
-    '/app.html',
-    '/manifest.json',
-    '/icon-512.png',
-    '/icon-512.jpg',
-    '/icon.png'
+const CACHE_NAME = 'sea-diary-match-v7.4.0';
+const urlsToCache = [
+  '/competition-Scorer/',
+  '/competition-Scorer/app.html',
+  '/competition-Scorer/manifest.json',
+  '/competition-Scorer/icon-192.png',
+  '/competition-Scorer/icon-512.png',
+  '/version.json'
 ];
 
-// Install event - caching the assets
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            console.log('Opened cache');
-            return cache.addAll(ASSETS);
-        })
-    );
-    // Force the waiting service worker to become the active service worker
-    self.skipWaiting();
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        return cache.addAll(urlsToCache);
+      })
+  );
+  self.skipWaiting();
 });
 
-// Activate event - cleaning up old caches
-self.addEventListener('activate', (event) => {
-    event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log('Deleting old cache:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
         })
-    );
-    // Ensure the service worker takes control of all pages immediately
-    self.clients.claim();
+      );
+    })
+  );
+  self.clients.claim();
 });
 
-// Fetch event - serving from cache or falling back to network
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-            // Return the cached response if found
-            if (cachedResponse) {
-                return cachedResponse;
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request).then(
+          function(response) {
+            if(!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
             }
-            
-            // Otherwise, fetch from the network
-            return fetch(event.request).catch(() => {
-                // If both the cache and network fail, and it's a navigation request, 
-                // fallback to the app.html page to keep the app shell alive
-                if (event.request.mode === 'navigate') {
-                    return caches.match('/app.html');
-                }
-            });
-        })
-    );
+            var responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then(function(cache) {
+                cache.put(event.request, responseToCache);
+              });
+            return response;
+          }
+        );
+      })
+  );
 });
