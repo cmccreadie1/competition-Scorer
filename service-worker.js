@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sea-diary-match-v7.4.0';
+const CACHE_NAME = 'sea-diary-match-v7.5.0';
 const urlsToCache = [
   '/competition-Scorer/',
   '/competition-Scorer/app.html',
