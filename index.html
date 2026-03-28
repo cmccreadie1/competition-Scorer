@@ -37,7 +37,7 @@
 </head>
 <body class="antialiased min-h-screen flex flex-col items-center justify-center">
 
-    <main id="mainContent" class="flex-1 w-full max-w-lg mx-auto flex flex-col pt-12 pb-6 px-6 text-center">
+    <main id="mainContent" class="flex-1 w-full max-w-lg mx-auto flex flex-col pt-12 pb-6 px-6 text-center opacity-0 transition-opacity duration-500">
         
         <img src="icon-512.png" alt="App Logo" class="w-36 h-36 mx-auto rounded-[2rem] shadow-2xl border border-white/10 mb-6" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgZmlsbD0iIzFZTjI5M2IiLz48L3N2Zz4='">
 
@@ -60,6 +60,14 @@
                 <div>
                     <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Dynamic Island HUD</h4>
                     <p class="text-slate-400 text-xs leading-relaxed">Never lose focus. The permanent tactical pill displays your live rank, total points, and a smart adrenaline clock that shifts formats as the match enters the final 30-minute window.</p>
+                </div>
+            </div>
+
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-green-500/10 text-green-500 p-3 rounded-xl"><i class="fa-solid fa-battery-full text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Battery Management</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">Designed for full 6-hour sessions. There are no heavy background loops or screen-wake enforcers. Lock your phone, put it in your pocket, and save your battery. The engine will instantly wake up, sync to the cloud, and update the ticker the second you unlock your screen.</p>
                 </div>
             </div>
 
@@ -92,7 +100,7 @@
             Install App To Phone <i class="fa-solid fa-download ml-3"></i>
         </button>
         
-        <button id="btnLaunchDirect" onclick="window.location.href='app.html'" class="hidden w-full bg-slate-800 border border-slate-700 rounded-2xl py-4 text-slate-300 font-black text-sm uppercase tracking-widest mt-4">
+        <button id="btnLaunchDirect" onclick="window.location.replace('app.html')" class="hidden w-full bg-slate-800 border border-slate-700 rounded-2xl py-4 text-slate-300 font-black text-sm uppercase tracking-widest mt-4">
             Open App in Browser
         </button>
 
@@ -126,11 +134,34 @@
         </div>
     </div>
 
-    <footer id="mainFooter" class="w-full text-center py-6 border-t border-slate-800">
+    <footer id="mainFooter" class="w-full text-center py-6 border-t border-slate-800 opacity-0 transition-opacity duration-500">
         <p class="text-slate-600 text-[10px] font-black uppercase tracking-widest version-display">Live Sea Score V8.0.0</p>
     </footer>
 
     <script>
+        // Check if running as PWA (Standalone) immediately before rendering the page
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        
+        if (isStandalone) {
+            // Instantly redirect without rendering the splash UI
+            window.location.replace('app.html');
+        } else {
+            // Fade in the UI if we are in a normal browser
+            document.addEventListener("DOMContentLoaded", () => {
+                document.getElementById('mainContent').classList.remove('opacity-0');
+                document.getElementById('mainFooter').classList.remove('opacity-0');
+                document.getElementById('btnLaunchDirect').classList.remove('hidden');
+                
+                // Fetch Single Source of Truth Version
+                fetch('version.json')
+                    .then(res => res.json())
+                    .then(data => {
+                        document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`);
+                    })
+                    .catch(err => console.log('Version fetch fallback active.'));
+            });
+        }
+
         let deferredPrompt;
 
         // Capture Android install prompt
@@ -157,7 +188,7 @@
                 });
             } else {
                 // Fallback if already installed or unsupported browser
-                window.location.href = 'app.html';
+                window.location.replace('app.html');
             }
         }
 
@@ -172,30 +203,6 @@
             document.getElementById('successContent').classList.remove('hidden');
             window.scrollTo(0, 0);
         }
-
-        // Check if running as PWA (Standalone)
-        window.onload = () => {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-            
-            if (isStandalone) {
-                // If they are already in the app, change button to just launch the engine
-                document.getElementById('btnInstallApp').innerText = "Launch Scorecard";
-                document.getElementById('btnInstallApp').onclick = () => window.location.href = 'app.html';
-            } else {
-                // Show the fallback direct link just in case
-                document.getElementById('btnLaunchDirect').classList.remove('hidden');
-            }
-
-            // Fetch Single Source of Truth Version
-            fetch('/version.json')
-                .then(res => res.json())
-                .then(data => {
-                    document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`);
-                })
-                .catch(err => {
-                    console.log('Version fetch fallback active.');
-                });
-        };
     </script>
 </body>
 </html>
