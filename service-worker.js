@@ -1,10 +1,11 @@
 const CACHE_NAME = 'sea-diary-match-v8.0.0';
 const urlsToCache = [
-  '/competition-Scorer/',
-  '/competition-Scorer/app.html',
-  '/competition-Scorer/manifest.json',
-  '/competition-Scorer/icon-192.png',
-  '/competition-Scorer/icon-512.png',
+  '/',
+  '/index.html',
+  '/app.html',
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png',
   '/version.json'
 ];
 
