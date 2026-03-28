@@ -139,20 +139,25 @@
     </footer>
 
     <script>
-        // Check if running as PWA (Standalone) immediately before rendering the page
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+    </script>
+
+    <script>
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
         
         if (isStandalone) {
-            // Instantly redirect without rendering the splash UI
             window.location.replace('app.html');
         } else {
-            // Fade in the UI if we are in a normal browser
             document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById('mainContent').classList.remove('opacity-0');
                 document.getElementById('mainFooter').classList.remove('opacity-0');
                 document.getElementById('btnLaunchDirect').classList.remove('hidden');
                 
-                // Fetch Single Source of Truth Version
                 fetch('version.json')
                     .then(res => res.json())
                     .then(data => {
@@ -164,10 +169,10 @@
 
         let deferredPrompt;
 
-        // Capture Android install prompt
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            console.log('App is ready to be installed natively.');
         });
 
         function handleInstallClick() {
@@ -175,10 +180,8 @@
             const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
 
             if (isIOS) {
-                // Show Apple instructions
                 document.getElementById('installModal').classList.remove('hidden');
             } else if (deferredPrompt) {
-                // Show Android native install prompt
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
@@ -187,7 +190,6 @@
                     deferredPrompt = null;
                 });
             } else {
-                // Fallback if already installed or unsupported browser
                 window.location.replace('app.html');
             }
         }
