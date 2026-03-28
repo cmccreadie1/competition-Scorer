@@ -852,7 +852,7 @@
             }
         });
 
-        function checkAndFireTicker() {
+        function checkAndFireTicker(force = false) {
             if(!globalMatchData || !globalMatchData.anglers) return;
             let allCatches = [];
             let totalFish = 0, biggestVal = 0, biggestStr = "No Captures";
@@ -868,13 +868,13 @@
                 }
             });
             
-            if (allCatches.length !== lastSyncCount) {
-                renderTickerHTML(allCatches, totalFish, biggestStr);
+            if (allCatches.length !== lastSyncCount || force) {
+                renderTickerHTML(allCatches, totalFish, biggestStr, force);
             }
             lastSyncCount = allCatches.length;
         }
 
-        function renderTickerHTML(allCatches, totalFish, biggestStr) {
+        function renderTickerHTML(allCatches, totalFish, biggestStr, forceRefresh = false) {
             allCatches.sort((a,b) => parseInt(b.id) - parseInt(a.id)); 
             let mostRecent = allCatches[0];
             let last5 = allCatches.slice(1, 6);
@@ -883,14 +883,14 @@
             
             if (mostRecent) {
                 let catchDisplay = `${mostRecent.species} (${mostRecent.display || mostRecent.size})`;
-                htmlBlock += `<span class="text-amber-500 font-black tracking-widest">MOST RECENT CATCH:</span> <span class="text-white font-bold ml-2">${mostRecent.anglerName} - ${catchDisplay.replace(/<[^>]*>?/gm, '')} • ${formatCatchTime(mostRecent)}</span> <span class="text-slate-600 mx-6">///</span> `;
+                htmlBlock += `<span class="text-amber-500 font-black tracking-widest">MOST RECENT CATCH:</span> <span class="text-white font-bold ml-2">${mostRecent.anglerName} - ${catchDisplay.replace(/<[^>]*>?/gm, '')} • <span class="text-amber-500">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
             }
             
             if (last5.length > 0) {
                 htmlBlock += `<span class="text-blue-400 font-black tracking-widest">LAST 5 FISH:</span> <span class="ml-2">`;
                 last5.forEach((c, i) => {
                     let display = `${c.species} (${c.display || c.size})`;
-                    htmlBlock += `<span class="text-slate-300">${c.anglerName} - ${display.replace(/<[^>]*>?/gm, '')}</span>`;
+                    htmlBlock += `<span class="text-slate-300">${c.anglerName} - ${display.replace(/<[^>]*>?/gm, '')} • <span class="text-amber-500">${formatCatchTime(c)}</span></span>`;
                     if (i < last5.length - 1) htmlBlock += `<span class="text-slate-600 mx-2">|</span>`;
                 });
                 htmlBlock += `</span> <span class="text-slate-600 mx-6">///</span> `;
@@ -904,10 +904,14 @@
 
             const track = document.getElementById('wallStreetTicker');
             if(track) {
-                track.classList.remove('scroll-active');
-                void track.offsetWidth; 
+                if (!forceRefresh) {
+                    track.classList.remove('scroll-active');
+                    void track.offsetWidth; 
+                }
                 track.innerHTML = htmlBlock; 
-                track.classList.add('scroll-active');
+                if (!track.classList.contains('scroll-active')) {
+                    track.classList.add('scroll-active');
+                }
             }
         }
 
@@ -1291,9 +1295,16 @@
             if (globalMatchData) checkAndFireTicker();
         }
 
+        let clockTickCount = 0;
         function startClock() {
             clearInterval(clockInterval);
+            clockTickCount = 0;
             clockInterval = setInterval(() => {
+                clockTickCount++;
+                if (clockTickCount % 60 === 0) {
+                    if (globalMatchData) checkAndFireTicker(true);
+                }
+                
                 let now = Date.now();
                 if (state.status === 'playing') {
                     let remaining = state.endTime - now;
