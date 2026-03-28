@@ -1,25 +1,21 @@
 {
-  "id": "./",
-  "name": "Sea Diary: Match Edition Pro",
-  "short_name": "Sea Diary",
-  "description": "Professional Sea Angling Match Scorer",
-  "start_url": "index.html",
+  "name": "Live Sea Score Pro",
+  "short_name": "Sea Score",
+  "start_url": "app.html",
   "display": "standalone",
-  "background_color": "#020617",
-  "theme_color": "#020617",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "icon-512.png",
-      "sizes": "192x192 512x512",
-      "type": "image/png",
-      "purpose": "any"
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/png"
     }
   ]
 }
