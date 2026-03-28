@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Live Sea Score Pro | Install & Launch</title>
-    <link rel="manifest" href="/competition-Scorer/manifest.json">
+    <title>Live Sea Score Pro | Install</title>
+    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -29,30 +29,30 @@
             background-color: #0f172a;
             border: 1px solid #1e293b;
         }
+        #installModal {
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(15px);
+        }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col items-center">
+<body class="antialiased min-h-screen flex flex-col items-center justify-center">
 
-    <main class="flex-1 w-full max-w-lg mx-auto flex flex-col justify-center px-6 py-12 text-center">
+    <main id="mainContent" class="flex-1 w-full max-w-lg mx-auto flex flex-col pt-12 pb-6 px-6 text-center">
         
-        <img src="competition-Scorer/icon-512.png" alt="App Logo" class="w-32 h-32 mx-auto rounded-[2rem] shadow-2xl border border-white/10 mb-8" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgZmlsbD0iIzFZTjI5M2IiLz48L3N2Zz4='">
+        <img src="icon-512.png" alt="App Logo" class="w-36 h-36 mx-auto rounded-[2rem] shadow-2xl border border-white/10 mb-6" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgZmlsbD0iIzFZTjI5M2IiLz48L3N2Zz4='">
 
         <h1 class="text-4xl font-black tracking-tight uppercase mb-2">Live Sea Score <span class="text-blue-500">Pro</span></h1>
         
-        <div class="inline-flex items-center justify-center space-x-3 mb-8">
+        <div class="inline-flex items-center justify-center space-x-3 mb-6">
             <span class="bg-blue-600/20 text-blue-400 font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full border border-blue-500/30">Match Engine Active</span>
             <span class="text-slate-500 font-bold text-[10px] tracking-widest uppercase version-display">V8.0.0</span>
         </div>
 
         <p class="text-slate-400 text-sm leading-relaxed mb-10 px-2 font-medium">
-            The ultimate scorecard built specifically for extreme coastal environments. Zero latency, military-grade offline caching, and instant cloud syncing.
+            The ultimate scorecard built for friends having a casual match on their local beach. Zero latency, smart offline caching, and instant cloud syncing.
         </p>
 
-        <a href="competition-Scorer/app.html" class="app-btn w-full rounded-2xl py-5 text-white font-black text-lg uppercase tracking-widest flex items-center justify-center mb-12">
-            Launch Scorecard <i class="fa-solid fa-arrow-right ml-3"></i>
-        </a>
-
-        <div class="text-left space-y-4 w-full">
+        <div class="text-left space-y-4 w-full mb-10">
             <h3 class="text-slate-500 font-black text-[10px] uppercase tracking-[0.2em] ml-2 mb-2">Engine Features</h3>
             
             <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
@@ -60,6 +60,14 @@
                 <div>
                     <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Dynamic Island HUD</h4>
                     <p class="text-slate-400 text-xs leading-relaxed">Never lose focus. The permanent tactical pill displays your live rank, total points, and a smart adrenaline clock that shifts formats as the match enters the final 30-minute window.</p>
+                </div>
+            </div>
+
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-indigo-500/10 text-indigo-400 p-3 rounded-xl"><i class="fa-solid fa-earth-europe text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Remote Competitions</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">You don't need to be standing on the same shingle. Anglers can be on different beaches, opposite ends of the country, or even the other side of the world. If they have the Match PIN, they are on the live leaderboard.</p>
                 </div>
             </div>
 
@@ -72,14 +80,6 @@
             </div>
 
             <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
-                <div class="bg-green-500/10 text-green-500 p-3 rounded-xl"><i class="fa-solid fa-list-ol text-xl"></i></div>
-                <div>
-                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Instant Leaderboards</h4>
-                    <p class="text-slate-400 text-xs leading-relaxed">No manual refreshing required. The Wall Street Ticker and live standing tables update in milliseconds as competitors log their fish across the venue.</p>
-                </div>
-            </div>
-
-            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
                 <div class="bg-purple-500/10 text-purple-500 p-3 rounded-xl"><i class="fa-solid fa-scale-balanced text-xl"></i></div>
                 <div>
                     <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Custom Rulesets</h4>
@@ -88,14 +88,105 @@
             </div>
         </div>
 
+        <button id="btnInstallApp" onclick="handleInstallClick()" class="app-btn w-full rounded-2xl py-5 text-white font-black text-lg uppercase tracking-widest flex items-center justify-center shadow-xl">
+            Install App To Phone <i class="fa-solid fa-download ml-3"></i>
+        </button>
+        
+        <button id="btnLaunchDirect" onclick="window.location.href='app.html'" class="hidden w-full bg-slate-800 border border-slate-700 rounded-2xl py-4 text-slate-300 font-black text-sm uppercase tracking-widest mt-4">
+            Open App in Browser
+        </button>
+
     </main>
 
-    <footer class="w-full text-center py-8 border-t border-slate-800 mt-8">
+    <div id="successContent" class="hidden flex-1 w-full max-w-lg mx-auto flex flex-col justify-center items-center px-6 text-center h-screen">
+        <i class="fa-solid fa-circle-check text-green-500 text-7xl mb-6 shadow-[0_0_30px_rgba(34,197,94,0.3)] rounded-full"></i>
+        <h2 class="text-2xl font-black uppercase tracking-tight text-white mb-4">Installation Complete</h2>
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-left shadow-lg">
+            <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                Live Sea Score Pro has been added to your device.
+            </p>
+            <p class="text-amber-500 font-black text-xs uppercase tracking-widest mb-2 pb-2 border-b border-slate-800">Next Steps:</p>
+            <p class="text-slate-400 text-xs leading-relaxed mb-2"><b class="text-white">1.</b> Close this browser tab completely.</p>
+            <p class="text-slate-400 text-xs leading-relaxed"><b class="text-white">2.</b> Go to your phone's Home Screen and tap the new <b>Live Sea Score</b> app icon to launch the full-screen engine.</p>
+        </div>
+    </div>
+
+    <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
+        <div class="bg-slate-900 w-full max-w-sm p-6 space-y-5 border-2 border-blue-500 rounded-2xl shadow-2xl">
+            <div class="text-center">
+                <i class="fa-brands fa-apple text-blue-400 text-5xl mb-3"></i>
+                <h3 class="text-lg font-black uppercase tracking-tight text-white">iPhone Installation</h3>
+                <p class="text-slate-400 text-sm mt-4 leading-relaxed text-left bg-slate-800 p-4 rounded-xl border border-slate-700">
+                    <b class="text-white">1.</b> Tap the <b>Share</b> icon at the bottom of Safari (the square with the arrow pointing up).<br><br>
+                    <b class="text-white">2.</b> Scroll down the list and tap <b>'Add to Home Screen'</b>.<br><br>
+                    <b class="text-white">3.</b> Tap <b>'Add'</b> in the top right corner.
+                </p>
+            </div>
+            <button onclick="closeIOSModal()" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl uppercase tracking-widest text-[11px] shadow-lg active:scale-95 transition">I have added it</button>
+        </div>
+    </div>
+
+    <footer id="mainFooter" class="w-full text-center py-6 border-t border-slate-800">
         <p class="text-slate-600 text-[10px] font-black uppercase tracking-widest version-display">Live Sea Score V8.0.0</p>
     </footer>
 
     <script>
+        let deferredPrompt;
+
+        // Capture Android install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        function handleInstallClick() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+
+            if (isIOS) {
+                // Show Apple instructions
+                document.getElementById('installModal').classList.remove('hidden');
+            } else if (deferredPrompt) {
+                // Show Android native install prompt
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        triggerSuccessScreen();
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                // Fallback if already installed or unsupported browser
+                window.location.href = 'app.html';
+            }
+        }
+
+        function closeIOSModal() {
+            document.getElementById('installModal').classList.add('hidden');
+            triggerSuccessScreen();
+        }
+
+        function triggerSuccessScreen() {
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('mainFooter').classList.add('hidden');
+            document.getElementById('successContent').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // Check if running as PWA (Standalone)
         window.onload = () => {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            
+            if (isStandalone) {
+                // If they are already in the app, change button to just launch the engine
+                document.getElementById('btnInstallApp').innerText = "Launch Scorecard";
+                document.getElementById('btnInstallApp').onclick = () => window.location.href = 'app.html';
+            } else {
+                // Show the fallback direct link just in case
+                document.getElementById('btnLaunchDirect').classList.remove('hidden');
+            }
+
+            // Fetch Single Source of Truth Version
             fetch('/version.json')
                 .then(res => res.json())
                 .then(data => {
