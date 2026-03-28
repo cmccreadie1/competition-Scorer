@@ -1,181 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full overflow-x-hidden bg-black">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Live Sea Score</title>
-    
-    <script>
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-            window.location.href = 'app.html';
-        }
-    </script>
-
-    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Live Sea Score Pro | Install & Launch</title>
+    <link rel="manifest" href="/competition-Scorer/manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { background-color: #000000; font-family: 'Inter', sans-serif; color: white; margin: 0; padding: 0; }
-        .feature-box { background: #0f172a; border: 1px solid #1e293b; padding: 22px; border-radius: 20px; }
-        .btn-action { background: #3b82f6; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3); transition: all 0.2s ease; }
-        .btn-action:active { transform: scale(0.95); opacity: 0.9; }
-        #iosGuideModal, #successScreen { background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(20px); }
-        @keyframes bounce-subtle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .animate-check { animation: bounce-subtle 2s infinite ease-in-out; }
+        html, body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; 
+            color: #ffffff;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .app-btn {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);
+            transition: all 0.2s ease;
+        }
+        .app-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 5px 15px -5px rgba(37, 99, 235, 0.5);
+        }
+        .feature-card {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+        }
     </style>
 </head>
-<body class="flex flex-col items-center p-6 pb-24">
+<body class="antialiased min-h-screen flex flex-col items-center">
 
-    <div id="mainContent" class="w-full max-w-sm flex flex-col items-center">
-        <div class="flex flex-col items-center text-center space-y-6 pt-10">
-            <img src="icon-512.png" alt="App Logo" class="w-32 h-32 rounded-[2.5rem] shadow-[0_10px_40px_rgba(59,130,246,0.3)] border border-slate-800">
-            <h1 class="text-4xl font-black tracking-tighter uppercase leading-none">Live Sea Score</h1>
-            <p id="versionDisplay" class="text-slate-500 font-bold text-[10px] uppercase tracking-[0.4em]">Version 7.4.0</p>
+    <main class="flex-1 w-full max-w-lg mx-auto flex flex-col justify-center px-6 py-12 text-center">
+        
+        <img src="competition-Scorer/icon-512.png" alt="App Logo" class="w-32 h-32 mx-auto rounded-[2rem] shadow-2xl border border-white/10 mb-8" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgZmlsbD0iIzFZTjI5M2IiLz48L3N2Zz4='">
+
+        <h1 class="text-4xl font-black tracking-tight uppercase mb-2">Live Sea Score <span class="text-blue-500">Pro</span></h1>
+        
+        <div class="inline-flex items-center justify-center space-x-3 mb-8">
+            <span class="bg-blue-600/20 text-blue-400 font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full border border-blue-500/30">Match Engine Active</span>
+            <span class="text-slate-500 font-bold text-[10px] tracking-widest uppercase version-display">V8.0.0</span>
         </div>
 
-        <div class="w-full space-y-5 mt-12">
-            <h2 class="text-base font-black text-slate-500 uppercase tracking-[0.5em] mb-6 text-center">App Specifications</h2>
-
-            <div class="feature-box space-y-2 border-l-4 border-amber-500">
-                <div class="flex items-center space-x-3 text-amber-500 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-layer-group"></i><span>Dynamic Island HUD</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">Real-time telemetry, target gaps, and your live match rank locked directly to the top of your screen.</p>
-            </div>
-
-            <div class="feature-box space-y-2">
-                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-bolt"></i><span>Bulletproof Sync Ticker</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">A continuously scrolling, <b>Sky Sports style</b> live catch ticker. Instantly know when the Biggest Fish benchmark is beaten.</p>
-            </div>
-
-            <div class="feature-box space-y-2">
-                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-battery-bolt"></i><span>OLED Battery Saver</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">Pure OLED black interface with <b>Sync-on-Wake</b> technology. No manual sleep button needed—built for marathon sessions.</p>
-            </div>
-            
-            <div class="feature-box space-y-2">
-                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-user-shield"></i><span>Steward Command Bridge</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">Match hosts can seamlessly adjust the match clock, trigger 3-minute grace periods, or transfer control mid-match.</p>
-            </div>
-
-            <div class="feature-box space-y-2">
-                <div class="flex items-center space-x-3 text-blue-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-box-archive"></i><span>Offline History Vault</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed">Cloud persistence backed by a secure local storage vault. Your match data is safe even if your connection drops or the app closes.</p>
-            </div>
-
-            <div class="feature-box space-y-2 border-l-4 border-green-500 mt-8">
-                <div class="flex items-center space-x-3 text-green-400 font-black uppercase text-sm tracking-widest">
-                    <i class="fa-solid fa-shield-check"></i><span>Privacy Guaranteed</span>
-                </div>
-                <p class="text-[13px] text-slate-300 leading-relaxed"><b>100% Free</b>. No trackers, no data collection, and <b>zero advertisements</b>.</p>
-            </div>
-
-            <div class="pt-8 pb-12">
-                <button id="mainActionButton" onclick="handleMainAction()" class="w-full btn-action py-5 rounded-2xl font-black text-lg uppercase tracking-widest flex items-center justify-center space-x-3">
-                    <span id="btnText">Launch Engine</span>
-                    <i id="btnIcon" class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="successScreen" class="fixed inset-0 z-[2000] hidden flex flex-col items-center justify-center p-8 text-center">
-        <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(34,197,94,0.4)] animate-check">
-            <i class="fa-solid fa-check text-5xl text-white"></i>
-        </div>
-        <h2 class="text-3xl font-black uppercase tracking-tight mb-4 text-green-400">Installation Started</h2>
-        <p class="text-slate-300 text-lg leading-relaxed mb-10">
-            Installation complete! You can now access the full engine via the <b class="text-white">Live Sea Score icon</b> on your home screen.
+        <p class="text-slate-400 text-sm leading-relaxed mb-10 px-2 font-medium">
+            The ultimate scorecard built specifically for extreme coastal environments. Zero latency, military-grade offline caching, and instant cloud syncing.
         </p>
-        <div class="w-full max-w-xs space-y-3">
-            <button onclick="window.close(); setTimeout(() => { document.getElementById('closeError').classList.remove('hidden'); }, 500);" class="w-full bg-red-600 py-5 rounded-2xl font-black text-white uppercase tracking-widest shadow-lg flex flex-col items-center">
-                <span>Close This Tab</span>
-                <span class="text-[9px] opacity-60 tracking-widest mt-0.5">App is now on your phone</span>
-            </button>
-            <button onclick="window.location.href='app.html'" class="w-full bg-slate-800 py-4 rounded-2xl font-black text-slate-400 uppercase text-[10px] tracking-[0.2em]">Open in Browser anyway</button>
-        </div>
-        <p id="closeError" class="hidden mt-8 text-[10px] text-slate-500 uppercase font-black px-6 italic">If this tab remains open, please close it manually using your browser controls.</p>
-    </div>
 
-    <div id="iosGuideModal" class="fixed inset-0 z-[1000] hidden flex items-center justify-center p-6">
-        <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-3xl p-8 text-center space-y-6 shadow-2xl">
-            <i class="fa-solid fa-mobile-screen-button text-5xl text-blue-400"></i>
-            <h3 class="text-xl font-black uppercase tracking-tight">iPhone Installation</h3>
-            <div class="text-sm text-slate-300 space-y-5">
-                <p>1. Tap the <b class="text-white">Share icon</b> <i class="fa-solid fa-arrow-up-from-bracket mx-1 text-blue-400"></i> at the bottom of Safari.</p>
-                <p>2. Scroll down and select <b class="text-white">'Add to Home Screen'</b>.</p>
-                <p>3. Once added, launch from your <b class="text-white">Home Screen icon</b>.</p>
+        <a href="competition-Scorer/app.html" class="app-btn w-full rounded-2xl py-5 text-white font-black text-lg uppercase tracking-widest flex items-center justify-center mb-12">
+            Launch Scorecard <i class="fa-solid fa-arrow-right ml-3"></i>
+        </a>
+
+        <div class="text-left space-y-4 w-full">
+            <h3 class="text-slate-500 font-black text-[10px] uppercase tracking-[0.2em] ml-2 mb-2">Engine Features</h3>
+            
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-amber-500/10 text-amber-500 p-3 rounded-xl"><i class="fa-solid fa-mobile-screen-button text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Dynamic Island HUD</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">Never lose focus. The permanent tactical pill displays your live rank, total points, and a smart adrenaline clock that shifts formats as the match enters the final 30-minute window.</p>
+                </div>
             </div>
-            <button onclick="toggleIosModal()" class="w-full bg-slate-800 py-4 rounded-xl font-black uppercase tracking-widest text-xs">Close</button>
+
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-blue-500/10 text-blue-500 p-3 rounded-xl"><i class="fa-solid fa-wifi text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Offline Resilience</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">Built for dead zones. If you lose signal on the beach, the engine safely caches your catches locally and silently forces a global sync the moment you reconnect.</p>
+                </div>
+            </div>
+
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-green-500/10 text-green-500 p-3 rounded-xl"><i class="fa-solid fa-list-ol text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Instant Leaderboards</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">No manual refreshing required. The Wall Street Ticker and live standing tables update in milliseconds as competitors log their fish across the venue.</p>
+                </div>
+            </div>
+
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-purple-500/10 text-purple-500 p-3 rounded-xl"><i class="fa-solid fa-scale-balanced text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Custom Rulesets</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">Whether you are scoring by pure length, Lbs/Oz, Kg/g, or running a 40-point Species Hunt, the Steward God Mode engine handles the complex math.</p>
+                </div>
+            </div>
         </div>
-    </div>
+
+    </main>
+
+    <footer class="w-full text-center py-8 border-t border-slate-800 mt-8">
+        <p class="text-slate-600 text-[10px] font-black uppercase tracking-widest version-display">Live Sea Score V8.0.0</p>
+    </footer>
 
     <script>
-        let deferredPrompt = null;
-        const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            if (!isStandalone) {
-                updateButton("Install Pro App", "fa-solid fa-download");
-            }
-        });
-
-        window.addEventListener('appinstalled', (evt) => {
-            document.getElementById('mainContent').classList.add('hidden');
-            document.getElementById('successScreen').classList.remove('hidden');
-        });
-
         window.onload = () => {
-            // Version Fetch Integration
             fetch('/version.json')
                 .then(res => res.json())
                 .then(data => {
-                    const verEl = document.getElementById('versionDisplay');
-                    if (verEl) verEl.innerText = `VERSION ${data.version}`;
+                    document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`);
                 })
-                .catch(err => console.log('Version fetch fallback.'));
-
-            // Standalone Checks
-            if (isStandalone) {
-                window.location.href = 'app.html';
-            } else if (isIOS) {
-                updateButton("How to Install", "fa-solid fa-circle-info");
-            }
+                .catch(err => {
+                    console.log('Version fetch fallback active.');
+                });
         };
-
-        function updateButton(text, iconClass) {
-            document.getElementById('btnText').innerText = text;
-            document.getElementById('btnIcon').className = iconClass;
-        }
-
-        function handleMainAction() {
-            if (isStandalone) {
-                window.location.href = 'app.html';
-            } else if (isIOS) {
-                toggleIosModal();
-            } else if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((result) => { deferredPrompt = null; });
-            } else {
-                window.location.href = 'app.html';
-            }
-        }
-
-        function toggleIosModal() {
-            document.getElementById('iosGuideModal').classList.toggle('hidden');
-        }
     </script>
 </body>
 </html>
