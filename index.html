@@ -67,7 +67,7 @@
                 <div class="bg-green-500/10 text-green-500 p-3 rounded-xl"><i class="fa-solid fa-battery-full text-xl"></i></div>
                 <div>
                     <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Battery Management</h4>
-                    <p class="text-slate-400 text-xs leading-relaxed">Designed for full 6-hour sessions. There are no heavy background loops or screen-wake enforcers. Lock your phone, put it in your pocket, and save your battery. The engine will instantly wake up, sync to the cloud, and update the ticker the second you unlock your screen.</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">Designed for full 6-hour sessions. There are no heavy background loops. Lock your phone, save your battery, and the engine will instantly wake up the second you unlock your screen.</p>
                 </div>
             </div>
 
@@ -75,7 +75,7 @@
                 <div class="bg-indigo-500/10 text-indigo-400 p-3 rounded-xl"><i class="fa-solid fa-earth-europe text-xl"></i></div>
                 <div>
                     <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Remote Competitions</h4>
-                    <p class="text-slate-400 text-xs leading-relaxed">You don't need to be standing on the same shingle. Anglers can be on different beaches, opposite ends of the country, or even the other side of the world. If they have the Match PIN, they are on the live leaderboard.</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">Anglers can be on different beaches, opposite ends of the country, or even the other side of the world. If they have the Match PIN, they are on the live leaderboard.</p>
                 </div>
             </div>
 
@@ -83,15 +83,15 @@
                 <div class="bg-blue-500/10 text-blue-500 p-3 rounded-xl"><i class="fa-solid fa-wifi text-xl"></i></div>
                 <div>
                     <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Offline Resilience</h4>
-                    <p class="text-slate-400 text-xs leading-relaxed">Built for dead zones. If you lose signal on the beach, the engine safely caches your catches locally and silently forces a global sync the moment you reconnect.</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">Built for dead zones. If you lose signal on the beach, the engine safely caches your catches locally and silently syncs the moment you reconnect.</p>
                 </div>
             </div>
 
             <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
-                <div class="bg-purple-500/10 text-purple-500 p-3 rounded-xl"><i class="fa-solid fa-scale-balanced text-xl"></i></div>
+                <div class="bg-red-500/10 text-red-500 p-3 rounded-xl"><i class="fa-solid fa-user-shield text-xl"></i></div>
                 <div>
-                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Custom Rulesets</h4>
-                    <p class="text-slate-400 text-xs leading-relaxed">Whether you are scoring by pure length, Lbs/Oz, Kg/g, or running a 40-point Species Hunt, the Steward God Mode engine handles the complex math.</p>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">No Ads, Tracking, or Nonsense</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">This app is 100% private. Unlike Facebook, which is over 500MB and tracks your location, this engine is less than 1MB and physically cannot access your camera, photos, or messages.</p>
                 </div>
             </div>
         </div>
@@ -115,7 +115,7 @@
             </p>
             <p class="text-amber-500 font-black text-xs uppercase tracking-widest mb-2 pb-2 border-b border-slate-800">Next Steps:</p>
             <p class="text-slate-400 text-xs leading-relaxed mb-2"><b class="text-white">1.</b> Close this browser tab completely.</p>
-            <p class="text-slate-400 text-xs leading-relaxed"><b class="text-white">2.</b> Go to your phone's Home Screen and tap the new <b>Live Sea Score</b> app icon to launch the full-screen engine.</p>
+            <p class="text-slate-400 text-xs leading-relaxed"><b class="text-white">2.</b> Go to your phone's Home Screen and tap the new <b>Live Sea Score</b> app icon.</p>
         </div>
     </div>
 
@@ -125,8 +125,8 @@
                 <i class="fa-brands fa-apple text-blue-400 text-5xl mb-3"></i>
                 <h3 class="text-lg font-black uppercase tracking-tight text-white">iPhone Installation</h3>
                 <p class="text-slate-400 text-sm mt-4 leading-relaxed text-left bg-slate-800 p-4 rounded-xl border border-slate-700">
-                    <b class="text-white">1.</b> Tap the <b>Share</b> icon at the bottom of Safari (the square with the arrow pointing up).<br><br>
-                    <b class="text-white">2.</b> Scroll down the list and tap <b>'Add to Home Screen'</b>.<br><br>
+                    <b class="text-white">1.</b> Tap the <b>Share</b> icon at the bottom of Safari.<br><br>
+                    <b class="text-white">2.</b> Scroll down and tap <b>'Add to Home Screen'</b>.<br><br>
                     <b class="text-white">3.</b> Tap <b>'Add'</b> in the top right corner.
                 </p>
             </div>
@@ -172,7 +172,6 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            console.log('App is ready to be installed natively.');
         });
 
         function handleInstallClick() {
