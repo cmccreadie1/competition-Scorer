@@ -1,59 +1,37 @@
-const CACHE_NAME = 'sea-diary-match-v8.0.0';
-const urlsToCache = [
+const CACHE_NAME = 'match-scorer-v8.1.0';
+const ASSETS = [
   '/',
   '/index.html',
   '/app.html',
   '/manifest.json',
-  '/icon.png',
   '/icon-512.png',
   '/version.json'
 ];
 
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('Caching v8.1.0 Neon Assets');
+      return cache.addAll(ASSETS);
+    })
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
+    caches.keys().then((keys) => {
       return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
       );
     })
   );
-  self.clients.claim();
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request).then(
-          function(response) {
-            if(!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            var responseToCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then(function(cache) {
-                cache.put(event.request, responseToCache);
-              });
-            return response;
-          }
-        );
-      })
+    caches.match(event.request).then((cachedResponse) => {
+      return cachedResponse || fetch(event.request);
+    })
   );
 });
