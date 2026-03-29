@@ -328,7 +328,7 @@
     <div id="browser-banner" class="hidden">
         <div class="flex items-center">
             <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-            <span>Browser Mode: Install to Home Screen for full HUD.</span>
+            <span>Browser Mode: Install to HUD.</span>
         </div>
         <button onclick="window.location.replace('index.html')" class="bg-black text-white px-3 py-1.5 rounded-full font-black text-[9px]">INSTALL</button>
         <button onclick="document.getElementById('browser-banner').classList.add('hidden')" class="ml-2 text-black/50"><i class="fa-solid fa-xmark"></i></button>
@@ -1800,7 +1800,16 @@
         function saveHistory(isL) { 
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); 
             let matchTF = 0; let matchBF = "None"; let bVal = 0;
+            let fullStandings = [];
+
             if (globalMatchData && globalMatchData.anglers) {
+                fullStandings = Object.entries(globalMatchData.anglers).map(([id, data]) => ({
+                    id: id,
+                    name: data.name,
+                    score: data.score,
+                    catches: data.catches ? (Array.isArray(data.catches) ? data.catches : Object.values(data.catches)) : []
+                }));
+
                 Object.values(globalMatchData.anglers).forEach(angler => { 
                     if(angler.catches) { 
                         const cList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches);
@@ -1821,7 +1830,7 @@
                 format: state.format, 
                 score: state.myCatches.reduce((s,c) => s+c.points, 0), 
                 personalCatches: [...state.myCatches], 
-                standings: globalMatchData?.anglers ? Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score) : [], 
+                standings: fullStandings.length > 0 ? fullStandings.sort((a,b) => b.score - a.score) : [], 
                 playerName: state.name, 
                 isLive: isL, 
                 isSteward: state.isSteward,
@@ -1903,7 +1912,7 @@
                         </div>
                     </div>`;
                     
-                let tableHtml = `<div class="space-y-1">${m.standings.map((a, i) => `<div class="match-card p-2 flex justify-between items-center"><span class="uppercase text-white font-bold text-[11px] text-left"><span class="neon-text-amber mr-2">${i+1}.</span> ${a.name}</span><b class="neon-text-blue text-xs text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`;
+                let tableHtml = `<div class="space-y-1">${m.standings.map((a, i) => `<div class="match-card p-2 flex justify-between items-center" onclick="openPastCatchFeed('${a.id}')"><span class="uppercase text-white font-bold text-[11px] text-left"><span class="neon-text-amber mr-2">${i+1}.</span> ${a.name}</span><b class="neon-text-blue text-xs text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`;
                 
                 document.getElementById('historyContent').innerHTML = statsHtml + `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-2 text-center tracking-widest">Score Table</h4>` + tableHtml; 
             } 
@@ -1915,6 +1924,29 @@
                 document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-3 text-center tracking-widest">Catch Diary</h4><div class="space-y-1">${listHtml}</div>`; 
             }
         }
+
+        window.openPastCatchFeed = (aid) => {
+            const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
+            if (!h || !h.standings) return;
+            const a = h.standings.find(s => s.id === aid);
+            if(!a) return;
+            document.getElementById('feedAnglerName').innerText = "HISTORY: " + a.name;
+            
+            let cList = a.catches ? (Array.isArray(a.catches) ? a.catches : Object.values(a.catches)) : [];
+            cList.sort((ca, cb) => cb.ts - ca.ts);
+
+            if(cList.length === 0) {
+                document.getElementById('feedContent').innerHTML = `<p class="text-center text-slate-500 py-10 font-black text-[9px] uppercase tracking-widest">No captures recorded</p>`;
+            } else {
+                document.getElementById('feedContent').innerHTML = cList.map(f => `
+                    <div class="match-card p-2 flex justify-between items-center mb-1.5 border border-white/5">
+                        <div class="text-left"><span class="text-white font-bold text-[11px] uppercase">${f.species}</span><br><span class="text-[9px] text-slate-300 uppercase tracking-widest mt-0.5 block">${f.time}</span></div>
+                        <span class="neon-text-blue font-black text-xs">${f.display || f.size}</span>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('catchFeedModal').classList.remove('hidden');
+        };
 
         function closeHistoryDetail() { document.getElementById('historyDetailDrawer').classList.remove('open'); setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); }
         function shareResults() { generateOfficialMasterReport(); }
@@ -1966,4 +1998,3 @@
     </script>
 </body>
 </html>
-
