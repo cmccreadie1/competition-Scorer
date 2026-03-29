@@ -29,14 +29,13 @@
         /* --- v8.1.0 NEON VARIABLES --- */
         :root {
             --neon-blue: #00f3ff;
-            --neon-pink: #ff00ff;
             --neon-amber: #f59e0b;
         }
 
         html, body {
             font-family: 'Inter', sans-serif;
             background-color: #000000; 
-            color: #ffffff;
+            color: #cbd5e1; /* Soft Slate White */
             -webkit-user-select: none;
             user-select: none;
         }
@@ -44,25 +43,26 @@
         .neon-text-blue { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
 
         .app-btn {
-            background: #0a0a0a;
+            background-color: rgba(0, 243, 255, 0.05);
             border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
             transition: all 0.2s ease;
             color: var(--neon-blue);
         }
         .app-btn:active {
             transform: scale(0.95);
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
-            background: var(--neon-blue);
-            color: #000000;
+            background-color: rgba(0, 243, 255, 0.15);
         }
+        
         .feature-card {
-            background-color: #0a0a0a;
+            background-color: #000000;
             border: 1px solid rgba(0, 243, 255, 0.15);
             box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.05);
         }
+        
         #installModal {
-            background: rgba(0,0,0,0.92);
+            background: rgba(0,0,0,0.95);
             backdrop-filter: blur(15px);
         }
     </style>
@@ -73,10 +73,10 @@
         
         <img src="icon-512.png" alt="App Logo" class="w-36 h-36 mx-auto rounded-[2rem] shadow-[0_0_25px_rgba(0,243,255,0.3)] border border-white/10 mb-6" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgZmlsbD0iIzFZTjI5M2IiLz48L3N2Zz4='">
 
-        <h1 class="text-4xl font-black tracking-tight uppercase mb-2">Live Sea Score <span class="neon-text-blue">Pro</span></h1>
+        <h1 class="text-4xl font-black tracking-tight uppercase mb-2 text-white">Live Sea Score <span class="neon-text-blue">Pro</span></h1>
         
         <div class="inline-flex items-center justify-center space-x-3 mb-6">
-            <span class="bg-blue-900/40 text-blue-400 font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full border border-blue-500/50">Match Engine Active</span>
+            <span class="bg-cyan-400/10 text-cyan-400 font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full border border-cyan-400/50">Match Engine Active</span>
             <span class="text-slate-500 font-bold text-[10px] tracking-widest uppercase version-display">V8.0.0</span>
         </div>
 
@@ -132,37 +132,37 @@
             Install App To Phone <i class="fa-solid fa-download ml-3"></i>
         </button>
         
-        <button id="btnLaunchDirect" onclick="window.location.replace('app.html')" class="hidden w-full bg-slate-900 border border-slate-800 rounded-2xl py-4 text-slate-300 font-black text-sm uppercase tracking-widest mt-4 active:bg-slate-800 transition-colors">
+        <button id="btnLaunchDirect" onclick="window.location.replace('app.html')" class="hidden w-full bg-black border border-cyan-400/30 rounded-2xl py-4 text-cyan-400 font-black text-sm uppercase tracking-widest mt-4 active:bg-cyan-400/10 transition-colors">
             Open App in Browser
         </button>
 
     </main>
 
     <div id="successContent" class="hidden flex-1 w-full max-w-lg mx-auto flex flex-col justify-center items-center px-6 text-center h-screen">
-        <i class="fa-solid fa-circle-check text-green-500 text-7xl mb-6 shadow-[0_0_30px_rgba(34,197,94,0.3)] rounded-full"></i>
+        <i class="fa-solid fa-circle-check neon-text-blue text-7xl mb-6 shadow-[0_0_30px_rgba(0,243,255,0.3)] rounded-full"></i>
         <h2 class="text-2xl font-black uppercase tracking-tight text-white mb-4">Installation Complete</h2>
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-left shadow-lg">
+        <div class="bg-black border border-cyan-400/30 p-6 rounded-2xl text-left shadow-lg">
             <p class="text-slate-300 text-sm leading-relaxed mb-4">
                 Live Sea Score Pro has been added to your device.
             </p>
-            <p class="text-amber-500 font-black text-xs uppercase tracking-widest mb-2 pb-2 border-b border-slate-800">Next Steps:</p>
+            <p class="neon-text-blue font-black text-xs uppercase tracking-widest mb-2 pb-2 border-b border-slate-800">Next Steps:</p>
             <p class="text-slate-400 text-xs leading-relaxed mb-2"><b class="text-white">1.</b> Close this browser tab completely.</p>
-            <p class="text-slate-400 text-xs leading-relaxed"><b class="text-white">2.</b> Go to your phone's Home Screen and tap the new <b>Live Sea Score</b> app icon.</p>
+            <p class="text-slate-400 text-xs leading-relaxed"><b class="text-white">2.</b> Go to your phone's Home Screen and tap the new <b class="text-white">Live Sea Score</b> app icon.</p>
         </div>
     </div>
 
     <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
-        <div class="bg-[#0a0a0a] w-full max-w-sm p-6 space-y-5 border-2 border-blue-500 rounded-2xl shadow-[0_0_30px_rgba(0,243,255,0.2)]">
+        <div class="bg-black w-full max-w-sm p-6 space-y-5 border border-cyan-400 rounded-2xl shadow-[0_0_30px_rgba(0,243,255,0.2)]">
             <div class="text-center">
-                <i class="fa-brands fa-apple text-blue-400 text-5xl mb-3"></i>
+                <i class="fa-brands fa-apple neon-text-blue text-5xl mb-3"></i>
                 <h3 class="text-lg font-black uppercase tracking-tight text-white">iPhone Installation</h3>
-                <p class="text-slate-400 text-sm mt-4 leading-relaxed text-left bg-slate-900 p-4 rounded-xl border border-slate-800">
-                    <b class="text-white">1.</b> Tap the <b>Share</b> icon at the bottom of Safari.<br><br>
-                    <b class="text-white">2.</b> Scroll down and tap <b>'Add to Home Screen'</b>.<br><br>
-                    <b class="text-white">3.</b> Tap <b>'Add'</b> in the top right corner.
+                <p class="text-slate-400 text-sm mt-4 leading-relaxed text-left bg-black p-4 rounded-xl border border-cyan-400/30">
+                    <b class="text-white">1.</b> Tap the <b class="text-white">Share</b> icon at the bottom of Safari.<br><br>
+                    <b class="text-white">2.</b> Scroll down and tap <b class="text-white">'Add to Home Screen'</b>.<br><br>
+                    <b class="text-white">3.</b> Tap <b class="text-white">'Add'</b> in the top right corner.
                 </p>
             </div>
-            <button onclick="closeIOSModal()" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl uppercase tracking-widest text-[11px] shadow-[0_0_15px_rgba(37,99,235,0.4)] active:scale-95 transition">I have added it</button>
+            <button onclick="closeIOSModal()" class="app-btn w-full font-black py-4 rounded-xl uppercase tracking-widest text-[11px]">I have added it</button>
         </div>
     </div>
 
