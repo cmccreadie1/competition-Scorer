@@ -1,37 +1,51 @@
-const CACHE_NAME = 'match-scorer-v8.1.0';
-const ASSETS = [
+const CACHE_NAME = 'match-scorer-v1.0.0';
+const urlsToCache = [
   '/',
   '/index.html',
   '/app.html',
   '/manifest.json',
+  '/icon-192.png',
   '/icon-512.png',
   '/version.json'
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('Caching v8.1.0 Neon Assets');
-      return cache.addAll(ASSETS);
-    })
-  );
+self.addEventListener('install', event => {
   self.skipWaiting();
-});
-
-self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      );
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
   );
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+  
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
+    fetch(event.request).then(response => {
+      if (!response || response.status !== 200 || response.type !== 'basic') {
+        return response;
+      }
+      let responseToCache = response.clone();
+      caches.open(CACHE_NAME).then(cache => {
+        cache.put(event.request, responseToCache);
+      });
+      return response;
+    }).catch(() => {
+      return caches.match(event.request);
     })
   );
 });
