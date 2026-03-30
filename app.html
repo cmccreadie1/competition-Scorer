@@ -737,21 +737,20 @@
             </button>
             <div class="scrollable-area p-6 space-y-8 text-white text-left">
                 <section class="space-y-5">
-                    <h4 class="neon-text-blue font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">🎣 ANGLER'S QUICK START</h4>
+                    <h4 class="neon-text-blue font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">🎣 USER GUIDE</h4>
                     <div class="space-y-4 text-xs leading-relaxed text-slate-300">
-                        <p><b class="text-white">Step 1: Join the Match</b><br>Enter your Name and the Venue. Tap "Join as Competitor" and type in the 4-digit PIN provided by your Steward.</p>
-                        <p><b class="text-white">Step 2: Log Your Catch</b><br>Select the fish species. Enter the size or weight, then hit "Record Catch". The app will instantly sync to the cloud.</p>
-                        <p><b class="text-white">Step 3: The Dynamic HUD & Leaderboard</b><br>The pill at the top of your screen is your tactical HUD. It shows your current points, match timer, and live rank. <b>Tap the pill</b> at any time to unfold the full Live Leaderboard. <b class="text-neon-blue">Tap any angler's name</b> on the leaderboard to view their live, individual catch feed in real-time.</p>
-                        <p><b class="text-white">Step 4: Smart Battery Saver</b><br>There is no sleep button. Put your phone in your pocket and let the screen turn off to save battery. The moment you wake your phone, the app will instantly sync and scroll any new catches across your screen.</p>
+                        <p><b class="text-white">Join Match:</b> Enter your Name and the Venue. Tap "Join as Competitor" and type in the 4-digit PIN provided by your Steward.</p>
+                        <p><b class="text-white">Log Your Catch:</b> Select the fish species. Enter the size or weight, then hit "Record Catch". The app will instantly sync to the cloud.</p>
+                        <p><b class="text-white">Interactive Leaderboard:</b> The top pill is your HUD. <b class="text-neon-blue">Tap the pill</b> to open the Live Leaderboard. <b class="text-neon-blue">Tap any angler's name</b> on the leaderboard to view their live, individual catch feed in real-time.</p>
+                        <p><b class="text-white">Smart Battery Saver:</b> There is no sleep button. Put your phone in your pocket and let the screen turn off to save battery. The moment you wake your phone, the app will instantly sync and scroll any new catches.</p>
                     </div>
                 </section>
                 <hr class="border-slate-800">
                 <section class="space-y-5">
-                    <h4 class="neon-text-blue font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">👑 STEWARD'S GUIDE</h4>
+                    <h4 class="neon-text-amber font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">👑 STEWARD GUIDE</h4>
                     <div class="space-y-4 text-xs leading-relaxed text-slate-300">
-                        <p><b class="text-white">Step 1: Setup</b><br>Tap "Host as Steward". Choose the match duration and scoring format, then give your anglers the Room PIN.</p>
-                        <p><b class="text-white">Step 2: Management (The Command Bridge)</b><br>During the match, <b>Press and Hold</b> the top HUD pill for 1 second to open the Steward Desk. From here, you can adjust the match clock, end the match early, or transfer Steward control to another angler.</p>
-                        <p><b class="text-white">Step 3: God Mode Audit</b><br>From the Steward Desk, tap "Review Angler Logs". Tap any angler to audit their catches. Stewards have the authority to <b>Force Log</b> a missing catch or <b>Delete</b> an invalid catch globally.</p>
+                        <p><b class="text-white">Command Bridge:</b> Press and hold the top HUD pill for 1 second to open the Steward Desk. Adjust the match clock or transfer Steward control here.</p>
+                        <p><b class="text-white">God Mode Audit:</b> From the Steward Desk, tap "Review Angler Logs". Tap any angler to audit their catches. Stewards have the authority to <b>Force Log</b> a missing catch or <b>Delete</b> an invalid catch globally.</p>
                     </div>
                 </section>
                 <hr class="border-slate-800">
@@ -1145,10 +1144,7 @@
                 let g = val % 1000;
                 return `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`;
             }
-            if (fmt === 'length' || fmt === 'length10') {
-                return `${val}<span class="telemetry-unit">cm</span>`;
-            }
-            return `${val}<span class="telemetry-unit">pts</span>`;
+            return `${val} pts`;
         }
 
         let atmPin = "";
@@ -1685,12 +1681,12 @@
             
             let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             update(ref(db, `matches/${state.pin}/anglers/${aid}`), { catches: arr, score: newScore });
-
+            
             if(aid === uid) {
                 state.myCatches = arr;
                 saveState(); renderCatchList(); updateLiveTally();
             }
-            
+
             showNotification(`Steward override applied.`);
             setTimeout(refreshStewardCatchList, 300);
         }
@@ -1727,19 +1723,17 @@
             let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             
             update(ref(db, `matches/${state.pin}/anglers/${godTargetAnglerId}`), { catches: arr, score: newScore });
-
+            
             if(godTargetAnglerId === uid) {
                 state.myCatches = arr;
                 saveState(); renderCatchList(); updateLiveTally();
             }
-            
+
             document.getElementById('godInputSpecies').value = ""; document.getElementById('godInputSize').value = "";
             document.getElementById('stewardGodModal').classList.add('hidden');
             showNotification("Catch forcibly logged.");
             setTimeout(refreshStewardCatchList, 300);
         }
-
-        function shareUnifiedReport() { generateOfficialMasterReport(); }
 
         function endMatchEarly(grace) { if(state.isSteward && state.pin) { if(grace) { document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('customEndModal').classList.remove('hidden'); } } }
         function stewardSetNewEnd(mins) { document.getElementById('customEndModal').classList.add('hidden'); document.getElementById('stewardDrawer').classList.remove('open'); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
@@ -1888,7 +1882,7 @@
             }
         }
 
-        window.openPastCatchFeed = (aid) => {
+        function openPastCatchFeed(aid) {
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if (!h || !h.standings) return;
             const a = h.standings.find(s => s.id === aid);
@@ -1909,19 +1903,19 @@
                 `).join('');
             }
             document.getElementById('catchFeedModal').classList.remove('hidden');
-        };
+        }
 
-        window.generateOfficialMasterReport = () => {
+        function generateOfficialMasterReport() {
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
             buildAndShareReport(arr, state.venue, new Date().toLocaleDateString());
-        };
+        }
 
-        window.generateHistoricReport = () => {
+        function generateHistoricReport() {
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if(!h || !h.standings) return alert("No leaderboard data available.");
             buildAndShareReport(h.standings, h.venue, h.date);
-        };
+        }
 
         function buildAndShareReport(arr, venueName, matchDate) {
             let podium = arr.slice(0, 3);
@@ -1989,6 +1983,9 @@
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
         }
 
+        function closeHistoryDetail() { document.getElementById('historyDetailDrawer').classList.remove('open'); setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); }
+        function shareUnifiedReport() { generateOfficialMasterReport(); }
+
         window.onload = () => {
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
             if (!isStandalone) {
@@ -2030,7 +2027,7 @@
         });
 
         // GLOBAL BINDINGS
-        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport; window.openPastCatchFeed = openPastCatchFeed;
+        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport; window.openPastCatchFeed = openPastCatchFeed;
     </script>
 </body>
 </html>
