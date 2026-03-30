@@ -1,4 +1,4 @@
-const CACHE_NAME = 'match-scorer-v1.0.0';
+const CACHE_NAME = 'match-scorer-v101';
 const urlsToCache = [
   '/',
   '/index.html',
