@@ -1649,10 +1649,24 @@
 
         function stewardOpenAngler(aid, aName) {
             godTargetAnglerId = aid;
-            godTargetAnglerName = aName;
+            godTargetAnglerName = aNam
             document.getElementById('auditAnglerName').innerText = `AUDIT: ${aName}`;
             document.getElementById('godModeAnglerName').innerText = aName;
             
+            const godSizeDeck = document.getElementById('godDeckSizeInputs');
+            if (state.format === 'speciesHunt') { 
+                if(godSizeDeck) godSizeDeck.classList.add('hidden'); 
+            } else {
+                if(godSizeDeck) godSizeDeck.classList.remove('hidden');
+                document.getElementById('godDeckLength').classList.add('hidden'); 
+                document.getElementById('godDeckWeightLb').classList.add('hidden'); 
+                document.getElementById('godDeckWeightKg').classList.add('hidden'); 
+                
+                if (state.format === 'weightLb') { document.getElementById('godDeckWeightLb').classList.remove('hidden'); } 
+                else if (state.format === 'weightKg') { document.getElementById('godDeckWeightKg').classList.remove('hidden'); } 
+                else { document.getElementById('godDeckLength').classList.remove('hidden'); }
+            }
+
             const logDrawer = document.getElementById('stewardLogDrawer');
             logDrawer.classList.remove('hidden');
             logDrawer.classList.add('open');
@@ -1718,33 +1732,67 @@
         function submitGodModeCatch() {
             if(!godTargetAnglerId) return;
             let species = document.getElementById('godInputSpecies').value;
-            let size = parseFloat(document.getElementById('godInputSize').value) || 0;
-            if(!species || size <= 0) { alert("Missing details."); return; }
+            if(!species) { alert("Select species first!"); return; }
+
+            let finalSize = 0, displaySize = "", pts = 0;
             
-            let pts = size; if (state.format === 'length10') pts = size + 10;
-            let newCatch = { id: Date.now().toString(), species: species, size: size, display: `${size}<span class="telemetry-unit">cm</span>`, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now() };
+            if (state.format === 'weightLb') { 
+                let lbs = parseInt(document.getElementById('godInputLbs').value) || 0, oz = parseInt(document.getElementById('godInputOz').value) || 0; 
+                finalSize = (lbs * 16) + oz; 
+                displaySize = `${lbs}<span class="telemetry-unit">lb</span> ${oz}<span class="telemetry-unit">oz</span>`; 
+                pts = finalSize; 
+            } 
+            else if (state.format === 'weightKg') { 
+                let kg = parseInt(document.getElementById('godInputKg').value) || 0, g = parseInt(document.getElementById('godInputGrammes').value) || 0; 
+                finalSize = (kg * 1000) + g; 
+                displaySize = `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`; 
+                pts = finalSize; 
+            } 
+            else if (state.format === 'speciesHunt') { 
+                finalSize = 1; displaySize = ""; 
+            } 
+            else { 
+                finalSize = parseFloat(document.getElementById('godInputSize').value) || 0; 
+                displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; 
+                pts = finalSize; 
+                if (state.format === 'length10') pts = finalSize + 10; 
+            }
+            
+            if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
             
             let cData = globalMatchData.anglers[godTargetAnglerId].catches || [];
             let arr = Array.isArray(cData) ? cData : Object.values(cData);
+
+            if (state.format === 'speciesHunt') { 
+                let existing = arr.filter(x => x.species === species).length; 
+                pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; 
+            } else if (species === 'Mackerel') { 
+                if (arr.filter(x => x.species === 'Mackerel').length >= 3) { pts = 0; } 
+            }
+
+            let newCatch = { id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now() };
+            
             arr.unshift(newCatch);
             let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             
             update(ref(db, `matches/${state.pin}/anglers/${godTargetAnglerId}`), { catches: arr, score: newScore });
             
-            // EPISODE 1 FIX: Sync local memory if steward force-logs their own fish
             if(godTargetAnglerId === uid) {
                 state.myCatches = arr;
-                saveState(); 
-                renderCatchList(); 
-                updateLiveTally();
+                saveState(); renderCatchList(); updateLiveTally();
             }
 
-            document.getElementById('godInputSpecies').value = ""; document.getElementById('godInputSize').value = "";
+            document.getElementById('godInputSpecies').value = ""; 
+            if(document.getElementById('godInputSize')) document.getElementById('godInputSize').value = ""; 
+            if(document.getElementById('godInputLbs')) document.getElementById('godInputLbs').value = ""; 
+            if(document.getElementById('godInputOz')) document.getElementById('godInputOz').value = ""; 
+            if(document.getElementById('godInputKg')) document.getElementById('godInputKg').value = ""; 
+            if(document.getElementById('godInputGrammes')) document.getElementById('godInputGrammes').value = "";
+            
             document.getElementById('stewardGodModal').classList.add('hidden');
             showNotification("Catch forcibly logged.");
             setTimeout(refreshStewardCatchList, 300);
         }
-
         function generateOfficialMasterReport() {
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
