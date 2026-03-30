@@ -976,6 +976,24 @@
             }
         });
 
+        // 1. UNIVERSAL FORMATTER (Plaintext for Reports/Ticker)
+        function formatScoreDisplay(val, fmt, isPlaintext = false) {
+            const unitOpen = isPlaintext ? "" : '<span class="telemetry-unit">';
+            const unitClose = isPlaintext ? "" : "</span>";
+            
+            if (fmt === 'weightLb') {
+                let lbs = Math.floor(val / 16);
+                let oz = val % 16;
+                return `${lbs}${unitOpen}lb${unitClose} ${oz}${unitOpen}oz${unitClose}`;
+            }
+            if (fmt === 'weightKg') {
+                let kg = Math.floor(val / 1000);
+                let g = val % 1000;
+                return `${kg}${unitOpen}kg${unitClose} ${g}${unitOpen}g${unitClose}`;
+            }
+            return `${val} ${unitOpen}pts${unitClose}`;
+        }
+
         function checkAndFireTicker(force = false) {
             if(!globalMatchData || !globalMatchData.anglers) return;
             let allCatches = [];
@@ -998,31 +1016,46 @@
             lastSyncCount = allCatches.length;
         }
 
+        // 2. FISH-FIRST TICKER (WITH MATCH TOTAL)
         function renderTickerHTML(allCatches, totalFish, biggestStr, forceRefresh = false) {
             allCatches.sort((a,b) => parseInt(b.id) - parseInt(a.id)); 
             let mostRecent = allCatches[0];
             let last5 = allCatches.slice(1, 6);
             
+            // Calculate Match Totals
+            let matchScore = 0;
+            let speciesSet = new Set();
+            Object.values(globalMatchData.anglers).forEach(a => {
+                matchScore += a.score || 0;
+                if(a.catches) {
+                    let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
+                    cList.forEach(f => speciesSet.add(f.species));
+                }
+            });
+
             let htmlBlock = '';
             
             if (mostRecent) {
                 let catchDisplay = `${mostRecent.species} (${mostRecent.display || mostRecent.size})`;
-                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MOST RECENT CATCH:</span> <span class="text-white font-bold ml-2">${mostRecent.anglerName} - ${catchDisplay.replace(/<[^>]*>?/gm, '')} • <span class="neon-text-blue">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
+                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay.replace(/<[^>]*>?/gm, '')} — <span class="neon-text-amber">${mostRecent.anglerName}</span> • <span class="neon-text-blue">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
             }
             
             if (last5.length > 0) {
-                htmlBlock += `<span class="text-slate-300 font-black tracking-widest">LAST 5 FISH:</span> <span class="ml-2">`;
+                htmlBlock += `<span class="text-slate-300 font-black tracking-widest">LAST 5:</span> <span class="ml-2">`;
                 last5.forEach((c, i) => {
                     let display = `${c.species} (${c.display || c.size})`;
-                    htmlBlock += `<span class="text-slate-300">${c.anglerName} - ${display.replace(/<[^>]*>?/gm, '')} • <span class="neon-text-blue">${formatCatchTime(c)}</span></span>`;
+                    htmlBlock += `<span class="text-slate-300">${display.replace(/<[^>]*>?/gm, '')} — <span class="neon-text-amber">${c.anglerName}</span></span>`;
                     if (i < last5.length - 1) htmlBlock += `<span class="text-slate-600 mx-2">|</span>`;
                 });
                 htmlBlock += `</span> <span class="text-slate-600 mx-6">///</span> `;
             }
             
             if (biggestStr !== "No Captures") {
-                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MATCH BIGGEST FISH:</span> <span class="text-white font-bold ml-2">${biggestStr.replace(/<[^>]*>?/gm, '')}</span>`;
+                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MATCH BIGGEST:</span> <span class="text-white font-bold ml-2">${biggestStr.replace(/<[^>]*>?/gm, '')}</span> <span class="text-slate-600 mx-6">///</span> `;
             }
+
+            // Match Total Milestone
+            htmlBlock += `<span class="text-white font-black tracking-widest">MATCH TOTAL:</span> <span class="neon-text-blue font-bold ml-2">${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatScoreDisplay(matchScore, state.format, true)}</span>`;
             
             htmlBlock += `<span class="inline-block w-[100vw]"></span>`;
 
@@ -1142,20 +1175,6 @@
                 textEl.innerHTML = "Please open this website on your Mobile Phone to install the Scorecard.";
             }
             document.getElementById('installModal').classList.remove('hidden');
-        }
-
-        function formatScoreDisplay(val, fmt) {
-            if (fmt === 'weightLb') {
-                let lbs = Math.floor(val / 16);
-                let oz = val % 16;
-                return `${lbs}<span class="telemetry-unit">lb</span> ${oz}<span class="telemetry-unit">oz</span>`;
-            }
-            if (fmt === 'weightKg') {
-                let kg = Math.floor(val / 1000);
-                let g = val % 1000;
-                return `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`;
-            }
-            return `${val} <span class="telemetry-unit">pts</span>`;
         }
 
         let atmPin = "";
@@ -1660,7 +1679,6 @@
             document.getElementById('auditAnglerName').innerText = `AUDIT: ${aName}`;
             document.getElementById('godModeAnglerName').innerText = aName;
             
-            // Fix layout for current format
             const godSizeDeck = document.getElementById('godDeckSizeInputs');
             if (state.format === 'speciesHunt') { 
                 if(godSizeDeck) godSizeDeck.classList.add('hidden'); 
@@ -1708,7 +1726,6 @@
             let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             update(ref(db, `matches/${state.pin}/anglers/${aid}`), { catches: arr, score: newScore });
             
-            // Sync local journal if steward deletes their own fish
             if(aid === uid) {
                 state.myCatches = arr;
                 saveState(); renderCatchList(); updateLiveTally();
@@ -1783,13 +1800,11 @@
             
             update(ref(db, `matches/${state.pin}/anglers/${godTargetAnglerId}`), { catches: arr, score: newScore });
             
-            // Sync local journal if force-adding for self
             if(godTargetAnglerId === uid) {
                 state.myCatches = arr;
                 saveState(); renderCatchList(); updateLiveTally();
             }
 
-            // Reset inputs
             document.getElementById('godInputSpecies').value = ""; 
             if(document.getElementById('godInputSize')) document.getElementById('godInputSize').value = ""; 
             if(document.getElementById('godInputLbs')) document.getElementById('godInputLbs').value = ""; 
@@ -1814,13 +1829,12 @@
             buildAndShareReport(h.standings, h.venue, h.date);
         }
 
+        // 3. CLEAN WHATSAPP REPORT FORMATTER
         function buildAndShareReport(arr, venueName, matchDate) {
+            const fmt = state.format; 
             let podium = arr.slice(0, 3);
             let biggestVal = 0, biggestStr = "N/A";
-            
-            let hourCounts = {};
-            let allSpecies = new Set();
-            let totalFish = 0;
+            let hourCounts = {}, allSpecies = new Set(), totalFish = 0;
 
             arr.forEach(a => {
                 if(a.catches) {
@@ -1829,36 +1843,30 @@
                     cList.forEach(f => {
                         allSpecies.add(f.species);
                         if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; }
-                        if(f.ts) {
-                            const hr = new Date(f.ts).getHours();
-                            hourCounts[hr] = (hourCounts[hr] || 0) + 1;
-                        }
+                        if(f.ts) { const hr = new Date(f.ts).getHours(); hourCounts[hr] = (hourCounts[hr] || 0) + 1; }
                     });
                 }
             });
 
-            let beachTotal = arr.reduce((sum, a) => sum + a.score, 0);
+            let matchTotalRaw = arr.reduce((sum, a) => sum + (a.score || 0), 0);
 
             let t = `🏆 *OFFICIAL MATCH RESULTS*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n\n`;
             
             t += `--- *PODIUM* ---\n\n`;
-            t += `🥇 *1st:* ${podium[0]?.name || '-'} — ${podium[0]?.score || 0}\n\n`;
-            t += `🥈 *2nd:* ${podium[1]?.name || '-'} — ${podium[1]?.score || 0}\n\n`;
-            t += `🥉 *3rd:* ${podium[2]?.name || '-'} — ${podium[2]?.score || 0}\n\n\n`;
+            t += `🥇 *1st:* ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n\n`;
+            t += `🥈 *2nd:* ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}\n\n`;
+            t += `🥉 *3rd:* ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n\n`;
             
             t += `--- *MATCH STATS* ---\n\n`;
             t += `🐋 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
             t += `🧬 *SPECIES DIVERSITY:* ${allSpecies.size} Unique\n\n`;
-            t += `📊 *BEACH TOTAL:* ${beachTotal} (${totalFish} Total Fish)\n\n\n`;
+            t += `📊 *MATCH TOTAL:* ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Total Fish)\n\n\n`;
 
             t += `⏱️ *FISH HOUR BY HOUR*\n\n`;
-            let maxHourVal = 0;
-            Object.keys(hourCounts).forEach(hr => { if(hourCounts[hr] > maxHourVal) maxHourVal = hourCounts[hr]; });
             let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
-            
-            if(sortedHours.length === 0) {
-                t += `No captures recorded with timestamps.\n\n\n`;
-            } else {
+            if(sortedHours.length === 0) { t += `No captures recorded.\n\n\n`; } 
+            else {
+                let maxHourVal = Math.max(...Object.values(hourCounts));
                 sortedHours.forEach(hr => {
                     let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "";
                     let nHr = parseInt(hr);
@@ -1870,8 +1878,7 @@
 
             t += `--- *FULL STANDINGS* ---\n\n`;
             arr.forEach((a, i) => { 
-                let cleanScore = typeof a.score === 'string' ? a.score.replace(/<[^>]*>?/gm, '') : a.score;
-                t += `${i+1}. ${a.name} - ${cleanScore}\n\n`; 
+                t += `${i+1}. ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n\n`; 
             });
             
             t += `_Generated by Live Sea Score Pro V2.0.0_`;
@@ -1881,7 +1888,6 @@
         }
 
         function shareUnifiedReport() { generateOfficialMasterReport(); }
-
         function endMatchEarly(grace) { if(state.isSteward && state.pin) { if(grace) { document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('customEndModal').classList.remove('hidden'); } } }
         function stewardSetNewEnd(mins) { document.getElementById('customEndModal').classList.add('hidden'); document.getElementById('stewardDrawer').classList.remove('open'); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
         function transferSteward() { if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); document.getElementById('stewardDrawer').classList.remove('open'); } } }
@@ -1895,54 +1901,24 @@
             document.getElementById('finalScore').innerHTML = formatScoreDisplay(totalPts, state.format); 
             document.getElementById('finalCount').innerText = state.myCatches.length; 
             document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; 
-            
             if(state.isSteward) document.getElementById('stewardReportBtn').classList.remove('hidden');
-            
             navTo('results'); 
         }
         
         function saveHistory(isL) { 
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); 
-            let matchTF = 0; let matchBF = "None"; let bVal = 0;
-            let fullStandings = [];
-
+            let matchTF = 0, matchBF = "None", bVal = 0, fullStandings = [];
             if (globalMatchData && globalMatchData.anglers) {
-                fullStandings = Object.entries(globalMatchData.anglers).map(([id, data]) => ({
-                    id: id,
-                    name: data.name,
-                    score: data.score,
-                    catches: data.catches ? (Array.isArray(data.catches) ? data.catches : Object.values(data.catches)) : []
-                }));
-
+                fullStandings = Object.entries(globalMatchData.anglers).map(([id, data]) => ({ id: id, name: data.name, score: data.score, catches: data.catches ? (Array.isArray(data.catches) ? data.catches : Object.values(data.catches)) : [] }));
                 Object.values(globalMatchData.anglers).forEach(angler => { 
                     if(angler.catches) { 
                         const cList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches);
                         matchTF += cList.length;
-                        cList.forEach(fish => { 
-                            if(fish.size > bVal) { bVal = fish.size; matchBF = `${angler.name} - ${fish.species} (${fish.display || fish.size})`; } 
-                        }); 
+                        cList.forEach(fish => { if(fish.size > bVal) { bVal = fish.size; matchBF = `${angler.name} - ${fish.species} (${fish.display || fish.size})`; } }); 
                     } 
                 });
             }
-
-            h.unshift({ 
-                id: 'match_' + Date.now(), 
-                pin: state.pin, 
-                venue: state.venue, 
-                date: new Date().toLocaleDateString(), 
-                time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), 
-                format: state.format, 
-                score: state.myCatches.reduce((s,c) => s+c.points, 0), 
-                personalCatches: [...state.myCatches], 
-                standings: fullStandings.length > 0 ? fullStandings.sort((a,b) => b.score - a.score) : [], 
-                playerName: state.name, 
-                isLive: isL, 
-                isSteward: state.isSteward,
-                endTime: state.endTime, 
-                graceEndTime: state.graceEndTime || (state.endTime ? state.endTime + 180000 : null),
-                totalMatchFish: matchTF,
-                matchBiggestFishDisplay: matchBF.replace(/<[^>]*>?/gm, '')
-            }); 
+            h.unshift({ id: 'match_' + Date.now(), pin: state.pin, venue: state.venue, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), format: state.format, score: state.myCatches.reduce((s,c) => s+c.points, 0), personalCatches: [...state.myCatches], standings: fullStandings.length > 0 ? fullStandings.sort((a,b) => b.score - a.score) : [], playerName: state.name, isLive: isL, isSteward: state.isSteward, endTime: state.endTime, graceEndTime: state.graceEndTime || (state.endTime ? state.endTime + 180000 : null), totalMatchFish: matchTF, matchBiggestFishDisplay: matchBF.replace(/<[^>]*>?/gm, '') }); 
             localStorage.setItem('matchHistory', JSON.stringify(h)); 
         }
         
@@ -1953,16 +1929,9 @@
                 let isMatchActuallyFinished = !m.isLive;
                 if(m.isLive && m.endTime) { if (now >= (m.graceEndTime || m.endTime + 180000)) isMatchActuallyFinished = true; }
                 const showLive = !isMatchActuallyFinished;
-                
-                let card = document.createElement('div'); 
-                card.className = "match-card p-4 flex flex-col items-center active:bg-slate-900 transition mb-2 text-center"; 
+                let card = document.createElement('div'); card.className = "match-card p-4 flex flex-col items-center active:bg-slate-900 transition mb-2 text-center"; 
                 let headerText = showLive ? "" : "<p class='text-[8px] font-black text-slate-500 mb-2 uppercase tracking-[0.4em]'>MATCH ENDED</p>"; 
-                
-                let timerHtml = "";
-                if (showLive && m.endTime) {
-                    timerHtml = `<div class="flex items-center space-x-2 mb-1"><div class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div><span class="history-timer text-[11px] font-black neon-text-amber tabular-nums" data-end="${m.graceEndTime || m.endTime + 180000}">00:00</span></div>`;
-                }
-
+                let timerHtml = (showLive && m.endTime) ? `<div class="flex items-center space-x-2 mb-1"><div class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div><span class="history-timer text-[11px] font-black neon-text-amber tabular-nums" data-end="${m.graceEndTime || m.endTime + 180000}">00:00</span></div>` : "";
                 card.innerHTML = `${headerText}<div class="w-full flex justify-between items-center"><div class="flex-1 text-left pl-1" onclick="viewPastRecord('${m.id}')"><span class="font-black text-white text-sm uppercase tracking-tight">${m.date}</span> ${showLive ? '<span class="text-[7px] bg-red-600 px-1.5 py-0.5 rounded-full text-white font-black ml-1 animate-pulse">LIVE</span>' : ''}<br><span class="text-[10px] text-slate-300 font-bold uppercase tracking-widest mt-1 inline-block">${m.venue || 'Venue'}</span><br><span class="text-[10px] neon-text-blue font-black tracking-widest uppercase mt-1 inline-block">PIN ${m.pin} • ${m.personalCatches.length} Catch</span></div><div class="text-right flex items-center space-x-3"><div class="flex flex-col items-end" onclick="viewPastRecord('${m.id}')">${timerHtml}<div class="text-xl font-black metric-white leading-tight mt-0.5">${formatScoreDisplay(m.score, m.format)}</div><div class="text-[9px] text-slate-500 uppercase font-black tracking-widest mt-1">Total Pts</div></div><button onclick="deleteHistoryItem('${m.id}')" class="text-slate-600 active:text-red-500 px-2"><i class="fa-solid fa-trash-can text-lg"></i></button></div></div><div class="w-full mt-3 pt-3 border-t border-slate-700/50 grid grid-cols-2 text-left"><div class="pr-2 border-r border-slate-700/50"><span class="text-[8px] text-slate-500 font-black uppercase tracking-widest block mb-0.5">Global Fish</span><span class="text-sm font-black neon-text-blue">${m.totalMatchFish || 0}</span></div><div class="pl-3"><span class="text-[8px] text-slate-500 font-black uppercase tracking-widest block mb-0.5">Global Biggest</span><span class="text-[10px] font-black neon-text-amber leading-tight block truncate">${m.matchBiggestFishDisplay || "N/A"}</span></div></div>`; 
                 if(i < 8) r.appendChild(card); else a.appendChild(card); 
             });
@@ -1980,18 +1949,12 @@
                     if (rem > 0) {
                         let totalSec = Math.floor(rem / 1000), h = Math.floor(totalSec / 3600), m = Math.floor((totalSec % 3600) / 60), s = totalSec % 60;
                         t.innerText = (h > 0 ? h + ":" : "") + m.toString().padStart(2,'0') + ":" + s.toString().padStart(2,'0');
-                    } else {
-                        t.closest('.match-card').innerHTML = '<p class="text-[7px] font-black text-slate-500 mb-0.5 uppercase tracking-[0.4em]">SYNCING FINAL...</p>';
-                        renderHistory(); 
-                    }
+                    } else { renderHistory(); }
                 });
             }, 1000);
         }
 
-        function stopHistoryClock() {
-            if (historyTick) clearInterval(historyTick);
-        }
-
+        function stopHistoryClock() { if (historyTick) clearInterval(historyTick); }
         function deleteHistoryItem(id) { if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
         function toggleArchive() { isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
         function viewPastRecord(id) { activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === id); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
@@ -1999,32 +1962,13 @@
         function switchHistoryTab(tab) {
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active'); }); document.getElementById(`tab-${tab}`).classList.add('active');
-            
             if(tab === 'standings') { 
                 let stewardShareBtn = `<button onclick="generateHistoricReport()" class="pill-btn w-full py-3 shadow-xl text-[10px] mb-3"><i class="fa-solid fa-file-export mr-2"></i> Share Official Report</button>`;
-                
-                let statsHtml = `
-                    ${stewardShareBtn}
-                    <div class="grid grid-cols-2 gap-2 mb-3">
-                        <div class="match-card p-2 text-center border border-amber/30 bg-amber/10">
-                            <span class="text-[8px] font-black uppercase tracking-widest block neon-text-amber opacity-90">Biggest Fish</span>
-                            <span class="font-bold text-[11px] text-white truncate block mt-0.5">${m.matchBiggestFishDisplay || 'N/A'}</span>
-                        </div>
-                        <div class="match-card p-2 text-center border border-cyan-400/30 bg-cyan-400/5">
-                            <span class="text-[8px] font-black uppercase tracking-widest block neon-text-blue opacity-90">Total Fish</span>
-                            <span class="font-bold text-[11px] text-white block mt-0.5">${m.totalMatchFish || '0'}</span>
-                        </div>
-                    </div>`;
-                    
+                let statsHtml = `${stewardShareBtn}<div class="grid grid-cols-2 gap-2 mb-3"><div class="match-card p-2 text-center border border-amber/30 bg-amber/10"><span class="text-[8px] font-black uppercase tracking-widest block neon-text-amber opacity-90">Biggest Fish</span><span class="font-bold text-[11px] text-white truncate block mt-0.5">${m.matchBiggestFishDisplay || 'N/A'}</span></div><div class="match-card p-2 text-center border border-cyan-400/30 bg-cyan-400/5"><span class="text-[8px] font-black uppercase tracking-widest block neon-text-blue opacity-90">Total Fish</span><span class="font-bold text-[11px] text-white block mt-0.5">${m.totalMatchFish || '0'}</span></div></div>`;
                 let tableHtml = `<div class="space-y-1">${m.standings.map((a, i) => `<div class="match-card p-2 flex justify-between items-center" onclick="openPastCatchFeed('${a.id || a.name}')"><span class="uppercase text-white font-bold text-[11px] text-left"><span class="neon-text-amber mr-2">${i+1}.</span> ${a.name}</span><b class="neon-text-blue text-xs text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`;
-                
                 document.getElementById('historyContent').innerHTML = statsHtml + `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-2 text-center tracking-widest">Score Table</h4>` + tableHtml; 
-            } 
-            else { 
-                let listHtml = m.personalCatches.map(c => { 
-                    let ptTxt = m.format.includes('weight') ? 'Recorded' : `${c.points} Pts`; 
-                    return `<div class="match-card p-3 flex justify-between items-center mb-1.5"><div class="text-left"><b class="text-white text-[11px] uppercase">${c.species}</b><br><span class="text-[9px] text-slate-300 font-black uppercase tracking-widest mt-1 inline-block">${c.time}</span></div><div class="text-right"><b class="text-white text-xs text-right">${c.display || c.size}</b><br><span class="text-[9px] neon-text-blue font-black uppercase mt-1 inline-block">${ptTxt}</span></div></div>`; 
-                }).join('');
+            } else { 
+                let listHtml = m.personalCatches.map(c => `<div class="match-card p-3 flex justify-between items-center mb-1.5"><div class="text-left"><b class="text-white text-[11px] uppercase">${c.species}</b><br><span class="text-[9px] text-slate-300 font-black uppercase tracking-widest mt-1 inline-block">${c.time}</span></div><div class="text-right"><b class="text-white text-xs text-right">${c.display || c.size}</b><br><span class="text-[9px] neon-text-blue font-black uppercase mt-1 inline-block">${m.format.includes('weight') ? 'Recorded' : c.points + ' Pts'}</span></div></div>`).join('');
                 document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-3 text-center tracking-widest">Catch Diary</h4><div class="space-y-1">${listHtml}</div>`; 
             }
         }
@@ -2035,20 +1979,9 @@
             const a = h.standings.find(s => s.id === aid || s.name === aid);
             if(!a) return;
             document.getElementById('feedAnglerName').innerText = "HISTORY: " + a.name;
-            
             let cList = a.catches ? (Array.isArray(a.catches) ? a.catches : Object.values(a.catches)) : [];
             cList.sort((ca, cb) => cb.ts - ca.ts);
-
-            if(cList.length === 0) {
-                document.getElementById('feedContent').innerHTML = `<p class="text-center text-slate-500 py-10 font-black text-[9px] uppercase tracking-widest">No captures recorded</p>`;
-            } else {
-                document.getElementById('feedContent').innerHTML = cList.map(f => `
-                    <div class="match-card p-2 flex justify-between items-center mb-1.5 border border-white/5">
-                        <div class="text-left"><span class="text-white font-bold text-[11px] uppercase">${f.species}</span><br><span class="text-[9px] text-slate-300 uppercase tracking-widest mt-0.5 block">${f.time}</span></div>
-                        <span class="neon-text-blue font-black text-xs">${f.display || f.size}</span>
-                    </div>
-                `).join('');
-            }
+            document.getElementById('feedContent').innerHTML = cList.length === 0 ? `<p class="text-center text-slate-500 py-10 font-black text-[9px] uppercase tracking-widest">No captures recorded</p>` : cList.map(f => `<div class="match-card p-2 flex justify-between items-center mb-1.5 border border-white/5"><div class="text-left"><span class="text-white font-bold text-[11px] uppercase">${f.species}</span><br><span class="text-[9px] text-slate-300 uppercase tracking-widest mt-0.5 block">${f.time}</span></div><span class="neon-text-blue font-black text-xs">${f.display || f.size}</span></div>`).join('');
             document.getElementById('catchFeedModal').classList.remove('hidden');
         };
 
@@ -2059,33 +1992,15 @@
 
         window.onload = () => {
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-            if (!isStandalone) {
-                document.getElementById('browser-banner').classList.remove('hidden');
-            }
-
+            if (!isStandalone) { document.getElementById('browser-banner').classList.remove('hidden'); }
             history.pushState(null, null, window.location.href); checkInstallStatus(); const saved = localStorage.getItem('matchState');
-            
-            fetch('version.json')
-                .then(res => res.json())
-                .then(data => {
-                    document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`);
-                }).catch(() => { console.log('Version fetch fallback active.'); });
-
+            fetch('version.json').then(res => res.json()).then(data => { document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); }).catch(() => { console.log('Version fetch fallback active.'); });
             if (saved) {
                 try {
                     let oldState = JSON.parse(saved);
                     state.name = oldState.name || ""; state.venue = oldState.venue || "";
                     document.getElementById('playerName').value = state.name; document.getElementById('venueName').value = state.venue;
-                    if (['playing', 'hype', 'waiting'].includes(oldState.status) || oldState.status === 'grace') {
-                        state = oldState; listenToCloud(); navTo(state.view);
-                        if (state.status === 'playing' || state.status === 'grace') { 
-                            renderCatchList(); startClock(); updateLiveTally(); 
-                            if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
-                            if (globalMatchData) {
-                                checkAndFireTicker();
-                            }
-                        }
-                    }
+                    if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) { state = oldState; listenToCloud(); navTo(state.view); if (['playing', 'grace'].includes(state.status)) { renderCatchList(); startClock(); updateLiveTally(); if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`; if (globalMatchData) { checkAndFireTicker(); } } }
                 } catch(e) { closeAndWipeSession(); }
             }
         };
