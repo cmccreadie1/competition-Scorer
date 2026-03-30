@@ -3,18 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Live Sea Score Pro | Entry</title>
+    <title>Live Sea Score Pro | Pro Match Engine</title>
     
+    <meta name="title" content="Live Sea Score Pro">
+    <meta name="description" content="The ultimate real-time match engine for beach anglers. Zero latency, smart offline caching, and instant cloud syncing.">
     <meta name="theme-color" content="#000000">
+
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Sea Score Pro">
-    <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="manifest" href="manifest.json">
 
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://matchscorerpro.netlify.app/">
     <meta property="og:title" content="Live Sea Score Pro">
-    <meta property="og:description" content="The ultimate real-time match engine for beach anglers.">
+    <meta property="og:description" content="Professional real-time scoring engine for angling tournaments. Built for reliability in the harshest coastal environments.">
     <meta property="og:image" content="icon-512.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -30,104 +34,125 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #000000;
-            color: #ffffff;
+            color: #cbd5e1;
             margin: 0;
             padding: 0;
-            height: 100dvh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow-x: hidden;
             -webkit-user-select: none;
             user-select: none;
         }
 
-        .splash-gradient {
-            background: radial-gradient(circle at center, #0a0a0a 0%, #000000 100%);
+        .neon-text { text-shadow: 0 0 15px rgba(0, 243, 255, 0.5); }
+        
+        @keyframes pulse-border {
+            0% { border-color: rgba(0, 243, 255, 0.2); box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.1); }
+            50% { border-color: rgba(0, 243, 255, 0.6); box-shadow: 0 0 20px 0 rgba(0, 243, 255, 0.3); }
+            100% { border-color: rgba(0, 243, 255, 0.2); box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.1); }
         }
 
-        .neon-glow {
-            text-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+        .feature-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(0, 243, 255, 0.15);
+            border-radius: 1.25rem;
+            transition: transform 0.2s;
         }
 
-        @keyframes icon-pulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.2)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(0, 243, 255, 0.5)); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.2)); }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
-        .animate-icon {
-            animation: icon-pulse 4s infinite ease-in-out;
-        }
-
-        @keyframes shadow-flow {
-            0% { box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
-            50% { box-shadow: 0 0 30px rgba(0, 243, 255, 0.5); }
-            100% { box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
-        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
 
         .launch-btn {
             background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
-            animation: shadow-flow 3s infinite;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .launch-btn:active {
-            transform: scale(0.92);
+            transform: scale(0.95);
             filter: brightness(1.2);
         }
 
-        .version-tag {
-            letter-spacing: 0.5em;
-            opacity: 0.4;
-        }
+        /* Hide scrollbar but allow scrolling if content overflows on small phones */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="splash-gradient">
+<body class="no-scrollbar">
 
-    <div class="flex-1 flex flex-col items-center justify-center p-8 space-y-10">
+    <div class="flex-1 flex flex-col items-center justify-center p-6 space-y-8 max-w-lg mx-auto w-full">
         
-        <div class="relative">
-            <div class="absolute inset-0 bg-cyan-500/10 blur-3xl rounded-full"></div>
-            <img src="icon-512.png" alt="Logo" class="w-40 h-40 mx-auto rounded-[2.5rem] border border-white/10 relative z-10 animate-icon shadow-2xl">
-        </div>
-
-        <div class="text-center space-y-2 relative z-10">
-            <h1 class="text-4xl font-black tracking-tighter neon-glow uppercase italic">Live Sea Score</h1>
-            <div class="flex items-center justify-center space-x-3">
-                <div class="h-[1px] w-8 bg-cyan-500/50"></div>
-                <p class="text-cyan-400 font-black text-[11px] tracking-[0.4em] uppercase opacity-90">Pro Match Engine</p>
-                <div class="h-[1px] w-8 bg-cyan-500/50"></div>
+        <div class="text-center space-y-4 pt-8">
+            <div class="relative inline-block">
+                <img src="icon-512.png" alt="Logo" class="w-32 h-32 mx-auto rounded-[2rem] border border-white/10 shadow-2xl animate-float">
+                <div class="absolute -bottom-2 -right-2 bg-cyan-500 text-black font-black text-[10px] px-2 py-1 rounded-lg shadow-lg">PRO</div>
+            </div>
+            
+            <div class="space-y-1">
+                <h1 class="text-3xl font-black tracking-tighter text-white uppercase italic neon-text">Live Sea Score</h1>
+                <p class="text-cyan-400 font-bold text-[10px] tracking-[0.4em] uppercase opacity-80">The Ultimate Match Engine</p>
             </div>
         </div>
 
-        <div class="w-full max-w-xs space-y-4 pt-4 relative z-10">
-            <button onclick="handleLaunch()" class="launch-btn w-full text-black font-black py-5 rounded-[1.5rem] uppercase tracking-[0.2em] text-sm shadow-xl flex items-center justify-center">
-                <span>Start Session</span>
-                <i class="fa-solid fa-chevron-right ml-3 text-[10px] opacity-60"></i>
-            </button>
-            
-            <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest text-center px-4 leading-relaxed">
-                Cloud Sync • Offline Protection • Pro Scoring
-            </p>
+        <div class="grid grid-cols-1 gap-3 w-full">
+            <div class="feature-card p-4 flex items-start space-x-4">
+                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0 border border-cyan-500/20">
+                    <i class="fa-solid fa-bolt-lightning text-cyan-400"></i>
+                </div>
+                <div>
+                    <h3 class="text-white font-black text-xs uppercase tracking-wider">Zero Latency Sync</h3>
+                    <p class="text-slate-400 text-[10px] leading-relaxed mt-1">Proprietary real-time engine ensures every catch is broadcast to the leaderboard in under 200ms.</p>
+                </div>
+            </div>
+
+            <div class="feature-card p-4 flex items-start space-x-4">
+                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0 border border-cyan-500/20">
+                    <i class="fa-solid fa-shield-halved text-cyan-400"></i>
+                </div>
+                <div>
+                    <h3 class="text-white font-black text-xs uppercase tracking-wider">Offline Resilience</h3>
+                    <p class="text-slate-400 text-[10px] leading-relaxed mt-1">Losing signal on the beach? The app caches your data locally and auto-syncs the moment you're back online.</p>
+                </div>
+            </div>
+
+            <div class="feature-card p-4 flex items-start space-x-4">
+                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0 border border-cyan-500/20">
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i>
+                </div>
+                <div>
+                    <h3 class="text-white font-black text-xs uppercase tracking-wider">Advanced Telemetry</h3>
+                    <p class="text-slate-400 text-[10px] leading-relaxed mt-1">Live ticker feed, interactive leaderboard feeds, and professional tournament reporting tools built-in.</p>
+                </div>
+            </div>
         </div>
+
+        <div class="w-full space-y-4 pt-4">
+            <button onclick="window.location.href='app.html'" class="launch-btn w-full text-black font-black py-5 rounded-[1.5rem] uppercase tracking-[0.2em] text-sm shadow-xl flex items-center justify-center group">
+                <span>Launch Engine</span>
+                <i class="fa-solid fa-chevron-right ml-3 text-[10px] opacity-60 group-active:translate-x-1 transition-transform"></i>
+            </button>
+            <p class="text-[9px] text-slate-600 font-bold uppercase tracking-[0.2em] text-center">Standard Network Rates May Apply</p>
+        </div>
+
     </div>
 
-    <div class="pb-12 text-center space-y-3 relative z-10">
+    <div class="pb-10 text-center space-y-3">
         <div id="status-bar" class="flex items-center justify-center space-x-2">
-            <div id="status-dot" class="w-1.5 h-1.5 bg-slate-700 rounded-full"></div>
-            <span id="status-text" class="text-[10px] font-black text-slate-500 tracking-[0.2em] uppercase">Initialising...</span>
+            <div id="status-dot" class="w-1.5 h-1.5 bg-slate-800 rounded-full transition-colors duration-500"></div>
+            <span id="status-text" class="text-[9px] font-black text-slate-500 tracking-[0.2em] uppercase">Checking Link...</span>
         </div>
-        <div class="version-tag text-[9px] font-black text-slate-600 uppercase version-display">Version 102</div>
+        <div class="text-[9px] font-black text-slate-700 uppercase tracking-[0.4em] version-display">Version 102</div>
     </div>
 
     <script>
-        // Force manual launch for better PWA transition
-        function handleLaunch() {
-            window.location.href = 'app.html';
-        }
-
-        // Single Source of Truth - Version Fetch
-        function syncVersion() {
+        // Single Source of Truth Logic
+        function fetchLatestVersion() {
             fetch('version.json')
                 .then(res => res.json())
                 .then(data => {
@@ -135,29 +160,31 @@
                         el.innerText = `Version ${data.version}`;
                     });
                 })
-                .catch(() => console.log('Version sync offline.'));
+                .catch(() => console.log('Version ping failed (Offline)'));
         }
 
-        // Service Worker Registration & Status
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js').then(reg => {
-                    document.getElementById('status-text').innerText = "System Online";
-                    document.getElementById('status-dot').classList.replace('bg-slate-700', 'bg-cyan-500');
-                    document.getElementById('status-dot').classList.add('animate-pulse');
+                    console.log('SW Active');
+                    document.getElementById('status-text').innerText = "System Ready";
+                    const dot = document.getElementById('status-dot');
+                    dot.classList.replace('bg-slate-800', 'bg-cyan-500');
+                    dot.classList.add('animate-pulse');
                 }).catch(err => {
-                    document.getElementById('status-text').innerText = "Ready Offline";
-                    document.getElementById('status-dot').classList.replace('bg-slate-700', 'bg-amber-500');
+                    document.getElementById('status-text').innerText = "Offline Mode";
+                    document.getElementById('status-dot').classList.replace('bg-slate-800', 'bg-amber-600');
                 });
             });
         }
 
-        // Initialize
-        syncVersion();
+        // Initialize Version Sync
+        fetchLatestVersion();
 
-        // Prevent accidental "swipe down to refresh" on the splash screen
+        // Lockdown Swipe-Refresh
         document.addEventListener('touchmove', function(e) {
-            if (e.target.tagName !== 'BUTTON') {
+            if (window.scrollY === 0 && e.touches[0].screenY > e.touches[0].screenY) {
                 e.preventDefault();
             }
         }, { passive: false });
