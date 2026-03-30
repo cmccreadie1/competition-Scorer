@@ -549,7 +549,7 @@
                 <h2 class="text-base font-black uppercase tracking-tight text-white">Match Creator</h2>
                 <div class="w-6"></div>
             </div>
-            <div class="match-card p-5 space-y-4 text-center mt-6">
+            <div class="match-card p-5 space-y-4 text-center mt-8">
                 <div>
                     <label class="block text-slate-400 font-black text-[9px] uppercase tracking-[0.2em] mb-1.5 text-left ml-3">Tournament Duration</label>
                     <select id="hostDuration" class="pill-input w-full p-2 text-sm appearance-none">
@@ -622,7 +622,7 @@
 
             <div id="loggingArea" class="scrollable-area p-4 space-y-3 flex flex-col">
                 
-                <div class="match-card p-4 space-y-3 text-center flex-none mt-6">
+                <div class="match-card p-4 space-y-3 text-center flex-none mt-8">
                     <div>
                         <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2 text-sm appearance-none">
                             <option value="" disabled selected>-- Select Fish Species --</option>
@@ -736,21 +736,22 @@
                 <i class="fa-solid fa-arrow-left mr-3"></i> Back to Lobby
             </button>
             <div class="scrollable-area p-6 space-y-8 text-white text-left">
-                <section class="space-y-4">
-                    <h4 class="neon-text-blue font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">🎣 USER GUIDE</h4>
+                <section class="space-y-5">
+                    <h4 class="neon-text-blue font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">🎣 ANGLER'S QUICK START</h4>
                     <div class="space-y-4 text-xs leading-relaxed text-slate-300">
-                        <p><b class="text-white">Join Match:</b> Enter your Name and the Venue. Tap "Join as Competitor" and type in the 4-digit PIN provided by your Steward.</p>
-                        <p><b class="text-white">Log Your Catch:</b> Select the fish species. Enter the size or weight, then hit "Record Catch". The app will instantly sync to the cloud.</p>
-                        <p><b class="text-white">Interactive Leaderboard:</b> The top pill is your HUD. <b class="text-neon-blue">Tap the pill</b> to open the Live Leaderboard. <b class="text-neon-blue">Tap any angler's name</b> on the leaderboard to view their live, individual catch feed in real-time.</p>
-                        <p><b class="text-white">Smart Battery Saver:</b> There is no sleep button. Put your phone in your pocket and let the screen turn off to save battery. The moment you wake your phone, the app will instantly sync and scroll any new catches.</p>
+                        <p><b class="text-white">Step 1: Join the Match</b><br>Enter your Name and the Venue. Tap "Join as Competitor" and type in the 4-digit PIN provided by your Steward.</p>
+                        <p><b class="text-white">Step 2: Log Your Catch</b><br>Select the fish species. Enter the size or weight, then hit "Record Catch". The app will instantly sync to the cloud.</p>
+                        <p><b class="text-white">Step 3: The Dynamic HUD & Leaderboard</b><br>The pill at the top of your screen is your tactical HUD. It shows your current points, match timer, and live rank. <b>Tap the pill</b> at any time to unfold the full Live Leaderboard. <b class="text-neon-blue">Tap any angler's name</b> on the leaderboard to view their live, individual catch feed in real-time.</p>
+                        <p><b class="text-white">Step 4: Smart Battery Saver</b><br>There is no sleep button. Put your phone in your pocket and let the screen turn off to save battery. The moment you wake your phone, the app will instantly sync and scroll any new catches across your screen.</p>
                     </div>
                 </section>
                 <hr class="border-slate-800">
-                <section class="space-y-4">
-                    <h4 class="neon-text-amber font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">👑 STEWARD GUIDE</h4>
+                <section class="space-y-5">
+                    <h4 class="neon-text-blue font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">👑 STEWARD'S GUIDE</h4>
                     <div class="space-y-4 text-xs leading-relaxed text-slate-300">
-                        <p><b class="text-white">Command Bridge:</b> Press and hold the top HUD pill for 1 second to open the Steward Desk. Adjust the match clock or transfer Steward control here.</p>
-                        <p><b class="text-white">God Mode Audit:</b> From the Steward Desk, tap "Review Angler Logs". Tap any angler to audit their catches. Stewards have the authority to <b>Force Log</b> a missing catch or <b>Delete</b> an invalid catch globally from the match.</p>
+                        <p><b class="text-white">Step 1: Setup</b><br>Tap "Host as Steward". Choose the match duration and scoring format, then give your anglers the Room PIN.</p>
+                        <p><b class="text-white">Step 2: Management (The Command Bridge)</b><br>During the match, <b>Press and Hold</b> the top HUD pill for 1 second to open the Steward Desk. From here, you can adjust the match clock, end the match early, or transfer Steward control to another angler.</p>
+                        <p><b class="text-white">Step 3: God Mode Audit</b><br>From the Steward Desk, tap "Review Angler Logs". Tap any angler to audit their catches. Stewards have the authority to <b>Force Log</b> a missing catch or <b>Delete</b> an invalid catch globally.</p>
                     </div>
                 </section>
                 <hr class="border-slate-800">
@@ -1143,6 +1144,9 @@
                 let kg = Math.floor(val / 1000);
                 let g = val % 1000;
                 return `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`;
+            }
+            if (fmt === 'length' || fmt === 'length10') {
+                return `${val}<span class="telemetry-unit">cm</span>`;
             }
             return `${val}<span class="telemetry-unit">pts</span>`;
         }
@@ -1567,7 +1571,7 @@
 
             list.innerHTML = arr.map((a, i) => {
                 const anglerUid = Object.keys(globalMatchData.anglers).find(key => globalMatchData.anglers[key].name === a.name);
-                return `<div class="match-card p-2 flex justify-between items-center mb-1 shadow-sm active:bg-slate-900 transition" onclick="openPastCatchFeed('${anglerUid}')">
+                return `<div class="match-card p-2 flex justify-between items-center mb-1 shadow-sm active:bg-slate-900 transition" onclick="openCatchFeed('${anglerUid}')">
                     <div class="flex items-center w-2/3 text-left">
                         <span class="font-black ${i===0?'neon-text-amber':'text-slate-500'} text-[11px] w-6">${i+1}</span>
                         <span class="font-black text-white text-[11px] uppercase tracking-wide truncate">${a.name}</span>
@@ -1681,12 +1685,12 @@
             
             let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             update(ref(db, `matches/${state.pin}/anglers/${aid}`), { catches: arr, score: newScore });
-            
+
             if(aid === uid) {
                 state.myCatches = arr;
                 saveState(); renderCatchList(); updateLiveTally();
             }
-
+            
             showNotification(`Steward override applied.`);
             setTimeout(refreshStewardCatchList, 300);
         }
@@ -1723,94 +1727,16 @@
             let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             
             update(ref(db, `matches/${state.pin}/anglers/${godTargetAnglerId}`), { catches: arr, score: newScore });
-            
+
             if(godTargetAnglerId === uid) {
                 state.myCatches = arr;
                 saveState(); renderCatchList(); updateLiveTally();
             }
-
+            
             document.getElementById('godInputSpecies').value = ""; document.getElementById('godInputSize').value = "";
             document.getElementById('stewardGodModal').classList.add('hidden');
             showNotification("Catch forcibly logged.");
             setTimeout(refreshStewardCatchList, 300);
-        }
-
-        function generateOfficialMasterReport() {
-            if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
-            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString());
-        }
-
-        function generateHistoricReport() {
-            const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
-            if(!h || !h.standings) return alert("No leaderboard data available.");
-            buildAndShareReport(h.standings, h.venue, h.date);
-        }
-
-        function buildAndShareReport(arr, venueName, matchDate) {
-            let podium = arr.slice(0, 3);
-            let biggestVal = 0, biggestStr = "N/A";
-            
-            let hourCounts = {};
-            let allSpecies = new Set();
-            let totalFish = 0;
-
-            arr.forEach(a => {
-                if(a.catches) {
-                    let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
-                    totalFish += cList.length;
-                    cList.forEach(f => {
-                        allSpecies.add(f.species);
-                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; }
-                        if(f.ts) {
-                            const hr = new Date(f.ts).getHours();
-                            hourCounts[hr] = (hourCounts[hr] || 0) + 1;
-                        }
-                    });
-                }
-            });
-
-            let beachTotal = arr.reduce((sum, a) => sum + a.score, 0);
-
-            let t = `🏆 *OFFICIAL MATCH RESULTS*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n\n`;
-            
-            t += `--- *PODIUM* ---\n\n`;
-            t += `🥇 *1st:* ${podium[0]?.name || '-'} — ${podium[0]?.score || 0}\n\n`;
-            t += `🥈 *2nd:* ${podium[1]?.name || '-'} — ${podium[1]?.score || 0}\n\n`;
-            t += `🥉 *3rd:* ${podium[2]?.name || '-'} — ${podium[2]?.score || 0}\n\n\n`;
-            
-            t += `--- *MATCH STATS* ---\n\n`;
-            t += `🐋 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
-            t += `🧬 *SPECIES DIVERSITY:* ${allSpecies.size} Unique\n\n`;
-            t += `📊 *BEACH TOTAL:* ${beachTotal} (${totalFish} Total Fish)\n\n\n`;
-
-            t += `⏱️ *FISH HOUR BY HOUR*\n\n`;
-            let maxHourVal = 0;
-            Object.keys(hourCounts).forEach(hr => { if(hourCounts[hr] > maxHourVal) maxHourVal = hourCounts[hr]; });
-            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
-            
-            if(sortedHours.length === 0) {
-                t += `No captures recorded with timestamps.\n\n\n`;
-            } else {
-                sortedHours.forEach(hr => {
-                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "";
-                    let nHr = parseInt(hr);
-                    let nextHr = nHr === 23 ? 0 : nHr + 1;
-                    t += `*${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00* 👉 ${hourCounts[hr]} Fish${isFire}\n\n`;
-                });
-                t += `\n`;
-            }
-
-            t += `--- *FULL STANDINGS* ---\n\n`;
-            arr.forEach((a, i) => { 
-                let cleanScore = typeof a.score === 'string' ? a.score.replace(/<[^>]*>?/gm, '') : a.score;
-                t += `${i+1}. ${a.name} - ${cleanScore}\n\n`; 
-            });
-            
-            t += `_Generated by Live Sea Score Pro V1.0.0_`;
-
-            if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
-            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
         }
 
         function shareUnifiedReport() { generateOfficialMasterReport(); }
@@ -1985,11 +1911,83 @@
             document.getElementById('catchFeedModal').classList.remove('hidden');
         };
 
+        window.generateOfficialMasterReport = () => {
+            if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
+            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
+            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString());
+        };
+
         window.generateHistoricReport = () => {
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if(!h || !h.standings) return alert("No leaderboard data available.");
             buildAndShareReport(h.standings, h.venue, h.date);
         };
+
+        function buildAndShareReport(arr, venueName, matchDate) {
+            let podium = arr.slice(0, 3);
+            let biggestVal = 0, biggestStr = "N/A";
+            
+            let hourCounts = {};
+            let allSpecies = new Set();
+            let totalFish = 0;
+
+            arr.forEach(a => {
+                if(a.catches) {
+                    let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
+                    totalFish += cList.length;
+                    cList.forEach(f => {
+                        allSpecies.add(f.species);
+                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; }
+                        if(f.ts) {
+                            const hr = new Date(f.ts).getHours();
+                            hourCounts[hr] = (hourCounts[hr] || 0) + 1;
+                        }
+                    });
+                }
+            });
+
+            let beachTotal = arr.reduce((sum, a) => sum + a.score, 0);
+
+            let t = `🏆 *OFFICIAL MATCH RESULTS*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n\n`;
+            
+            t += `--- *PODIUM* ---\n\n`;
+            t += `🥇 *1st:* ${podium[0]?.name || '-'} — ${podium[0]?.score || 0}\n\n`;
+            t += `🥈 *2nd:* ${podium[1]?.name || '-'} — ${podium[1]?.score || 0}\n\n`;
+            t += `🥉 *3rd:* ${podium[2]?.name || '-'} — ${podium[2]?.score || 0}\n\n\n`;
+            
+            t += `--- *MATCH STATS* ---\n\n`;
+            t += `🐋 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
+            t += `🧬 *SPECIES DIVERSITY:* ${allSpecies.size} Unique\n\n`;
+            t += `📊 *BEACH TOTAL:* ${beachTotal} (${totalFish} Total Fish)\n\n\n`;
+
+            t += `⏱️ *FISH HOUR BY HOUR*\n\n`;
+            let maxHourVal = 0;
+            Object.keys(hourCounts).forEach(hr => { if(hourCounts[hr] > maxHourVal) maxHourVal = hourCounts[hr]; });
+            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
+            
+            if(sortedHours.length === 0) {
+                t += `No captures recorded with timestamps.\n\n\n`;
+            } else {
+                sortedHours.forEach(hr => {
+                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "";
+                    let nHr = parseInt(hr);
+                    let nextHr = nHr === 23 ? 0 : nHr + 1;
+                    t += `*${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00* 👉 ${hourCounts[hr]} Fish${isFire}\n\n`;
+                });
+                t += `\n`;
+            }
+
+            t += `--- *FULL STANDINGS* ---\n\n`;
+            arr.forEach((a, i) => { 
+                let cleanScore = typeof a.score === 'string' ? a.score.replace(/<[^>]*>?/gm, '') : a.score;
+                t += `${i+1}. ${a.name} - ${cleanScore}\n\n`; 
+            });
+            
+            t += `_Generated by Live Sea Score Pro V1.0.0_`;
+
+            if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
+            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
+        }
 
         window.onload = () => {
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
@@ -2032,7 +2030,7 @@
         });
 
         // GLOBAL BINDINGS
-        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport;
+        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport; window.openPastCatchFeed = openPastCatchFeed;
     </script>
 </body>
 </html>
