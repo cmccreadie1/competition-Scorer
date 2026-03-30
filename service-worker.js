@@ -1,51 +1,63 @@
-const CACHE_NAME = 'match-scorer-v101';
-const urlsToCache = [
+const CACHE_NAME = 'match-scorer-v200';
+const ASSETS = [
   '/',
   '/index.html',
   '/app.html',
   '/manifest.json',
+  '/version.json',
   '/icon-192.png',
   '/icon-512.png',
-  '/version.json'
+  'https://cdn.tailwindcss.com',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
 ];
 
-self.addEventListener('install', event => {
-  self.skipWaiting();
+// Install event: Cache the initial assets
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('Opened cache:', CACHE_NAME);
+      return cache.addAll(ASSETS);
+    })
   );
+  self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
+// Activate event: Clean up old caches
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map(cacheName => {
+        cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
+            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
-    }).then(() => self.clients.claim())
+    })
   );
+  self.clients.claim();
 });
 
-self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
-  
+// Fetch event: Serve from cache, fallback to network
+self.addEventListener('fetch', (event) => {
+  // We don't want to aggressively cache version.json so it can act as our single source of truth
+  if (event.request.url.includes('version.json')) {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
   event.respondWith(
-    fetch(event.request).then(response => {
-      if (!response || response.status !== 200 || response.type !== 'basic') {
+    caches.match(event.request).then((response) => {
+      if (response) {
         return response;
       }
-      let responseToCache = response.clone();
-      caches.open(CACHE_NAME).then(cache => {
-        cache.put(event.request, responseToCache);
+      return fetch(event.request).then((networkResponse) => {
+        // Optional: Dynamically cache new requests here if needed
+        return networkResponse;
       });
-      return response;
-    }).catch(() => {
-      return caches.match(event.request);
     })
   );
 });
