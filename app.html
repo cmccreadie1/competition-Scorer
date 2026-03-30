@@ -22,7 +22,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        /* --- v101 NEON VARIABLES --- */
+        /* --- V101 NEON VARIABLES --- */
         :root {
             --neon-blue: #00f3ff;
             --neon-amber: #f59e0b;
@@ -747,11 +747,11 @@
                 </section>
                 <hr class="border-slate-800">
                 <section class="space-y-5">
-                    <h4 class="neon-text-amber font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">👑 STEWARD'S GUIDE</h4>
+                    <h4 class="neon-text-blue font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">👑 STEWARD'S GUIDE</h4>
                     <div class="space-y-4 text-xs leading-relaxed text-slate-300">
                         <p><b class="text-white">Step 1: Setup</b><br>Tap "Host as Steward". Choose the match duration and scoring format, then give your anglers the Room PIN.</p>
                         <p><b class="text-white">Step 2: Management (The Command Bridge)</b><br>During the match, <b>Press and Hold</b> the top HUD pill for 1 second to open the Steward Desk. From here, you can adjust the match clock, end the match early, or transfer Steward control to another angler.</p>
-                        <p><b class="text-white">Step 3: God Mode Audit</b><br>From the Steward Desk, tap "Review Angler Logs". Tap any angler to audit their catches. Stewards have the authority to <b>Force Log</b> a missing catch or <b>Delete</b> an invalid catch globally from the match.</p>
+                        <p><b class="text-white">Step 3: God Mode Audit</b><br>From the Steward Desk, tap "Review Angler Logs". Tap any angler to audit their catches. Stewards have the authority to <b>Force Log</b> a missing catch or <b>Delete</b> an invalid catch globally.</p>
                     </div>
                 </section>
                 <hr class="border-slate-800">
@@ -1144,6 +1144,9 @@
                 let kg = Math.floor(val / 1000);
                 let g = val % 1000;
                 return `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`;
+            }
+            if (fmt === 'length' || fmt === 'length10') {
+                return `${val}<span class="telemetry-unit">cm</span>`;
             }
             return `${val} <span class="telemetry-unit">pts</span>`;
         }
@@ -1683,6 +1686,14 @@
             let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             update(ref(db, `matches/${state.pin}/anglers/${aid}`), { catches: arr, score: newScore });
             
+            // EPISODE 1 FIX: Sync local memory if steward deletes their own fish
+            if(aid === uid) {
+                state.myCatches = arr;
+                saveState(); 
+                renderCatchList(); 
+                updateLiveTally();
+            }
+
             showNotification(`Steward override applied.`);
             setTimeout(refreshStewardCatchList, 300);
         }
@@ -1720,6 +1731,14 @@
             
             update(ref(db, `matches/${state.pin}/anglers/${godTargetAnglerId}`), { catches: arr, score: newScore });
             
+            // EPISODE 1 FIX: Sync local memory if steward force-logs their own fish
+            if(godTargetAnglerId === uid) {
+                state.myCatches = arr;
+                saveState(); 
+                renderCatchList(); 
+                updateLiveTally();
+            }
+
             document.getElementById('godInputSpecies').value = ""; document.getElementById('godInputSize').value = "";
             document.getElementById('stewardGodModal').classList.add('hidden');
             showNotification("Catch forcibly logged.");
@@ -1752,23 +1771,113 @@
             let beachTotal = arr.reduce((sum, a) => sum + a.score, 0);
             let totalFish = arr.reduce((sum, a) => sum + (a.catches ? Object.values(a.catches).length : 0), 0);
 
-            let t = `🏆 *OFFICIAL MATCH RESULTS*\n📍 *Venue:* ${state.venue}\n\n`;
-            t += `🥇 *1st:* ${podium[0]?.name || '-'} — ${podium[0]?.score || 0}\n`;
-            t += `🥈 *2nd:* ${podium[1]?.name || '-'} — ${podium[1]?.score || 0}\n`;
-            t += `🥉 *3rd:* ${podium[2]?.name || '-'} — ${podium[2]?.score || 0}\n\n`;
+            let t = `🏆 *OFFICIAL MATCH RESULTS*\n📍 *Venue:* ${state.venue}\n📅 *Date:* ${new Date().toLocaleDateString()}\n\n`;
             
-            t += `🐋 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n`;
-            t += `🔥 *THE BLITZ HOUR:* ${blitzRange} (${hourCounts[blitzHr] || 0} Fish)\n`;
-            t += `🧬 *SPECIES DIVERSITY:* ${allSpecies.size} Unique\n`;
-            t += `📊 *BEACH TOTAL:* ${beachTotal} (${totalFish} Total Fish)\n\n`;
+            t += `--- *PODIUM* ---\n\n`;
+            t += `🥇 *1st:* ${podium[0]?.name || '-'} — ${podium[0]?.score || 0}\n\n`;
+            t += `🥈 *2nd:* ${podium[1]?.name || '-'} — ${podium[1]?.score || 0}\n\n`;
+            t += `🥉 *3rd:* ${podium[2]?.name || '-'} — ${podium[2]?.score || 0}\n\n\n`;
+            
+            t += `--- *MATCH STATS* ---\n\n`;
+            t += `🐋 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
+            t += `🧬 *SPECIES DIVERSITY:* ${allSpecies.size} Unique\n\n`;
+            t += `📊 *BEACH TOTAL:* ${beachTotal} (${totalFish} Total Fish)\n\n\n`;
 
-            t += `--- *FULL STANDINGS* ---\n`;
+            t += `⏱️ *FISH HOUR BY HOUR*\n\n`;
+            let maxHourVal = 0;
+            Object.keys(hourCounts).forEach(hr => { if(hourCounts[hr] > maxHourVal) maxHourVal = hourCounts[hr]; });
+            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
+            
+            if(sortedHours.length === 0) {
+                t += `No captures recorded with timestamps.\n\n\n`;
+            } else {
+                sortedHours.forEach(hr => {
+                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "";
+                    let nHr = parseInt(hr);
+                    let nextHr = nHr === 23 ? 0 : nHr + 1;
+                    t += `*${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00* 👉 ${hourCounts[hr]} Fish${isFire}\n\n`;
+                });
+                t += `\n`;
+            }
+
+            t += `--- *FULL STANDINGS* ---\n\n`;
             arr.forEach((a, i) => { 
                 let cleanScore = typeof a.score === 'string' ? a.score.replace(/<[^>]*>?/gm, '') : a.score;
-                t += `${i+1}. ${a.name} - ${cleanScore}\n`; 
+                t += `${i+1}. ${a.name} - ${cleanScore}\n\n`; 
             });
             
-            t += `\n_Generated by Live Sea Score Pro V101_`;
+            t += `_Generated by Live Sea Score Pro V101_`;
+
+            if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
+            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
+        }
+
+        // EPISODE 2 FIX: Ensure history report grabs correct specific match
+        function generateHistoricReport() {
+            const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
+            if(!h || !h.standings) return alert("No leaderboard data available.");
+            
+            let arr = h.standings;
+            let podium = arr.slice(0, 3);
+            let biggestVal = 0, biggestStr = "N/A";
+            
+            let hourCounts = {};
+            let allSpecies = new Set();
+            let totalFish = 0;
+
+            arr.forEach(a => {
+                if(a.catches) {
+                    let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
+                    totalFish += cList.length;
+                    cList.forEach(f => {
+                        allSpecies.add(f.species);
+                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; }
+                        if(f.ts) {
+                            const hr = new Date(f.ts).getHours();
+                            hourCounts[hr] = (hourCounts[hr] || 0) + 1;
+                        }
+                    });
+                }
+            });
+
+            let beachTotal = arr.reduce((sum, a) => sum + a.score, 0);
+
+            let t = `🏆 *OFFICIAL MATCH RESULTS*\n📍 *Venue:* ${h.venue}\n📅 *Date:* ${h.date}\n\n`;
+            
+            t += `--- *PODIUM* ---\n\n`;
+            t += `🥇 *1st:* ${podium[0]?.name || '-'} — ${podium[0]?.score || 0}\n\n`;
+            t += `🥈 *2nd:* ${podium[1]?.name || '-'} — ${podium[1]?.score || 0}\n\n`;
+            t += `🥉 *3rd:* ${podium[2]?.name || '-'} — ${podium[2]?.score || 0}\n\n\n`;
+            
+            t += `--- *MATCH STATS* ---\n\n`;
+            t += `🐋 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
+            t += `🧬 *SPECIES DIVERSITY:* ${allSpecies.size} Unique\n\n`;
+            t += `📊 *BEACH TOTAL:* ${beachTotal} (${totalFish} Total Fish)\n\n\n`;
+
+            t += `⏱️ *FISH HOUR BY HOUR*\n\n`;
+            let maxHourVal = 0;
+            Object.keys(hourCounts).forEach(hr => { if(hourCounts[hr] > maxHourVal) maxHourVal = hourCounts[hr]; });
+            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
+            
+            if(sortedHours.length === 0) {
+                t += `No captures recorded with timestamps.\n\n\n`;
+            } else {
+                sortedHours.forEach(hr => {
+                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "";
+                    let nHr = parseInt(hr);
+                    let nextHr = nHr === 23 ? 0 : nHr + 1;
+                    t += `*${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00* 👉 ${hourCounts[hr]} Fish${isFire}\n\n`;
+                });
+                t += `\n`;
+            }
+
+            t += `--- *FULL STANDINGS* ---\n\n`;
+            arr.forEach((a, i) => { 
+                let cleanScore = typeof a.score === 'string' ? a.score.replace(/<[^>]*>?/gm, '') : a.score;
+                t += `${i+1}. ${a.name} - ${cleanScore}\n\n`; 
+            });
+            
+            t += `_Generated by Live Sea Score Pro V101_`;
 
             if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
@@ -1798,7 +1907,16 @@
         function saveHistory(isL) { 
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); 
             let matchTF = 0; let matchBF = "None"; let bVal = 0;
+            let fullStandings = [];
+
             if (globalMatchData && globalMatchData.anglers) {
+                fullStandings = Object.entries(globalMatchData.anglers).map(([id, data]) => ({
+                    id: id,
+                    name: data.name,
+                    score: data.score,
+                    catches: data.catches ? (Array.isArray(data.catches) ? data.catches : Object.values(data.catches)) : []
+                }));
+
                 Object.values(globalMatchData.anglers).forEach(angler => { 
                     if(angler.catches) { 
                         const cList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches);
@@ -1819,7 +1937,7 @@
                 format: state.format, 
                 score: state.myCatches.reduce((s,c) => s+c.points, 0), 
                 personalCatches: [...state.myCatches], 
-                standings: globalMatchData?.anglers ? Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score) : [], 
+                standings: fullStandings.length > 0 ? fullStandings.sort((a,b) => b.score - a.score) : [], 
                 playerName: state.name, 
                 isLive: isL, 
                 isSteward: state.isSteward,
@@ -1886,7 +2004,8 @@
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active'); }); document.getElementById(`tab-${tab}`).classList.add('active');
             
             if(tab === 'standings') { 
-                let stewardShareBtn = m.isSteward ? `<button onclick="generateOfficialMasterReport()" class="pill-btn w-full py-3 shadow-xl text-[10px] mb-3">Re-Send Official Report</button>` : "";
+                // EPISODE 2 FIX: Always show the Share button so legacy matches can be shared too
+                let stewardShareBtn = `<button onclick="generateHistoricReport()" class="pill-btn w-full py-3 shadow-xl text-[10px] mb-3"><i class="fa-solid fa-file-export mr-2"></i> Share Official Report</button>`;
                 
                 let statsHtml = `
                     ${stewardShareBtn}
@@ -1901,7 +2020,8 @@
                         </div>
                     </div>`;
                     
-                let tableHtml = `<div class="space-y-1">${m.standings.map((a, i) => `<div class="match-card p-2 flex justify-between items-center"><span class="uppercase text-white font-bold text-[11px] text-left"><span class="neon-text-amber mr-2">${i+1}.</span> ${a.name}</span><b class="neon-text-blue text-xs text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`;
+                // EPISODE 2 FIX: Fall back to Name if the ID is missing from an older saved match
+                let tableHtml = `<div class="space-y-1">${m.standings.map((a, i) => `<div class="match-card p-2 flex justify-between items-center" onclick="openPastCatchFeed('${a.id || a.name}')"><span class="uppercase text-white font-bold text-[11px] text-left"><span class="neon-text-amber mr-2">${i+1}.</span> ${a.name}</span><b class="neon-text-blue text-xs text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`;
                 
                 document.getElementById('historyContent').innerHTML = statsHtml + `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-2 text-center tracking-widest">Score Table</h4>` + tableHtml; 
             } 
@@ -1913,6 +2033,30 @@
                 document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-3 text-center tracking-widest">Catch Diary</h4><div class="space-y-1">${listHtml}</div>`; 
             }
         }
+
+        // EPISODE 2 FIX: Allow feed to open by checking ID OR Name
+        window.openPastCatchFeed = (aid) => {
+            const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
+            if (!h || !h.standings) return;
+            const a = h.standings.find(s => s.id === aid || s.name === aid);
+            if(!a) return;
+            document.getElementById('feedAnglerName').innerText = "HISTORY: " + a.name;
+            
+            let cList = a.catches ? (Array.isArray(a.catches) ? a.catches : Object.values(a.catches)) : [];
+            cList.sort((ca, cb) => cb.ts - ca.ts);
+
+            if(cList.length === 0) {
+                document.getElementById('feedContent').innerHTML = `<p class="text-center text-slate-500 py-10 font-black text-[9px] uppercase tracking-widest">No captures recorded</p>`;
+            } else {
+                document.getElementById('feedContent').innerHTML = cList.map(f => `
+                    <div class="match-card p-2 flex justify-between items-center mb-1.5 border border-white/5">
+                        <div class="text-left"><span class="text-white font-bold text-[11px] uppercase">${f.species}</span><br><span class="text-[9px] text-slate-300 uppercase tracking-widest mt-0.5 block">${f.time}</span></div>
+                        <span class="neon-text-blue font-black text-xs">${f.display || f.size}</span>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('catchFeedModal').classList.remove('hidden');
+        };
 
         function closeHistoryDetail() { document.getElementById('historyDetailDrawer').classList.remove('open'); setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); }
         function shareResults() { generateOfficialMasterReport(); }
@@ -1959,8 +2103,8 @@
             }
         });
 
-        // GLOBAL BINDINGS
-        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport;
+        // GLOBAL BINDINGS - SECURE
+        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport; window.openPastCatchFeed = openPastCatchFeed;
     </script>
 </body>
 </html>
