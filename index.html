@@ -1,194 +1,225 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-black">
+<html lang="en" class="h-full overflow-x-hidden bg-black">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Live Sea Score Pro | Pro Match Engine</title>
-    
-    <meta name="title" content="Live Sea Score Pro">
-    <meta name="description" content="The ultimate real-time match engine for beach anglers. Zero latency, smart offline caching, and instant cloud syncing.">
+    <title>Live Sea Score Pro | Install</title>
     <meta name="theme-color" content="#000000">
-
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Sea Score Pro">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <link rel="manifest" href="manifest.json">
-
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://matchscorerpro.netlify.app/">
     <meta property="og:title" content="Live Sea Score Pro">
-    <meta property="og:description" content="Professional real-time scoring engine for angling tournaments. Built for reliability in the harshest coastal environments.">
-    <meta property="og:image" content="icon-512.png">
+    <meta property="og:description" content="The ultimate real-time match engine for beach anglers. Zero latency, smart offline caching, and instant cloud syncing.">
+    <meta property="og:image" content="https://matchscorerpro.netlify.app/icon-512.png">
+   
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
 
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://matchscorerpro.netlify.app/">
+    <meta property="twitter:title" content="Live Sea Score Pro">
+    <meta property="twitter:description" content="The ultimate real-time match engine for beach anglers. Zero latency, smart offline caching, and instant cloud syncing.">
+    <meta property="twitter:image" content="https://matchscorerpro.netlify.app/icon-512.png">
+    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
     <style>
-        :root {
-            --neon-blue: #00f3ff;
-            --neon-amber: #f59e0b;
-        }
-
-        body {
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        html, body {
             font-family: 'Inter', sans-serif;
-            background-color: #000000;
-            color: #cbd5e1;
-            margin: 0;
-            padding: 0;
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
+            background-color: #020617; 
+            color: #ffffff;
             -webkit-user-select: none;
             user-select: none;
         }
-
-        .neon-text { text-shadow: 0 0 15px rgba(0, 243, 255, 0.5); }
-        
-        @keyframes pulse-border {
-            0% { border-color: rgba(0, 243, 255, 0.2); box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.1); }
-            50% { border-color: rgba(0, 243, 255, 0.6); box-shadow: 0 0 20px 0 rgba(0, 243, 255, 0.3); }
-            100% { border-color: rgba(0, 243, 255, 0.2); box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.1); }
+        .app-btn {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);
+            transition: all 0.2s ease;
         }
-
-        .feature-card {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(0, 243, 255, 0.15);
-            border-radius: 1.25rem;
-            transition: transform 0.2s;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .animate-float { animation: float 6s ease-in-out infinite; }
-
-        .launch-btn {
-            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .launch-btn:active {
+        .app-btn:active {
             transform: scale(0.95);
-            filter: brightness(1.2);
+            box-shadow: 0 5px 15px -5px rgba(37, 99, 235, 0.5);
         }
-
-        /* Hide scrollbar but allow scrolling if content overflows on small phones */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .feature-card {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+        }
+        #installModal {
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(15px);
+        }
     </style>
 </head>
-<body class="no-scrollbar">
+<body class="antialiased min-h-screen flex flex-col items-center justify-center">
 
-    <div class="flex-1 flex flex-col items-center justify-center p-6 space-y-8 max-w-lg mx-auto w-full">
+    <main id="mainContent" class="flex-1 w-full max-w-lg mx-auto flex flex-col pt-12 pb-6 px-6 text-center opacity-0 transition-opacity duration-500">
         
-        <div class="text-center space-y-4 pt-8">
-            <div class="relative inline-block">
-                <img src="icon-512.png" alt="Logo" class="w-32 h-32 mx-auto rounded-[2rem] border border-white/10 shadow-2xl animate-float">
-                <div class="absolute -bottom-2 -right-2 bg-cyan-500 text-black font-black text-[10px] px-2 py-1 rounded-lg shadow-lg">PRO</div>
-            </div>
+        <img src="icon-512.png" alt="App Logo" class="w-36 h-36 mx-auto rounded-[2rem] shadow-2xl border border-white/10 mb-6" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4Ij48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgZmlsbD0iIzFZTjI5M2IiLz48L3N2Zz4='">
+
+        <h1 class="text-4xl font-black tracking-tight uppercase mb-2">Live Sea Score <span class="text-blue-500">Pro</span></h1>
+        
+        <div class="inline-flex items-center justify-center space-x-3 mb-6">
+            <span class="bg-blue-600/20 text-blue-400 font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-full border border-blue-500/30">Match Engine Active</span>
+            <span class="text-slate-500 font-bold text-[10px] tracking-widest uppercase version-display">V102</span>
+        </div>
+
+        <p class="text-slate-400 text-sm leading-relaxed mb-10 px-2 font-medium">
+            The ultimate scorecard built for friends having a casual match on their local beach. Zero latency, smart offline caching, and instant cloud syncing.
+        </p>
+
+        <div class="text-left space-y-4 w-full mb-10">
+            <h3 class="text-slate-500 font-black text-[10px] uppercase tracking-[0.2em] ml-2 mb-2">Engine Features</h3>
             
-            <div class="space-y-1">
-                <h1 class="text-3xl font-black tracking-tighter text-white uppercase italic neon-text">Live Sea Score</h1>
-                <p class="text-cyan-400 font-bold text-[10px] tracking-[0.4em] uppercase opacity-80">The Ultimate Match Engine</p>
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-amber-500/10 text-amber-500 p-3 rounded-xl"><i class="fa-solid fa-mobile-screen-button text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Dynamic Island HUD</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">Never lose focus. The permanent tactical pill displays your live rank, total points, and a smart adrenaline clock that shifts formats as the match enters the final 30-minute window.</p>
+                </div>
+            </div>
+
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-green-500/10 text-green-500 p-3 rounded-xl"><i class="fa-solid fa-battery-full text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Battery Management</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">Designed for full 6-hour sessions. There are no heavy background loops. Lock your phone, save your battery, and the engine will instantly wake up the second you unlock your screen.</p>
+                </div>
+            </div>
+
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-indigo-500/10 text-indigo-400 p-3 rounded-xl"><i class="fa-solid fa-earth-europe text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Remote Competitions</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">Anglers can be on different beaches, opposite ends of the country, or even the other side of the world. If they have the Match PIN, they are on the live leaderboard.</p>
+                </div>
+            </div>
+
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-blue-500/10 text-blue-500 p-3 rounded-xl"><i class="fa-solid fa-wifi text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">Offline Resilience</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">Built for dead zones. If you lose signal on the beach, the engine safely caches your catches locally and silently syncs the moment you reconnect.</p>
+                </div>
+            </div>
+
+            <div class="feature-card p-5 rounded-2xl flex items-start space-x-4">
+                <div class="bg-red-500/10 text-red-500 p-3 rounded-xl"><i class="fa-solid fa-user-shield text-xl"></i></div>
+                <div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white mb-1">No Ads, Tracking, or Nonsense</h4>
+                    <p class="text-slate-400 text-xs leading-relaxed">This app is 100% private. Unlike Facebook, which is over 500MB and tracks your location, this engine is less than 1MB and physically cannot access your camera, photos, or messages.</p>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-3 w-full">
-            <div class="feature-card p-4 flex items-start space-x-4">
-                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0 border border-cyan-500/20">
-                    <i class="fa-solid fa-bolt-lightning text-cyan-400"></i>
-                </div>
-                <div>
-                    <h3 class="text-white font-black text-xs uppercase tracking-wider">Zero Latency Sync</h3>
-                    <p class="text-slate-400 text-[10px] leading-relaxed mt-1">Proprietary real-time engine ensures every catch is broadcast to the leaderboard in under 200ms.</p>
-                </div>
-            </div>
+        <button id="btnInstallApp" onclick="handleInstallClick()" class="app-btn w-full rounded-2xl py-5 text-white font-black text-lg uppercase tracking-widest flex items-center justify-center shadow-xl">
+            Install App To Phone <i class="fa-solid fa-download ml-3"></i>
+        </button>
+        
+        <button id="btnLaunchDirect" onclick="window.location.replace('app.html')" class="hidden w-full bg-slate-800 border border-slate-700 rounded-2xl py-4 text-slate-300 font-black text-sm uppercase tracking-widest mt-4">
+            Open App in Browser
+        </button>
 
-            <div class="feature-card p-4 flex items-start space-x-4">
-                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0 border border-cyan-500/20">
-                    <i class="fa-solid fa-shield-halved text-cyan-400"></i>
-                </div>
-                <div>
-                    <h3 class="text-white font-black text-xs uppercase tracking-wider">Offline Resilience</h3>
-                    <p class="text-slate-400 text-[10px] leading-relaxed mt-1">Losing signal on the beach? The app caches your data locally and auto-syncs the moment you're back online.</p>
-                </div>
-            </div>
+    </main>
 
-            <div class="feature-card p-4 flex items-start space-x-4">
-                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0 border border-cyan-500/20">
-                    <i class="fa-solid fa-chart-line text-cyan-400"></i>
-                </div>
-                <div>
-                    <h3 class="text-white font-black text-xs uppercase tracking-wider">Advanced Telemetry</h3>
-                    <p class="text-slate-400 text-[10px] leading-relaxed mt-1">Live ticker feed, interactive leaderboard feeds, and professional tournament reporting tools built-in.</p>
-                </div>
-            </div>
+    <div id="successContent" class="hidden flex-1 w-full max-w-lg mx-auto flex flex-col justify-center items-center px-6 text-center h-screen">
+        <i class="fa-solid fa-circle-check text-green-500 text-7xl mb-6 shadow-[0_0_30px_rgba(34,197,94,0.3)] rounded-full"></i>
+        <h2 class="text-2xl font-black uppercase tracking-tight text-white mb-4">Installation Complete</h2>
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl text-left shadow-lg">
+            <p class="text-slate-300 text-sm leading-relaxed mb-4">
+                Live Sea Score Pro has been added to your device.
+            </p>
+            <p class="text-amber-500 font-black text-xs uppercase tracking-widest mb-2 pb-2 border-b border-slate-800">Next Steps:</p>
+            <p class="text-slate-400 text-xs leading-relaxed mb-2"><b class="text-white">1.</b> Close this browser tab completely.</p>
+            <p class="text-slate-400 text-xs leading-relaxed"><b class="text-white">2.</b> Go to your phone's Home Screen and tap the new <b>Live Sea Score</b> app icon.</p>
         </div>
-
-        <div class="w-full space-y-4 pt-4">
-            <button onclick="window.location.href='app.html'" class="launch-btn w-full text-black font-black py-5 rounded-[1.5rem] uppercase tracking-[0.2em] text-sm shadow-xl flex items-center justify-center group">
-                <span>Launch Engine</span>
-                <i class="fa-solid fa-chevron-right ml-3 text-[10px] opacity-60 group-active:translate-x-1 transition-transform"></i>
-            </button>
-            <p class="text-[9px] text-slate-600 font-bold uppercase tracking-[0.2em] text-center">Standard Network Rates May Apply</p>
-        </div>
-
     </div>
 
-    <div class="pb-10 text-center space-y-3">
-        <div id="status-bar" class="flex items-center justify-center space-x-2">
-            <div id="status-dot" class="w-1.5 h-1.5 bg-slate-800 rounded-full transition-colors duration-500"></div>
-            <span id="status-text" class="text-[9px] font-black text-slate-500 tracking-[0.2em] uppercase">Checking Link...</span>
+    <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
+        <div class="bg-slate-900 w-full max-w-sm p-6 space-y-5 border-2 border-blue-500 rounded-2xl shadow-2xl">
+            <div class="text-center">
+                <i class="fa-brands fa-apple text-blue-400 text-5xl mb-3"></i>
+                <h3 class="text-lg font-black uppercase tracking-tight text-white">iPhone Installation</h3>
+                <p class="text-slate-400 text-sm mt-4 leading-relaxed text-left bg-slate-800 p-4 rounded-xl border border-slate-700">
+                    <b class="text-white">1.</b> Tap the <b>Share</b> icon at the bottom of Safari.<br><br>
+                    <b class="text-white">2.</b> Scroll down and tap <b>'Add to Home Screen'</b>.<br><br>
+                    <b class="text-white">3.</b> Tap <b>'Add'</b> in the top right corner.
+                </p>
+            </div>
+            <button onclick="closeIOSModal()" class="w-full bg-blue-600 text-white font-black py-4 rounded-xl uppercase tracking-widest text-[11px] shadow-lg active:scale-95 transition">I have added it</button>
         </div>
-        <div class="text-[9px] font-black text-slate-700 uppercase tracking-[0.4em] version-display">Version 102</div>
     </div>
+
+    <footer id="mainFooter" class="w-full text-center py-6 border-t border-slate-800 opacity-0 transition-opacity duration-500">
+        <p class="text-slate-600 text-[10px] font-black uppercase tracking-widest version-display">Live Sea Score V102</p>
+    </footer>
 
     <script>
-        // Single Source of Truth Logic
-        function fetchLatestVersion() {
-            fetch('version.json')
-                .then(res => res.json())
-                .then(data => {
-                    document.querySelectorAll('.version-display').forEach(el => {
-                        el.innerText = `Version ${data.version}`;
-                    });
-                })
-                .catch(() => console.log('Version ping failed (Offline)'));
-        }
-
-        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(reg => {
-                    console.log('SW Active');
-                    document.getElementById('status-text').innerText = "System Ready";
-                    const dot = document.getElementById('status-dot');
-                    dot.classList.replace('bg-slate-800', 'bg-cyan-500');
-                    dot.classList.add('animate-pulse');
-                }).catch(err => {
-                    document.getElementById('status-text').innerText = "Offline Mode";
-                    document.getElementById('status-dot').classList.replace('bg-slate-800', 'bg-amber-600');
-                });
+                navigator.serviceWorker.register('/sw.js')
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+    </script>
+
+    <script>
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        
+        if (isStandalone) {
+            window.location.replace('app.html');
+        } else {
+            document.addEventListener("DOMContentLoaded", () => {
+                document.getElementById('mainContent').classList.remove('opacity-0');
+                document.getElementById('mainFooter').classList.remove('opacity-0');
+                document.getElementById('btnLaunchDirect').classList.remove('hidden');
+                
+                fetch('version.json')
+                    .then(res => res.json())
+                    .then(data => {
+                        document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`);
+                    })
+                    .catch(err => console.log('Version fetch fallback active.'));
             });
         }
 
-        // Initialize Version Sync
-        fetchLatestVersion();
+        let deferredPrompt;
 
-        // Lockdown Swipe-Refresh
-        document.addEventListener('touchmove', function(e) {
-            if (window.scrollY === 0 && e.touches[0].screenY > e.touches[0].screenY) {
-                e.preventDefault();
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        function handleInstallClick() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+
+            if (isIOS) {
+                document.getElementById('installModal').classList.remove('hidden');
+            } else if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        triggerSuccessScreen();
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                window.location.replace('app.html');
             }
-        }, { passive: false });
-    </script>
+        }
 
+        function closeIOSModal() {
+            document.getElementById('installModal').classList.add('hidden');
+            triggerSuccessScreen();
+        }
+
+        function triggerSuccessScreen() {
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('mainFooter').classList.add('hidden');
+            document.getElementById('successContent').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+    </script>
 </body>
 </html>
