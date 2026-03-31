@@ -339,49 +339,65 @@
             line-height: 1;
             text-shadow: 0 0 15px var(--neon-blue);
         }
-    /* --- v7.4.0 SOLAR THEME MASTER PALETTE --- */
+    /* --- v7.4.0 SPLASH-MATCHED SOLAR OVERRIDE --- */
         [data-theme="solar"] {
             --card-bg: #ffffff;
-            --card-border: #e2e8f0;
-            --neon-blue: #0056b3; /* Darker blue for readability */
-            --island-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            background-color: #f0f2f5 !important;
+            --card-border: #cbd5e1;
+            --neon-blue: #0056b3;
+            background-color: #f4f4f4 !important; /* EXACT SPLASH COLOR */
             color: #1a1a1a !important;
         }
 
-        /* Force stubborn black backgrounds to turn white */
+        /* Force ALL Black backgrounds (Pill, Inputs, Drawers) to White */
         [data-theme="solar"] .bg-black, 
         [data-theme="solar"] .bg-black\/95, 
         [data-theme="solar"] .bg-black\/50,
+        [data-theme="solar"] #dynamic-island,
+        [data-theme="solar"] .dynamic-island-content,
         [data-theme="solar"] #historyDetailDrawer,
         [data-theme="solar"] #leaderboardDrawer,
-        [data-theme="solar"] .bg-slate-900,
-        [data-theme="solar"] .bg-gray-900 {
+        [data-theme="solar"] #recordCatchUI,
+        [data-theme="solar"] .telemetry-card,
+        [data-theme="solar"] input,
+        [data-theme="solar"] select,
+        [data-theme="solar"] textarea {
             background-color: #ffffff !important;
             color: #1a1a1a !important;
+            border: 1px solid #cbd5e1 !important;
         }
 
-        /* Force white text to turn dark for readability */
+        /* Force ALL White text to Black for readability */
         [data-theme="solar"] .text-white,
         [data-theme="solar"] .text-slate-400,
         [data-theme="solar"] .text-slate-300,
-        [data-theme="solar"] .text-black\/50 {
+        [data-theme="solar"] .text-blue-400,
+        [data-theme="solar"] .text-black\/50,
+        [data-theme="solar"] #dynamic-island *,
+        [data-theme="solar"] .telemetry-unit,
+        [data-theme="solar"] .version-display {
             color: #1a1a1a !important;
         }
 
-        /* Fix the Close buttons, dividers, and borders */
-        [data-theme="solar"] .border-cyan-400\/30,
-        [data-theme="solar"] .border-white\/10,
-        [data-theme="solar"] .border-b,
-        [data-theme="solar"] .divide-y > * {
-            border-color: #cbd5e1 !important;
+        /* Fix the "Pill" Buttons and History Tabs */
+        [data-theme="solar"] .pill-btn,
+        [data-theme="solar"] .history-tab {
+            background-color: #e2e8f0 !important;
+            color: #1a1a1a !important;
+            border: 1px solid #cbd5e1 !important;
         }
 
-        /* Make the theme toggle button stand out in Solar mode */
+        [data-theme="solar"] .pill-btn.active,
+        [data-theme="solar"] .history-tab.active {
+            background-color: #0056b3 !important;
+            color: #ffffff !important;
+        }
+
+        /* Theme Toggle Button - Splash Match */
         [data-theme="solar"] button[onclick="toggleTheme()"] {
             background: #ffffff !important;
-            border-color: #cbd5e1 !important;
+            border: 1px solid #cbd5e1 !important;
             color: #0056b3 !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
         }
     </style>
 </head>
