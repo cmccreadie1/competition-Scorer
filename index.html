@@ -35,6 +35,7 @@
 
         .neon-text-blue { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
 
+        /* PRIMARY (Neon) Install Button */
         .app-btn {
             background-color: rgba(0, 243, 255, 0.05);
             border: 2px solid var(--neon-blue);
@@ -46,6 +47,20 @@
             transform: scale(0.95);
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
             background-color: rgba(0, 243, 255, 0.15);
+        }
+
+        /* MUTED (Fallback) Browser Button - NEW FEATURE */
+        .fallback-btn {
+            background-color: transparent; /* No fill */
+            border: 1px solid #334155; /* Dark Slate Gray (Subtle, muted border) */
+            color: #94a3b8; /* Faded gray text (Still legible, but recedes) */
+            text-shadow: none; /* NO GLOW */
+            transition: all 0.2s ease;
+        }
+        .fallback-btn:active {
+            transform: scale(0.98);
+            border-color: #475569; /* Slate Gray (Slightly brighter active state) */
+            color: #cbd5e1; /* Off-white text on active */
         }
         
         .feature-card {
@@ -169,7 +184,9 @@
             Install App <i id="osIcon" class="fa-solid fa-download absolute right-6 text-xl"></i>
         </button>
         
-        <button id="btnLaunchDirect" onclick="window.location.replace('app.html')" class="hidden w-full bg-black border border-cyan-400/30 rounded-xl py-3.5 text-cyan-400 font-black text-sm uppercase tracking-widest mt-3">
+        <div class="w-full h-8 flex-shrink-0"></div>
+
+        <button id="btnLaunchDirect" onclick="window.location.replace('app.html')" class="hidden fallback-btn w-3/4 mx-auto rounded-lg py-3 text-xs uppercase tracking-wider text-center">
             Open App in Browser
         </button>
 
@@ -218,7 +235,7 @@
                 document.getElementById('mainFooter').classList.remove('opacity-0');
                 document.getElementById('btnLaunchDirect').classList.remove('hidden');
                 
-                // OS Check for dynamic button icon (Play Logo for Android)
+                // OS Check for dynamic button icon
                 const userAgent = navigator.userAgent || navigator.vendor || window.opera;
                 const osIcon = document.getElementById('osIcon');
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
