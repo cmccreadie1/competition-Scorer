@@ -154,7 +154,7 @@
     </div>
 
     <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
-        <div class="bg-black w-full max-w-sm p-6 space-y-4 border border-cyan-400 rounded-xl">
+        <div class="bg-black w-full max-sm p-6 space-y-4 border border-cyan-400 rounded-xl">
             <div class="text-center">
                 <i class="fa-brands fa-apple neon-text-blue text-4xl mb-2"></i>
                 <h3 class="text-lg font-black uppercase tracking-tight text-white">iPhone Setup</h3>
@@ -183,13 +183,13 @@
                 document.getElementById('mainFooter').classList.remove('opacity-0');
                 document.getElementById('btnLaunchDirect').classList.remove('hidden');
                 
-                // OS Check for dynamic button icon
+                // OS Check for dynamic button icon (Play Logo for Android)
                 const userAgent = navigator.userAgent || navigator.vendor || window.opera;
                 const osIcon = document.getElementById('osIcon');
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
                     osIcon.className = "fa-brands fa-apple absolute right-6 text-2xl";
                 } else if (/android/i.test(userAgent)) {
-                    osIcon.className = "fa-brands fa-android absolute right-6 text-xl";
+                    osIcon.className = "fa-brands fa-google-play absolute right-6 text-xl";
                 }
                 
                 fetch('version.json')
