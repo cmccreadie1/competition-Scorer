@@ -19,7 +19,7 @@
         :root {
             --neon-blue: #00f3ff;
             --neon-amber: #f59e0b;
-            /* Theme Variables - Default Night */
+            /* Theme Variables - Permanent Night */
             --bg-color: #000000;
             --text-main: #94a3b8;
             --text-header: #ffffff;
@@ -27,18 +27,6 @@
             --card-border: rgba(0, 243, 255, 0.15);
             --btn-bg: rgba(0, 243, 255, 0.05);
             --shadow-glow: 0 0 15px rgba(0, 243, 255, 0.4);
-        }
-
-        [data-theme="solar"] {
-            /* Theme Variables - Solar Mode */
-            --bg-color: #f4f4f4;
-            --text-main: #334155;
-            --text-header: #0f172a;
-            --card-bg: #ffffff;
-            --card-border: #cbd5e1;
-            --btn-bg: #0891b2;
-            --shadow-glow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --neon-blue: #0891b2;
         }
 
         /* Pure Black Base for Infinite Depth on OLED */
@@ -51,11 +39,9 @@
             scroll-behavior: smooth;
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .neon-text-blue { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); transition: all 0.3s ease; }
-        [data-theme="solar"] .neon-text-blue { text-shadow: none; font-weight: 900; }
 
         /* PRIMARY (Neon) Install Button */
         .app-btn {
@@ -65,7 +51,6 @@
             transition: all 0.2s ease;
             color: var(--neon-blue);
         }
-        [data-theme="solar"] .app-btn { color: #ffffff; }
 
         .app-btn:active {
             transform: scale(0.95);
@@ -99,25 +84,6 @@
             backdrop-filter: blur(20px);
         }
 
-        /* Theme Toggle Button */
-        #themeToggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            color: var(--neon-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow-glow);
-            cursor: pointer;
-        }
-
         /* Bottom-Right Scroll Indicator */
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
@@ -147,10 +113,6 @@
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col items-center justify-center">
-
-    <button id="themeToggle" onclick="toggleTheme()">
-        <i id="themeIcon" class="fa-solid fa-moon text-xl"></i>
-    </button>
 
     <div id="scrollHint" class="scroll-hint text-cyan-400/60 bounce-arrow">
         <i class="fa-solid fa-chevron-down text-2xl"></i>
@@ -273,34 +235,6 @@
     </footer>
 
     <script>
-        // v7.4.0 Theme Engine
-        function toggleTheme() {
-            const body = document.body;
-            const icon = document.getElementById('themeIcon');
-            const meta = document.getElementById('themeMeta');
-            const isSolar = body.getAttribute('data-theme') === 'solar';
-            
-            if (isSolar) {
-                body.removeAttribute('data-theme');
-                icon.className = 'fa-solid fa-moon text-xl';
-                meta.setAttribute('content', '#000000');
-                localStorage.setItem('ls-theme-pref', 'night');
-            } else {
-                body.setAttribute('data-theme', 'solar');
-                icon.className = 'fa-solid fa-sun text-xl';
-                meta.setAttribute('content', '#f4f4f4');
-                localStorage.setItem('ls-theme-pref', 'solar');
-            }
-        }
-
-        // Apply saved theme preference on load
-        const savedTheme = localStorage.getItem('ls-theme-pref');
-        if (savedTheme === 'solar') {
-            document.body.setAttribute('data-theme', 'solar');
-            document.getElementById('themeIcon').className = 'fa-solid fa-sun text-xl';
-            document.getElementById('themeMeta').setAttribute('content', '#f4f4f4');
-        }
-
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
         
         if (isStandalone) {
@@ -343,7 +277,7 @@
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js');
+                navigator.serviceWorker.register('/service-worker.js');
             });
         }
 
