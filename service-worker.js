@@ -1,4 +1,4 @@
-const CACHE_NAME = 'match-scorer-v200';
+const CACHE_NAME = 'match-scorer-v740';
 const ASSETS = [
   '/',
   '/index.html',
@@ -22,7 +22,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate event: Clean up old caches
+// Activate event: Clean up old caches (v200 and older)
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -41,7 +41,8 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event: Serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
-  // We don't want to aggressively cache version.json so it can act as our single source of truth
+  // SINGLE SOURCE OF TRUTH: Force network-first for version.json
+  // This allows the app to detect an update immediately even when offline-first is active.
   if (event.request.url.includes('version.json')) {
     event.respondWith(
       fetch(event.request).catch(() => caches.match(event.request))
@@ -55,7 +56,7 @@ self.addEventListener('fetch', (event) => {
         return response;
       }
       return fetch(event.request).then((networkResponse) => {
-        // Optional: Dynamically cache new requests here if needed
+        // Dynamic caching is disabled here to keep the footprint small and predictable
         return networkResponse;
       });
     })
