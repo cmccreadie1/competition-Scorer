@@ -27,6 +27,7 @@
             color: #cbd5e1;
             -webkit-user-select: none;
             user-select: none;
+            scroll-behavior: smooth;
         }
 
         .neon-text-blue { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
@@ -54,11 +55,33 @@
             background: rgba(0,0,0,0.95);
             backdrop-filter: blur(15px);
         }
+
+        /* Scroll Indicator Styles */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
+            40% {transform: translateY(-10px) translateX(-50%);}
+            60% {transform: translateY(-5px) translateX(-50%);}
+        }
+        .scroll-hint {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            transition: opacity 0.4s ease, visibility 0.4s;
+        }
+        .bounce-arrow {
+            animation: bounce 2s infinite;
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col items-center justify-center">
 
-    <main id="mainContent" class="flex-1 w-full max-w-lg mx-auto flex flex-col pt-10 pb-6 px-6 text-center opacity-0 transition-opacity duration-500">
+    <div id="scrollHint" class="scroll-hint text-cyan-400/60 bounce-arrow">
+        <i class="fa-solid fa-chevron-down text-2xl"></i>
+    </div>
+
+    <main id="mainContent" class="flex-1 w-full max-w-lg mx-auto flex flex-col pt-10 pb-12 px-6 text-center opacity-0 transition-opacity duration-500">
         
         <img src="icon-512.png" alt="App Logo" class="w-32 h-32 mx-auto rounded-[1.5rem] shadow-[0_0_20px_rgba(0,243,255,0.3)] border border-white/10 mb-6">
 
@@ -183,7 +206,7 @@
                 document.getElementById('mainFooter').classList.remove('opacity-0');
                 document.getElementById('btnLaunchDirect').classList.remove('hidden');
                 
-                // OS Check for dynamic button icon (Play Logo for Android)
+                // OS Check for dynamic button icon
                 const userAgent = navigator.userAgent || navigator.vendor || window.opera;
                 const osIcon = document.getElementById('osIcon');
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
@@ -199,6 +222,18 @@
                     })
                     .catch(err => console.log('Version fetch fallback active.'));
             });
+
+            // Hide scroll hint on scroll
+            window.addEventListener('scroll', () => {
+                const hint = document.getElementById('scrollHint');
+                if (window.scrollY > 50) {
+                    hint.style.opacity = '0';
+                    hint.style.visibility = 'hidden';
+                } else {
+                    hint.style.opacity = '1';
+                    hint.style.visibility = 'visible';
+                }
+            }, { passive: true });
         }
 
         if ('serviceWorker' in navigator) {
