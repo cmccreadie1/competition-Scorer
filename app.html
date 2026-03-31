@@ -22,17 +22,40 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        /* --- V2.0.0 NEON VARIABLES --- */
+       /* --- V7.4.0 THEME VARIABLES --- */
         :root {
             --neon-blue: #00f3ff;
             --neon-amber: #f59e0b;
             --neon-red: #ef4444;
+            --bg-main: #000000;
+            --text-main: #cbd5e1;
+            --text-header: #ffffff;
+            --card-bg: #000000;
+            --card-border: rgba(0, 243, 255, 0.5);
+            --ticker-bg: #000000;
+            --ticker-text: var(--neon-blue);
+            --input-bg: rgba(0, 243, 255, 0.08);
+            --island-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+        }
+
+        [data-theme="solar"] {
+            --bg-main: #f4f4f4;
+            --text-main: #334155;
+            --text-header: #0f172a;
+            --card-bg: #ffffff;
+            --card-border: #cbd5e1;
+            --ticker-bg: #ffffff;
+            --ticker-text: #0f172a;
+            --input-bg: #ffffff;
+            --island-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --neon-blue: #0891b2;
+            --neon-amber: #b45309;
         }
 
         html, body {
             font-family: 'Inter', sans-serif;
-            background-color: #000000; 
-            color: #cbd5e1; /* Soft Slate White */
+            background-color: var(--bg-main) !important; 
+            color: var(--text-main);
             -webkit-user-select: none;
             user-select: none;
             width: 100%;
@@ -42,6 +65,7 @@
             overscroll-behavior: none;
             margin: 0;
             padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* Neon Glow Utility Classes */
@@ -285,17 +309,11 @@
         }
         #broadcastToast.show { transform: translateY(0); }
         
-        .drawer-right {
-            transition: transform 0.3s ease-in-out;
-            transform: translateX(100%);
-        }
-        .drawer-right.open { transform: translateX(0); }
-
-        .drawer-left {
-            transition: transform 0.3s ease-in-out;
-            transform: translateX(-100%);
-        }
-        .drawer-left.open { transform: translateX(0); }
+        /* --- v7.4.0 DRAWER OVERLAY FIX --- */
+        .drawer-right { position: fixed; inset: 0; width: 100%; z-index: 250; transition: transform 0.3s ease-in-out; transform: translateX(100%); visibility: hidden; }
+        .drawer-right.open { transform: translateX(0); visibility: visible; }
+        .drawer-left { position: fixed; inset: 0; width: 100%; z-index: 250; transition: transform 0.3s ease-in-out; transform: translateX(-100%); visibility: hidden; }
+        .drawer-left.open { transform: translateX(0); visibility: visible; }
         
         .hidden { display: none !important; }
 
@@ -323,7 +341,11 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="night">
+
+    <button onclick="toggleTheme()" style="position: fixed; top: 15px; left: 15px; z-index: 1000; width: 42px; height: 42px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--card-border); color: var(--neon-blue); display: flex; align-items: center; justify-content: center; box-shadow: var(--island-shadow);">
+        <i class="fa-solid fa-circle-half-stroke"></i>
+    </button>
 
     <div id="browser-banner" class="hidden">
         <div class="flex items-center">
@@ -770,7 +792,7 @@
                         <i class="fa-solid fa-rotate text-base mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-[9px] tracking-widest">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[8px] text-slate-600 mt-3 uppercase tracking-[0.2em] version-display">V2.0.0</p>
+                    <p class="text-[8px] text-slate-600 mt-3 uppercase tracking-[0.2em] version-display">V7.4.0</p>
                 </section>
             </div>
         </div>
@@ -904,9 +926,32 @@
         let touchStartTime = 0;
         let isLongPress = false;
         let islandPressTimer;
-        
-        let godTargetAnglerId = null;
+       let godTargetAnglerId = null;
         let godTargetAnglerName = "";
+
+        /* --- v7.4.0 UTILITIES --- */
+        function formatMetric(totalCm) {
+            if (!totalCm || totalCm === 0) return "0cm";
+            if (totalCm < 100) return `${totalCm}cm`;
+            const m = Math.floor(totalCm / 100);
+            const cm = totalCm % 100;
+            const cmStr = cm === 0 ? "00" : (cm < 10 ? "0" + cm : cm);
+            return cm === 0 ? `${m}m 00` : `${m}m ${cmStr}cm`;
+        }
+
+        window.toggleTheme = function() {
+            const body = document.body;
+            const isSolar = body.getAttribute('data-theme') === 'solar';
+            if (isSolar) {
+                body.removeAttribute('data-theme');
+                if(document.getElementById('themeMeta')) document.getElementById('themeMeta').setAttribute('content', '#000000');
+                localStorage.setItem('ls-theme-740', 'night');
+            } else {
+                body.setAttribute('data-theme', 'solar');
+                if(document.getElementById('themeMeta')) document.getElementById('themeMeta').setAttribute('content', '#f4f4f4');
+                localStorage.setItem('ls-theme-740', 'solar');
+            }
+        };
 
         function formatCatchTime(c) {
             if (!c.ts) return c.time;
@@ -1522,7 +1567,12 @@
             if (state.format === 'weightLb') { let lbs = parseInt(document.getElementById('inputLbs').value) || 0, oz = parseInt(document.getElementById('inputOz').value) || 0; finalSize = (lbs * 16) + oz; displaySize = `${lbs}<span class="telemetry-unit">lb</span> ${oz}<span class="telemetry-unit">oz</span>`; pts = finalSize; } 
             else if (state.format === 'weightKg') { let kg = parseInt(document.getElementById('inputKg').value) || 0, g = parseInt(document.getElementById('inputGrammes').value) || 0; finalSize = (kg * 1000) + g; displaySize = `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`; pts = finalSize; } 
             else if (state.format === 'speciesHunt') { finalSize = 1; displaySize = ""; } 
-            else { finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; pts = finalSize; if (state.format === 'length10') pts = finalSize + 10; }
+            else { 
+            finalSize = parseFloat(document.getElementById('inputSize').value) || 0; 
+            displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; 
+            /* --- v7.4.0 VOLUME REWARD (+10 Pts) --- */
+            if (state.format === 'length10') { pts = finalSize + 10; } else { pts = finalSize; }
+        }
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
             
             if (state.format === 'speciesHunt') { 
@@ -1775,11 +1825,11 @@
                 finalSize = 1; displaySize = ""; 
             } 
             else { 
-                finalSize = parseFloat(document.getElementById('godInputSize').value) || 0; 
-                displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; 
-                pts = finalSize; 
-                if (state.format === 'length10') pts = finalSize + 10; 
-            }
+            finalSize = parseFloat(document.getElementById('godInputSize').value) || 0; 
+            displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; 
+            /* --- v7.4.0 GOD MODE VOLUME REWARD (+10 Pts) --- */
+            if (state.format === 'length10') { pts = finalSize + 10; } else { pts = finalSize; }
+        }
             
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
             
@@ -1853,14 +1903,17 @@
             let t = `🏆 *OFFICIAL MATCH RESULTS*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n\n`;
             
             t += `--- *PODIUM* ---\n\n`;
-            t += `🥇 *1st:* ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n\n`;
-            t += `🥈 *2nd:* ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}\n\n`;
-            t += `🥉 *3rd:* ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n\n`;
-            
-            t += `--- *MATCH STATS* ---\n\n`;
-            t += `🐋 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
-            t += `🧬 *SPECIES DIVERSITY:* ${allSpecies.size} Unique\n\n`;
-            t += `📊 *MATCH TOTAL:* ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Total Fish)\n\n\n`;
+           /* --- v7.4.0 METRIC REPORTER --- */
+        const getScore = (s) => (fmt === 'length' || fmt === 'length10') ? formatMetric(s) : formatScoreDisplay(s, fmt, true);
+        
+        t += `🥇 *1st:* ${podium[0]?.name || '-'} - ${getScore(podium[0]?.score || 0)}\n\n`;
+        t += `🥈 *2nd:* ${podium[1]?.name || '-'} - ${getScore(podium[1]?.score || 0)}\n\n`;
+        t += `🥉 *3rd:* ${podium[2]?.name || '-'} - ${getScore(podium[2]?.score || 0)}\n\n`;
+
+        t += "--- *MATCH STATS* ---\n\n";
+        t += `🐙 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
+        t += `🧬 *SPECIES DIVERSITY:* ${allSpecies.size} Unique\n\n`;
+        t += `📉 *MATCH TOTAL:* ${getScore(matchTotalRaw)} (${totalFish} Total Fish)\n\n`;
 
             t += `⏱️ *FISH HOUR BY HOUR*\n\n`;
             let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
@@ -1881,7 +1934,7 @@
                 t += `${i+1}. ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n\n`; 
             });
             
-            t += `_Generated by Live Sea Score Pro V2.0.0_`;
+            t += `_Generated by Live Sea Score Pro V7.4.0_`;
 
             if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
@@ -1991,6 +2044,11 @@
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
 
         window.onload = () => {
+            /* --- v7.4.0 THEME MEMORY --- */
+            const savedTheme = localStorage.getItem('ls-theme-740');
+            if (savedTheme === 'solar') {
+                document.body.setAttribute('data-theme', 'solar');
+            }
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
             if (!isStandalone) { document.getElementById('browser-banner').classList.remove('hidden'); }
             history.pushState(null, null, window.location.href); checkInstallStatus(); const saved = localStorage.getItem('matchState');
