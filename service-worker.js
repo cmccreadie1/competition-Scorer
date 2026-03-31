@@ -1,4 +1,4 @@
-const CACHE_NAME = 'match-scorer-v740';
+const CACHE_NAME = 'match-scorer-v7.4.0';
 const ASSETS = [
   '/',
   '/index.html',
