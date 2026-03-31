@@ -130,8 +130,8 @@
             </div>
         </div>
 
-        <button id="btnInstallApp" onclick="handleInstallClick()" class="app-btn w-full rounded-xl py-4 font-black text-base uppercase tracking-widest flex items-center justify-center">
-            Install App To Phone <i id="osIcon" class="fa-solid fa-download ml-3 text-xl"></i>
+        <button id="btnInstallApp" onclick="handleInstallClick()" class="app-btn w-full rounded-xl py-4 font-black text-base uppercase tracking-widest flex items-center justify-center relative">
+            Install App <i id="osIcon" class="fa-solid fa-download absolute right-6 text-xl"></i>
         </button>
         
         <button id="btnLaunchDirect" onclick="window.location.replace('app.html')" class="hidden w-full bg-black border border-cyan-400/30 rounded-xl py-3.5 text-cyan-400 font-black text-sm uppercase tracking-widest mt-3">
@@ -187,9 +187,9 @@
                 const userAgent = navigator.userAgent || navigator.vendor || window.opera;
                 const osIcon = document.getElementById('osIcon');
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                    osIcon.className = "fa-brands fa-apple ml-3 text-2xl";
+                    osIcon.className = "fa-brands fa-apple absolute right-6 text-2xl";
                 } else if (/android/i.test(userAgent)) {
-                    osIcon.className = "fa-brands fa-android ml-3 text-xl";
+                    osIcon.className = "fa-brands fa-android absolute right-6 text-xl";
                 }
                 
                 fetch('version.json')
