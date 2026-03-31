@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full overflow-x-hidden bg-black">
+<html lang="en" class="h-full overflow-x-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Live Sea Score Pro | Install</title>
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#000000" id="themeMeta">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://matchscorerpro.netlify.app/">
     <meta property="og:title" content="Live Sea Score Pro">
@@ -19,59 +19,103 @@
         :root {
             --neon-blue: #00f3ff;
             --neon-amber: #f59e0b;
+            /* Theme Variables - Default Night */
+            --bg-color: #000000;
+            --text-main: #94a3b8;
+            --text-header: #ffffff;
+            --card-bg: #000000;
+            --card-border: rgba(0, 243, 255, 0.15);
+            --btn-bg: rgba(0, 243, 255, 0.05);
+            --shadow-glow: 0 0 15px rgba(0, 243, 255, 0.4);
+        }
+
+        [data-theme="solar"] {
+            /* Theme Variables - Solar Mode */
+            --bg-color: #f4f4f4;
+            --text-main: #334155;
+            --text-header: #0f172a;
+            --card-bg: #ffffff;
+            --card-border: #cbd5e1;
+            --btn-bg: #0891b2;
+            --shadow-glow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --neon-blue: #0891b2;
         }
 
         /* Pure Black Base for Infinite Depth on OLED */
         html, body {
             font-family: 'Inter', sans-serif;
-            background-color: #000000 !important; 
-            color: #cbd5e1;
+            background-color: var(--bg-color) !important; 
+            color: var(--text-main);
             -webkit-user-select: none;
             user-select: none;
             scroll-behavior: smooth;
             margin: 0;
             padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .neon-text-blue { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
+        .neon-text-blue { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); transition: all 0.3s ease; }
+        [data-theme="solar"] .neon-text-blue { text-shadow: none; font-weight: 900; }
 
         /* PRIMARY (Neon) Install Button */
         .app-btn {
-            background-color: rgba(0, 243, 255, 0.05);
+            background-color: var(--btn-bg);
             border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            box-shadow: var(--shadow-glow);
             transition: all 0.2s ease;
             color: var(--neon-blue);
         }
+        [data-theme="solar"] .app-btn { color: #ffffff; }
+
         .app-btn:active {
             transform: scale(0.95);
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
             background-color: rgba(0, 243, 255, 0.15);
         }
 
-        /* MUTED (Fallback) Browser Button - NEW FEATURE */
+        /* MUTED (Fallback) Browser Button */
         .fallback-btn {
-            background-color: transparent; /* No fill */
-            border: 1px solid #334155; /* Dark Slate Gray (Subtle, muted border) */
-            color: #94a3b8; /* Faded gray text (Still legible, but recedes) */
-            text-shadow: none; /* NO GLOW */
+            background-color: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            text-shadow: none;
             transition: all 0.2s ease;
         }
         .fallback-btn:active {
             transform: scale(0.98);
-            border-color: #475569; /* Slate Gray (Slightly brighter active state) */
-            color: #cbd5e1; /* Off-white text on active */
+            border-color: #475569;
+            color: #cbd5e1;
         }
         
         .feature-card {
-            background-color: #000000;
-            border: 1px solid rgba(0, 243, 255, 0.15);
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.05);
+            transition: all 0.3s ease;
         }
         
         #installModal {
             background: rgba(0,0,0,0.98);
             backdrop-filter: blur(20px);
+        }
+
+        /* Theme Toggle Button */
+        #themeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--neon-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-glow);
+            cursor: pointer;
         }
 
         /* Bottom-Right Scroll Indicator */
@@ -102,19 +146,23 @@
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col items-center justify-center bg-black">
+<body class="antialiased min-h-screen flex flex-col items-center justify-center">
+
+    <button id="themeToggle" onclick="toggleTheme()">
+        <i id="themeIcon" class="fa-solid fa-moon text-xl"></i>
+    </button>
 
     <div id="scrollHint" class="scroll-hint text-cyan-400/60 bounce-arrow">
         <i class="fa-solid fa-chevron-down text-2xl"></i>
     </div>
 
-    <main id="mainContent" class="flex-1 w-full max-w-lg mx-auto flex flex-col pt-10 pb-12 px-6 text-center opacity-0 transition-opacity duration-500 bg-black">
+    <main id="mainContent" class="flex-1 w-full max-w-lg mx-auto flex flex-col pt-10 pb-12 px-6 text-center opacity-0 transition-opacity duration-500">
         
         <img src="icon-512.png" alt="App Logo" class="glowing-logo w-32 h-32 mx-auto rounded-[1.5rem] border border-white/5 mb-6 shadow-[0_0_20px_rgba(0,243,255,0.08)]">
 
-        <h1 class="text-3xl font-black tracking-tight uppercase mb-2 text-white flex justify-center items-center space-x-2">
+        <h1 class="text-3xl font-black tracking-tight uppercase mb-2 text-[var(--text-header)] flex justify-center items-center space-x-2">
             <span>Live Sea Score <span class="neon-text-blue">Pro</span></span>
-            <span class="text-slate-500 font-bold text-[10px] tracking-widest uppercase version-display relative top-0.5">V2.0.0</span>
+            <span class="text-slate-500 font-bold text-[10px] tracking-widest uppercase version-display relative top-0.5">V7.4.0</span>
         </h1>
         
         <div class="flex items-center justify-center space-x-3 mb-6 text-[9px] font-black uppercase tracking-widest text-slate-400">
@@ -125,7 +173,7 @@
             <span class="flex items-center"><i class="fa-solid fa-shield-halved text-green-500 mr-1.5 opacity-80"></i> 100% Private</span>
         </div>
 
-        <p class="text-slate-400 text-[13px] leading-relaxed mb-8 px-4 font-medium">
+        <p class="text-[var(--text-main)] text-[13px] leading-relaxed mb-8 px-4 font-medium">
             The ultimate <b class="neon-text-blue uppercase tracking-wider">live</b> scorecard built for casual beach matches.
         </p>
 
@@ -134,49 +182,49 @@
             <div class="feature-card p-3.5 rounded-xl flex flex-col">
                 <div class="flex items-center space-x-2.5 mb-1.5">
                     <div class="bg-amber-500/10 text-amber-500 p-2 rounded-lg shrink-0"><i class="fa-solid fa-mobile-screen-button text-base"></i></div>
-                    <h4 class="font-bold text-sm uppercase tracking-wide text-white">Interactive Dynamic Hub</h4>
+                    <h4 class="font-bold text-sm uppercase tracking-wide text-[var(--text-header)]">Interactive Dynamic Hub</h4>
                 </div>
-                <p class="text-slate-400 text-[13px] leading-snug w-full">Keep your eyes on the surf, not your screen. The 'Hub' is a permanent display pill at the top of the app. It constantly updates to show your live rank, total points, and the match clock. Just wake your phone to see exactly where you stand—no swiping or digging through menus required.</p>
+                <p class="text-[var(--text-main)] text-[13px] leading-snug w-full">Keep your eyes on the surf, not your screen. The 'Hub' is a permanent display pill at the top of the app. It constantly updates to show your live rank, total points, and the match clock. Just wake your phone to see exactly where you stand—no swiping or digging through menus required.</p>
             </div>
 
             <div class="feature-card p-3.5 rounded-xl flex flex-col">
                 <div class="flex items-center space-x-2.5 mb-1.5">
                     <div class="bg-green-500/10 text-green-500 p-2 rounded-lg shrink-0"><i class="fa-solid fa-trophy text-base"></i></div>
-                    <h4 class="font-bold text-sm uppercase tracking-wide text-white">Live Leaderboard</h4>
+                    <h4 class="font-bold text-sm uppercase tracking-wide text-[var(--text-header)]">Live Leaderboard</h4>
                 </div>
-                <p class="text-slate-400 text-[13px] leading-snug w-full">See exactly who is catching what, and how many points you need to steal the lead. Tap anyone's name to instantly view their catch diary as it happens.</p>
+                <p class="text-[var(--text-main)] text-[13px] leading-snug w-full">See exactly who is catching what, and how many points you need to steal the lead. Tap anyone's name to instantly view their catch diary as it happens.</p>
             </div>
 
             <div class="feature-card p-3.5 rounded-xl flex flex-col">
                 <div class="flex items-center space-x-2.5 mb-1.5">
                     <div class="bg-blue-500/10 text-blue-500 p-2 rounded-lg shrink-0"><i class="fa-solid fa-bolt text-base"></i></div>
-                    <h4 class="font-bold text-sm uppercase tracking-wide text-white">Zero Friction Logging</h4>
+                    <h4 class="font-bold text-sm uppercase tracking-wide text-[var(--text-header)]">Zero Friction Logging</h4>
                 </div>
-                <p class="text-slate-400 text-[13px] leading-snug w-full">Built for cold, wet hands. Tap once to choose from 80+ pre-populated species, neatly broken down by <b>Commonly Caught</b> and <b>Fish Categories</b>. It is 3-second fish logging with no typing and zero searching. The app does the math and updates the live leader board instantly.</p>
+                <p class="text-[var(--text-main)] text-[13px] leading-snug w-full">Built for cold, wet hands. Tap once to choose from 80+ pre-populated species, neatly broken down by <b>Commonly Caught</b> and <b>Fish Categories</b>. It is 3-second fish logging with no typing and zero searching. The app does the math and updates the live leader board instantly.</p>
             </div>
 
             <div class="feature-card p-3.5 rounded-xl flex flex-col">
                 <div class="flex items-center space-x-2.5 mb-1.5">
                     <div class="bg-indigo-500/10 text-indigo-400 p-2 rounded-lg shrink-0"><i class="fa-solid fa-earth-europe text-base"></i></div>
-                    <h4 class="font-bold text-sm uppercase tracking-wide text-white">Flexible & Remote Fishing</h4>
+                    <h4 class="font-bold text-sm uppercase tracking-wide text-[var(--text-header)]">Flexible & Remote Fishing</h4>
                 </div>
-                <p class="text-slate-400 text-[13px] leading-snug w-full">You don't have to be on the same stretch of sand to compete. Mates can fish miles apart on the same live leaderboard. Need to pack up early? Leave the match safely without losing your points, and watch the rest of the battle live from your History tab on the drive home.</p>
+                <p class="text-[var(--text-main)] text-[13px] leading-snug w-full">You don't have to be on the same stretch of sand to compete. Mates can fish miles apart on the same live leaderboard. Need to pack up early? Leave the match safely without losing your points, and watch the rest of the battle live from your History tab on the drive home.</p>
             </div>
 
             <div class="feature-card p-3.5 rounded-xl flex flex-col">
                 <div class="flex items-center space-x-2.5 mb-1.5">
                     <div class="bg-teal-500/10 text-teal-500 p-2 rounded-lg shrink-0"><i class="fa-solid fa-battery-half text-base"></i></div>
-                    <h4 class="font-bold text-sm uppercase tracking-wide text-white">Bulletproof Reliability</h4>
+                    <h4 class="font-bold text-sm uppercase tracking-wide text-[var(--text-header)]">Bulletproof Reliability</h4>
                 </div>
-                <p class="text-slate-400 text-[13px] leading-snug w-full">Accidentally closed the app? Don't panic. You can't lose your place or your data. The engine uses practically zero battery in the background. Lock your screen to save power, and if you hit a dead zone, it safely caches your fish and auto-syncs the second you reconnect.</p>
+                <p class="text-[var(--text-main)] text-[13px] leading-snug w-full">Accidentally closed the app? Don't panic. You can't lose your place or your data. The engine uses practically zero battery in the background. Lock your screen to save power, and if you hit a dead zone, it safely caches your fish and auto-syncs the second you reconnect.</p>
             </div>
 
             <div class="feature-card p-3.5 rounded-xl flex flex-col">
                 <div class="flex items-center space-x-2.5 mb-1.5">
                     <div class="bg-fuchsia-500/10 text-fuchsia-500 p-2 rounded-lg shrink-0"><i class="fa-brands fa-whatsapp text-base"></i></div>
-                    <h4 class="font-bold text-sm uppercase tracking-wide text-white">One-Tap WhatsApp Results</h4>
+                    <h4 class="font-bold text-sm uppercase tracking-wide text-[var(--text-header)]">One-Tap WhatsApp Results</h4>
                 </div>
-                <p class="text-slate-400 text-[13px] leading-snug w-full">When the clock strikes zero, the app calculates the final standings and total beach stats. Generate and share a clean, official match report straight to your WhatsApp group with a single tap.</p>
+                <p class="text-[var(--text-main)] text-[13px] leading-snug w-full">When the clock strikes zero, the app calculates the final standings and total beach stats. Generate and share a clean, official match report straight to your WhatsApp group with a single tap.</p>
             </div>
         </div>
 
@@ -192,16 +240,16 @@
 
     </main>
 
-    <div id="successContent" class="hidden flex-1 w-full max-w-lg mx-auto flex flex-col justify-center items-center px-6 text-center h-screen bg-black">
+    <div id="successContent" class="hidden flex-1 w-full max-w-lg mx-auto flex flex-col justify-center items-center px-6 text-center h-screen">
         <i class="fa-solid fa-circle-check neon-text-blue text-6xl mb-6"></i>
-        <h2 class="text-xl font-black uppercase tracking-tight text-white mb-4">Installation Complete</h2>
-        <div class="bg-black border border-cyan-400/30 p-5 rounded-xl text-left shadow-lg">
-            <p class="text-slate-300 text-sm leading-relaxed mb-4">
+        <h2 class="text-xl font-black uppercase tracking-tight text-[var(--text-header)] mb-4">Installation Complete</h2>
+        <div class="bg-[var(--card-bg)] border border-cyan-400/30 p-5 rounded-xl text-left shadow-lg">
+            <p class="text-[var(--text-main)] text-sm leading-relaxed mb-4">
                 Live Sea Score Pro has been added to your device.
             </p>
             <p class="neon-text-blue font-black text-xs uppercase tracking-widest mb-2 pb-1.5 border-b border-slate-800">Next Steps:</p>
-            <p class="text-slate-400 text-xs leading-relaxed mb-2"><b class="text-white">1.</b> Close this browser tab.</p>
-            <p class="text-slate-400 text-xs leading-relaxed"><b class="text-white">2.</b> Go to your Home Screen and tap the new <b class="text-white">Live Sea Score</b> icon.</p>
+            <p class="text-[var(--text-main)] text-xs leading-relaxed mb-2"><b class="text-[var(--text-header)]">1.</b> Close this browser tab.</p>
+            <p class="text-[var(--text-main)] text-xs leading-relaxed"><b class="text-[var(--text-header)]">2.</b> Go to your Home Screen and tap the new <b class="text-[var(--text-header)]">Live Sea Score</b> icon.</p>
         </div>
     </div>
 
@@ -220,11 +268,39 @@
         </div>
     </div>
 
-    <footer id="mainFooter" class="w-full text-center py-5 border-t border-slate-900 opacity-0 transition-opacity duration-500 bg-black">
-        <p class="text-slate-600 text-[9px] font-black uppercase tracking-widest version-display">Live Sea Score V2.0.0</p>
+    <footer id="mainFooter" class="w-full text-center py-5 border-t border-slate-900 opacity-0 transition-opacity duration-500">
+        <p class="text-slate-600 text-[9px] font-black uppercase tracking-widest version-display">Live Sea Score V7.4.0</p>
     </footer>
 
     <script>
+        // v7.4.0 Theme Engine
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            const meta = document.getElementById('themeMeta');
+            const isSolar = body.getAttribute('data-theme') === 'solar';
+            
+            if (isSolar) {
+                body.removeAttribute('data-theme');
+                icon.className = 'fa-solid fa-moon text-xl';
+                meta.setAttribute('content', '#000000');
+                localStorage.setItem('ls-theme-pref', 'night');
+            } else {
+                body.setAttribute('data-theme', 'solar');
+                icon.className = 'fa-solid fa-sun text-xl';
+                meta.setAttribute('content', '#f4f4f4');
+                localStorage.setItem('ls-theme-pref', 'solar');
+            }
+        }
+
+        // Apply saved theme preference on load
+        const savedTheme = localStorage.getItem('ls-theme-pref');
+        if (savedTheme === 'solar') {
+            document.body.setAttribute('data-theme', 'solar');
+            document.getElementById('themeIcon').className = 'fa-solid fa-sun text-xl';
+            document.getElementById('themeMeta').setAttribute('content', '#f4f4f4');
+        }
+
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
         
         if (isStandalone) {
