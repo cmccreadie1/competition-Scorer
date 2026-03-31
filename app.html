@@ -2093,64 +2093,45 @@
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
 
        window.onload = () => {
-            /* --- v7.4.0 THEME & APP STARTUP --- */
-            const savedTheme = localStorage.getItem('ls-theme-740');
-            if (savedTheme === 'solar') {
-                document.body.setAttribute('data-theme', 'solar');
-            }
+            /* --- v7.4.0 ROBUST STARTUP --- */
+            try {
+                const savedTheme = localStorage.getItem('ls-theme-740');
+                if (savedTheme === 'solar') {
+                    document.body.setAttribute('data-theme', 'solar');
+                }
 
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-            if (!isStandalone) { 
+                const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
                 const banner = document.getElementById('browser-banner');
-                if (banner) banner.classList.remove('hidden'); 
-            }
-            
-            history.pushState(null, null, window.location.href);
-            if (typeof checkInstallStatus === 'function') checkInstallStatus();
+                if (!isStandalone && banner) { banner.classList.remove('hidden'); }
+                
+                history.pushState(null, null, window.location.href);
 
-            const saved = localStorage.getItem('matchState');
-            
-            // Version Check
-            fetch('version.json').then(res => res.json()).then(data => {
-                document.querySelectorAll('.version-display').forEach(el => {
-                    el.innerText = data.version;
-                });
-            }).catch(err => console.log("Update check skipped"));
-
-            if (saved) {
-                try {
+                const saved = localStorage.getItem('matchState');
+                if (saved) {
                     let oldState = JSON.parse(saved);
-                    state.name = oldState.name || "";
-                    state.venue = oldState.venue || "";
+                    // Force state sync
+                    state = Object.assign(state, oldState);
                     
                     if (document.getElementById('playerName')) {
-                        document.getElementById('playerName').value = state.name;
-                        document.getElementById('venueName').value = state.venue;
+                        document.getElementById('playerName').value = state.name || "";
+                        document.getElementById('venueName').value = state.venue || "";
                     }
 
-                    if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) {
-                        state = oldState;
+                    // If they were in a match, go there. Otherwise, go to setup.
+                    if (['playing', 'hype', 'waiting', 'grace'].includes(state.status)) {
                         if (typeof listenToCloud === 'function') listenToCloud();
                         navTo(state.status);
+                    } else {
+                        navTo('setup');
                     }
-                } catch(e) {
-                    console.error("Session recovery failed", e);
+                } else {
+                    navTo('setup');
                 }
-            } else {
-                // If no match is saved, ensure we are on the landing/setup page
-                navTo('setup'); 
+            } catch (err) {
+                console.error("Startup failed, forcing setup", err);
+                navTo('setup');
             }
         };
-
-        window.addEventListener('popstate', () => {
-            history.pushState(null, null, window.location.href);
-            if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open') || document.getElementById('guideDrawer').classList.contains('open') || !document.getElementById('historyDetailDrawer').classList.contains('hidden') || !document.getElementById('stewardRosterDrawer').classList.contains('hidden') || !document.getElementById('stewardLogDrawer').classList.contains('hidden')) { 
-                document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('guideDrawer').classList.remove('open'); stewardCloseLogs(); closeHistoryDetail(); document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);
-            }
-        });
-
-        // GLOBAL BINDINGS
-        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport;
     </script>
 </body>
 </html>
