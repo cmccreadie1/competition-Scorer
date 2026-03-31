@@ -339,6 +339,50 @@
             line-height: 1;
             text-shadow: 0 0 15px var(--neon-blue);
         }
+    /* --- v7.4.0 SOLAR THEME MASTER PALETTE --- */
+        [data-theme="solar"] {
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --neon-blue: #0056b3; /* Darker blue for readability */
+            --island-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background-color: #f0f2f5 !important;
+            color: #1a1a1a !important;
+        }
+
+        /* Force stubborn black backgrounds to turn white */
+        [data-theme="solar"] .bg-black, 
+        [data-theme="solar"] .bg-black\/95, 
+        [data-theme="solar"] .bg-black\/50,
+        [data-theme="solar"] #historyDetailDrawer,
+        [data-theme="solar"] #leaderboardDrawer,
+        [data-theme="solar"] .bg-slate-900,
+        [data-theme="solar"] .bg-gray-900 {
+            background-color: #ffffff !important;
+            color: #1a1a1a !important;
+        }
+
+        /* Force white text to turn dark for readability */
+        [data-theme="solar"] .text-white,
+        [data-theme="solar"] .text-slate-400,
+        [data-theme="solar"] .text-slate-300,
+        [data-theme="solar"] .text-black\/50 {
+            color: #1a1a1a !important;
+        }
+
+        /* Fix the Close buttons, dividers, and borders */
+        [data-theme="solar"] .border-cyan-400\/30,
+        [data-theme="solar"] .border-white\/10,
+        [data-theme="solar"] .border-b,
+        [data-theme="solar"] .divide-y > * {
+            border-color: #cbd5e1 !important;
+        }
+
+        /* Make the theme toggle button stand out in Solar mode */
+        [data-theme="solar"] button[onclick="toggleTheme()"] {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0056b3 !important;
+        }
     </style>
 </head>
 <body data-theme="night">
