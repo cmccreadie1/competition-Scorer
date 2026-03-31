@@ -339,65 +339,78 @@
             line-height: 1;
             text-shadow: 0 0 15px var(--neon-blue);
         }
-    /* --- v7.4.0 SPLASH-MATCHED SOLAR OVERRIDE --- */
+   /* --- v7.4.0 TOTAL SOLAR OVERRIDE --- */
         [data-theme="solar"] {
             --card-bg: #ffffff;
             --card-border: #cbd5e1;
             --neon-blue: #0056b3;
-            background-color: #f4f4f4 !important; /* EXACT SPLASH COLOR */
+            background-color: #f4f4f4 !important;
             color: #1a1a1a !important;
         }
 
-        /* Force ALL Black backgrounds (Pill, Inputs, Drawers) to White */
+        /* 1. Force ALL Black containers to White (Main Card & Journal Rows) */
         [data-theme="solar"] .bg-black, 
         [data-theme="solar"] .bg-black\/95, 
         [data-theme="solar"] .bg-black\/50,
+        [data-theme="solar"] .bg-black\/40,
+        [data-theme="solar"] .bg-slate-900,
         [data-theme="solar"] #dynamic-island,
-        [data-theme="solar"] .dynamic-island-content,
-        [data-theme="solar"] #historyDetailDrawer,
-        [data-theme="solar"] #leaderboardDrawer,
         [data-theme="solar"] #recordCatchUI,
         [data-theme="solar"] .telemetry-card,
-        [data-theme="solar"] input,
-        [data-theme="solar"] select,
-        [data-theme="solar"] textarea {
+        [data-theme="solar"] div[class*="bg-black"],
+        [data-theme="solar"] .flex.items-center.p-3.rounded-3xl.mb-2 { 
             background-color: #ffffff !important;
             color: #1a1a1a !important;
             border: 1px solid #cbd5e1 !important;
         }
 
-        /* Force ALL White text to Black for readability */
+        /* 2. Force ALL text to be visible (Dark Grey/Black) */
         [data-theme="solar"] .text-white,
         [data-theme="solar"] .text-slate-400,
-        [data-theme="solar"] .text-slate-300,
+        [data-theme="solar"] .text-slate-500,
         [data-theme="solar"] .text-blue-400,
         [data-theme="solar"] .text-black\/50,
-        [data-theme="solar"] #dynamic-island *,
-        [data-theme="solar"] .telemetry-unit,
-        [data-theme="solar"] .version-display {
+        [data-theme="solar"] p, 
+        [data-theme="solar"] span,
+        [data-theme="solar"] .font-black {
             color: #1a1a1a !important;
         }
 
-        /* Fix the "Pill" Buttons and History Tabs */
-        [data-theme="solar"] .pill-btn,
-        [data-theme="solar"] .history-tab {
+        /* 3. Keep the Blue Score visible but readable */
+        [data-theme="solar"] .text-blue-500,
+        [data-theme="solar"] .text-cyan-400 {
+            color: #0056b3 !important;
+        }
+
+        /* 4. Fix Inputs & Select boxes */
+        [data-theme="solar"] input,
+        [data-theme="solar"] select,
+        [data-theme="solar"] .measurement-btn {
+            background-color: #f1f5f9 !important;
+            color: #1a1a1a !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        /* 5. Fix the Bottom "Leave Match" Button */
+        [data-theme="solar"] .bg-slate-800,
+        [data-theme="solar"] .bg-slate-700 {
             background-color: #e2e8f0 !important;
             color: #1a1a1a !important;
-            border: 1px solid #cbd5e1 !important;
         }
 
-        [data-theme="solar"] .pill-btn.active,
-        [data-theme="solar"] .history-tab.active {
-            background-color: #0056b3 !important;
-            color: #ffffff !important;
+        /* 6. Fix the Icons (Trash/Edit) */
+        [data-theme="solar"] .fa-trash,
+        [data-theme="solar"] .fa-pen-to-square,
+        [data-theme="solar"] i {
+            color: #475569 !important;
         }
 
-        /* Theme Toggle Button - Splash Match */
+        /* 7. Toggle Button Shadow */
         [data-theme="solar"] button[onclick="toggleTheme()"] {
             background: #ffffff !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
             border: 1px solid #cbd5e1 !important;
             color: #0056b3 !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
         }
     </style>
 </head>
