@@ -76,14 +76,14 @@
             animation: bounce 2s infinite;
         }
 
-        /* Pulsing Logo Glow - NEW FEATURE */
+        /* Subtle Breathing Logo Glow */
         @keyframes neonBreathe {
-            0%, 100% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.1), border-color: rgba(255,255,255,0.02); }
-            50% { box-shadow: 0 0 35px rgba(0, 243, 255, 0.25), border-color: rgba(255,255,255,0.06); }
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.08), border-color: rgba(255,255,255,0.02); }
+            50% { box-shadow: 0 0 35px rgba(0, 243, 255, 0.2), border-color: rgba(255,255,255,0.05); }
         }
         
         .glowing-logo {
-            animation: neonBreathe 4s infinite ease-in-out;
+            animation: neonBreathe 5s infinite ease-in-out;
         }
     </style>
 </head>
@@ -95,7 +95,7 @@
 
     <main id="mainContent" class="flex-1 w-full max-w-lg mx-auto flex flex-col pt-10 pb-12 px-6 text-center opacity-0 transition-opacity duration-500 bg-black">
         
-        <img src="icon-512.png" alt="App Logo" class="glowing-logo w-32 h-32 mx-auto rounded-[1.5rem] border border-white/5 mb-6 shadow-[0_0_20px_rgba(0,243,255,0.1)]">
+        <img src="icon-512.png" alt="App Logo" class="glowing-logo w-32 h-32 mx-auto rounded-[1.5rem] border border-white/5 mb-6 shadow-[0_0_20px_rgba(0,243,255,0.08)]">
 
         <h1 class="text-3xl font-black tracking-tight uppercase mb-2 text-white flex justify-center items-center space-x-2">
             <span>Live Sea Score <span class="neon-text-blue">Pro</span></span>
@@ -218,7 +218,7 @@
                 document.getElementById('mainFooter').classList.remove('opacity-0');
                 document.getElementById('btnLaunchDirect').classList.remove('hidden');
                 
-                // OS Check for dynamic button icon
+                // OS Check for dynamic button icon (Play Logo for Android)
                 const userAgent = navigator.userAgent || navigator.vendor || window.opera;
                 const osIcon = document.getElementById('osIcon');
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
