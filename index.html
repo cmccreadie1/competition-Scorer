@@ -56,17 +56,16 @@
             backdrop-filter: blur(15px);
         }
 
-        /* Scroll Indicator Styles */
+        /* Bottom-Right Scroll Indicator */
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0) translateX(-50%);}
-            40% {transform: translateY(-10px) translateX(-50%);}
-            60% {transform: translateY(-5px) translateX(-50%);}
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
         }
         .scroll-hint {
             position: fixed;
             bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 24px;
             z-index: 50;
             transition: opacity 0.4s ease, visibility 0.4s;
         }
@@ -206,7 +205,7 @@
                 document.getElementById('mainFooter').classList.remove('opacity-0');
                 document.getElementById('btnLaunchDirect').classList.remove('hidden');
                 
-                // OS Check for dynamic button icon
+                // OS Check for dynamic button icon (Play Logo for Android)
                 const userAgent = navigator.userAgent || navigator.vendor || window.opera;
                 const osIcon = document.getElementById('osIcon');
                 if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
@@ -226,12 +225,12 @@
             // Hide scroll hint on scroll
             window.addEventListener('scroll', () => {
                 const hint = document.getElementById('scrollHint');
-                if (window.scrollY > 50) {
+                if (window.scrollY > 40) {
                     hint.style.opacity = '0';
-                    hint.style.visibility = 'hidden';
+                    setTimeout(() => { hint.style.visibility = 'hidden'; }, 400);
                 } else {
-                    hint.style.opacity = '1';
                     hint.style.visibility = 'visible';
+                    hint.style.opacity = '1';
                 }
             }, { passive: true });
         }
