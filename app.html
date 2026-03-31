@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full overflow-hidden bg-black">
+<html lang="en" class="h-full overflow-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Live Sea Score Pro</title>
-    <meta name="theme-color" content="#000000">
+    <title>Live Sea Score Pro | v7.4.0</title>
+    <meta name="theme-color" content="#000000" id="themeMeta">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://matchscorerpro.netlify.app/">
     <meta property="og:title" content="Live Sea Score Pro">
@@ -22,17 +22,42 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        /* --- V2.0.0 NEON VARIABLES --- */
         :root {
             --neon-blue: #00f3ff;
             --neon-amber: #f59e0b;
             --neon-red: #ef4444;
+            
+            /* v7.4.0 Theme Variables (Default Night) */
+            --bg-main: #000000;
+            --text-main: #cbd5e1;
+            --text-header: #ffffff;
+            --card-bg: #000000;
+            --card-border: rgba(0, 243, 255, 0.5);
+            --ticker-bg: #000000;
+            --ticker-text: var(--neon-blue);
+            --input-bg: rgba(0, 243, 255, 0.08);
+            --island-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+        }
+
+        [data-theme="solar"] {
+            /* v7.4.0 Solar Variables (Strava Inspired) */
+            --bg-main: #f4f4f4;
+            --text-main: #334155;
+            --text-header: #0f172a;
+            --card-bg: #ffffff;
+            --card-border: #cbd5e1;
+            --ticker-bg: #ffffff;
+            --ticker-text: #0f172a;
+            --input-bg: #ffffff;
+            --island-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --neon-blue: #0891b2;
+            --neon-amber: #b45309;
         }
 
         html, body {
             font-family: 'Inter', sans-serif;
-            background-color: #000000; 
-            color: #cbd5e1; /* Soft Slate White */
+            background-color: var(--bg-main); 
+            color: var(--text-main);
             -webkit-user-select: none;
             user-select: none;
             width: 100%;
@@ -42,31 +67,13 @@
             overscroll-behavior: none;
             margin: 0;
             padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Neon Glow Utility Classes */
-        .neon-text-blue { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
-        .neon-text-amber { color: var(--neon-amber); text-shadow: 0 0 8px var(--neon-amber); }
+        .neon-text-blue { color: var(--neon-blue); text-shadow: var(--bg-main) === '#000000' ? '0 0 8px var(--neon-blue)' : 'none'; }
+        .neon-text-amber { color: var(--neon-amber); text-shadow: var(--bg-main) === '#000000' ? '0 0 8px var(--neon-amber)' : 'none'; }
         
-        /* Pure White for critical numbers */
-        .metric-white { color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
-
-        /* Browser Safety Banner Styling */
-        #browser-banner {
-            background-color: #f59e0b;
-            color: #000000;
-            font-weight: 800;
-            font-size: 10px;
-            padding: 12px 16px;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 1000;
-            position: relative;
-        }
+        .metric-white { color: var(--text-header); text-shadow: 0 0 10px rgba(255,255,255,0.1); }
 
         #app-container {
             width: 100%;
@@ -81,32 +88,27 @@
             background-color: #450a0a !important; 
         }
 
-        /* --- UNIFIED BORDERS & GLASS FILLS --- */
         .match-card {
-            background-color: #000000; 
-            border: 1px solid rgba(0, 243, 255, 0.5); 
+            background-color: var(--card-bg); 
+            border: 1px solid var(--card-border); 
             border-radius: 1.5rem;
+            box-shadow: var(--island-shadow);
         }
 
         .pill-input {
-            background-color: rgba(0, 243, 255, 0.08);
-            border: 1px solid rgba(0, 243, 255, 0.6);
+            background-color: var(--input-bg);
+            border: 1px solid var(--card-border);
             border-radius: 9999px;
             text-align: center;
             font-weight: 800;
             outline: none;
             transition: all 0.3s ease;
-            color: #ffffff;
-        }
-        .pill-input:focus {
-            border-color: var(--neon-blue) !important;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
-            background-color: rgba(0, 243, 255, 0.12);
+            color: var(--text-header);
         }
 
         .pill-btn {
-            background-color: rgba(0, 243, 255, 0.12);
-            border: 1px solid rgba(0, 243, 255, 0.6);
+            background-color: var(--input-bg);
+            border: 1px solid var(--card-border);
             color: var(--neon-blue);
             border-radius: 9999px;
             font-weight: 900;
@@ -119,24 +121,23 @@
             position: relative;
             overflow: hidden;
         }
+        [data-theme="solar"] .pill-btn { background-color: var(--card-bg); }
+
         .pill-btn:active { 
             transform: scale(0.95); 
             background-color: rgba(0, 243, 255, 0.20);
         }
 
-        /* The Destructive Red Exception */
         .btn-destructive {
             background-color: rgba(239, 68, 68, 0.05) !important;
             border-color: rgba(239, 68, 68, 0.6) !important;
             color: var(--neon-red) !important;
         }
 
-        /* Pulsing Record Catch Button */
         .btn-record-pulse {
             animation: record-pulse 2s infinite;
             border: 2px solid var(--neon-blue) !important;
-            color: #ffffff !important;
-            text-shadow: 0 0 5px var(--neon-blue);
+            color: var(--text-header) !important;
         }
 
         @keyframes record-pulse {
@@ -145,33 +146,35 @@
             100% { box-shadow: 0 0 5px rgba(0, 243, 255, 0.3); }
         }
 
-        .telemetry-unit {
-            font-size: 0.65em;
-            opacity: 0.5;
-            font-weight: 700;
-            margin-left: 2px;
-            text-transform: lowercase;
+        /* --- THEME TOGGLE BUTTON --- */
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--neon-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--island-shadow);
         }
 
-        /* --- DYNAMIC ISLAND HUD --- */
         .island-container {
-            background: #000000;
+            background: var(--bg-main);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            box-shadow: var(--island-shadow);
             border-radius: 9999px;
             cursor: pointer;
             touch-action: none; 
         }
 
-        .island-text-fade { transition: opacity 0.8s ease-in-out; }
-
-        /* --- TICKERS (BORDERLESS) --- */
-        @keyframes ticker-scroll {
-            0% { left: 100%; transform: translateX(0); }
-            100% { left: 0; transform: translateX(-100%); }
-        }
         .ticker-track {
             position: absolute;
             display: flex;
@@ -180,49 +183,9 @@
             white-space: nowrap;
             will-change: transform, left;
             left: 100%;
+            color: var(--ticker-text);
         }
-        .scroll-active {
-            animation: ticker-scroll 28s linear infinite; 
-        }
-
-        .mask-fade-edges {
-            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-        }
-
-        /* --- CONCENTRIC BUTTON ANIMATION (CYAN & WHITE) --- */
-        @keyframes ripple-ring {
-            0% { transform: scale(0.8); opacity: 1; border-width: 4px; }
-            100% { transform: scale(2.5); opacity: 0; border-width: 0px; }
-        }
-        .btn-ripple::after {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 100px; height: 100px;
-            background: transparent;
-            border: solid var(--neon-blue);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            animation: ripple-ring 0.6s ease-out;
-            pointer-events: none;
-        }
-        .flash-white {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-            box-shadow: 0 0 30px #ffffff !important;
-            border-color: #ffffff !important;
-            transition: all 0.1s;
-        }
-
-        @keyframes sync-pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.98); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        .grace-pulse { animation: sync-pulse 1s infinite ease-in-out; color: var(--neon-red) !important; text-shadow: 0 0 10px var(--neon-red); }
-
+        
         .scrollable-area {
             flex: 1;
             min-height: 0; 
@@ -232,41 +195,10 @@
             padding-bottom: 80px !important; 
             scrollbar-width: none;
         }
-        .scrollable-area::-webkit-scrollbar { display: none; }
-
-        .view-frame {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(245, 158, 11, 0); }
-            100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
-        }
-        
-        .hype-number {
-            font-size: 7rem;
-            font-weight: 900;
-            color: var(--neon-blue);
-            animation: pulse-ring 1s infinite;
-            border-radius: 50%;
-            border: 8px solid var(--neon-blue);
-            text-shadow: 0 0 20px var(--neon-blue);
-        }
-
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
 
         .atm-btn {
-            background: rgba(0, 243, 255, 0.10);
-            border: 1px solid rgba(0, 243, 255, 0.5);
+            background: var(--input-bg);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
             font-size: 1.25rem; 
             font-weight: 900;
@@ -275,55 +207,15 @@
             justify-content: center;
             height: 50px; 
             transition: all 0.1s;
-            color: #ffffff;
-        }
-        .atm-btn:active { background: rgba(0, 243, 255, 0.25); box-shadow: 0 0 15px rgba(0,243,255,0.5); border-color: var(--neon-blue); }
-        
-        #broadcastToast {
-            transform: translateY(-150%);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        #broadcastToast.show { transform: translateY(0); }
-        
-        .drawer-right {
-            transition: transform 0.3s ease-in-out;
-            transform: translateX(100%);
-        }
-        .drawer-right.open { transform: translateX(0); }
-
-        .drawer-left {
-            transition: transform 0.3s ease-in-out;
-            transform: translateX(-100%);
-        }
-        .drawer-left.open { transform: translateX(0); }
-        
-        .hidden { display: none !important; }
-
-        .history-tab.active {
-            background-color: rgba(0, 243, 255, 0.20); 
-            color: #ffffff;
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0,243,255,0.4);
-        }
-
-        #customEndModal, #installModal, #stewardGodModal, #catchFeedModal {
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(15px);
-        }
-
-        .splash-text {
-            font-size: 3rem;
-            font-weight: 900;
-            color: var(--neon-blue);
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: -0.05em;
-            line-height: 1;
-            text-shadow: 0 0 15px var(--neon-blue);
+            color: var(--text-header);
         }
     </style>
 </head>
 <body>
+
+    <button onclick="toggleTheme()" class="theme-switcher" id="themeBtn">
+        <i class="fa-solid fa-circle-half-stroke"></i>
+    </button>
 
     <div id="browser-banner" class="hidden">
         <div class="flex items-center">
@@ -343,7 +235,7 @@
     </div>
 
     <div id="catchFeedModal" class="fixed inset-0 z-[500] hidden flex items-center justify-center p-6">
-        <div class="match-card w-full max-w-sm p-6 space-y-4 border-2 border-cyan-400 shadow-[0_0_20px_rgba(0,243,255,0.3)]">
+        <div class="match-card w-full max-w-sm p-6 space-y-4 border-2 border-cyan-400">
             <div class="flex justify-between items-center border-b border-white/10 pb-3">
                 <h3 id="feedAnglerName" class="text-base font-black uppercase tracking-tight neon-text-blue">Angler Name</h3>
                 <button onclick="closeCatchFeed()" class="text-slate-400 text-lg"><i class="fa-solid fa-xmark"></i></button>
@@ -389,15 +281,15 @@
             </div>
             <div id="godDeckSizeInputs">
                 <div id="godDeckLength">
-                    <input type="number" id="godInputSize" inputmode="decimal" class="pill-input w-full p-2 text-base metric-white" placeholder="Measurement (cm)">
+                    <input type="number" id="godInputSize" inputmode="decimal" class="pill-input w-full p-2 text-base" placeholder="Measurement (cm)">
                 </div>
                 <div id="godDeckWeightLb" class="hidden flex space-x-2">
-                    <div class="flex-1"><input type="number" id="godInputLbs" inputmode="numeric" placeholder="Lbs" class="pill-input w-full p-2 text-base metric-white"></div>
-                    <div class="flex-1"><input type="number" id="godInputOz" inputmode="numeric" placeholder="Oz" class="pill-input w-full p-2 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputLbs" inputmode="numeric" placeholder="Lbs" class="pill-input w-full p-2 text-base"></div>
+                    <div class="flex-1"><input type="number" id="godInputOz" inputmode="numeric" placeholder="Oz" class="pill-input w-full p-2 text-base"></div>
                 </div>
                 <div id="godDeckWeightKg" class="hidden flex space-x-2">
-                    <div class="flex-1"><input type="number" id="godInputKg" inputmode="numeric" placeholder="Kg" class="pill-input w-full p-2 text-base metric-white"></div>
-                    <div class="flex-1"><input type="number" id="godInputGrammes" inputmode="numeric" placeholder="Grams" class="pill-input w-full p-2 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputKg" inputmode="numeric" placeholder="Kg" class="pill-input w-full p-2 text-base"></div>
+                    <div class="flex-1"><input type="number" id="godInputGrammes" inputmode="numeric" placeholder="Grams" class="pill-input w-full p-2 text-base"></div>
                 </div>
             </div>
             <button onclick="submitGodModeCatch()" class="pill-btn w-full py-3 shadow-lg mt-2 text-sm">Force Save Record</button>
@@ -473,8 +365,8 @@
 
             <div class="text-center mt-6">
                 <img src="icon-512.png" class="w-32 h-32 mx-auto rounded-[1.5rem] mb-3 shadow-[0_0_20px_rgba(0,243,255,0.5)] border border-white/10">
-                <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase text-white neon-text-blue">Live Sea Score</h1>
-                <div class="text-slate-500 font-bold text-[10px] tracking-widest uppercase opacity-90 version-display">Loading...</div>
+                <h1 class="text-2xl font-black tracking-tight mb-0.5 uppercase neon-text-blue">Live Sea Score</h1>
+                <div class="text-slate-500 font-bold text-[10px] tracking-widest uppercase opacity-90 version-display">V7.4.0</div>
             </div>
             
             <div class="w-full max-w-sm space-y-3 mt-8">
@@ -497,7 +389,7 @@
                         <i class="fa-solid fa-book mr-1.5 neon-text-blue"></i> History
                     </button>
                     <button onclick="document.getElementById('guideDrawer').classList.add('open')" class="pill-btn flex-1 py-2.5 text-[9px]">
-                        <i class="fa-solid fa-book mr-1.5 text-white"></i> User Guide
+                        <i class="fa-solid fa-book mr-1.5"></i> User Guide
                     </button>
                 </div>
 
@@ -507,10 +399,10 @@
             </div>
         </div>
 
-        <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-black">
+        <div id="view-role" class="hidden view-frame p-5 space-y-6 relative">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
                 <button onclick="navTo('home')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-base font-black uppercase tracking-tight text-white">Select Role</h2>
+                <h2 class="text-base font-black uppercase tracking-tight text-[var(--text-header)]">Select Role</h2>
                 <button onclick="exitApp()" class="text-red-500 text-xl px-2"><i class="fa-solid fa-power-off"></i></button>
             </div>
             
@@ -529,10 +421,10 @@
             </div>
         </div>
 
-        <div id="view-join" class="hidden view-frame p-4 bg-black">
+        <div id="view-join" class="hidden view-frame p-4">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
                 <button onclick="navTo('role')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-base font-black uppercase tracking-tight text-white">Authentication</h2>
+                <h2 class="text-base font-black uppercase tracking-tight text-[var(--text-header)]">Authentication</h2>
                 <div class="w-6"></div>
             </div>
             <div class="text-center pt-6 pb-3">
@@ -553,10 +445,10 @@
             <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto pill-btn text-base py-3 mb-8 shadow-xl">Validate</button>
         </div>
 
-        <div id="view-host" class="hidden view-frame p-5 space-y-4 bg-black">
+        <div id="view-host" class="hidden view-frame p-5 space-y-4">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                 <button onclick="navTo('role')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-base font-black uppercase tracking-tight text-white">Match Creator</h2>
+                <h2 class="text-base font-black uppercase tracking-tight text-[var(--text-header)]">Match Creator</h2>
                 <div class="w-6"></div>
             </div>
             <div class="match-card p-5 space-y-4 text-center mt-8">
@@ -580,14 +472,14 @@
             </div>
         </div>
 
-        <div id="view-waiting" class="hidden view-frame p-5 space-y-4 bg-black">
+        <div id="view-waiting" class="hidden view-frame p-5 space-y-4">
             <div class="flex justify-between items-center w-full">
                 <button onclick="exitWaitingRoom()" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <div class="neon-text-blue font-black tracking-[0.2em] bg-black px-4 py-1 rounded-full border border-cyan-400/60 shadow-[0_0_15px_rgba(0,243,255,0.3)] text-lg" id="displayPin">0000</div>
             </div>
             <div class="flex-1 flex flex-col items-center space-y-4 pt-3">
-                <h3 class="text-lg font-black text-white uppercase tracking-tight">Angler Lobby</h3>
-                <div id="attendanceList" class="w-full max-w-sm flex-1 bg-black rounded-[1.5rem] border border-slate-800 p-4 space-y-2 overflow-y-auto"></div>
+                <h3 class="text-lg font-black text-[var(--text-header)] uppercase tracking-tight">Angler Lobby</h3>
+                <div id="attendanceList" class="w-full max-w-sm flex-1 match-card p-4 space-y-2 overflow-y-auto"></div>
                 <div id="hostControls" class="hidden w-full max-w-sm pb-5">
                     <button onclick="triggerHypeStart()" class="pill-btn w-full font-black text-lg py-3 shadow-xl border-cyan-400" style="animation: record-pulse 2s infinite;">🚀 START MATCH</button>
                 </div>
@@ -597,14 +489,14 @@
             </div>
         </div>
 
-        <div id="view-hype" class="hidden view-frame items-center justify-center bg-black">
+        <div id="view-hype" class="hidden view-frame items-center justify-center">
             <div id="hypeContainer" class="flex flex-col items-center justify-center text-center">
                 <div id="hypeCount" class="hype-number flex items-center justify-center w-40 h-40 metric-white">5</div>
                 <div id="hypeSplash" class="hidden splash-text mt-6">MATCH STARTED!</div>
             </div>
         </div>
 
-        <div id="view-fishing" class="hidden view-frame relative bg-black">
+        <div id="view-fishing" class="hidden view-frame relative">
             
             <div class="flex-none pt-4 px-4 flex flex-col items-center justify-center z-50">
                 <div id="dynamic-island" class="island-container w-full max-w-md h-[50px] flex items-center justify-between px-4 relative overflow-hidden flex-none">
@@ -612,7 +504,7 @@
                         <div class="flex items-center relative flex-1 h-full overflow-hidden mr-3">
                             <div id="island-rank-text" class="absolute inset-y-0 left-0 flex items-center text-[10px] font-black neon-text-blue uppercase tracking-widest island-text-fade opacity-100">🏆 MY RANK: --</div>
                             <div id="island-gap-text" class="absolute inset-y-0 left-0 flex items-center text-[10px] font-black text-slate-300 uppercase tracking-widest island-text-fade opacity-0">🎯 -- PTS TO NEXT</div>
-                            <div id="island-prompt-text" class="absolute inset-y-0 left-0 flex items-center text-[10px] font-black text-white uppercase tracking-tighter island-text-fade opacity-0">👆 TAP FOR LEADER BOARD</div>
+                            <div id="island-prompt-text" class="absolute inset-y-0 left-0 flex items-center text-[10px] font-black text-[var(--text-header)] uppercase tracking-tighter island-text-fade opacity-0">👆 TAP FOR LEADER BOARD</div>
                         </div>
                         
                         <div class="flex items-center space-x-2 z-10 justify-end flex-none">
@@ -690,7 +582,7 @@
 
         </div>
 
-        <div id="view-results" class="hidden view-frame bg-black p-5 justify-center space-y-5 text-center">
+        <div id="view-results" class="hidden view-frame justify-center space-y-5 text-center">
             <h1 class="text-3xl font-black uppercase neon-text-blue border-b-4 border-slate-900 pb-4 tracking-tighter">Final Result</h1>
             <div class="match-card p-5 shadow-[0_0_30px_rgba(0,243,255,0.3)] text-center">
                 <p class="text-slate-500 font-black uppercase tracking-[0.3em] text-[9px] mb-2">Tournament Total Score</p>
@@ -712,10 +604,10 @@
             <button onclick="closeAndWipeSession()" class="text-slate-500 font-black mt-5 active:text-white uppercase text-[10px] tracking-[0.5em]">Return Home (Clear Match)</button>
         </div>
 
-        <div id="view-history" class="hidden view-frame p-5 bg-black">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4 text-white">
+        <div id="view-history" class="hidden view-frame p-5">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
                 <button onclick="navTo('home')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-base font-black uppercase tracking-[0.1em]">History Vault</h2>
+                <h2 class="text-base font-black uppercase tracking-[0.1em] text-[var(--text-header)]">History Vault</h2>
                 <div class="w-6"></div>
             </div>
             <div class="scrollable-area space-y-2 pb-10 text-center">
@@ -730,9 +622,9 @@
             </div>
         </div>
 
-        <div id="view-kill" class="hidden view-frame items-center justify-center bg-black p-6 text-center">
+        <div id="view-kill" class="hidden view-frame items-center justify-center p-6 text-center">
             <i class="fa-solid fa-power-off text-red-600 text-4xl mb-4 animate-pulse shadow-[0_0_30px_rgba(220,38,38,0.4)] rounded-full"></i>
-            <h1 class="text-xl font-black uppercase text-white tracking-widest mb-2">Session Cleared</h1>
+            <h1 class="text-xl font-black uppercase text-[var(--text-header)] tracking-widest mb-2">Session Cleared</h1>
             <p class="text-slate-400 font-bold text-[11px] leading-relaxed mb-5 text-center">Your connection is safely closed and your battery is no longer being used.</p>
             <div class="match-card p-4 text-left">
                 <p class="neon-text-blue font-black uppercase tracking-widest text-[9px] mb-2 border-b border-slate-800 pb-2 text-center">To fully exit the app:</p>
@@ -741,11 +633,11 @@
             </div>
         </div>
 
-        <div id="guideDrawer" class="drawer-right fixed inset-0 w-full bg-black/95 z-[250] flex flex-col backdrop-blur-md">
-            <button onclick="document.getElementById('guideDrawer').classList.remove('open')" class="flex-none w-full bg-black py-5 font-black uppercase tracking-[0.4em] text-white border-b border-cyan-400/40 flex justify-center items-center text-xs">
+        <div id="guideDrawer" class="drawer-right fixed inset-0 w-full z-[250] flex flex-col backdrop-blur-md" style="background: var(--bg-main);">
+            <button onclick="document.getElementById('guideDrawer').classList.remove('open')" class="flex-none w-full py-5 font-black uppercase tracking-[0.4em] text-[var(--text-header)] border-b border-cyan-400/40 flex justify-center items-center text-xs" style="background: var(--bg-main);">
                 <i class="fa-solid fa-arrow-left mr-3"></i> Back to Lobby
             </button>
-            <div class="scrollable-area p-6 space-y-8 text-white text-left">
+            <div class="scrollable-area p-6 space-y-8 text-[var(--text-main)] text-left">
                 <section class="space-y-5">
                     <h4 class="neon-text-blue font-black text-lg uppercase tracking-widest border-b border-slate-800 pb-2">🎣 ANGLER'S QUICK START</h4>
                     <div class="space-y-4 text-xs leading-relaxed text-slate-300">
@@ -770,23 +662,23 @@
                         <i class="fa-solid fa-rotate text-base mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-[9px] tracking-widest">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[8px] text-slate-600 mt-3 uppercase tracking-[0.2em] version-display">V2.0.0</p>
+                    <p class="text-[8px] text-slate-600 mt-3 uppercase tracking-[0.2em] version-display">V7.4.0</p>
                 </section>
             </div>
         </div>
 
-        <div id="historyDetailDrawer" class="drawer-right fixed inset-0 w-full bg-black z-[150] flex flex-col hidden">
-            <button onclick="closeHistoryDetail()" class="flex-none w-full bg-black py-5 font-black uppercase tracking-[0.4em] text-slate-400 border-b border-cyan-400/40 flex justify-center items-center text-xs">
+        <div id="historyDetailDrawer" class="drawer-right fixed inset-0 w-full z-[150] flex flex-col hidden" style="background: var(--bg-main);">
+            <button onclick="closeHistoryDetail()" class="flex-none w-full py-5 font-black uppercase tracking-[0.4em] text-slate-400 border-b border-cyan-400/40 flex justify-center items-center text-xs" style="background: var(--bg-main);">
                 <i class="fa-solid fa-xmark mr-3"></i> Exit Vault
             </button>
-            <div class="flex-none flex bg-black p-2 space-x-2 border-b border-cyan-400/30 shadow-md">
+            <div class="flex-none flex p-2 space-x-2 border-b border-cyan-400/30 shadow-md" style="background: var(--bg-main);">
                 <button id="tab-standings" onclick="switchHistoryTab('standings')" class="history-tab pill-btn flex-1 py-2.5 text-[9px] tracking-[0.2em]">Leader Board</button>
                 <button id="tab-record" onclick="switchHistoryTab('record')" class="history-tab pill-btn flex-1 py-2.5 text-[9px] tracking-[0.2em]">Catch Record</button>
             </div>
             <div id="historyContent" class="scrollable-area p-4 text-center"></div>
         </div>
 
-        <div id="leaderboardDrawer" class="drawer-right fixed inset-0 w-full bg-black/95 backdrop-blur-xl z-[101] flex flex-col">
+        <div id="leaderboardDrawer" class="drawer-right fixed inset-0 w-full backdrop-blur-xl z-[101] flex flex-col" style="background: rgba(var(--bg-main), 0.95);">
             <button onclick="document.getElementById('leaderboardDrawer').classList.remove('open')" class="flex-none w-full bg-black text-white font-black py-4 uppercase tracking-[0.3em] text-[10px] flex justify-center items-center border-b border-cyan-400/60 shadow-[0_0_15px_rgba(0,243,255,0.3)] rounded-b-[1.5rem]">
                 <i class="fa-solid fa-arrow-up mr-3 animate-bounce neon-text-blue"></i> RETURN TO FISH LOG
             </button>
@@ -806,7 +698,7 @@
             <div id="leaderboardList" class="scrollable-area p-3 space-y-1.5 text-center mt-1"></div>
         </div>
 
-        <div id="stewardDrawer" class="drawer-left fixed inset-0 w-full bg-black/95 backdrop-blur-xl z-[101] flex flex-col shadow-2xl">
+        <div id="stewardDrawer" class="drawer-left fixed inset-0 w-full backdrop-blur-xl z-[101] flex flex-col shadow-2xl" style="background: rgba(var(--bg-main), 0.95);">
             <button onclick="document.getElementById('stewardDrawer').classList.remove('open')" class="flex-none w-full bg-black text-white font-black py-5 uppercase tracking-[0.4em] flex justify-center items-center border-b border-cyan-400/60 shadow-[0_0_15px_rgba(0,243,255,0.3)] rounded-b-[1.5rem] text-xs">
                 <i class="fa-solid fa-arrow-left mr-3 neon-text-blue"></i> RETURN TO FISH LOG
             </button>
@@ -823,7 +715,7 @@
             </div>
         </div>
 
-        <div id="stewardRosterDrawer" class="drawer-left fixed inset-0 w-full bg-black/95 backdrop-blur-xl z-[102] flex flex-col shadow-2xl hidden">
+        <div id="stewardRosterDrawer" class="drawer-left fixed inset-0 w-full backdrop-blur-xl z-[102] flex flex-col shadow-2xl hidden" style="background: rgba(var(--bg-main), 0.95);">
             <button onclick="stewardCloseLogs()" class="flex-none w-full bg-black text-white font-black py-5 uppercase tracking-[0.4em] flex justify-center items-center border-b border-cyan-400/60 shadow-[0_0_15px_rgba(0,243,255,0.3)] rounded-b-[1.5rem] text-xs">
                 <i class="fa-solid fa-arrow-left mr-3 neon-text-blue"></i> BACK TO STEWARD DESK
             </button>
@@ -833,8 +725,8 @@
             <div id="stewardRosterList" class="scrollable-area p-3 space-y-1.5 text-center"></div>
         </div>
 
-        <div id="stewardLogDrawer" class="drawer-right fixed inset-0 w-full bg-black z-[103] flex flex-col hidden">
-            <button onclick="document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);" class="flex-none w-full bg-black py-5 font-black uppercase tracking-[0.4em] text-slate-400 border-b border-cyan-400/60 shadow-[0_0_15px_rgba(0,243,255,0.3)] flex justify-center items-center text-xs">
+        <div id="stewardLogDrawer" class="drawer-right fixed inset-0 w-full z-[103] flex flex-col hidden" style="background: var(--bg-main);">
+            <button onclick="document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);" class="flex-none w-full py-5 font-black uppercase tracking-[0.4em] text-slate-400 border-b border-cyan-400/60 shadow-[0_0_15px_rgba(0,243,255,0.3)] flex justify-center items-center text-xs" style="background: var(--bg-main);">
                 <i class="fa-solid fa-xmark mr-3"></i> Close Audit
             </button>
             <div class="flex-none p-3 bg-black text-center border-b border-slate-800">
@@ -908,6 +800,35 @@
         let godTargetAnglerId = null;
         let godTargetAnglerName = "";
 
+        // v7.4.0 METRIC UTILITY
+        function formatMetric(totalCm) {
+            if (!totalCm || totalCm === 0) return "0cm";
+            if (totalCm < 100) return `${totalCm}cm`;
+            const m = Math.floor(totalCm / 100);
+            const cm = totalCm % 100;
+            const cmStr = cm === 0 ? "00" : (cm < 10 ? "0" + cm : cm);
+            return cm === 0 ? `${m}m 00` : `${m}m ${cmStr}cm`;
+        }
+
+        // v7.4.0 THEME TOGGLE
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            const meta = document.getElementById('themeMeta');
+            const isSolar = body.getAttribute('data-theme') === 'solar';
+            
+            if (isSolar) {
+                body.removeAttribute('data-theme');
+                if(meta) meta.setAttribute('content', '#000000');
+                localStorage.setItem('ls-theme-740', 'night');
+            } else {
+                body.setAttribute('data-theme', 'solar');
+                if(meta) meta.setAttribute('content', '#f4f4f4');
+                localStorage.setItem('ls-theme-740', 'solar');
+            }
+        }
+        window.toggleTheme = toggleTheme;
+
         function formatCatchTime(c) {
             if (!c.ts) return c.time;
             let diffMins = Math.floor((Date.now() - c.ts) / 60000);
@@ -976,7 +897,6 @@
             }
         });
 
-        // 1. UNIVERSAL FORMATTER (Plaintext for Reports/Ticker)
         function formatScoreDisplay(val, fmt, isPlaintext = false) {
             const unitOpen = isPlaintext ? "" : '<span class="telemetry-unit">';
             const unitClose = isPlaintext ? "" : "</span>";
@@ -1016,59 +936,51 @@
             lastSyncCount = allCatches.length;
         }
 
-        // 2. FISH-FIRST TICKER (WITH MATCH TOTAL)
         function renderTickerHTML(allCatches, totalFish, biggestStr, forceRefresh = false) {
             allCatches.sort((a,b) => parseInt(b.id) - parseInt(a.id)); 
-            let mostRecent = allCatches[0];
-            let last5 = allCatches.slice(1, 6);
             
-            // Calculate Match Totals
-            let matchScore = 0;
-            let speciesSet = new Set();
-            Object.values(globalMatchData.anglers).forEach(a => {
-                matchScore += a.score || 0;
-                if(a.catches) {
-                    let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
-                    cList.forEach(f => speciesSet.add(f.species));
-                }
-            });
-
             let htmlBlock = '';
             
-            if (mostRecent) {
-                let catchDisplay = `${mostRecent.species} (${mostRecent.display || mostRecent.size})`;
-                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay.replace(/<[^>]*>?/gm, '')} — <span class="neon-text-amber">${mostRecent.anglerName}</span> • <span class="neon-text-blue">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
-            }
-            
-            if (last5.length > 0) {
-                htmlBlock += `<span class="text-slate-300 font-black tracking-widest">LAST 5:</span> <span class="ml-2">`;
-                last5.forEach((c, i) => {
-                    let display = `${c.species} (${c.display || c.size})`;
-                    htmlBlock += `<span class="text-slate-300">${display.replace(/<[^>]*>?/gm, '')} — <span class="neon-text-amber">${c.anglerName}</span></span>`;
-                    if (i < last5.length - 1) htmlBlock += `<span class="text-slate-600 mx-2">|</span>`;
+            // v7.4.0 SPECIES HUNT LIVE SEQUENCE
+            if (state.format === 'speciesHunt') {
+                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">LIVE FEED:</span> <span class="ml-2">`;
+                allCatches.slice(0, 8).forEach((c, i) => {
+                    // Logic to find instance # for that specific angler
+                    const anglerCatches = allCatches.filter(ac => ac.anglerName === c.anglerName && ac.species === c.species);
+                    const instance = anglerCatches.length - anglerCatches.indexOf(c);
+                    
+                    htmlBlock += `<span class="text-white font-bold">${c.species} (${instance}${instance===1?'st':instance===2?'nd':instance===3?'rd':'th'}) ${c.points}pts — <span class="neon-text-amber">${c.anglerName}</span></span>`;
+                    if (i < 7 && i < allCatches.length - 1) htmlBlock += `<span class="text-slate-600 mx-4">|</span>`;
                 });
-                htmlBlock += `</span> <span class="text-slate-600 mx-6">///</span> `;
+                htmlBlock += `</span>`;
+            } else {
+                // Standard Length/Weight Ticker
+                let mostRecent = allCatches[0];
+                let last5 = allCatches.slice(1, 6);
+                
+                if (mostRecent) {
+                    let catchDisplay = `${mostRecent.species} (${mostRecent.display || mostRecent.size})`;
+                    htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay.replace(/<[^>]*>?/gm, '')} — <span class="neon-text-amber">${mostRecent.anglerName}</span> • <span class="neon-text-blue">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
+                }
+                
+                if (last5.length > 0) {
+                    htmlBlock += `<span class="text-slate-300 font-black tracking-widest">LAST 5:</span> <span class="ml-2">`;
+                    last5.forEach((c, i) => {
+                        let display = `${c.species} (${c.display || c.size})`;
+                        htmlBlock += `<span class="text-slate-300">${display.replace(/<[^>]*>?/gm, '')} — <span class="neon-text-amber">${c.anglerName}</span></span>`;
+                        if (i < last5.length - 1) htmlBlock += `<span class="text-slate-600 mx-2">|</span>`;
+                    });
+                    htmlBlock += `</span> <span class="text-slate-600 mx-6">///</span> `;
+                }
             }
-            
-            if (biggestStr !== "No Captures") {
-                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MATCH BIGGEST:</span> <span class="text-white font-bold ml-2">${biggestStr.replace(/<[^>]*>?/gm, '')}</span> <span class="text-slate-600 mx-6">///</span> `;
-            }
-
-            // Match Total Milestone
-            htmlBlock += `<span class="text-white font-black tracking-widest">MATCH TOTAL:</span> <span class="neon-text-blue font-bold ml-2">${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatScoreDisplay(matchScore, state.format, true)}</span>`;
             
             htmlBlock += `<span class="inline-block w-[100vw]"></span>`;
 
             const track = document.getElementById('wallStreetTicker');
             if(track) {
-                if (!forceRefresh) {
-                    track.classList.remove('scroll-active');
-                    void track.offsetWidth; 
-                }
+                if (!forceRefresh) { track.classList.remove('scroll-active'); void track.offsetWidth; }
                 track.innerHTML = htmlBlock; 
-                if (!track.classList.contains('scroll-active')) {
-                    track.classList.add('scroll-active');
-                }
+                if (!track.classList.contains('scroll-active')) { track.classList.add('scroll-active'); }
             }
         }
 
@@ -1095,16 +1007,13 @@
             state = { view: 'home', name: '', venue: '', isHost: false, isSteward: false, pin: '', format: 'length', endTime: null, graceEndTime: null, myCatches: [], editingId: null, status: 'idle' };
             document.getElementById('playerName').value = '';
             document.getElementById('venueName').value = '';
-            
             clearInterval(clockInterval);
             clearInterval(hypeInterval);
             document.getElementById('finalScore').innerText = '0';
             document.getElementById('finalCount').innerText = '0';
             document.getElementById('finalSpecies').innerText = '0';
-            
             document.getElementById('app-container').classList.remove('grace-active');
             document.getElementById('mainTimer').classList.remove('grace-pulse');
-            
             navTo('home');
         }
 
@@ -1519,10 +1428,19 @@
             let species = selectEl.value;
             if(!species) { return alert("Select species first!"); }
             let finalSize = 0, displaySize = "", pts = 0;
+            
             if (state.format === 'weightLb') { let lbs = parseInt(document.getElementById('inputLbs').value) || 0, oz = parseInt(document.getElementById('inputOz').value) || 0; finalSize = (lbs * 16) + oz; displaySize = `${lbs}<span class="telemetry-unit">lb</span> ${oz}<span class="telemetry-unit">oz</span>`; pts = finalSize; } 
             else if (state.format === 'weightKg') { let kg = parseInt(document.getElementById('inputKg').value) || 0, g = parseInt(document.getElementById('inputGrammes').value) || 0; finalSize = (kg * 1000) + g; displaySize = `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`; pts = finalSize; } 
             else if (state.format === 'speciesHunt') { finalSize = 1; displaySize = ""; } 
-            else { finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; pts = finalSize; if (state.format === 'length10') pts = finalSize + 10; }
+            else { 
+                finalSize = parseFloat(document.getElementById('inputSize').value) || 0; 
+                displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; 
+                
+                // v7.4.0 SCORING LOGIC (+10 Volume Reward)
+                pts = finalSize + 10; 
+                if (state.format === 'length') pts = finalSize; // Keep base length only for 'Length Only' option
+                else if (state.format === 'length10') pts = finalSize + 10; 
+            }
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
             
             if (state.format === 'speciesHunt') { 
@@ -1572,7 +1490,7 @@
                 let div = document.createElement('div');
                 div.className = "match-card p-2 flex justify-between items-center mb-1 shadow-sm";
                 let ptLabel = state.format === 'speciesHunt' ? `(${c.points})` : (c.points === 0 ? '(0)' : '');
-                div.innerHTML = `<div class="flex-1 text-left pl-1"><span class="font-black text-white text-[11px] uppercase tracking-tight">${c.species}</span><span class="text-xs ml-3 neon-text-blue font-black">${c.display || c.size}</span><br><span class="text-[9px] text-slate-300 font-bold uppercase tracking-widest leading-none block mt-0.5">${c.time} <span class="neon-text-amber ml-2">${ptLabel}</span></span></div><div class="flex items-center space-x-4 pr-2"><button onclick="editCatch('${c.id}')" class="text-blue-400 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button><button onclick="deleteCatch('${c.id}')" class="text-slate-600 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`;
+                div.innerHTML = `<div class="flex-1 text-left pl-1"><span class="font-black text-[var(--text-header)] text-[11px] uppercase tracking-tight">${c.species}</span><span class="text-xs ml-3 neon-text-blue font-black">${c.display || c.size}</span><br><span class="text-[9px] text-slate-300 font-bold uppercase tracking-widest leading-none block mt-0.5">${c.time} <span class="neon-text-amber ml-2">${ptLabel}</span></span></div><div class="flex items-center space-x-4 pr-2"><button onclick="editCatch('${c.id}')" class="text-blue-400 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button><button onclick="deleteCatch('${c.id}')" class="text-slate-600 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`;
                 list.appendChild(div);
             });
         }
@@ -1600,7 +1518,7 @@
                 return `<div class="match-card p-2 flex justify-between items-center mb-1 shadow-sm active:bg-slate-900 transition" onclick="openCatchFeed('${anglerUid}')">
                     <div class="flex items-center w-2/3 text-left">
                         <span class="font-black ${i===0?'neon-text-amber':'text-slate-500'} text-[11px] w-6">${i+1}</span>
-                        <span class="font-black text-white text-[11px] uppercase tracking-wide truncate">${a.name}</span>
+                        <span class="font-black text-[var(--text-header)] text-[11px] uppercase tracking-wide truncate">${a.name}</span>
                     </div>
                     <div class="font-black text-xs neon-text-blue text-right w-1/3">${formatScoreDisplay(a.score, state.format)}</div>
                 </div>`
@@ -1641,7 +1559,7 @@
                 content.innerHTML = catches.map(c => `
                     <div class="match-card p-2 border border-cyan-400/20 flex justify-between items-center mb-1.5">
                         <div class="text-left">
-                            <span class="text-white font-black uppercase text-[11px]">${c.species}</span>
+                            <span class="text-[var(--text-header)] font-black uppercase text-[11px]">${c.species}</span>
                             <span class="block text-[9px] text-slate-300 uppercase tracking-widest mt-0.5">${c.time}</span>
                         </div>
                         <span class="neon-text-blue font-black text-xs">${c.display || c.size}</span>
@@ -1777,8 +1695,9 @@
             else { 
                 finalSize = parseFloat(document.getElementById('godInputSize').value) || 0; 
                 displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; 
-                pts = finalSize; 
-                if (state.format === 'length10') pts = finalSize + 10; 
+                pts = finalSize + 10; 
+                if (state.format === 'length') pts = finalSize;
+                else if (state.format === 'length10') pts = finalSize + 10; 
             }
             
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
@@ -1829,12 +1748,14 @@
             buildAndShareReport(h.standings, h.venue, h.date);
         }
 
-        // 3. CLEAN WHATSAPP REPORT FORMATTER
         function buildAndShareReport(arr, venueName, matchDate) {
             const fmt = state.format; 
             let podium = arr.slice(0, 3);
             let biggestVal = 0, biggestStr = "N/A";
             let hourCounts = {}, allSpecies = new Set(), totalFish = 0;
+            
+            // v7.4.0 DUAL TRACK TALLY
+            let totalBioLength = 0;
 
             arr.forEach(a => {
                 if(a.catches) {
@@ -1842,6 +1763,7 @@
                     totalFish += cList.length;
                     cList.forEach(f => {
                         allSpecies.add(f.species);
+                        totalBioLength += f.size;
                         if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; }
                         if(f.ts) { const hr = new Date(f.ts).getHours(); hourCounts[hr] = (hourCounts[hr] || 0) + 1; }
                     });
@@ -1850,14 +1772,15 @@
 
             let matchTotalRaw = arr.reduce((sum, a) => sum + (a.score || 0), 0);
 
-            let t = `🏆 *OFFICIAL MATCH RESULTS*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n\n`;
+            let t = `🏆 *OFFICIAL MATCH RESULTS (v7.4.0)*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n\n`;
             
             t += `--- *PODIUM* ---\n\n`;
             t += `🥇 *1st:* ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n\n`;
             t += `🥈 *2nd:* ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}\n\n`;
             t += `🥉 *3rd:* ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n\n`;
             
-            t += `--- *MATCH STATS* ---\n\n`;
+            t += `--- *BIO-METRIC SUMMARY* ---\n\n`;
+            t += `📏 *TOTAL LENGTH:* *${formatMetric(totalBioLength)}*\n\n`;
             t += `🐋 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
             t += `🧬 *SPECIES DIVERSITY:* ${allSpecies.size} Unique\n\n`;
             t += `📊 *MATCH TOTAL:* ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Total Fish)\n\n\n`;
@@ -1881,7 +1804,7 @@
                 t += `${i+1}. ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n\n`; 
             });
             
-            t += `_Generated by Live Sea Score Pro V2.0.0_`;
+            t += `_Generated by Live Sea Score Pro V7.4.0_`;
 
             if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
@@ -1994,6 +1917,14 @@
             const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
             if (!isStandalone) { document.getElementById('browser-banner').classList.remove('hidden'); }
             history.pushState(null, null, window.location.href); checkInstallStatus(); const saved = localStorage.getItem('matchState');
+            
+            // Apply v7.4.0 Theme on Load
+            const savedTheme = localStorage.getItem('ls-theme-740');
+            if (savedTheme === 'solar') {
+                document.body.setAttribute('data-theme', 'solar');
+                if(document.getElementById('themeMeta')) document.getElementById('themeMeta').setAttribute('content', '#f4f4f4');
+            }
+
             fetch('version.json').then(res => res.json()).then(data => { document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); }).catch(() => { console.log('Version fetch fallback active.'); });
             if (saved) {
                 try {
