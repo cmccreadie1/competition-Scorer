@@ -1088,7 +1088,7 @@
             
             function getCatchDisplay(c) {
                 if (state.format === 'speciesHunt') return `${c.species} ${getSpeciesBadge(c.points)}`;
-                return `${c.species} <span class="opacity-70 text-[10px]">(${c.display || c.size})</span>`;
+                return `${c.species} (${c.display || c.size})`;
             }
 
             if (mostRecent) {
