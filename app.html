@@ -499,7 +499,7 @@
     <div id="app-container">
 
         <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative">
-            <button onclick="exitApp()" class="absolute top-5 right-5 pill-btn border-cyan-400/60 text-slate-200 px-3 py-2 text-[9px] active:text-white transition shadow-md z-[50]">
+            <button onclick="exitApp()" class="absolute top-5 right-5 pill-btn border-cyan-400/60 neon-text-amber px-3 py-2 text-[9px] active:text-white transition shadow-md z-[50]">
                 Close App <i class="fa-solid fa-xmark ml-1"></i>
             </button>
 
@@ -1166,6 +1166,9 @@
             document.getElementById('finalScore').innerText = '0';
             document.getElementById('finalCount').innerText = '0';
             document.getElementById('finalSpecies').innerText = '0';
+            if (document.getElementById('localCatchList')) document.getElementById('localCatchList').innerHTML = '';
+            if (document.getElementById('islandScore')) document.getElementById('islandScore').innerText = '0';
+            if (document.getElementById('island-rank-text')) document.getElementById('island-rank-text').innerText = '🏆 MY RANK: --';
             
             document.getElementById('app-container').classList.remove('grace-active');
             document.getElementById('mainTimer').classList.remove('grace-pulse');
