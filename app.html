@@ -1093,14 +1093,14 @@
 
             if (mostRecent) {
                 let catchDisplay = getCatchDisplay(mostRecent);
-                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay} — <span class="neon-text-amber">${mostRecent.anglerName}</span> • <span class="neon-text-blue">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
+                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay} <span class="neon-text-amber">${mostRecent.anglerName}</span> • <span class="neon-text-blue">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
             }
             
             if (last5.length > 0) {
                 htmlBlock += `<span class="text-slate-300 font-black tracking-widest">LAST 5 FISH:</span> <span class="ml-2">`;
                 last5.forEach((c, i) => {
                     let display = getCatchDisplay(c);
-                    htmlBlock += `<span class="text-slate-300">${display} — <span class="neon-text-amber">${c.anglerName}</span></span>`;
+                    htmlBlock += `<span class="text-slate-300">${display} <span class="neon-text-amber">${c.anglerName}</span></span>`;
                     if (i < last5.length - 1) htmlBlock += `<span class="text-slate-600 mx-2">|</span>`;
                 });
                 htmlBlock += `</span> <span class="text-slate-600 mx-6">///</span> `;
