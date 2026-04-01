@@ -60,6 +60,29 @@
         /* Pure White for critical numbers */
         .metric-white { color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
+        /* --- SPECIES HUNT BADGES --- */
+        .badge-species {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 900;
+            color: #ffffff !important;
+            margin-left: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            vertical-align: middle;
+            position: relative;
+            top: -1px;
+            text-shadow: none;
+        }
+        .badge-b { background: linear-gradient(135deg, #b08d57, #805e34); border: 1px solid #cfa871; } 
+        .badge-s { background: linear-gradient(135deg, #cbd5e1, #94a3b8); color: #0f172a !important; border: 1px solid #f8fafc; } 
+        .badge-g { background: linear-gradient(135deg, #fbbf24, #b45309); border: 1px solid #fde68a; } 
+        .badge-l { background: linear-gradient(135deg, #475569, #1e293b); color: #94a3b8 !important; border: 1px solid #64748b; }
+
         /* Browser Safety Banner Styling */
         #browser-banner {
             background-color: #f59e0b;
@@ -917,6 +940,21 @@
         let godTargetAnglerId = null;
         let godTargetAnglerName = "";
 
+        // --- NEW METRIC HELPERS ---
+        function getSpeciesBadge(pts) {
+            if (pts === 25) return '<span class="badge-species badge-b">1</span>';
+            if (pts === 35) return '<span class="badge-species badge-s">2</span>';
+            if (pts === 40) return '<span class="badge-species badge-g">3</span>';
+            return '<span class="badge-species badge-l">L</span>';
+        }
+
+        function formatTotalLength(cm) {
+            if (cm < 100) return `${Math.round(cm)}cm`;
+            let m = Math.floor(cm / 100);
+            let c = Math.round(cm % 100);
+            return `${m}m ${c.toString().padStart(2, '0')}cm`;
+        }
+
         function formatCatchTime(c) {
             if (!c.ts) return c.time;
             let diffMins = Math.floor((Date.now() - c.ts) / 60000);
@@ -1025,46 +1063,63 @@
             lastSyncCount = allCatches.length;
         }
 
-        // 2. FISH-FIRST TICKER (WITH MATCH TOTAL)
+        // 2. FISH-FIRST TICKER (WITH MATCH TOTAL & HYBRID FORMATTING)
         function renderTickerHTML(allCatches, totalFish, biggestStr, forceRefresh = false) {
             allCatches.sort((a,b) => parseInt(b.id) - parseInt(a.id)); 
             let mostRecent = allCatches[0];
             let last5 = allCatches.slice(1, 6);
             
-            // Calculate Match Totals
             let matchScore = 0;
+            let matchPhysicalSize = 0;
             let speciesSet = new Set();
+            
             Object.values(globalMatchData.anglers).forEach(a => {
                 matchScore += a.score || 0;
                 if(a.catches) {
                     let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
-                    cList.forEach(f => speciesSet.add(f.species));
+                    cList.forEach(f => {
+                        speciesSet.add(f.species);
+                        matchPhysicalSize += (parseFloat(f.size) || 0);
+                    });
                 }
             });
 
             let htmlBlock = '';
             
+            function getCatchDisplay(c) {
+                if (state.format === 'speciesHunt') return `${c.species} ${getSpeciesBadge(c.points)}`;
+                return `${c.species} <span class="opacity-70 text-[10px]">(${c.display || c.size})</span>`;
+            }
+
             if (mostRecent) {
-                let catchDisplay = `${mostRecent.species} (${mostRecent.display || mostRecent.size})`;
-                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay.replace(/<[^>]*>?/gm, '')} — <span class="neon-text-amber">${mostRecent.anglerName}</span> • <span class="neon-text-blue">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
+                let catchDisplay = getCatchDisplay(mostRecent);
+                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay} — <span class="neon-text-amber">${mostRecent.anglerName}</span> • <span class="neon-text-blue">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
             }
             
             if (last5.length > 0) {
                 htmlBlock += `<span class="text-slate-300 font-black tracking-widest">LAST 5:</span> <span class="ml-2">`;
                 last5.forEach((c, i) => {
-                    let display = `${c.species} (${c.display || c.size})`;
-                    htmlBlock += `<span class="text-slate-300">${display.replace(/<[^>]*>?/gm, '')} — <span class="neon-text-amber">${c.anglerName}</span></span>`;
+                    let display = getCatchDisplay(c);
+                    htmlBlock += `<span class="text-slate-300">${display} — <span class="neon-text-amber">${c.anglerName}</span></span>`;
                     if (i < last5.length - 1) htmlBlock += `<span class="text-slate-600 mx-2">|</span>`;
                 });
                 htmlBlock += `</span> <span class="text-slate-600 mx-6">///</span> `;
             }
             
-            if (biggestStr !== "No Captures") {
+            if (state.format !== 'speciesHunt' && biggestStr !== "No Captures") {
                 htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MATCH BIGGEST:</span> <span class="text-white font-bold ml-2">${biggestStr.replace(/<[^>]*>?/gm, '')}</span> <span class="text-slate-600 mx-6">///</span> `;
             }
 
-            // Match Total Milestone
-            htmlBlock += `<span class="text-white font-black tracking-widest">MATCH TOTAL:</span> <span class="neon-text-blue font-bold ml-2">${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatScoreDisplay(matchScore, state.format, true)}</span>`;
+            // Match Total Milestone (Community Metrics)
+            let totalStr = "";
+            if (state.format === 'speciesHunt') {
+                totalStr = `${totalFish} TOTAL FISH • ${speciesSet.size} UNIQUE SPECIES`;
+            } else if (state.format.startsWith('length')) {
+                totalStr = `${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatTotalLength(matchPhysicalSize)}`;
+            } else {
+                totalStr = `${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatScoreDisplay(matchScore, state.format, true)}`;
+            }
+            htmlBlock += `<span class="text-white font-black tracking-widest">MATCH TOTAL:</span> <span class="neon-text-blue font-bold ml-2">${totalStr}</span>`;
             
             htmlBlock += `<span class="inline-block w-[100vw]"></span>`;
 
@@ -1580,7 +1635,7 @@
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
                 div.className = "match-card p-2 flex justify-between items-center mb-1 shadow-sm";
-                let ptLabel = state.format === 'speciesHunt' ? `(${c.points})` : (c.points === 0 ? '(0)' : '');
+                let ptLabel = state.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (c.points === 0 ? '(0)' : `(${c.points})`);
                 div.innerHTML = `<div class="flex-1 text-left pl-1"><span class="font-black text-white text-[11px] uppercase tracking-tight">${c.species}</span><span class="text-xs ml-3 neon-text-blue font-black">${c.display || c.size}</span><br><span class="text-[9px] text-slate-300 font-bold uppercase tracking-widest leading-none block mt-0.5">${c.time} <span class="neon-text-amber ml-2">${ptLabel}</span></span></div><div class="flex items-center space-x-4 pr-2"><button onclick="editCatch('${c.id}')" class="text-blue-400 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button><button onclick="deleteCatch('${c.id}')" class="text-slate-600 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`;
                 list.appendChild(div);
             });
@@ -1647,15 +1702,17 @@
             if(catches.length === 0) {
                 content.innerHTML = `<p class="text-center text-slate-500 py-10 font-black text-[9px] uppercase tracking-widest">No captures yet</p>`;
             } else {
-                content.innerHTML = catches.map(c => `
+                content.innerHTML = catches.map(c => {
+                    let feedBadge = state.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (c.display || c.size);
+                    return `
                     <div class="match-card p-2 border border-cyan-400/20 flex justify-between items-center mb-1.5">
                         <div class="text-left">
                             <span class="text-white font-black uppercase text-[11px]">${c.species}</span>
                             <span class="block text-[9px] text-slate-300 uppercase tracking-widest mt-0.5">${c.time}</span>
                         </div>
-                        <span class="neon-text-blue font-black text-xs">${c.display || c.size}</span>
+                        <span class="neon-text-blue font-black text-xs">${feedBadge}</span>
                     </div>
-                `).join('');
+                `}).join('');
             }
             document.getElementById('catchFeedModal').classList.remove('hidden');
         }
@@ -1721,7 +1778,8 @@
             
             let html = "";
             arr.forEach((c) => {
-                html += `<div class="match-card p-2 flex justify-between items-center mb-1 shadow-sm border border-red-900/30"><div class="flex-1 text-left pl-1"><span class="font-black text-white text-[11px] uppercase tracking-tight">${c.species}</span><span class="text-xs ml-3 neon-text-blue font-black">${c.display || c.size}</span><br><span class="text-[9px] text-slate-300 font-bold uppercase tracking-widest leading-none block mt-0.5">${c.time}</span></div><button onclick="stewardDeleteCatch('${godTargetAnglerId}', '${c.id}')" class="text-red-500 bg-red-900/10 px-3 py-2 rounded-xl active:scale-90 transition shadow-md border border-red-500/30"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`;
+                let feedBadge = state.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (c.display || c.size);
+                html += `<div class="match-card p-2 flex justify-between items-center mb-1 shadow-sm border border-red-900/30"><div class="flex-1 text-left pl-1"><span class="font-black text-white text-[11px] uppercase tracking-tight">${c.species}</span><span class="text-xs ml-3 neon-text-blue font-black">${feedBadge}</span><br><span class="text-[9px] text-slate-300 font-bold uppercase tracking-widest leading-none block mt-0.5">${c.time}</span></div><button onclick="stewardDeleteCatch('${godTargetAnglerId}', '${c.id}')" class="text-red-500 bg-red-900/10 px-3 py-2 rounded-xl active:scale-90 transition shadow-md border border-red-500/30"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`;
             });
             listEl.innerHTML = html;
         }
@@ -1844,6 +1902,7 @@
             let podium = arr.slice(0, 3);
             let biggestVal = 0, biggestStr = "N/A";
             let hourCounts = {}, allSpecies = new Set(), totalFish = 0;
+            let matchTotalPhysicalSize = 0;
 
             arr.forEach(a => {
                 if(a.catches) {
@@ -1851,6 +1910,7 @@
                     totalFish += cList.length;
                     cList.forEach(f => {
                         allSpecies.add(f.species);
+                        matchTotalPhysicalSize += (parseFloat(f.size) || 0);
                         if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; }
                         if(f.ts) { const hr = new Date(f.ts).getHours(); hourCounts[hr] = (hourCounts[hr] || 0) + 1; }
                     });
@@ -1867,9 +1927,18 @@
             t += `🥉 *3rd:* ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n\n`;
             
             t += `--- *MATCH STATS* ---\n\n`;
-            t += `🐋 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
+            if (fmt !== 'speciesHunt') {
+                t += `🐋 *BIGGEST FISH:* ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
+            }
             t += `🧬 *SPECIES DIVERSITY:* ${allSpecies.size} Unique\n\n`;
-            t += `📊 *MATCH TOTAL:* ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Total Fish)\n\n\n`;
+            
+            if (fmt === 'speciesHunt') {
+                t += `📊 *MATCH TOTAL:* ${totalFish} Total Fish\n\n\n`;
+            } else if (fmt.startsWith('length')) {
+                t += `📊 *MATCH TOTAL:* ${formatTotalLength(matchTotalPhysicalSize)} (${totalFish} Total Fish)\n\n\n`;
+            } else {
+                t += `📊 *MATCH TOTAL:* ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Total Fish)\n\n\n`;
+            }
 
             t += `⏱️ *FISH HOUR BY HOUR*\n\n`;
             let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
@@ -1977,7 +2046,7 @@
                 let tableHtml = `<div class="space-y-1">${m.standings.map((a, i) => `<div class="match-card p-2 flex justify-between items-center" onclick="openPastCatchFeed('${a.id || a.name}')"><span class="uppercase text-white font-bold text-[11px] text-left"><span class="neon-text-amber mr-2">${i+1}.</span> ${a.name}</span><b class="neon-text-blue text-xs text-right">${formatScoreDisplay(a.score, m.format)}</b></div>`).join('')}</div>`;
                 document.getElementById('historyContent').innerHTML = statsHtml + `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-2 text-center tracking-widest">Score Table</h4>` + tableHtml; 
             } else { 
-                let listHtml = m.personalCatches.map(c => `<div class="match-card p-3 flex justify-between items-center mb-1.5"><div class="text-left"><b class="text-white text-[11px] uppercase">${c.species}</b><br><span class="text-[9px] text-slate-300 font-black uppercase tracking-widest mt-1 inline-block">${c.time}</span></div><div class="text-right"><b class="text-white text-xs text-right">${c.display || c.size}</b><br><span class="text-[9px] neon-text-blue font-black uppercase mt-1 inline-block">${m.format.includes('weight') ? 'Recorded' : c.points + ' Pts'}</span></div></div>`).join('');
+                let listHtml = m.personalCatches.map(c => `<div class="match-card p-3 flex justify-between items-center mb-1.5"><div class="text-left"><b class="text-white text-[11px] uppercase">${c.species}</b><br><span class="text-[9px] text-slate-300 font-black uppercase tracking-widest mt-1 inline-block">${c.time}</span></div><div class="text-right"><b class="text-white text-xs text-right">${c.display || c.size}</b><br><span class="text-[9px] neon-text-blue font-black uppercase mt-1 inline-block">${m.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (m.format.includes('weight') ? 'Recorded' : c.points + ' Pts')}</span></div></div>`).join('');
                 document.getElementById('historyContent').innerHTML = `<h4 class="text-[9px] font-black uppercase text-slate-400 mb-3 text-center tracking-widest">Catch Diary</h4><div class="space-y-1">${listHtml}</div>`; 
             }
         }
@@ -1990,7 +2059,10 @@
             document.getElementById('feedAnglerName').innerText = "HISTORY: " + a.name;
             let cList = a.catches ? (Array.isArray(a.catches) ? a.catches : Object.values(a.catches)) : [];
             cList.sort((ca, cb) => cb.ts - ca.ts);
-            document.getElementById('feedContent').innerHTML = cList.length === 0 ? `<p class="text-center text-slate-500 py-10 font-black text-[9px] uppercase tracking-widest">No captures recorded</p>` : cList.map(f => `<div class="match-card p-2 flex justify-between items-center mb-1.5 border border-white/5"><div class="text-left"><span class="text-white font-bold text-[11px] uppercase">${f.species}</span><br><span class="text-[9px] text-slate-300 uppercase tracking-widest mt-0.5 block">${f.time}</span></div><span class="neon-text-blue font-black text-xs">${f.display || f.size}</span></div>`).join('');
+            document.getElementById('feedContent').innerHTML = cList.length === 0 ? `<p class="text-center text-slate-500 py-10 font-black text-[9px] uppercase tracking-widest">No captures recorded</p>` : cList.map(f => {
+                let feedBadge = h.format === 'speciesHunt' ? getSpeciesBadge(f.points) : (f.display || f.size);
+                return `<div class="match-card p-2 flex justify-between items-center mb-1.5 border border-white/5"><div class="text-left"><span class="text-white font-bold text-[11px] uppercase">${f.species}</span><br><span class="text-[9px] text-slate-300 uppercase tracking-widest mt-0.5 block">${f.time}</span></div><span class="neon-text-blue font-black text-xs">${feedBadge}</span></div>`
+            }).join('');
             document.getElementById('catchFeedModal').classList.remove('hidden');
         };
 
