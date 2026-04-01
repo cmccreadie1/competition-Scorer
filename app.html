@@ -1088,9 +1088,9 @@
             
             function getCatchDisplay(c) {
                 if (state.format === 'speciesHunt') return `${c.species} ${getSpeciesBadge(c.points)}`;
-                return `${c.species} (${c.display || c.size})`;
+                let cleanDisplay = (c.display || c.size).toString().replace(/<span class="telemetry-unit">/g, ' ').replace(/<[^>]*>?/gm, '');
+                return `${c.species} (${cleanDisplay})`;
             }
-
             if (mostRecent) {
                 let catchDisplay = getCatchDisplay(mostRecent);
                 htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay} <span class="neon-text-amber">${mostRecent.anglerName}</span> • <span class="neon-text-blue">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
@@ -1107,7 +1107,8 @@
             }
             
             if (state.format !== 'speciesHunt' && biggestStr !== "No Captures") {
-                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MATCH BIGGEST:</span> <span class="text-white font-bold ml-2">${biggestStr.replace(/<[^>]*>?/gm, '')}</span> <span class="text-slate-600 mx-6">///</span> `;
+                let cleanBiggest = biggestStr.replace(/<span class="telemetry-unit">/g, ' ').replace(/<[^>]*>?/gm, '');
+                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MATCH BIGGEST:</span> <span class="text-white font-bold ml-2">${cleanBiggest}</span> <span class="text-slate-600 mx-6">///</span> `;
             }
 
             // Match Total Milestone (Community Metrics)
