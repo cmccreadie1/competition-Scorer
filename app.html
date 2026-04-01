@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Live Sea Score Pro</title>
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#020617">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://matchscorerpro.netlify.app/">
     <meta property="og:title" content="Live Sea Score Pro">
@@ -22,17 +22,22 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        /* --- V2.0.0 NEON VARIABLES --- */
+        /* --- V7.4.0 HYBRID "DEEP SPACE" VARIABLES --- */
         :root {
+            --bg-color: #020617;       /* Deep Navy (OLED Friendly) */
+            --card-bg: #0f172a;        /* Slate Navy Container */
+            --input-bg: #1e293b;       /* Visible Input Background */
+            --text-main: #f8fafc;
             --neon-blue: #00f3ff;
             --neon-amber: #f59e0b;
             --neon-red: #ef4444;
+            --card-border: rgba(0, 243, 255, 0.25);
         }
 
         html, body {
             font-family: 'Inter', sans-serif;
-            background-color: #000000; 
-            color: #cbd5e1; /* Soft Slate White */
+            background-color: var(--bg-color) !important; 
+            color: var(--text-main); 
             -webkit-user-select: none;
             user-select: none;
             width: 100%;
@@ -43,6 +48,10 @@
             margin: 0;
             padding: 0;
         }
+
+        /* Overriding Tailwind bg-black to use Deep Space Navy globally */
+        .bg-black { background-color: var(--bg-color) !important; }
+        .bg-black\/95 { background-color: rgba(2, 6, 23, 0.95) !important; }
 
         /* Neon Glow Utility Classes */
         .neon-text-blue { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
@@ -83,25 +92,25 @@
 
         /* --- UNIFIED BORDERS & GLASS FILLS --- */
         .match-card {
-            background-color: #000000; 
-            border: 1px solid rgba(0, 243, 255, 0.5); 
+            background-color: var(--card-bg) !important; 
+            border: 1px solid var(--card-border) !important; 
             border-radius: 1.5rem;
         }
 
         .pill-input {
-            background-color: rgba(0, 243, 255, 0.08);
-            border: 1px solid rgba(0, 243, 255, 0.6);
+            background-color: var(--input-bg) !important;
+            border: 1px solid #334155 !important;
             border-radius: 9999px;
             text-align: center;
             font-weight: 800;
             outline: none;
             transition: all 0.3s ease;
-            color: #ffffff;
+            color: #ffffff !important;
         }
         .pill-input:focus {
             border-color: var(--neon-blue) !important;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
-            background-color: rgba(0, 243, 255, 0.12);
+            background-color: rgba(0, 243, 255, 0.12) !important;
         }
 
         .pill-btn {
@@ -155,11 +164,11 @@
 
         /* --- DYNAMIC ISLAND HUD --- */
         .island-container {
-            background: #000000;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            background: rgba(15, 23, 42, 0.85) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
             border-radius: 9999px;
             cursor: pointer;
             touch-action: none; 
@@ -307,7 +316,7 @@
         }
 
         #customEndModal, #installModal, #stewardGodModal, #catchFeedModal {
-            background: rgba(0,0,0,0.95);
+            background: rgba(2, 6, 23, 0.95);
             backdrop-filter: blur(15px);
         }
 
@@ -741,7 +750,7 @@
             </div>
         </div>
 
-        <div id="guideDrawer" class="drawer-right fixed inset-0 w-full bg-black/95 z-[250] flex flex-col backdrop-blur-md">
+        <div id="guideDrawer" class="drawer-right fixed inset-0 w-full bg-black z-[250] flex flex-col backdrop-blur-md">
             <button onclick="document.getElementById('guideDrawer').classList.remove('open')" class="flex-none w-full bg-black py-5 font-black uppercase tracking-[0.4em] text-white border-b border-cyan-400/40 flex justify-center items-center text-xs">
                 <i class="fa-solid fa-arrow-left mr-3"></i> Back to Lobby
             </button>
@@ -770,7 +779,7 @@
                         <i class="fa-solid fa-rotate text-base mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-[9px] tracking-widest">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[8px] text-slate-600 mt-3 uppercase tracking-[0.2em] version-display">V2.0.0</p>
+                    <p class="text-[8px] text-slate-600 mt-3 uppercase tracking-[0.2em] version-display">V7.4.0</p>
                 </section>
             </div>
         </div>
@@ -1881,7 +1890,7 @@
                 t += `${i+1}. ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n\n`; 
             });
             
-            t += `_Generated by Live Sea Score Pro V2.0.0_`;
+            t += `_Generated by Live Sea Score Pro V7.4.0_`;
 
             if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
