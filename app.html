@@ -955,12 +955,15 @@
             return `${m}m ${c.toString().padStart(2, '0')}cm`;
         }
 
-        function formatCatchTime(c) {
+      function formatCatchTime(c) {
             if (!c.ts) return c.time;
             let diffMins = Math.floor((Date.now() - c.ts) / 60000);
             if (diffMins < 1) return 'Just now';
-            if (diffMins < 15) return `${diffMins}m ago`;
-            return c.time;
+            if (diffMins < 60) return `${diffMins} mins ago`;
+            let hrs = Math.floor(diffMins / 60);
+            let mins = diffMins % 60;
+            if (mins === 0) return `${hrs}hr ago`;
+            return `${hrs}hr ${mins} mins ago`;
         }
 
         function handleIslandTouchStart(e) {
@@ -1100,7 +1103,7 @@
                 htmlBlock += `<span class="text-slate-300 font-black tracking-widest">LAST 5 FISH:</span> <span class="ml-2">`;
                 last5.forEach((c, i) => {
                     let display = getCatchDisplay(c);
-                    htmlBlock += `<span class="text-slate-300">${display} <span class="neon-text-amber">${c.anglerName}</span></span>`;
+                    htmlBlock += `<span class="text-slate-300">${display} <span class="neon-text-amber">${c.anglerName}</span> <span class="text-slate-400 text-[10px] opacity-80 ml-1">• ${formatCatchTime(c)}</span></span>`;
                     if (i < last5.length - 1) htmlBlock += `<span class="text-slate-600 mx-2">|</span>`;
                 });
                 htmlBlock += `</span> <span class="text-slate-600 mx-6">///</span> `;
