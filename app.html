@@ -1567,7 +1567,7 @@
                 el.innerText = `${mStr}:${secs.toString().padStart(2,'0')}`;
                 el.className = "text-xs font-black tabular-nums tracking-tighter neon-text-blue leading-none";
             } else {
-                el.innerText = `${hours}h ${mins.toString().padStart(2,'0')}m`;
+                el.innerHTML = `${hours}h ${mins.toString().padStart(2,'0')}m <span class="text-[10px] opacity-75">${secs.toString().padStart(2,'0')}s</span>`;
                 el.className = "text-xs font-black tabular-nums tracking-tighter metric-white opacity-80 leading-none";
             }
         }
