@@ -1461,14 +1461,24 @@ setInterval(() => {
             let el = document.getElementById('inputSize');
             if (state.format === 'weightLb') { el = document.getElementById('inputLbs'); }
             if (state.format === 'weightKg') { el = document.getElementById('inputKg'); }
-            if (el) { el.focus(); handleInputFocus(el); }
+            
+            if (el) {
+                setTimeout(() => {
+                    el.focus();
+                    el.click(); // Forces the mobile keyboard to pop up immediately
+                }, 50); 
+            }
         }
 
         function checkSpeciesSelection() {
             const select = document.getElementById('inputSpecies');
-            if (select.value === "[ADD OTHER]") { promptCustomSpecies(); } 
-            else if (state.format === 'speciesHunt') { document.getElementById('btnRecord').focus(); } 
-            else { focusMeasurement(); }
+            if (select.value === "[ADD OTHER]") { 
+                promptCustomSpecies(); 
+            } else if (state.format === 'speciesHunt') { 
+                document.getElementById('btnRecord').focus(); 
+            } else { 
+                focusMeasurement(); 
+            }
         }
 
         function promptCustomSpecies() {
