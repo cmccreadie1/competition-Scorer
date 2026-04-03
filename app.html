@@ -357,14 +357,7 @@
 </head>
 <body>
 
-    <div id="browser-banner" class="hidden">
-        <div class="flex items-center">
-            <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-            <span>Browser Mode: Install to Home Screen for full HUD.</span>
-        </div>
-        <button onclick="window.location.replace('index.html')" class="bg-black text-white px-3 py-1.5 rounded-full font-black text-[9px]">INSTALL</button>
-        <button onclick="document.getElementById('browser-banner').classList.add('hidden')" class="ml-2 text-black/50"><i class="fa-solid fa-xmark"></i></button>
-    </div>
+    
 
     <div id="broadcastToast" class="fixed top-4 inset-x-4 z-[200] bg-black text-white p-4 rounded-xl shadow-2xl flex items-center space-x-4 border-2 border-blue-500 shadow-[0_0_20px_rgba(0,243,255,0.3)]">
         <i class="fa-solid fa-bullhorn text-xl animate-bounce neon-text-blue"></i>
@@ -2088,11 +2081,10 @@ setInterval(() => {
         function shareMasterLeaderboard() { generateOfficialMasterReport(); }
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
 
-        window.onload = () => {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-            if (!isStandalone) { document.getElementById('browser-banner').classList.remove('hidden'); }
-            history.pushState(null, null, window.location.href); checkInstallStatus(); const saved = localStorage.getItem('matchState');
+       window.onload = () => {
+            history.pushState(null, null, window.location.href);
             fetch('version.json').then(res => res.json()).then(data => { document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); }).catch(() => { console.log('Version fetch fallback active.'); });
+            const saved = localStorage.getItem('matchState');
             if (saved) {
                 try {
                     let oldState = JSON.parse(saved);
