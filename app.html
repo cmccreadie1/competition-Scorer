@@ -1534,10 +1534,14 @@
                     if (remaining <= 0) { 
                         try { navigator.vibrate([100, 50, 100, 50, 100]); } catch(e){}
                         playHorn(); 
-                        if (state.isHost) { 
-                            let grace = Date.now() + 180000; 
-                            update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: grace }); 
-                        } 
+                        if (state.isHost) {
+    let absoluteGraceEnd = state.endTime + 180000;
+    if (now >= absoluteGraceEnd) {
+        update(ref(db, 'matches/' + state.pin), { status: 'finished' });
+    } else {
+        update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: absoluteGraceEnd });
+    }
+}
                     } else { 
                         updateTimerDisplay(remaining); 
                     }
