@@ -655,9 +655,9 @@
     </div>
 </div>
 
-<div id="hub-watermark" class="w-full flex flex-col items-center justify-center text-slate-600 font-bold uppercase tracking-[0.2em] mt-1 mb-1 pointer-events-none z-10">
-    <i class="fa-solid fa-chevron-up text-[7px] mb-0.5 opacity-40"></i>
-    <div id="hub-watermark-text" class="text-[7.5px] opacity-60"></div>
+<div id="hub-watermark" class="w-full flex flex-col items-center justify-center text-slate-400 font-medium mt-1 mb-1 pointer-events-none z-10">
+    <i class="fa-solid fa-chevron-up text-[7px] mb-0.5 opacity-80"></i>
+    <div id="hub-watermark-text" class="text-[9px] tracking-tight"></div>
 </div>
 
 <div class="w-full max-w-md h-6 py-1 relative mask-fade-edges overflow-hidden flex-none">
@@ -1516,8 +1516,8 @@ setInterval(() => {
           const watermarkText = document.getElementById('hub-watermark-text');
     if (watermarkText && state) {
         watermarkText.innerText = state.isHost 
-            ? 'TAP PILL ABOVE FOR LEADERBOARD | LONG PRESS FOR STEWARD CONTROLS' 
-            : 'TAP PILL ABOVE FOR LEADERBOARD';
+            ? 'tap pill for leaderboard | hold for steward tools' 
+            : 'tap pill for leaderboard';
     }
             clearInterval(clockInterval);
             clockTickCount = 0;
