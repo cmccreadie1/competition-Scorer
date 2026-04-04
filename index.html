@@ -109,6 +109,7 @@
         
         .glowing-logo {
             animation: neonBreathe 5s infinite ease-in-out;
+            background-color: #000;
         }
     </style>
 </head>
@@ -120,7 +121,20 @@
 
     <main id="mainContent" class="flex-1 w-full max-w-lg mx-auto flex flex-col pt-10 pb-12 px-6 text-center opacity-0 transition-opacity duration-500">
         
-        <img src="icon-512.png" alt="App Logo" class="glowing-logo w-32 h-32 mx-auto rounded-[1.5rem] border border-white/5 mb-6 shadow-[0_0_20px_rgba(0,243,255,0.08)]">
+        <div class="relative w-32 h-32 mx-auto mb-6">
+            <video 
+                id="logoVideo"
+                autoplay 
+                muted 
+                loop 
+                playsinline 
+                webkit-playsinline
+                poster="icon-512.png"
+                class="glowing-logo w-full h-full object-cover rounded-[1.5rem] border border-white/10 shadow-[0_0_30px_rgba(0,243,255,0.3)]">
+                <source src="logo-vid.mp4" type="video/mp4">
+                <img src="icon-512.png" alt="App Logo">
+            </video>
+        </div>
 
         <h1 class="text-3xl font-black tracking-tight uppercase mb-2 text-[var(--text-header)] flex justify-center items-center space-x-2">
             <span>Live Sea Score <span class="neon-text-blue">Pro</span></span>
@@ -235,6 +249,12 @@
     </footer>
 
     <script>
+        // TOUCH KICKSTART - Force video to wake up on first user interaction
+        document.addEventListener('touchstart', function() {
+            const v = document.getElementById('logoVideo');
+            if (v && v.paused) { v.play(); }
+        }, { once: true });
+
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
         
         if (isStandalone) {
