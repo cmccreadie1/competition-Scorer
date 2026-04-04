@@ -71,7 +71,11 @@
             font-size: 10px;
             font-weight: 900;
             margin-left: 8px;
+            
+            /* --- CLIP FIX --- */
             vertical-align: middle;
+            margin-bottom: 2px;
+            
             border: 1px solid;
             text-transform: uppercase;
         }
@@ -1661,7 +1665,7 @@ setInterval(() => {
                     : `<span class="text-xs ml-3 neon-text-blue font-black">${c.display || c.size}</span>`;
 
                 div.innerHTML = `
-                    <div class="flex-1 text-left pl-1">
+                   <div class="flex-1 text-left pl-1 py-1">
                         <span class="font-black text-white text-[11px] uppercase tracking-tight">${c.species}</span> 
                         ${metricDisplay}
                         <br>
