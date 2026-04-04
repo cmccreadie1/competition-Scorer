@@ -77,6 +77,13 @@
             border: 1px solid;
             text-transform: uppercase;
         }
+        /* Standard Blue Badge for Length/Weight Matches */
+        .pts-std { 
+            background: rgba(0, 243, 255, 0.15); 
+            border-color: #00f3ff; 
+            color: #00f3ff !important; 
+            box-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
+        }
         .pts-40 { 
             background: rgba(251, 191, 36, 0.2); 
             border-color: #fbbf24; 
@@ -945,7 +952,14 @@
             if (pts === 40) return `<span class="pts-badge pts-40">40</span>`;
             return `<span class="pts-badge pts-1">1</span>`;
         }
-
+function getUniversalBadge(c) {
+            if (state.format === 'speciesHunt') {
+                return getSpeciesBadge(c.points);
+            }
+            const val = c.display || c.size;
+            return `<span class="pts-badge pts-std">${val}</span>`;
+        }
+        
         function formatTotalLength(cm) {
             if (cm < 100) return `${Math.round(cm)}cm`;
             let m = Math.floor(cm / 100);
@@ -1083,11 +1097,7 @@ setInterval(() => {
 
             let htmlBlock = '';
             
-            function getCatchDisplay(c) {
-                if (state.format === 'speciesHunt') return `${c.species} ${getSpeciesBadge(c.points)}`;
-                let cleanDisplay = (c.display || c.size).toString().replace(/<span class="telemetry-unit">/g, ' ').replace(/<[^>]*>?/gm, '');
-                return `${c.species} (${cleanDisplay})`;
-            }
+            function getCatchDisplay(c) { return `${c.species} ${getUniversalBadge(c)}`; }
             if (mostRecent) {
                 let catchDisplay = getCatchDisplay(mostRecent);
                 htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay} <span class="neon-text-amber">${mostRecent.anglerName}</span> • <span class="neon-text-blue">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-600 mx-6">///</span> `;
@@ -1658,9 +1668,7 @@ setInterval(() => {
                 div.className = "match-card p-2 flex justify-between items-center mb-1 shadow-sm";
                 
                 // Determine if we show Point Badges (Species Hunt) or Measurements (Standard)
-                let metricDisplay = state.format === 'speciesHunt' 
-                    ? getSpeciesBadge(c.points) 
-                    : `<span class="text-xs ml-3 neon-text-blue font-black">${c.display || c.size}</span>`;
+               let metricDisplay = getUniversalBadge(c);
 
                 div.innerHTML = `
                    <div class="flex-1 text-left pl-1 py-1">
