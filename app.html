@@ -1116,7 +1116,7 @@ setInterval(() => {
             
             if (state.format !== 'speciesHunt' && biggestStr !== "No Captures") {
                 let cleanBiggest = biggestStr.replace(/<span class="telemetry-unit">/g, ' ').replace(/<[^>]*>?/gm, '');
-               htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MATCH BIGGEST:</span> <span class="pts-badge pts-std ml-2">${cleanBiggest}</span> <span class="text-slate-600 mx-6">///</span> `;
+              htmlBlock += `<span class="neon-text-blue font-black tracking-widest uppercase">MATCH BIGGEST:</span> <span class="text-white font-bold ml-2">${biggestStr.split('(')[0]}</span> <span class="pts-badge pts-std">${(biggestStr.match(/\(([^)]+)\)/) || [])[1] || biggestVal}</span> <span class="text-slate-600 mx-6">///</span> `;
             }
 
             // Match Total Milestone (Community Metrics)
@@ -1128,9 +1128,7 @@ setInterval(() => {
             } else {
                 totalStr = `${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatScoreDisplay(matchScore, state.format, true)}`;
             }
-            htmlBlock += `<span class="text-white font-black tracking-widest">MATCH TOTAL:</span> <span class="pts-badge pts-std ml-2">${totalStr}</span>`;
-            
-            htmlBlock += `<span class="inline-block w-[100vw]"></span>`;
+            htmlBlock += `<span class="text-white font-black tracking-widest uppercase">MATCH TOTAL:</span> <span class="pts-badge pts-std ml-2">${totalStr}</span>`;            htmlBlock += `<span class="inline-block w-[100vw]"></span>`;
 
             const track = document.getElementById('wallStreetTicker');
             if(track) {
