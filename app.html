@@ -187,10 +187,11 @@
 
         .telemetry-unit {
             font-size: 0.65em;
-            opacity: 0.5;
+            opacity: 0.9;
             font-weight: 700;
             margin-left: 2px;
             text-transform: lowercase;
+            color: #ffffff;
         }
 
         /* --- DYNAMIC ISLAND HUD --- */
@@ -1115,7 +1116,7 @@ setInterval(() => {
             
             if (state.format !== 'speciesHunt' && biggestStr !== "No Captures") {
                 let cleanBiggest = biggestStr.replace(/<span class="telemetry-unit">/g, ' ').replace(/<[^>]*>?/gm, '');
-                htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MATCH BIGGEST:</span> <span class="text-white font-bold ml-2">${cleanBiggest}</span> <span class="text-slate-600 mx-6">///</span> `;
+               htmlBlock += `<span class="neon-text-blue font-black tracking-widest">MATCH BIGGEST:</span> <span class="pts-badge pts-std ml-2">${cleanBiggest}</span> <span class="text-slate-600 mx-6">///</span> `;
             }
 
             // Match Total Milestone (Community Metrics)
@@ -1127,7 +1128,7 @@ setInterval(() => {
             } else {
                 totalStr = `${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatScoreDisplay(matchScore, state.format, true)}`;
             }
-            htmlBlock += `<span class="text-white font-black tracking-widest">MATCH TOTAL:</span> <span class="neon-text-blue font-bold ml-2">${totalStr}</span>`;
+            htmlBlock += `<span class="text-white font-black tracking-widest">MATCH TOTAL:</span> <span class="pts-badge pts-std ml-2">${totalStr}</span>`;
             
             htmlBlock += `<span class="inline-block w-[100vw]"></span>`;
 
@@ -1710,7 +1711,7 @@ setInterval(() => {
                         <span class="font-black ${i===0?'neon-text-amber':'text-slate-500'} text-[11px] w-6">${i+1}</span>
                         <span class="font-black text-white text-[11px] uppercase tracking-wide truncate">${a.name}</span>
                     </div>
-                    <div class="font-black text-xs neon-text-blue text-right w-1/3">${formatScoreDisplay(a.score, state.format)}</div>
+                   <div class="text-right w-1/3">${getUniversalBadge({points: a.score, size: a.score, display: formatScoreDisplay(a.score, state.format, true)})}</div>
                 </div>`
             }).join('');
             
