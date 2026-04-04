@@ -462,27 +462,34 @@
             <h2 class="text-base font-black uppercase tracking-tight text-white">Set Finish Time</h2>
             <div class="w-6"></div>
         </div>
-        
-        <div class="text-center pt-8 pb-4">
+      <div class="text-center pt-8 pb-4">
             <div class="flex justify-center items-center space-x-3">
-                <div class="w-12 h-14 bg-black border border-cyan-400/60 rounded-lg flex items-center justify-center text-2xl font-black metric-white shadow-md" id="time-pin-1">_</div>
-                <div class="w-12 h-14 bg-black border border-cyan-400/60 rounded-lg flex items-center justify-center text-2xl font-black metric-white shadow-md" id="time-pin-2">_</div>
+                <div id="time-pin-1" class="w-12 h-14 bg-black border border-cyan-400/60 rounded-lg flex items-center justify-center text-2xl font-black text-white">_</div>
+                <div id="time-pin-2" class="w-12 h-14 bg-black border border-cyan-400/60 rounded-lg flex items-center justify-center text-2xl font-black text-white">_</div>
                 <div class="text-xl font-black text-slate-500 mb-2">:</div>
-                <div class="w-12 h-14 bg-black border border-cyan-400/60 rounded-lg flex items-center justify-center text-2xl font-black metric-white shadow-md" id="time-pin-3">_</div>
-                <div class="w-12 h-14 bg-black border border-cyan-400/60 rounded-lg flex items-center justify-center text-2xl font-black metric-white shadow-md" id="time-pin-4">_</div>
+                <div id="time-pin-3" class="w-12 h-14 bg-black border border-cyan-400/60 rounded-lg flex items-center justify-center text-2xl font-black text-white">_</div>
+                <div id="time-pin-4" class="w-12 h-14 bg-black border border-cyan-400/60 rounded-lg flex items-center justify-center text-2xl font-black text-white">_</div>
             </div>
-            
+        </div>
 
         <div class="flex-1 grid grid-cols-3 gap-2.5 p-3 max-w-sm mx-auto w-full content-center">
-            <button class="atm-btn" onclick="timeAtmPress(1)">1</button><button class="atm-btn" onclick="timeAtmPress(2)">2</button><button class="atm-btn" onclick="timeAtmPress(3)">3</button>
-            <button class="atm-btn" onclick="timeAtmPress(4)">4</button><button class="atm-btn" onclick="timeAtmPress(5)">5</button><button class="atm-btn" onclick="timeAtmPress(6)">6</button>
-            <button class="atm-btn" onclick="timeAtmPress(7)">7</button><button class="atm-btn" onclick="timeAtmPress(8)">8</button><button class="atm-btn" onclick="timeAtmPress(9)">9</button>
-            <button class="atm-btn text-red-500" onclick="closeTimeKeypad()"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="timeAtmPress(0)">0</button><button class="atm-btn neon-text-blue" onclick="timeAtmDelete()"><i class="fa-solid fa-delete-left"></i></button>
+            <button class="atm-btn" onclick="timeAtmPress(1)">1</button>
+            <button class="atm-btn" onclick="timeAtmPress(2)">2</button>
+            <button class="atm-btn" onclick="timeAtmPress(3)">3</button>
+            <button class="atm-btn" onclick="timeAtmPress(4)">4</button>
+            <button class="atm-btn" onclick="timeAtmPress(5)">5</button>
+            <button class="atm-btn" onclick="timeAtmPress(6)">6</button>
+            <button class="atm-btn" onclick="timeAtmPress(7)">7</button>
+            <button class="atm-btn" onclick="timeAtmPress(8)">8</button>
+            <button class="atm-btn" onclick="timeAtmPress(9)">9</button>
+            <button class="atm-btn text-red-500" onclick="closeTimeKeypad()"><i class="fa-solid fa-xmark"></i></button>
+            <button class="atm-btn" onclick="timeAtmPress(0)">0</button>
+            <button class="atm-btn text-amber-500" onclick="timeAtmDelete()"><i class="fa-solid fa-backspace"></i></button>
         </div>
-        
-        <button id="time-submit-btn" onclick="submitTimeAtm()" class="hidden pill-btn w-full max-w-sm mx-auto text-sm py-3 mb-8 shadow-xl tracking-widest"></button>
-   
 
+        <button id="time-submit-btn" onclick="submitTimeAtm()" class="hidden pill-btn w-full max-w-sm mx-auto text-sm py-3 mb-8 shadow-lg">
+            SET FINISH TIME
+        </button>
     <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-5 border border-cyan-400">
             <div class="text-center">
