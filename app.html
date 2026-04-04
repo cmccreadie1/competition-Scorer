@@ -60,45 +60,44 @@
         /* Pure White for critical numbers */
         .metric-white { color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
-        /* --- SPECIES HUNT BADGES --- */
-        .badge-species {
+        /* --- V8.2.0 SPECIES POINT BADGES --- */
+        .pts-badge {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
+            padding: 1px 5px;
+            min-width: 28px;
+            border-radius: 4px;
             font-size: 10px;
             font-weight: 900;
-            color: #ffffff !important;
-            margin-left: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            margin-left: 8px;
             vertical-align: middle;
-            position: relative;
-            top: -1px;
-            text-shadow: none;
-        }
-        .badge-b { background: linear-gradient(135deg, #b08d57, #805e34); border: 1px solid #cfa871; } 
-        .badge-s { background: linear-gradient(135deg, #cbd5e1, #94a3b8); color: #0f172a !important; border: 1px solid #f8fafc; } 
-        .badge-g { background: linear-gradient(135deg, #fbbf24, #b45309); border: 1px solid #fde68a; } 
-        .badge-l { background: linear-gradient(135deg, #475569, #1e293b); color: #94a3b8 !important; border: 1px solid #64748b; }
-
-        /* Browser Safety Banner Styling */
-        #browser-banner {
-            background-color: #f59e0b;
-            color: #000000;
-            font-weight: 800;
-            font-size: 10px;
-            padding: 12px 16px;
-            text-align: center;
+            border: 1px solid;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 1000;
-            position: relative;
         }
+        .pts-40 { 
+            background: rgba(251, 191, 36, 0.2); 
+            border-color: #fbbf24; 
+            color: #fbbf24 !important; 
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
+        } 
+        .pts-35 { 
+            background: rgba(248, 250, 252, 0.15); 
+            border-color: #ffffff; 
+            color: #ffffff !important; 
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+        } 
+        .pts-25 { 
+            background: rgba(176, 141, 87, 0.2); 
+            border-color: #cd7f32; 
+            color: #ff9d6e !important; 
+        } 
+        .pts-1 { 
+            background: transparent; 
+            border: 1px dashed #475569; 
+            color: #64748b !important; 
+        }
+       
 
         #app-container {
             width: 100%;
@@ -939,10 +938,10 @@
 
         // --- NEW METRIC HELPERS ---
         function getSpeciesBadge(pts) {
-            if (pts === 25) return '<span class="badge-species badge-b">1</span>';
-            if (pts === 35) return '<span class="badge-species badge-s">2</span>';
-            if (pts === 40) return '<span class="badge-species badge-g">3</span>';
-            return '<span class="badge-species badge-l">L</span>';
+            if (pts === 25) return `<span class="pts-badge pts-25">25</span>`;
+            if (pts === 35) return `<span class="pts-badge pts-35">35</span>`;
+            if (pts === 40) return `<span class="pts-badge pts-40">40</span>`;
+            return `<span class="pts-badge pts-1">1</span>`;
         }
 
         function formatTotalLength(cm) {
@@ -1655,8 +1654,23 @@ setInterval(() => {
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
                 div.className = "match-card p-2 flex justify-between items-center mb-1 shadow-sm";
-                let ptLabel = state.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (c.points === 0 ? '(0)' : `(${c.points})`);
-                div.innerHTML = `<div class="flex-1 text-left pl-1"><span class="font-black text-white text-[11px] uppercase tracking-tight">${c.species}</span><span class="text-xs ml-3 neon-text-blue font-black">${c.display || c.size}</span><br><span class="text-[9px] text-slate-300 font-bold uppercase tracking-widest leading-none block mt-0.5">${c.time} <span class="neon-text-amber ml-2">${ptLabel}</span></span></div><div class="flex items-center space-x-4 pr-2"><button onclick="editCatch('${c.id}')" class="text-blue-400 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button><button onclick="deleteCatch('${c.id}')" class="text-slate-600 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button></div>`;
+                
+                // Determine if we show Point Badges (Species Hunt) or Measurements (Standard)
+                let metricDisplay = state.format === 'speciesHunt' 
+                    ? getSpeciesBadge(c.points) 
+                    : `<span class="text-xs ml-3 neon-text-blue font-black">${c.display || c.size}</span>`;
+
+                div.innerHTML = `
+                    <div class="flex-1 text-left pl-1">
+                        <span class="font-black text-white text-[11px] uppercase tracking-tight">${c.species}</span> 
+                        ${metricDisplay}
+                        <br>
+                        <span class="text-[9px] text-slate-300 font-bold uppercase tracking-widest leading-none block mt-0.5">${c.time}</span>
+                    </div>
+                    <div class="flex items-center space-x-4 pr-2">
+                        <button onclick="editCatch('${c.id}')" class="text-blue-400 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button>
+                        <button onclick="deleteCatch('${c.id}')" class="text-slate-600 active:text-red-500 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                    </div>`;
                 list.appendChild(div);
             });
         }
