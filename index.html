@@ -4,21 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Live Sea Score Pro | Install</title>
+    
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Live Sea Score">
+    <meta name="apple-mobile-web-app-title" content="Live Sea Score">
+    <meta name="msapplication-starturl" content="/index.html">
+    
     <meta name="theme-color" content="#020617" id="themeMeta">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://matchscorerpro.netlify.app/">
     <meta property="og:title" content="Live Sea Score Pro">
     <meta property="og:description" content="The ultimate real-time match engine for beach anglers. Zero latency, smart offline caching, and instant cloud syncing.">
     <meta property="og:image" content="https://matchscorerpro.netlify.app/icon-512.png">
+    
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="apple-touch-icon" href="icon-512.png">
     <link rel="manifest" href="manifest.json">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
         :root {
-            --bg-color: #020617;       /* Deep Space Navy */
-            --card-bg: #0f172a;        /* Container Slate */
+            --bg-color: #020617;
+            --card-bg: #0f172a;
             --text-main: #94a3b8;
             --text-header: #ffffff;
             --neon-blue: #00f3ff;
@@ -39,7 +50,6 @@
 
         .neon-text-blue { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
 
-        /* --- ASSEMBLY ANIMATIONS --- */
         @keyframes icon-assemble {
             0% { opacity: 0; transform: scale(0.4) translateY(40px); filter: blur(10px) brightness(2); }
             70% { opacity: 1; transform: scale(1.1) translateY(-5px); filter: blur(0) brightness(1.2); }
@@ -216,13 +226,11 @@
     </footer>
 
     <script>
-        // TOUCH KICKSTART
         document.addEventListener('touchstart', function() {
             const v = document.getElementById('logoVideo');
             if (v && v.paused) { v.play(); }
         }, { once: true });
 
-        // FEATURE SCROLL ANIMATION
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
