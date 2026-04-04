@@ -1283,21 +1283,24 @@ setInterval(() => {
         function timeAtmPress(num) {
             if (timeAtmInput.length >= 4) return;
             let pending = timeAtmInput + num;
-            if (pending.length === 1 && num >= 2) { pending = "0" + num; }
-            if (pending.length === 2) { let h = parseInt(pending); if (h < 1 || h > 12) return; }
-            if (pending.length === 3) { let m1 = parseInt(num); if (m1 > 5) return; }
+            if (pending.length === 2) { 
+                let h = parseInt(pending); 
+                if (h > 23) return; // Blocks hours higher than 23
+            }
+            if (pending.length === 3) { 
+                let m1 = parseInt(num); 
+                if (m1 > 5) return; // Blocks minutes starting with 6, 7, 8, or 9
+            }
             timeAtmInput = pending;
             updateTimeAtmDisplay();
         }
-
         function timeAtmDelete() {
             timeAtmInput = timeAtmInput.slice(0, -1);
             updateTimeAtmDisplay();
         }
 
         function timeAtmToggleAMPM() {
-            timeAtmIsPM = !timeAtmIsPM;
-            updateTimeAtmDisplay();
+            
         }
 
         function updateTimeAtmDisplay() {
@@ -1305,27 +1308,31 @@ setInterval(() => {
                 let el = document.getElementById(`time-pin-${i}`);
                 if(el) el.innerText = timeAtmInput[i-1] !== undefined ? timeAtmInput[i-1] : "_";
             }
-            document.getElementById('time-ampm-btn').innerText = timeAtmIsPM ? "PM" : "AM";
             let submitBtn = document.getElementById('time-submit-btn');
             if (timeAtmInput.length === 4) {
                 submitBtn.classList.remove('hidden');
-                submitBtn.innerText = `SET MATCH TO ${timeAtmInput.slice(0,2)}:${timeAtmInput.slice(2,4)} ${timeAtmIsPM ? 'PM' : 'AM'}`;
+                submitBtn.innerText = `SET FINISH TO ${timeAtmInput.slice(0,2)}:${timeAtmInput.slice(2,4)} (24H)`;
             } else { submitBtn.classList.add('hidden'); }
         }
-
         function submitTimeAtm() {
             if(timeAtmInput.length !== 4) return;
             let hh = parseInt(timeAtmInput.slice(0,2));
             let mm = parseInt(timeAtmInput.slice(2,4));
-            if (timeAtmIsPM && hh !== 12) hh += 12;
-            if (!timeAtmIsPM && hh === 12) hh = 0;
+            
+            if (hh > 23 || mm > 59) {
+                alert("Invalid Time (Use 00:00 to 23:59)");
+                return;
+            }
+
             const targetDate = new Date();
             targetDate.setHours(hh, mm, 0, 0);
+            
             if (targetDate.getTime() < Date.now()) { targetDate.setDate(targetDate.getDate() + 1); }
+            
             update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: targetDate.getTime(), graceEndTime: null });
             document.getElementById('timeKeypadModal').classList.add('hidden');
             document.getElementById('stewardDrawer').classList.remove('open');
-            showNotification(`Match finish time broadcasted.`);
+            showNotification(`Match finish set to ${timeAtmInput.slice(0,2)}:${timeAtmInput.slice(2,4)}`);
         }
 
         function closeTimeKeypad() { document.getElementById('timeKeypadModal').classList.add('hidden'); }
