@@ -61,21 +61,19 @@
         .metric-white { color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
         /* --- V8.2.0 SPECIES POINT BADGES --- */
-        .pts-badge {
+       .pts-badge {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 1px 5px;
-            min-width: 28px;
-            border-radius: 4px;
-            font-size: 10px;
+            padding: 0px 4px;      /* Slimmer padding */
+            height: 14px;          /* Forced slim height */
+            min-width: 24px;       /* Narrower width */
+            border-radius: 3px;    /* Tighter corners */
+            font-size: 9px;        /* 1px smaller font to fit perfectly */
             font-weight: 900;
-            margin-left: 8px;
-            
-            /* --- CLIP FIX --- */
+            margin-left: 6px;
             vertical-align: middle;
-            margin-bottom: 2px;
-            
+            margin-bottom: 2px;    /* Lifts it off the floor */
             border: 1px solid;
             text-transform: uppercase;
         }
