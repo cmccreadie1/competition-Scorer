@@ -1,6 +1,7 @@
 {
   "short_name": "SeaScorePro",
   "name": "Live Sea Score Pro",
+  "description": "The ultimate real-time match engine for beach anglers. Zero latency, smart offline caching, and instant cloud syncing.",
   "icons": [
     {
       "src": "icon-512.png",
@@ -15,7 +16,16 @@
       "purpose": "any"
     }
   ],
-  "start_url": "index.html",
+  "screenshots": [
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "form_factor": "narrow",
+      "label": "App Home Screen"
+    }
+  ],
+  "start_url": "/index.html",
   "background_color": "#020617",
   "display": "standalone",
   "scope": "/",
