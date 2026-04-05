@@ -7,15 +7,19 @@
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Live Sea Score">
-    <meta name="apple-mobile-web-app-title" content="Live Sea Score">
+    <meta name="application-name" content="Live Sea Score Pro">
+    <meta name="apple-mobile-web-app-title" content="Live Sea Score Pro">
     <meta name="theme-color" content="#020617">
     
+    <meta name="web-app-manifest-version" content="2">
+    <meta name="format-detection" content="telephone=no">
+
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
     <link rel="apple-touch-icon" href="icon-512.png">
-    
     <link rel="manifest" href="/manifest.json">
     
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -173,15 +177,14 @@
             Open App in Browser
         </button>
     </main>
-
-    <script>
+<script>
         let deferredPrompt;
 
         // Catch the browser's install signal
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            console.log('Install prompt captured');
+            console.log('Samsung Install Event Captured');
         });
 
         function handleInstallClick() {
@@ -194,23 +197,55 @@
                     deferredPrompt = null;
                 });
             } else {
-                // Fallback if browser hasn't triggered prompt yet
+                // If already installed or prompt not ready, go to app
                 window.location.replace('app.html');
             }
         }
 
+        // TOUCH KICKSTART for Video
         document.addEventListener('touchstart', function() {
             const v = document.getElementById('logoVideo');
             if (v && v.paused) { v.play(); }
         }, { once: true });
 
+        // FEATURE SCROLL ANIMATION
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
             });
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.feature-card').forEach(card => observer.observe(card));
+
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        
+        if (isStandalone) {
+            window.location.replace('app.html');
+        } else {
+            document.addEventListener("DOMContentLoaded", () => {
+                const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                const osIcon = document.getElementById('osIcon');
+                if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                    osIcon.className = "fa-brands fa-apple absolute right-6 text-2xl";
+                } else if (/android/i.test(userAgent)) {
+                    osIcon.className = "fa-brands fa-google-play absolute right-6 text-xl";
+                }
+                
+                fetch('version.json').then(res => res.json()).then(data => {
+                    document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`);
+                });
+            });
+
+            window.addEventListener('scroll', () => {
+                const hint = document.getElementById('scrollHint');
+                if (hint) {
+                    if (window.scrollY > 40) hint.style.opacity = '0';
+                    else hint.style.opacity = '1';
+                }
+            }, { passive: true });
+        }
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -220,3 +255,4 @@
     </script>
 </body>
 </html>
+    
