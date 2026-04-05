@@ -49,7 +49,7 @@
         }
 
         @keyframes feature-slide-in {
-            0% { opacity: 0; transform: translateY(60px); filter: blur(4px); }
+            0% { opacity: 0; transform: translateY(50px); filter: blur(2px); }
             100% { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
@@ -128,7 +128,7 @@
             The ultimate <b class="neon-text-blue uppercase tracking-wider">live</b> scorecard built for casual beach matches.
         </p>
 
-        <div class="text-left space-y-20 w-full mb-20" id="featureList">
+        <div class="text-left space-y-12 w-full mb-16" id="featureList">
             
             <div class="feature-card p-4 rounded-2xl flex flex-col">
                 <div class="flex items-center space-x-2.5 mb-2">
@@ -196,10 +196,8 @@
     </footer>
 
     <script>
-        // CRITICAL: AUTO-JUMP TO APP IF OPENED FROM ICON
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-        
-        if (isStandalone) {
+        // CRITICAL AUTO-JUMP
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
             window.location.replace('app.html');
         }
 
@@ -218,7 +216,7 @@
             }
         }
 
-        // Waterfall Scroll Logic
+        // Waterfall Scroll Logic (150ms delay)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
@@ -227,7 +225,7 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
         document.querySelectorAll('.feature-card').forEach(card => observer.observe(card));
 
