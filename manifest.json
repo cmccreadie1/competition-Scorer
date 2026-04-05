@@ -1,7 +1,8 @@
 {
   "short_name": "SeaScorePro",
   "name": "Live Sea Score Pro",
-  "description": "The ultimate real-time match engine for beach anglers. Zero latency, smart offline caching, and instant cloud syncing.",
+  "description": "The ultimate professional real-time match engine for beach anglers. Zero latency, smart offline caching, and instant cloud syncing for competitive sea fishing.",
+  "id": "com.liveseascore.pro",
   "icons": [
     {
       "src": "icon-512.png",
@@ -22,14 +23,14 @@
       "type": "image/png",
       "sizes": "512x512",
       "form_factor": "narrow",
-      "label": "App Home Screen"
+      "label": "Live Leaderboard and Match Engine"
     },
     {
       "src": "icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "form_factor": "wide",
-      "label": "App Desktop View"
+      "label": "Desktop Results View"
     }
   ],
   "start_url": "/index.html",
@@ -38,8 +39,9 @@
   "scope": "/",
   "theme_color": "#020617",
   "version": "7.4.0",
-  "categories": ["sports", "utilities"],
+  "categories": ["sports", "utilities", "entertainment"],
   "orientation": "portrait",
   "dir": "ltr",
-  "lang": "en-GB"
+  "lang": "en-GB",
+  "prefer_related_applications": false
 }
