@@ -125,7 +125,7 @@
             The ultimate <b class="neon-text-blue uppercase tracking-wider">live</b> scorecard built for casual beach matches.
         </p>
 
-        <div class="text-left space-y-3 w-full mb-10" id="featureList">
+        <div class="text-left space-y-6 w-full mb-12" id="featureList">
             <div class="feature-card p-4 rounded-2xl flex flex-col">
                 <div class="flex items-center space-x-2.5 mb-2">
                     <div class="bg-amber-500/10 text-amber-500 p-2 rounded-lg shrink-0"><i class="fa-solid fa-mobile-screen-button text-base"></i></div>
@@ -180,10 +180,10 @@
             Open App in Browser
         </button>
     </main>
-<script>
+    <script>
         let deferredPrompt;
 
-        // Catch the browser's install signal
+        // 1. Capture Install Signal
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -194,33 +194,37 @@
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted install');
-                    }
                     deferredPrompt = null;
                 });
             } else {
-                // If already installed or prompt not ready, go to app
                 window.location.replace('app.html');
             }
         }
 
-        // TOUCH KICKSTART for Video
+        // 2. REFINED FEATURE SCROLL ANIMATION (Waterfall Effect)
+        const observerOptions = {
+            threshold: 0.2,      
+            rootMargin: '0px 0px -50px 0px' 
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Staggered delay ensures cards "cascade" in
+                    entry.target.style.transitionDelay = `${(index % 3) * 150}ms`;
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card').forEach(card => observer.observe(card));
+
+        // 3. App Kickstart & Version Sync
         document.addEventListener('touchstart', function() {
             const v = document.getElementById('logoVideo');
             if (v && v.paused) { v.play(); }
         }, { once: true });
-
-        // FEATURE SCROLL ANIMATION
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.feature-card').forEach(card => observer.observe(card));
 
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
         
@@ -240,14 +244,6 @@
                     document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`);
                 });
             });
-
-            window.addEventListener('scroll', () => {
-                const hint = document.getElementById('scrollHint');
-                if (hint) {
-                    if (window.scrollY > 40) hint.style.opacity = '0';
-                    else hint.style.opacity = '1';
-                }
-            }, { passive: true });
         }
 
         if ('serviceWorker' in navigator) {
@@ -258,4 +254,4 @@
     </script>
 </body>
 </html>
-    
+   
