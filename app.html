@@ -1004,7 +1004,7 @@
             if (pts === 40) return `<span class="pts-badge pts-40">40</span>`;
             return `<span class="pts-badge pts-1">1</span>`;
         }
-function getUniversalBadge(c) {
+        function getUniversalBadge(c) {
             if (state.format === 'speciesHunt') {
                 return getSpeciesBadge(c.points);
             }
@@ -1057,24 +1057,48 @@ function getUniversalBadge(c) {
         islandEl.addEventListener('mouseup', handleIslandTouchEnd);
 
         let hudState = 0;
-setInterval(() => {
-    const rankTxt = document.getElementById('island-rank-text');
-    const gapTxt = document.getElementById('island-gap-text');
-    
-    if (rankTxt && gapTxt) {
-        rankTxt.classList.replace('opacity-100', 'opacity-0');
-        gapTxt.classList.replace('opacity-100', 'opacity-0');
-        
-        hudState = (hudState + 1) % 2;
-        
-        if (hudState === 0) rankTxt.classList.replace('opacity-0', 'opacity-100');
-        else if (hudState === 1) gapTxt.classList.replace('opacity-0', 'opacity-100');
-    }
-}, 4000);
+        setInterval(() => {
+            const rankTxt = document.getElementById('island-rank-text');
+            const gapTxt = document.getElementById('island-gap-text');
+            
+            if (rankTxt && gapTxt) {
+                rankTxt.classList.replace('opacity-100', 'opacity-0');
+                gapTxt.classList.replace('opacity-100', 'opacity-0');
+                
+                hudState = (hudState + 1) % 2;
+                
+                if (hudState === 0) rankTxt.classList.replace('opacity-0', 'opacity-100');
+                else if (hudState === 1) gapTxt.classList.replace('opacity-0', 'opacity-100');
+            }
+        }, 4000);
+
+        // --- NEW: SYNC INPUT DECK VISIBILITY LOGIC ---
+        function syncInputDeckToState() {
+            const label = document.getElementById('labelSize'), sizeDeck = document.getElementById('deckSizeInputs');
+            if (state.format === 'speciesHunt') { if(sizeDeck) sizeDeck.classList.add('hidden'); } else {
+                if(sizeDeck) sizeDeck.classList.remove('hidden');
+                if (document.getElementById('deckLength')) document.getElementById('deckLength').classList.add('hidden');
+                if (document.getElementById('deckWeightLb')) document.getElementById('deckWeightLb').classList.add('hidden');
+                if (document.getElementById('deckWeightKg')) document.getElementById('deckWeightKg').classList.add('hidden');
+
+                if (state.format === 'weightLb') {
+                    if (document.getElementById('deckWeightLb')) document.getElementById('deckWeightLb').classList.remove('hidden');
+                    if(label) label.innerText = "Weight (Lbs/Oz)";
+                } else if (state.format === 'weightKg') {
+                    if (document.getElementById('deckWeightKg')) document.getElementById('deckWeightKg').classList.remove('hidden');
+                    if(label) label.innerText = "Weight (Kg/g)";
+                } else {
+                    if (document.getElementById('deckLength')) document.getElementById('deckLength').classList.remove('hidden');
+                    if(label) label.innerText = "Measurement (cm)";
+                }
+            }
+            if (document.getElementById('bountyContainer')) { document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); }
+        }
 
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible' && state.pin) {
                 if (['playing', 'grace'].includes(state.status)) {
+                    syncInputDeckToState(); // Ensures UI matches state on wake up
                     get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
                         if (snapshot.exists()) {
                             globalMatchData = snapshot.val();
@@ -1534,7 +1558,7 @@ setInterval(() => {
                 setTimeout(() => {
                     el.focus();
                     el.click(); // Forces the mobile keyboard to pop up immediately
-                }, 50); 
+                }, 100); 
             }
         }
 
@@ -1566,16 +1590,10 @@ setInterval(() => {
             if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
 
             pushMyScoreToCloud();
-            const label = document.getElementById('labelSize'), sizeDeck = document.getElementById('deckSizeInputs');
-            if (state.format === 'speciesHunt') { if(sizeDeck) sizeDeck.classList.add('hidden'); } else {
-                if(sizeDeck) sizeDeck.classList.remove('hidden');
-                document.getElementById('deckLength').classList.add('hidden'); 
-                document.getElementById('deckWeightLb').classList.add('hidden'); document.getElementById('deckWeightKg').classList.add('hidden'); 
-                if (state.format === 'weightLb') { document.getElementById('deckWeightLb').classList.remove('hidden'); if(label) label.innerText = "Weight (Lbs/Oz)"; } 
-                else if (state.format === 'weightKg') { document.getElementById('deckWeightKg').classList.remove('hidden'); if(label) label.innerText = "Weight (Kg/g)"; } 
-                else { document.getElementById('deckLength').classList.remove('hidden'); if(label) label.innerText = "Measurement (cm)"; }
-            }
-            if (document.getElementById('bountyContainer')) { document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); }
+            
+            // Calls the new sync logic so UI updates perfectly
+            syncInputDeckToState();
+            
             startClock();
             
             if (globalMatchData) checkAndFireTicker();
@@ -2136,7 +2154,7 @@ setInterval(() => {
         function stopHistoryClock() { if (historyTick) clearInterval(historyTick); }
         function deleteHistoryItem(id) { if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
         function toggleArchive() { isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
-        function viewPastRecord(id) { activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === id); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
+        function viewPastRecord(id) { activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
         
         function switchHistoryTab(tab) {
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
@@ -2181,7 +2199,19 @@ setInterval(() => {
                     let oldState = JSON.parse(saved);
                     state.name = oldState.name || ""; state.venue = oldState.venue || "";
                     document.getElementById('playerName').value = state.name; document.getElementById('venueName').value = state.venue;
-                    if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) { state = oldState; listenToCloud(); navTo(state.view); if (['playing', 'grace'].includes(state.status)) { renderCatchList(); startClock(); updateLiveTally(); if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`; if (globalMatchData) { checkAndFireTicker(); } } }
+                    if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) {
+                        state = oldState;
+                        listenToCloud();
+                        navTo(state.view);
+                        if (['playing', 'grace'].includes(state.status)) {
+                            syncInputDeckToState(); // ADDED: Restores the correct inputs instantly
+                            renderCatchList();
+                            startClock();
+                            updateLiveTally();
+                            if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
+                            if (globalMatchData) { checkAndFireTicker(); }
+                        }
+                    }
                 } catch(e) { closeAndWipeSession(); }
             }
         };
@@ -2194,7 +2224,7 @@ setInterval(() => {
         });
 
         // GLOBAL BINDINGS
-        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport;
+        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport; window.syncInputDeckToState = syncInputDeckToState;
     </script>
 </body>
 </html>
