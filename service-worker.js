@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sea-score-pro-v7.4.0';
+const CACHE_NAME = 'sea-score-pro-v7.4.2';
 
 // List of assets to store immediately for offline use
 const ASSETS_TO_CACHE = [
@@ -8,7 +8,6 @@ const ASSETS_TO_CACHE = [
     '/manifest.json',
     '/version.json',
     '/icon-512.png',
-    '/logo-vid.mp4',
     'https://cdn.tailwindcss.com',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
 ];
