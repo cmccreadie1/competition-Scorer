@@ -54,18 +54,20 @@
         }
         .animate-image { animation: image-reveal 1s ease-out forwards; animation-delay: 0.8s; opacity: 0; }
 
+        /* --- FLOATING APP BUTTON --- */
         .app-btn-container {
             position: fixed;
             bottom: 30px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(100px); /* Start off-screen */
             width: calc(100% - 40px);
             max-width: 440px;
             z-index: 100;
             opacity: 0;
-            transition: opacity 1.5s ease;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy entrance */
         }
-        .app-btn-container.show { opacity: 1; }
+        /* Reveal class added via JS */
+        .app-btn-container.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         @keyframes btnPulse {
             0%, 100% { box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); border-color: var(--neon-blue); }
@@ -166,7 +168,7 @@
 
         <div class="text-left space-y-12 w-full mb-16">
             
-            <div class="feature-card p-5 rounded-2xl flex flex-col">
+            <div id="firstFeature" class="feature-card p-5 rounded-2xl flex flex-col">
                 <div class="flex items-center space-x-3 mb-2">
                     <div class="bg-amber-500/10 text-amber-500 p-2.5 rounded-xl"><i class="fa-solid fa-mobile-screen-button text-base"></i></div>
                     <h4 class="font-black text-sm uppercase tracking-wide text-white">Interactive Dynamic Hub</h4>
@@ -291,12 +293,21 @@
             if (window.deferredPrompt) { window.deferredPrompt.prompt(); } else { window.location.href = 'app.html'; }
         }
 
+        // --- THE TRIGGER LOGIC ---
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.feature-card').forEach(card => observer.observe(card));
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // IF we scroll past the first feature card, show the button
+                    if(entry.target.id === 'firstFeature') {
+                        document.getElementById('floatingBtnContainer').classList.add('show');
+                    }
+                }
+            });
+        }, { threshold: 0.2 });
 
-        setTimeout(() => { document.getElementById('floatingBtnContainer').classList.add('show'); }, 2000);
+        document.querySelectorAll('.feature-card').forEach(card => observer.observe(card));
         
         fetch('version.json').then(res => res.json()).then(data => {
             document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`);
