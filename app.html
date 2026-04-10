@@ -404,8 +404,6 @@
 </head>
 <body>
 
-    
-
     <div id="broadcastToast" class="fixed top-4 inset-x-4 z-[200] bg-black text-white p-4 rounded-xl shadow-2xl flex items-center space-x-4 border-2 border-blue-500 shadow-[0_0_20px_rgba(0,243,255,0.3)]">
         <i class="fa-solid fa-bullhorn text-xl animate-bounce neon-text-blue"></i>
         <div class="flex-1 text-center">
@@ -528,7 +526,9 @@
         <button id="time-submit-btn" onclick="submitTimeAtm()" class="hidden pill-btn w-full max-w-sm mx-auto text-sm py-3 mb-8 shadow-lg">
             SET FINISH TIME
         </button>
-    </div> <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
+    </div> 
+    
+    <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-5 border border-cyan-400">
             <div class="text-center">
                 <i class="fa-solid fa-mobile-screen-button neon-text-blue text-4xl mb-2"></i>
@@ -566,11 +566,11 @@
                 <div class="match-card p-5 space-y-4 text-center shadow-lg">
                     <div>
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-3 text-left">Angler Profile</label>
-                        <input type="text" id="playerName" onkeydown="if(event.key === 'Enter'){ document.getElementById('venueName').focus(); }" placeholder="Your Name" class="pill-input w-full p-2 text-base">
+                        <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ document.getElementById('venueName').focus(); }" placeholder="Your Name" class="pill-input w-full p-2 text-base">
                     </div>
                     <div>
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-3 text-left">Venue</label>
-                        <input type="text" id="venueName" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Venue Name" class="pill-input w-full p-2 text-base">
+                        <input type="text" id="venueName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Venue Name" class="pill-input w-full p-2 text-base">
                     </div>
                     <button onclick="proceedToRoleSelection()" class="pill-btn w-full text-base py-2.5 mt-2 shadow-md border-2 border-cyan-400">
                         Continue
@@ -661,7 +661,7 @@
                         <option value="speciesHunt">Species Hunt</option>
                     </select>
                 </div>
-                <button onclick="createMatch()" class="pill-btn w-full text-base py-3 mt-3 border-cyan-400 shadow-[0_0_15px_rgba(0,243,255,0.3)]">Initialize Match</button>
+                <button id="btnInitMatch" onclick="createMatch()" class="pill-btn w-full text-base py-3 mt-3 border-cyan-400 shadow-[0_0_15px_rgba(0,243,255,0.3)]">Initialize Match</button>
             </div>
         </div>
 
@@ -1072,7 +1072,6 @@
             }
         }, 4000);
 
-        // --- NEW: SYNC INPUT DECK VISIBILITY LOGIC ---
         function syncInputDeckToState() {
             const label = document.getElementById('labelSize'), sizeDeck = document.getElementById('deckSizeInputs');
             if (state.format === 'speciesHunt') { if(sizeDeck) sizeDeck.classList.add('hidden'); } else {
@@ -1098,7 +1097,7 @@
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible' && state.pin) {
                 if (['playing', 'grace'].includes(state.status)) {
-                    syncInputDeckToState(); // Ensures UI matches state on wake up
+                    syncInputDeckToState(); 
                     get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
                         if (snapshot.exists()) {
                             globalMatchData = snapshot.val();
@@ -1304,19 +1303,23 @@
         }
 
         function checkInstallStatus() {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            let isStandalone = false;
+            try { isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone; } catch(e){}
             const installBtn = document.getElementById('btnInstallGuide');
-            if (isStandalone) {
-                installBtn.classList.add('hidden');
-            } else {
-                installBtn.classList.remove('hidden');
+            if (installBtn) {
+                if (isStandalone) {
+                    installBtn.classList.add('hidden');
+                } else {
+                    installBtn.classList.remove('hidden');
+                }
             }
         }
 
         function showInstallGuide() {
             const userAgent = navigator.userAgent.toLowerCase();
+            const isIos = /iphone|ipad|ipod/.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
             const textEl = document.getElementById('installInstructionText');
-            if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
+            if (isIos) {
                 textEl.innerHTML = "iPhone User detected.<br><br>1. Open this link in <b>Safari</b>.<br>2. Tap the <b>Share</b> icon (box with up arrow).<br>3. Select <b>'Add to Home Screen'</b>.";
             } else if (userAgent.includes('android')) {
                 textEl.innerHTML = "Android User detected.<br><br>1. Open this link in <b>Google Chrome</b>.<br>2. Tap the <b>Settings</b> icon (three dots ⋮).<br>3. Select <b>'Add to Home Screen'</b>.";
@@ -1360,11 +1363,11 @@
             let pending = timeAtmInput + num;
             if (pending.length === 2) { 
                 let h = parseInt(pending); 
-                if (h > 23) return; // Blocks hours higher than 23
+                if (h > 23) return; 
             }
             if (pending.length === 3) { 
                 let m1 = parseInt(num); 
-                if (m1 > 5) return; // Blocks minutes starting with 6, 7, 8, or 9
+                if (m1 > 5) return; 
             }
             timeAtmInput = pending;
             updateTimeAtmDisplay();
@@ -1478,6 +1481,12 @@
         function pushMyScoreToCloud() {
             if(!state.pin) return; updateLiveTally();
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
+            
+            if (globalMatchData && globalMatchData.anglers && globalMatchData.anglers[uid]) {
+                globalMatchData.anglers[uid].catches = state.myCatches;
+                globalMatchData.anglers[uid].score = total;
+            }
+            
             update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name || "Angler", score: total, catches: state.myCatches });
         }
 
@@ -1486,10 +1495,29 @@
             state.venue = document.getElementById('venueName').value || "Venue";
             state.isHost = true; state.isSteward = true; 
             localStorage.setItem('userRole', 'steward');
-            state.format = document.getElementById('hostFormat').value; state.pin = Math.floor(1000 + Math.random() * 9000).toString(); 
-            set(ref(db, 'matches/' + state.pin), { hostId: uid, format: state.format, status: 'waiting', anglers: { [uid]: { name: state.name, score: 0 } } }).then(() => {
-                state.status = 'waiting'; listenToCloud(); document.getElementById('displayPin').innerText = state.pin;
-                document.getElementById('hostControls').classList.remove('hidden'); document.getElementById('joinerWaitingText').classList.add('hidden'); navTo('waiting');
+            state.format = document.getElementById('hostFormat').value; 
+            state.pin = Math.floor(1000 + Math.random() * 9000).toString(); 
+            
+            const btn = document.getElementById('btnInitMatch');
+            const originalText = btn.innerText;
+            btn.innerText = "Connecting to Engine...";
+            
+            set(ref(db, 'matches/' + state.pin), { 
+                hostId: uid, 
+                format: state.format, 
+                status: 'waiting', 
+                anglers: { [uid]: { name: state.name, score: 0 } } 
+            }).then(() => {
+                btn.innerText = originalText;
+                state.status = 'waiting'; 
+                listenToCloud(); 
+                document.getElementById('displayPin').innerText = state.pin;
+                document.getElementById('hostControls').classList.remove('hidden'); 
+                document.getElementById('joinerWaitingText').classList.add('hidden'); 
+                navTo('waiting');
+            }).catch((err) => {
+                btn.innerText = originalText;
+                alert("Match Creation Failed. Please check your signal or Firebase permissions.\nError Code: " + err.message);
             });
         }
 
@@ -1499,12 +1527,21 @@
             state.pin = atmPin; state.status = 'waiting';
             localStorage.setItem('userRole', 'competitor');
             state.isSteward = false;
+            
+            const btn = document.getElementById('btn-connect');
+            const originalText = btn.innerText;
+            btn.innerText = "Checking PIN...";
+            
             get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
+                btn.innerText = originalText;
                 if (snapshot.exists()) {
                     state.format = snapshot.val().format; listenToCloud(); update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name, score: 0 });
                     if(snapshot.val().status === 'playing' || snapshot.val().status === 'grace') { state.endTime = snapshot.val().endTime; state.status = snapshot.val().status; beginFishing(false); }
                     else { navTo('waiting'); }
                 } else { alert("Invalid PIN."); atmPin = ""; updateAtm(); }
+            }).catch((err) => {
+                btn.innerText = originalText;
+                alert("Connection failed: " + err.message);
             });
         }
 
@@ -1557,7 +1594,7 @@
             if (el) {
                 setTimeout(() => {
                     el.focus();
-                    el.click(); // Forces the mobile keyboard to pop up immediately
+                    el.click(); 
                 }, 100); 
             }
         }
@@ -1591,7 +1628,6 @@
 
             pushMyScoreToCloud();
             
-            // Calls the new sync logic so UI updates perfectly
             syncInputDeckToState();
             
             startClock();
@@ -1742,7 +1778,6 @@
                 let div = document.createElement('div');
                 div.className = "match-card p-2 flex justify-between items-center mb-1 shadow-sm";
                 
-                // Determine if we show Point Badges (Species Hunt) or Measurements (Standard)
                let metricDisplay = getUniversalBadge(c);
 
                 div.innerHTML = `
@@ -2006,18 +2041,18 @@
         function generateOfficialMasterReport() {
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString());
+            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format);
         }
 
         function generateHistoricReport() {
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if(!h || !h.standings) return alert("No leaderboard data available.");
-            buildAndShareReport(h.standings, h.venue, h.date);
+            buildAndShareReport(h.standings, h.venue, h.date, h.format);
         }
 
         // 3. CLEAN WHATSAPP REPORT FORMATTER
-        function buildAndShareReport(arr, venueName, matchDate) {
-            const fmt = state.format; 
+        function buildAndShareReport(arr, venueName, matchDate, matchFormat) {
+            const fmt = matchFormat || state.format; 
             let podium = arr.slice(0, 3);
             let biggestVal = 0, biggestStr = "N/A";
             let hourCounts = {}, allSpecies = new Set(), totalFish = 0;
@@ -2193,6 +2228,7 @@
        window.onload = () => {
             history.pushState(null, null, window.location.href);
             fetch('version.json').then(res => res.json()).then(data => { document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); }).catch(() => { console.log('Version fetch fallback active.'); });
+            checkInstallStatus();
             const saved = localStorage.getItem('matchState');
             if (saved) {
                 try {
@@ -2204,7 +2240,7 @@
                         listenToCloud();
                         navTo(state.view);
                         if (['playing', 'grace'].includes(state.status)) {
-                            syncInputDeckToState(); // ADDED: Restores the correct inputs instantly
+                            syncInputDeckToState(); 
                             renderCatchList();
                             startClock();
                             updateLiveTally();
