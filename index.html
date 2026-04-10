@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Live Sea Score Pro | Get the App</title>
+    <title>ShoreScore | Get the App</title>
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Live Sea Score Pro">
-    <meta name="apple-mobile-web-app-title" content="Live Sea Score Pro">
+    <meta name="application-name" content="ShoreScore">
+    <meta name="apple-mobile-web-app-title" content="ShoreScore">
     <meta name="theme-color" content="#020617">
     <meta name="web-app-manifest-version" content="2">
 
@@ -104,7 +104,7 @@
         </div>
 
         <h1 class="text-3xl font-black tracking-tight uppercase mb-4 text-[var(--text-header)] flex justify-center items-center">
-            <span>Live Sea Score <span class="neon-text-blue">Pro</span></span>
+            <span>Shore<span class="neon-text-blue">Score</span></span>
         </h1>
         
         <div class="flex items-center justify-center space-x-1.5 mb-6 mx-auto max-w-[280px]">
@@ -122,10 +122,10 @@
             </div>
         </div>
 
-        <div class="text-slate-600 font-bold text-[8px] tracking-[0.4em] uppercase mb-8 opacity-60 version-display">V7.4.0</div>
+        <div class="text-slate-600 font-bold text-[8px] tracking-[0.4em] uppercase mb-8 opacity-60 version-display">V8.0.0</div>
 
         <p class="text-[var(--text-main)] text-[13px] leading-relaxed mb-8 px-4 font-medium">
-            The ultimate <b class="neon-text-blue uppercase tracking-wider">live</b> scorecard built for casual beach matches.
+            The ultimate <b class="neon-text-blue uppercase tracking-wider">live</b> scorecard built for shore anglers.
         </p>
 
         <div class="text-left space-y-12 w-full mb-16" id="featureList">
@@ -192,7 +192,7 @@
     </main>
 
     <footer id="mainFooter" class="w-full text-center py-5">
-        <p class="text-slate-600 text-[8px] font-black uppercase tracking-widest version-display">Live Sea Score V7.4.0</p>
+        <p class="text-slate-600 text-[8px] font-black uppercase tracking-widest version-display">ShoreScore V8.0.0</p>
     </footer>
 
     <div id="iosInstallModal" class="fixed inset-0 z-[500] hidden flex items-center justify-center p-6 text-center" style="background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px);">
@@ -229,7 +229,7 @@
             <div class="text-center">
                 <i class="fa-solid fa-circle-check text-green-500 text-6xl mb-4 animate-pop"></i>
                 <h3 class="text-lg font-black uppercase tracking-tight text-white mb-2">App Installed!</h3>
-                <p class="text-slate-300 text-xs leading-relaxed font-medium">Live Sea Score Pro has been successfully added to your device.</p>
+                <p class="text-slate-300 text-xs leading-relaxed font-medium">ShoreScore has been successfully added to your device.</p>
                 <div class="bg-slate-900/50 border border-slate-700 rounded-xl p-4 mt-6">
                     <p class="text-green-400 text-[10px] font-black uppercase tracking-widest mb-2">Next Step:</p>
                     <p class="text-slate-400 text-[11px] leading-relaxed">Please close this browser window and launch the app directly from your phone's Home Screen or App Drawer.</p>
@@ -239,7 +239,6 @@
     </div>
 
     <script>
-        // CRITICAL AUTO-JUMP: Skips splash screen if already opened as a standalone app
         if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
             window.location.replace('app.html');
         }
@@ -250,7 +249,6 @@
             deferredPrompt = e;
         });
 
-        // Show success modal when Android finishes installing in the background
         window.addEventListener('appinstalled', () => {
             document.getElementById('installSuccessModal').classList.remove('hidden');
         });
@@ -264,30 +262,24 @@
             const ua = navigator.userAgent.toLowerCase() || navigator.vendor.toLowerCase() || window.opera.toLowerCase();
             const isIos = /iphone|ipad|ipod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
             const isAndroid = /android/.test(ua);
-            
-            // Specific Android Browser Detection
             const isSamsung = /samsungbrowser/.test(ua);
             const isFirefox = /firefox|fxios/.test(ua);
             const isChrome = /chrome|chromium|crios/.test(ua) && !isSamsung && !/edg/.test(ua) && !/opr/.test(ua);
 
-            // iOS Route
             if (isIos && !window.MSStream) {
                 document.getElementById('iosInstallModal').classList.remove('hidden');
                 return;
             }
 
-            // Android Routes
             if (isAndroid) {
                 if (isSamsung) {
                     showAndroidModal("Samsung Browser Detected. To install safely without warnings:<br><br><b class='text-white'>1.</b> Tap the <b>Menu icon (≡)</b> at the bottom right.<br><br><b class='text-white'>2.</b> Tap <b>'Add page to'</b>.<br><br><b class='text-white'>3.</b> Select <b>'Home screen'</b>.");
                     return;
                 } 
-                
                 if (isFirefox) {
                     showAndroidModal("Firefox Detected.<br><br><b class='text-white'>1.</b> Tap the <b>Menu icon (⋮)</b> at the top or bottom right of your screen.<br><br><b class='text-white'>2.</b> Select <b>'Install'</b> or <b>'Add to Home screen'</b>.");
                     return;
                 } 
-                
                 if (isChrome) {
                     if (deferredPrompt) {
                         deferredPrompt.prompt();
@@ -299,13 +291,10 @@
                             }
                         });
                     } else {
-                        // Fallback if Chrome suppresses the native prompt (e.g. adblocker)
                         showAndroidModal("Chrome Detected.<br><br><b class='text-white'>1.</b> Tap the <b>Menu icon (⋮)</b> at the top right of your screen.<br><br><b class='text-white'>2.</b> Select <b>'Install app'</b> or <b>'Add to Home screen'</b>.");
                     }
                     return;
                 } 
-                
-                // Generic / Unrecognized Android Browser Route
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
                     deferredPrompt.userChoice.then((choiceResult) => { 
@@ -321,7 +310,6 @@
                 return;
             }
 
-            // Desktop / Unknown Fallback
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choice) => { deferredPrompt = null; });
@@ -330,7 +318,6 @@
             }
         }
 
-        // Waterfall Scroll Logic (150ms delay)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
