@@ -203,24 +203,11 @@
                 <p class="text-slate-300 text-xs leading-relaxed font-medium mb-4">iPhone / iPad User Detected.</p>
                 <div class="text-left bg-slate-900/50 border border-slate-700 rounded-xl p-4 space-y-2">
                     <p class="text-slate-300 text-[11px] leading-relaxed"><b class="text-white">1.</b> Open this link in <b>Safari</b> (if not already).</p>
-                    <p class="text-slate-300 text-[11px] leading-relaxed"><b class="text-white">2.</b> Tap the <b>Share</b> icon <i class="fa-solid fa-arrow-up-from-bracket mx-1"></i> at the bottom.</p>
+                    <p class="text-slate-300 text-[11px] leading-relaxed"><b class="text-white">2.</b> Tap the <b>Share</b> icon <i class="fa-solid fa-arrow-up-from-bracket mx-1 text-cyan-400"></i> at the bottom.</p>
                     <p class="text-slate-300 text-[11px] leading-relaxed"><b class="text-white">3.</b> Scroll down and select <b>'Add to Home Screen'</b>.</p>
                 </div>
             </div>
             <button onclick="document.getElementById('iosInstallModal').classList.add('hidden')" class="app-btn w-full rounded-xl py-3 font-black text-xs uppercase tracking-widest">Got it</button>
-        </div>
-    </div>
-
-    <div id="androidInstallModal" class="fixed inset-0 z-[500] hidden flex items-center justify-center p-6 text-center" style="background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px);">
-        <div class="feature-card visible w-full max-w-sm p-6 rounded-[1.5rem] space-y-5 border border-[var(--neon-blue)] shadow-[0_0_30px_rgba(0,243,255,0.2)]">
-            <div class="text-center">
-                <i class="fa-brands fa-android text-[var(--neon-blue)] text-5xl mb-4 animate-pop"></i>
-                <h3 id="androidBrowserTitle" class="text-base font-black uppercase tracking-tight text-white mb-2">Device Installation</h3>
-                <div class="text-left bg-slate-900/50 border border-slate-700 rounded-xl p-4 mt-4">
-                    <p id="androidBrowserText" class="text-slate-300 text-[11px] leading-relaxed"></p>
-                </div>
-            </div>
-            <button onclick="document.getElementById('androidInstallModal').classList.add('hidden')" class="app-btn w-full rounded-xl py-3 font-black text-xs uppercase tracking-widest">Got it</button>
         </div>
     </div>
 
@@ -232,7 +219,7 @@
                 <p class="text-slate-300 text-xs leading-relaxed font-medium">ShoreScore has been successfully added to your device.</p>
                 <div class="bg-slate-900/50 border border-slate-700 rounded-xl p-4 mt-6">
                     <p class="text-green-400 text-[10px] font-black uppercase tracking-widest mb-2">Next Step:</p>
-                    <p class="text-slate-400 text-[11px] leading-relaxed">Please close this browser window and launch the app directly from your phone's Home Screen or App Drawer.</p>
+                    <p class="text-slate-400 text-[11px] leading-relaxed">Please close this browser window and launch the app directly from your phone's Home Screen.</p>
                 </div>
             </div>
         </div>
@@ -253,68 +240,28 @@
             document.getElementById('installSuccessModal').classList.remove('hidden');
         });
 
-        function showAndroidModal(textHtml) {
-            document.getElementById('androidBrowserText').innerHTML = textHtml;
-            document.getElementById('androidInstallModal').classList.remove('hidden');
-        }
-
         function handleInstallClick() {
-            const ua = navigator.userAgent.toLowerCase() || navigator.vendor.toLowerCase() || window.opera.toLowerCase();
+            const ua = navigator.userAgent.toLowerCase();
             const isIos = /iphone|ipad|ipod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-            const isAndroid = /android/.test(ua);
-            const isSamsung = /samsungbrowser/.test(ua);
-            const isFirefox = /firefox|fxios/.test(ua);
-            const isChrome = /chrome|chromium|crios/.test(ua) && !isSamsung && !/edg/.test(ua) && !/opr/.test(ua);
-
-            if (isIos && !window.MSStream) {
+            
+            // If iOS, show the manual modal (Mandatory)
+            if (isIos) {
                 document.getElementById('iosInstallModal').classList.remove('hidden');
                 return;
             }
 
-            if (isAndroid) {
-                if (isSamsung) {
-                    showAndroidModal("Samsung Browser Detected. To install safely without warnings:<br><br><b class='text-white'>1.</b> Tap the <b>Menu icon (≡)</b> at the bottom right.<br><br><b class='text-white'>2.</b> Tap <b>'Add page to'</b>.<br><br><b class='text-white'>3.</b> Select <b>'Home screen'</b>.");
-                    return;
-                } 
-                if (isFirefox) {
-                    showAndroidModal("Firefox Detected.<br><br><b class='text-white'>1.</b> Tap the <b>Menu icon (⋮)</b> at the top or bottom right of your screen.<br><br><b class='text-white'>2.</b> Select <b>'Install'</b> or <b>'Add to Home screen'</b>.");
-                    return;
-                } 
-                if (isChrome) {
-                    if (deferredPrompt) {
-                        deferredPrompt.prompt();
-                        deferredPrompt.userChoice.then((choiceResult) => { 
-                            deferredPrompt = null; 
-                            if (choiceResult.outcome === 'accepted') {
-                                document.getElementById('btnInstallApp').innerHTML = 'Installing... <i class="fa-solid fa-circle-notch fa-spin absolute right-6 text-xl"></i>';
-                                setTimeout(() => { document.getElementById('installSuccessModal').classList.remove('hidden'); }, 4000);
-                            }
-                        });
-                    } else {
-                        showAndroidModal("Chrome Detected.<br><br><b class='text-white'>1.</b> Tap the <b>Menu icon (⋮)</b> at the top right of your screen.<br><br><b class='text-white'>2.</b> Select <b>'Install app'</b> or <b>'Add to Home screen'</b>.");
-                    }
-                    return;
-                } 
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => { 
-                        deferredPrompt = null; 
-                        if (choiceResult.outcome === 'accepted') {
-                            document.getElementById('btnInstallApp').innerHTML = 'Installing... <i class="fa-solid fa-circle-notch fa-spin absolute right-6 text-xl"></i>';
-                            setTimeout(() => { document.getElementById('installSuccessModal').classList.remove('hidden'); }, 4000);
-                        }
-                    });
-                } else {
-                    showAndroidModal("Android Browser Detected.<br><br><b class='text-white'>1.</b> Tap your browser's <b>Menu icon</b> (usually <b>⋮</b> or <b>≡</b>).<br><br><b class='text-white'>2.</b> Scroll down and select <b>'Add to Home screen'</b> or <b>'Install app'</b>.");
-                }
-                return;
-            }
-
+            // Direct Prompt for Samsung Internet, Chrome, and Android browsers
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choice) => { deferredPrompt = null; });
+                deferredPrompt.userChoice.then((choiceResult) => { 
+                    deferredPrompt = null; 
+                    if (choiceResult.outcome === 'accepted') {
+                        document.getElementById('btnInstallApp').innerHTML = 'Installing... <i class="fa-solid fa-circle-notch fa-spin absolute right-6 text-xl"></i>';
+                    }
+                });
             } else {
-                document.getElementById('installSuccessModal').classList.remove('hidden');
+                // Fallback: If prompt not ready, take them to the app
+                window.location.replace('app.html');
             }
         }
 
@@ -336,11 +283,11 @@
         }, { once: true });
 
         document.addEventListener("DOMContentLoaded", () => {
-            const ua = navigator.userAgent.toLowerCase() || navigator.vendor.toLowerCase() || window.opera.toLowerCase();
+            const ua = navigator.userAgent.toLowerCase();
             const osIcon = document.getElementById('osIcon');
             const isIos = /iphone|ipad|ipod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
             
-            if (isIos && !window.MSStream) {
+            if (isIos) {
                 osIcon.className = "fa-brands fa-apple absolute right-6 text-2xl";
             } else if (/android/i.test(ua)) {
                 osIcon.className = "fa-brands fa-google-play absolute right-6 text-xl";
