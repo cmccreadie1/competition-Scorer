@@ -91,7 +91,6 @@
 
         .glowing-logo { background-color: #000; box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
 
-        /* --- INTERACTIVE ZOOM LIGHTBOX --- */
         #lightbox {
             display: none;
             position: fixed;
@@ -120,8 +119,6 @@
             border-radius: 1rem;
             box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
         }
-
-        .zoom-trigger { cursor: zoom-in; }
         
         #closeLightbox {
             position: absolute;
@@ -174,7 +171,7 @@
                     <div class="bg-amber-500/10 text-amber-500 p-2.5 rounded-xl"><i class="fa-solid fa-mobile-screen-button text-base"></i></div>
                     <h4 class="font-black text-sm uppercase tracking-wide text-white">Interactive Dynamic Hub</h4>
                 </div>
-                <p class="text-xs leading-relaxed text-slate-400">Keep your eyes on the surf. The permanent display pill shows your live rank, total points, and match clock at a glance. Just wake your phone to see exactly where you stand.</p>
+                <p class="text-xs leading-relaxed text-slate-400">Keep your eyes on the surf, not your screen. The 'Hub' is a permanent display pill at the top of the app. It constantly updates to show your live rank, total points, and the match clock. Just wake your phone to see exactly where you stand—no swiping or digging through menus required.</p>
             </div>
 
             <div class="feature-card p-5 rounded-2xl flex flex-col">
@@ -190,7 +187,23 @@
                     <div class="bg-blue-500/10 text-blue-500 p-2.5 rounded-xl"><i class="fa-solid fa-bolt text-base"></i></div>
                     <h4 class="font-black text-sm uppercase tracking-wide text-white">Zero Friction Logging</h4>
                 </div>
-                <p class="text-xs leading-relaxed text-slate-400">3-second fish logging with no typing. Choose from 80+ pre-populated species. Works perfectly in dead zones—it auto-syncs the moment you reconnect.</p>
+                <p class="text-xs leading-relaxed text-slate-400">Built for cold, wet hands. Tap once to choose from 80+ pre-populated species. 3-second fish logging with no typing. The app does the math and updates the live leaderboard instantly.</p>
+            </div>
+
+            <div class="feature-card p-5 rounded-2xl flex flex-col">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="bg-indigo-500/10 text-indigo-400 p-2.5 rounded-xl"><i class="fa-solid fa-earth-europe text-base"></i></div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white">Flexible & Remote Fishing</h4>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-400">Mates can fish miles apart on the same live leaderboard. Need to pack up early? Leave the match safely without losing your points, and watch the rest of the battle live from your History tab.</p>
+            </div>
+
+            <div class="feature-card p-5 rounded-2xl flex flex-col">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="bg-teal-500/10 text-teal-500 p-2.5 rounded-xl"><i class="fa-solid fa-battery-half text-base"></i></div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white">Bulletproof Reliability</h4>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-400">Accidentally closed the app? Don't panic. Lock your screen to save power, and if you hit a dead zone, it safely caches your fish and auto-syncs the second you reconnect.</p>
             </div>
 
             <div class="feature-card p-5 rounded-2xl flex flex-col">
@@ -198,7 +211,7 @@
                     <div class="bg-fuchsia-500/10 text-fuchsia-500 p-2.5 rounded-xl"><i class="fa-brands fa-whatsapp text-base"></i></div>
                     <h4 class="font-black text-sm uppercase tracking-wide text-white">One-Tap WhatsApp Reports</h4>
                 </div>
-                <p class="text-xs leading-relaxed text-slate-400">Generate professional match results and total stats instantly. Share a clean report straight to your group with a single tap.</p>
+                <p class="text-xs leading-relaxed text-slate-400">When the clock strikes zero, the app calculates final standings. Generate and share a clean, official match report straight to your group with a single tap.</p>
             </div>
 
         </div>
@@ -218,8 +231,8 @@
         </button>
     </div>
 
-    <div id="lightbox">
-        <button id="closeLightbox" onclick="closeLightbox()">&times;</button>
+    <div id="lightbox" onclick="closeLightbox()">
+        <button id="closeLightbox">&times;</button>
         <div id="zoomWrapper">
             <img src="app-screens.png" alt="Full Screen Preview">
         </div>
@@ -242,11 +255,10 @@
         function openLightbox() { lightbox.classList.add('open'); }
         function closeLightbox() { 
             lightbox.classList.remove('open'); 
-            scale = 1; moveX = 0; moveY = 0;
+            scale = 1; moveX = 0; moveY = 0; lastScale = 1;
             updateTransform();
         }
 
-        // Pinch and Pan Logic
         lightbox.addEventListener('touchstart', e => {
             if (e.touches.length === 2) {
                 startX = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
