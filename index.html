@@ -207,10 +207,20 @@
             deferredPrompt = e;
         });
 
+        // Automatically close splash screen and redirect to app once Android installation finishes
+        window.addEventListener('appinstalled', () => {
+            window.location.replace('app.html');
+        });
+
         function handleInstallClick() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+                deferredPrompt.userChoice.then((choiceResult) => { 
+                    deferredPrompt = null; 
+                    if (choiceResult.outcome === 'accepted') {
+                        window.location.replace('app.html');
+                    }
+                });
             } else {
                 window.location.replace('app.html');
             }
