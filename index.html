@@ -46,7 +46,6 @@
             0% { opacity: 0; transform: scale(0.4) translateY(40px); filter: blur(10px) brightness(2); }
             100% { opacity: 1; transform: scale(1) translateY(0); filter: brightness(1); }
         }
-
         .animate-pop { animation: icon-assemble 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
 
         @keyframes image-reveal {
@@ -55,7 +54,6 @@
         }
         .animate-image { animation: image-reveal 1s ease-out forwards; animation-delay: 0.8s; opacity: 0; }
 
-        /* --- FLOATING APP BUTTON --- */
         .app-btn-container {
             position: fixed;
             bottom: 30px;
@@ -63,7 +61,7 @@
             transform: translateX(-50%);
             width: calc(100% - 40px);
             max-width: 440px;
-            z-index: 100; /* Stays below lightbox */
+            z-index: 100;
             opacity: 0;
             transition: opacity 1.5s ease;
         }
@@ -82,42 +80,66 @@
             color: var(--neon-blue);
         }
 
-        /* --- FEATURE CARDS --- */
         .feature-card {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
             opacity: 0; 
+            transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .feature-card.visible { opacity: 1; transform: translateY(0); }
 
         .glowing-logo { background-color: #000; box-shadow: 0 0 20px rgba(0, 243, 255, 0.2); }
 
-        /* --- LIGHTBOX ZOOM LOGIC --- */
+        /* --- INTERACTIVE ZOOM LIGHTBOX --- */
         #lightbox {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(2, 6, 23, 0.98);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             z-index: 2000;
-            cursor: zoom-out;
-            padding: 20px;
+            overflow: hidden;
+            touch-action: none;
+        }
+        #lightbox.open { display: flex; align-items: center; justify-content: center; }
+        
+        #zoomWrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.1s ease-out;
         }
-        #lightbox.open { display: flex; }
+        
         #lightbox img {
-            max-width: 100%;
-            max-height: 90vh;
+            max-width: 90%;
+            max-height: 85vh;
+            pointer-events: none;
             border-radius: 1rem;
             box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
         }
 
-        .zoom-trigger { cursor: zoom-in; transition: transform 0.3s ease; }
-        .zoom-trigger:active { transform: scale(0.98); }
+        .zoom-trigger { cursor: zoom-in; }
+        
+        #closeLightbox {
+            position: absolute;
+            top: env(safe-area-inset-top, 20px);
+            right: 20px;
+            z-index: 2100;
+            background: rgba(255,255,255,0.1);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
 
-        footer { margin-bottom: 110px; }
+        footer { margin-bottom: 120px; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col items-center">
@@ -141,23 +163,44 @@
         </p>
 
         <div class="w-full mb-16 animate-image px-2">
-            <p class="text-[9px] font-bold text-cyan-400/60 uppercase tracking-widest mb-3"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Tap to expand</p>
+            <p class="text-[9px] font-bold text-cyan-400/60 uppercase tracking-widest mb-3"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Tap to zoom preview</p>
             <img src="app-screens.png" onclick="openLightbox()" alt="App Preview" class="zoom-trigger w-full h-auto rounded-[2rem] border border-white/10 shadow-2xl">
         </div>
 
         <div class="text-left space-y-12 w-full mb-16">
-            <div class="feature-card p-5 rounded-2xl">
-                <h4 class="font-bold text-sm uppercase tracking-wide text-white mb-2"><i class="fa-solid fa-mobile-screen text-cyan-400 mr-2"></i> Interactive Hub</h4>
-                <p class="text-xs leading-relaxed text-slate-400">Keep your eyes on the surf. The permanent display pill shows your live rank and match clock at a glance.</p>
+            
+            <div class="feature-card p-5 rounded-2xl flex flex-col">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="bg-amber-500/10 text-amber-500 p-2.5 rounded-xl"><i class="fa-solid fa-mobile-screen-button text-base"></i></div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white">Interactive Dynamic Hub</h4>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-400">Keep your eyes on the surf. The permanent display pill shows your live rank, total points, and match clock at a glance. Just wake your phone to see exactly where you stand.</p>
             </div>
-            <div class="feature-card p-5 rounded-2xl">
-                <h4 class="font-bold text-sm uppercase tracking-wide text-white mb-2"><i class="fa-solid fa-bolt text-cyan-400 mr-2"></i> Zero Friction Logging</h4>
-                <p class="text-xs leading-relaxed text-slate-400">3-second fish logging with no typing. Fast, simple, and works perfectly in dead zones.</p>
+
+            <div class="feature-card p-5 rounded-2xl flex flex-col">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="bg-green-500/10 text-green-500 p-2.5 rounded-xl"><i class="fa-solid fa-trophy text-base"></i></div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white">Live Leaderboard</h4>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-400">Real-time rankings. See exactly what your mates are catching as it happens. Tap any name to view their individual catch feed in real-time.</p>
             </div>
-            <div class="feature-card p-5 rounded-2xl">
-                <h4 class="font-bold text-sm uppercase tracking-wide text-white mb-2"><i class="fa-brands fa-whatsapp text-cyan-400 mr-2"></i> Instant Reports</h4>
-                <p class="text-xs leading-relaxed text-slate-400">Generate professional match results and share them to your group with a single tap.</p>
+
+            <div class="feature-card p-5 rounded-2xl flex flex-col">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="bg-blue-500/10 text-blue-500 p-2.5 rounded-xl"><i class="fa-solid fa-bolt text-base"></i></div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white">Zero Friction Logging</h4>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-400">3-second fish logging with no typing. Choose from 80+ pre-populated species. Works perfectly in dead zones—it auto-syncs the moment you reconnect.</p>
             </div>
+
+            <div class="feature-card p-5 rounded-2xl flex flex-col">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="bg-fuchsia-500/10 text-fuchsia-500 p-2.5 rounded-xl"><i class="fa-brands fa-whatsapp text-base"></i></div>
+                    <h4 class="font-black text-sm uppercase tracking-wide text-white">One-Tap WhatsApp Reports</h4>
+                </div>
+                <p class="text-xs leading-relaxed text-slate-400">Generate professional match results and total stats instantly. Share a clean report straight to your group with a single tap.</p>
+            </div>
+
         </div>
 
         <button onclick="window.location.replace('app.html')" class="mb-20 text-[10px] font-bold uppercase tracking-widest text-slate-600 underline">
@@ -175,43 +218,74 @@
         </button>
     </div>
 
-    <div id="lightbox" onclick="closeLightbox()">
-        <button class="absolute top-10 right-10 text-white text-4xl">&times;</button>
-        <img src="app-screens.png" alt="Full Screen Preview">
+    <div id="lightbox">
+        <button id="closeLightbox" onclick="closeLightbox()">&times;</button>
+        <div id="zoomWrapper">
+            <img src="app-screens.png" alt="Full Screen Preview">
+        </div>
     </div>
 
     <div id="iosInstallModal" class="fixed inset-0 z-[3000] hidden flex items-center justify-center p-6 bg-black/95">
-        <div class="bg-slate-900 w-full max-w-sm p-8 rounded-[2rem] border border-cyan-400">
+        <div class="bg-slate-900 w-full max-w-sm p-8 rounded-[2rem] border border-cyan-400 text-center">
             <i class="fa-brands fa-apple text-white text-5xl mb-4"></i>
-            <h3 class="text-white font-black uppercase mb-4">Safari Install</h3>
-            <p class="text-xs text-slate-400 mb-6">Tap Share <i class="fa-solid fa-arrow-up-from-bracket mx-1 text-cyan-400"></i> then <b>'Add to Home Screen'</b>.</p>
+            <h3 class="text-white font-black uppercase mb-4">Safari Installation</h3>
+            <p class="text-xs text-slate-400 mb-6 text-left">1. Tap <b>Share</b> <i class="fa-solid fa-arrow-up-from-bracket mx-1 text-cyan-400"></i> at bottom.<br>2. Select <b>'Add to Home Screen'</b>.</p>
             <button onclick="document.getElementById('iosInstallModal').classList.add('hidden')" class="app-btn w-full py-3 rounded-xl font-bold uppercase text-xs">Got it</button>
         </div>
     </div>
 
     <script>
-        function openLightbox() { document.getElementById('lightbox').classList.add('open'); }
-        function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+        const lightbox = document.getElementById('lightbox');
+        const zoomWrapper = document.getElementById('zoomWrapper');
+        let scale = 1, lastScale = 1, startX = 0, startY = 0, moveX = 0, moveY = 0;
 
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+        function openLightbox() { lightbox.classList.add('open'); }
+        function closeLightbox() { 
+            lightbox.classList.remove('open'); 
+            scale = 1; moveX = 0; moveY = 0;
+            updateTransform();
+        }
+
+        // Pinch and Pan Logic
+        lightbox.addEventListener('touchstart', e => {
+            if (e.touches.length === 2) {
+                startX = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+            } else if (e.touches.length === 1) {
+                startX = e.touches[0].pageX - moveX;
+                startY = e.touches[0].pageY - moveY;
+            }
+        });
+
+        lightbox.addEventListener('touchmove', e => {
+            if (e.touches.length === 2) {
+                let dist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                scale = Math.min(Math.max(1, lastScale * (dist / startX)), 3);
+            } else if (e.touches.length === 1 && scale > 1) {
+                moveX = e.touches[0].pageX - startX;
+                moveY = e.touches[0].pageY - startY;
+            }
+            updateTransform();
+        });
+
+        lightbox.addEventListener('touchend', () => { lastScale = scale; });
+
+        function updateTransform() {
+            zoomWrapper.style.transform = `translate(${moveX}px, ${moveY}px) scale(${scale})`;
+        }
 
         function handleInstallClick() {
             const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase()) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
             if (isIos) { document.getElementById('iosInstallModal').classList.remove('hidden'); return; }
-            if (deferredPrompt) { deferredPrompt.prompt(); } else { window.location.href = 'app.html'; }
+            if (window.deferredPrompt) { window.deferredPrompt.prompt(); } else { window.location.href = 'app.html'; }
         }
 
-        // Scroll animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.feature-card').forEach(card => observer.observe(card));
 
-        // Floating button delay
         setTimeout(() => { document.getElementById('floatingBtnContainer').classList.add('show'); }, 2000);
-
-        // Versioning
+        
         fetch('version.json').then(res => res.json()).then(data => {
             document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`);
         });
