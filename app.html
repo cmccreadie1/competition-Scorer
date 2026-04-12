@@ -2478,27 +2478,36 @@
 
        window.onload = () => {
             history.pushState(null, null, window.location.href);
-            fetch('version.json').then(res => res.json()).then(data => { document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); }).catch(() => { console.log('Version fetch fallback active.'); });
+            fetch('version.json').then(res => res.json()).then(data => { 
+                document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); 
+            }).catch(() => { console.log('Version fetch fallback active.'); });
+            
             checkInstallStatus();
             const saved = localStorage.getItem('matchState');
             if (saved) {
                 try {
                     let oldState = JSON.parse(saved);
-                    state.name = oldState.name || ""; state.venue = oldState.venue || "";
-                    document.getElementById('playerName').value = state.name; document.getElementById('venueName').value = state.venue;
+                    state.name = oldState.name || ""; 
+                    state.venue = oldState.venue || "";
+                    document.getElementById('playerName').value = state.name; 
+                    document.getElementById('venueName').value = state.venue;
+                    
                     if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) {
                         state = oldState;
                         listenToCloud();
                         navTo(state.view);
                         if (['playing', 'grace'].includes(state.status)) {
-                           syncInputDeckToState();
-                renderCatchList();
-                startClock();
-                updateLiveTally();
-                if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----";
-                if (globalMatchData) { checkAndFireTicker(); }
-            } catch(e) { console.error(e); }
-        }
+                            syncInputDeckToState();
+                            renderCatchList();
+                            startClock();
+                            updateLiveTally();
+                            if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----";
+                            if (globalMatchData) { checkAndFireTicker(); }
+                        }
+                    }
+                } catch(e) { console.error(e); }
+            }
+        };
 
         function proceedToRoleSelection() {
             let pName = document.getElementById('playerName').value || "";
@@ -2538,11 +2547,20 @@
         window.openCatchFeed = openCatchFeed;
         window.closeCatchFeed = closeCatchFeed;
         window.generateOfficialMasterReport = generateOfficialMasterReport;
+        window.exitWaitingRoom = exitWaitingRoom;
+        window.triggerHypeStart = triggerHypeStart;
+        window.toggleArchive = toggleArchive;
+        window.viewPastRecord = viewPastRecord;
+        window.deleteHistoryItem = deleteHistoryItem;
+        window.atmPress = atmPress;
+        window.atmDelete = atmDelete;
+        window.showInstallGuide = showInstallGuide;
 
         window.addEventListener('popstate', () => {
             history.pushState(null, null, window.location.href);
             if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open')) {
-                document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open');
+                document.getElementById('leaderboardDrawer').classList.remove('open'); 
+                document.getElementById('stewardDrawer').classList.remove('open');
             }
         });
     </script>
