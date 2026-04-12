@@ -1723,13 +1723,16 @@
             if (!el) return;
             
             if (state.status === 'grace') {
+                // Grace clock: Bumped to text-lg for high visibility
                 el.innerText = `${mins}:${secs.toString().padStart(2,'0')}`;
-                el.className = "text-xs font-black tabular-nums tracking-tighter leading-none grace-pulse";
+                el.className = "text-lg font-black tabular-nums tracking-tight leading-none grace-pulse";
             } else if (ms <= 1800000) { 
+                // Regular Countdown under 30 mins: Keeping your current size
                 let mStr = mins.toString();
                 el.innerText = `${mStr}:${secs.toString().padStart(2,'0')}`;
                 el.className = "text-xs font-black tabular-nums tracking-tighter neon-text-blue leading-none";
             } else {
+                // Regular Countdown over 30 mins: Keeping your current size
                 el.innerHTML = `${hours}h ${mins.toString().padStart(2,'0')}m <span class="text-[10px] opacity-75">${secs.toString().padStart(2,'0')}s</span>`;
                 el.className = "text-xs font-black tabular-nums tracking-tighter metric-white opacity-80 leading-none";
             }
