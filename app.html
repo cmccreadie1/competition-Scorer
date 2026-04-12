@@ -1769,9 +1769,18 @@
             
             if (state.editingId) { 
                 let obj = state.myCatches.find(x => x.id === state.editingId); 
-                if(obj) { obj.species = species; obj.size = finalSize; obj.display = displaySize; obj.points = pts; } 
+                if(obj) { 
+                    obj.species = species; 
+                    obj.size = finalSize; 
+                    obj.display = displaySize; 
+                    obj.points = pts; 
+                    obj.edited = true; 
+                } 
                 state.editingId = null; 
-            } else { state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now() }); }
+                document.getElementById('btnRecord').innerText = "Record Catch";
+            } else { 
+                state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now(), edited: false }); 
+            }
             
             document.getElementById('inputSpecies').value = ""; document.getElementById('inputSize').value = ""; document.getElementById('inputLbs').value = ""; document.getElementById('inputOz').value = ""; document.getElementById('inputKg').value = ""; document.getElementById('inputGrammes').value = "";
             document.activeElement.blur(); 
@@ -2430,7 +2439,22 @@
                 </div>`;
             }).join('')}</div>`;
                 
-            document.getElementById('historyContent').innerHTML = hubHtml + tableHtml; 
+           document.getElementById('historyContent').innerHTML = hubHtml + tableHtml; 
+        } else { 
+            let listHtml = m.personalCatches.map(c => {
+                const editMarker = c.edited ? `<i class="fa-solid fa-pen-to-square ml-1.5 text-amber-500 opacity-90" style="font-size: 0.9em;"></i>` : "";
+                return `<div class="match-card p-3 flex justify-between items-center mb-1.5">
+                    <div class="text-left">
+                        <b class="text-white text-xs uppercase">${c.species}${editMarker}</b><br>
+                        <span class="text-[10px] text-white font-bold uppercase tracking-widest mt-1 inline-block">${c.time}</span>
+                    </div>
+                    <div class="text-right">
+                        <b class="text-white text-sm text-right">${c.display || c.size}</b><br>
+                        <span class="text-[10px] neon-text-blue font-black uppercase mt-1 inline-block">${m.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (m.format.includes('weight') ? 'Recorded' : c.points + ' Pts')}</span>
+                    </div>
+                </div>`
+            }).join('');
+            document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-cyan-200 mb-3 text-center tracking-widest mt-2">Catch Diary</h4><div class="space-y-1">${listHtml}</div>`; 
         }
         window.openPastCatchFeed = (aid) => {
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
