@@ -1287,6 +1287,7 @@
         function proceedToRoleSelection() {
             let pName = document.getElementById('playerName').value || "";
             let vName = document.getElementById('venueName').value || "";
+            if (!pName || !vName) { alert("Please enter both Name and Venue to continue."); return; }
             pName = pName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
             vName = vName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
             document.getElementById('playerName').value = pName;
@@ -1723,16 +1724,13 @@
             if (!el) return;
             
             if (state.status === 'grace') {
-                // Grace clock: Bumped to text-lg for high visibility
                 el.innerText = `${mins}:${secs.toString().padStart(2,'0')}`;
                 el.className = "text-lg font-black tabular-nums tracking-tight leading-none grace-pulse";
             } else if (ms <= 1800000) { 
-                // Regular Countdown under 30 mins: Keeping your current size
                 let mStr = mins.toString();
                 el.innerText = `${mStr}:${secs.toString().padStart(2,'0')}`;
                 el.className = "text-xs font-black tabular-nums tracking-tighter neon-text-blue leading-none";
             } else {
-                // Regular Countdown over 30 mins: Keeping your current size
                 el.innerHTML = `${hours}h ${mins.toString().padStart(2,'0')}m <span class="text-[10px] opacity-75">${secs.toString().padStart(2,'0')}s</span>`;
                 el.className = "text-xs font-black tabular-nums tracking-tighter metric-white opacity-80 leading-none";
             }
@@ -2263,7 +2261,6 @@
                 </div>`;
 
                 let wrapper = document.createElement('div');
-                // Made entire card clickable, moved onclick here
                 wrapper.innerHTML = `<div class="max-w-md mx-auto relative cursor-pointer active:scale-[0.98] transition-all bg-[#0f172a] rounded-xl neon-border-glow border p-4 pb-0 space-y-4 overflow-hidden mb-4 text-left" onclick="viewPastRecord('${m.id}')">${cardHtml}</div>`;
                 let card = wrapper.firstElementChild;
                 
@@ -2476,22 +2473,16 @@
         function shareMasterLeaderboard() { generateOfficialMasterReport(); }
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
 
-       window.onload = () => {
+        window.onload = () => {
             history.pushState(null, null, window.location.href);
-            fetch('version.json').then(res => res.json()).then(data => { 
-                document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); 
-            }).catch(() => { console.log('Version fetch fallback active.'); });
-            
+            fetch('version.json').then(res => res.json()).then(data => { document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); }).catch(() => { console.log('Version fetch fallback active.'); });
             checkInstallStatus();
             const saved = localStorage.getItem('matchState');
             if (saved) {
                 try {
                     let oldState = JSON.parse(saved);
-                    state.name = oldState.name || ""; 
-                    state.venue = oldState.venue || "";
-                    document.getElementById('playerName').value = state.name; 
-                    document.getElementById('venueName').value = state.venue;
-                    
+                    state.name = oldState.name || ""; state.venue = oldState.venue || "";
+                    document.getElementById('playerName').value = state.name; document.getElementById('venueName').value = state.venue;
                     if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) {
                         state = oldState;
                         listenToCloud();
@@ -2547,20 +2538,32 @@
         window.openCatchFeed = openCatchFeed;
         window.closeCatchFeed = closeCatchFeed;
         window.generateOfficialMasterReport = generateOfficialMasterReport;
-        window.exitWaitingRoom = exitWaitingRoom;
-        window.triggerHypeStart = triggerHypeStart;
-        window.toggleArchive = toggleArchive;
-        window.viewPastRecord = viewPastRecord;
-        window.deleteHistoryItem = deleteHistoryItem;
         window.atmPress = atmPress;
         window.atmDelete = atmDelete;
+        window.openTimeKeypad = openTimeKeypad;
+        window.timeAtmPress = timeAtmPress;
+        window.timeAtmDelete = timeAtmDelete;
+        window.submitTimeAtm = submitTimeAtm;
+        window.closeTimeKeypad = closeTimeKeypad;
+        window.triggerHypeStart = triggerHypeStart;
+        window.leaveMatchEarly = leaveMatchEarly;
+        window.stewardSetNewEnd = stewardSetNewEnd;
+        window.exitWaitingRoom = exitWaitingRoom;
         window.showInstallGuide = showInstallGuide;
+        window.checkSpeciesSelection = checkSpeciesSelection;
+        window.handleInputFocus = handleInputFocus;
+        window.stewardReviewLogs = stewardReviewLogs;
+        window.transferSteward = transferSteward;
+        window.endMatchEarly = endMatchEarly;
+        window.deleteHistoryItem = deleteHistoryItem;
+        window.toggleArchive = toggleArchive;
+        window.viewPastRecord = viewPastRecord;
+        window.closeAndWipeSession = closeAndWipeSession;
 
         window.addEventListener('popstate', () => {
             history.pushState(null, null, window.location.href);
             if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open')) {
-                document.getElementById('leaderboardDrawer').classList.remove('open'); 
-                document.getElementById('stewardDrawer').classList.remove('open');
+                document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open');
             }
         });
     </script>
