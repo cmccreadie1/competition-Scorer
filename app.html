@@ -28,6 +28,7 @@
             --card-bg: #0f172a;        /* Slate Navy Container */
             --input-bg: #1e293b;       /* Visible Input Background */
             --text-main: #f8fafc;
+            --text-header: #ffffff;
             --neon-blue: #00f3ff;
             --neon-amber: #f59e0b;
             --neon-red: #ef4444;
@@ -59,6 +60,20 @@
         
         /* Pure White for critical numbers */
         .metric-white { color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+
+        /* Global Neon Glowing Border Style (Added for Vault Card) */
+        .neon-border-glow {
+            border: 2px solid rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease-out;
+        }
+        .neon-border-glow:hover, .neon-border-glow:active {
+            border-color: rgba(0, 243, 255, 0.8);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+        }
+
+        /* Domestic interaction cue */
+        .domestic-action:active { transform: scale(0.97); }
 
         /* --- V8.2.0 SPECIES POINT BADGES --- */
        .pts-badge {
@@ -364,12 +379,6 @@
         }
 
         /* --- FIRST LOAD ASSEMBLY ANIMATIONS --- */
-        @keyframes icon-assemble {
-            0% { opacity: 0; transform: scale(0.4) translateY(40px); filter: blur(10px) brightness(2); }
-            70% { opacity: 1; transform: scale(1.1) translateY(-5px); filter: blur(0) brightness(1.2); }
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: brightness(1); }
-        }
-
         @keyframes text-reveal {
             0% { opacity: 0; transform: translateY(20px); filter: blur(4px); }
             100% { opacity: 1; transform: translateY(0); filter: blur(0); }
@@ -542,15 +551,22 @@
     <div id="app-container">
 
         <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative">
-          <button onclick="exitApp()" class="absolute top-5 right-5 pill-btn px-3 py-2 text-[9px] active:text-white transition shadow-md z-[50]" style="color: var(--neon-amber) !important; border-color: var(--neon-amber) !important; background-color: rgba(245, 158, 11, 0.1) !important;">
-                Close App <i class="fa-solid fa-xmark ml-1"></i>
+            
+            <button onclick="document.getElementById('guideDrawer').classList.add('open')" class="absolute top-5 left-5 domestic-action text-white/50 active:text-cyan-400 cursor-pointer flex flex-col items-center z-[50]">
+                <i class="fa-solid fa-book-open text-2xl mb-1"></i>
+                <span class="text-[8px] font-black uppercase tracking-widest">Guide</span>
             </button>
 
-           <div class="text-center mt-6 relative">
+            <button onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-white/50 active:text-red-400 cursor-pointer flex flex-col items-center z-[50]">
+                <i class="fa-solid fa-power-off text-2xl mb-1"></i>
+                <span class="text-[8px] font-black uppercase tracking-widest">Close</span>
+            </button>
+
+            <div class="text-center mt-6 relative">
                 <div class="glow-ring"></div>
 
                 <div class="animate-icon mb-4">
-                    <img src="icon-512.png" class="w-32 h-32 mx-auto rounded-[1.5rem] shadow-[0_0_30px_rgba(0,243,255,0.4)] border border-white/10">
+                    <img src="icon-512.png" class="w-28 h-28 mx-auto rounded-[1.5rem] shadow-[0_0_30px_rgba(0,243,255,0.4)] border border-white/10">
                 </div>
 
                 <h1 class="animate-text delay-title text-2xl font-black tracking-tight mb-0.5 uppercase text-white neon-text-blue">
@@ -562,41 +578,56 @@
                 </div>
             </div>
             
-            <div class="w-full max-w-sm space-y-3 mt-8">
-                <div class="match-card p-5 space-y-4 text-center shadow-lg">
+            <div class="w-full max-w-sm space-y-4 mt-6">
+                <div class="match-card p-5 space-y-4 text-center shadow-lg relative z-10">
                     <div>
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-3 text-left">Angler Profile</label>
-                        <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ document.getElementById('venueName').focus(); }" placeholder="Your Name" class="pill-input w-full p-2 text-base">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fa-solid fa-user text-cyan-400/50"></i>
+                            </div>
+                            <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ document.getElementById('venueName').focus(); }" placeholder="Your Name" class="pill-input w-full py-3 pl-10 pr-4 text-sm font-bold">
+                        </div>
                     </div>
                     <div>
                         <label class="block text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-3 text-left">Venue</label>
-                        <input type="text" id="venueName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Venue Name" class="pill-input w-full p-2 text-base">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fa-solid fa-location-dot text-cyan-400/50"></i>
+                            </div>
+                            <input type="text" id="venueName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Venue Name" class="pill-input w-full py-3 pl-10 pr-4 text-sm font-bold">
+                        </div>
                     </div>
-                    <button onclick="proceedToRoleSelection()" class="pill-btn w-full text-base py-2.5 mt-2 shadow-md border-2 border-cyan-400">
-                        Continue
+                    <button onclick="proceedToRoleSelection()" class="pill-btn w-full text-base py-3 mt-2 shadow-md border-2 border-cyan-400">
+                        Continue <i class="fa-solid fa-arrow-right ml-2"></i>
                     </button>
                 </div>
                 
-                <div class="flex space-x-2.5 pt-2">
-                    <button onclick="navTo('history')" class="pill-btn flex-1 py-2.5 text-[9px]">
-                        <i class="fa-solid fa-book mr-1.5 neon-text-blue"></i> History
-                    </button>
-                    <button onclick="document.getElementById('guideDrawer').classList.add('open')" class="pill-btn flex-1 py-2.5 text-[9px]">
-                        <i class="fa-solid fa-book mr-1.5 text-white"></i> User Guide
+                <div class="w-full bg-[#0f172a] rounded-2xl neon-border-glow border overflow-hidden domestic-action relative z-10">
+                    <button onclick="navTo('history')" class="w-full p-5 text-center space-y-2 flex flex-col items-center cursor-pointer">
+                        <div class="text-white/30 text-4xl flex items-center justify-center space-x-3 mb-1">
+                            <i class="fa-solid fa-vault"></i>
+                            <i class="fa-solid fa-key text-white/10 text-3xl mt-2"></i>
+                        </div>
+                        <div class="text-[var(--text-header)] text-xl font-black uppercase tracking-tight">My Match <span class="neon-text-blue">Vault</span></div>
+                        <p class="text-[10px] text-[var(--text-main)] font-medium leading-snug px-2">View past match summary, deep analysis & catch diary.</p>
+                        <div class="flex items-center justify-center gap-1.5 pt-2 text-[9px] font-bold text-white/50 leading-snug">
+                            <i class="fa-solid fa-key neon-text-blue text-[10px] opacity-60"></i>
+                            (Click for full match analysis)
+                        </div>
                     </button>
                 </div>
 
-                <button id="btnInstallGuide" onclick="showInstallGuide()" class="hidden pill-btn w-full py-2.5 text-[9px] mt-2.5">
+                <button id="btnInstallGuide" onclick="showInstallGuide()" class="hidden pill-btn w-full py-2.5 text-[9px] mt-2 relative z-10">
                     <i class="fa-solid fa-mobile-screen mr-1.5 neon-text-blue"></i> Install App
                 </button>
             </div>
         </div>
-
         <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-black">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3 pt-1">
                 <button onclick="navTo('home')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-base font-black uppercase tracking-tight text-white">Select Role</h2>
-                <button onclick="exitApp()" class="text-red-500 text-xl px-2"><i class="fa-solid fa-power-off"></i></button>
+                <div class="w-6"></div>
             </div>
             
             <div class="flex-1 flex flex-col justify-center space-y-6 max-w-sm mx-auto w-full pb-20">
