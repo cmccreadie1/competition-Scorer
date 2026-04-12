@@ -2491,119 +2491,60 @@
                         listenToCloud();
                         navTo(state.view);
                         if (['playing', 'grace'].includes(state.status)) {
-                            syncInputDeckToState(); 
-                            renderCatchList();
-                            startClock();
-                            updateLiveTally();
-                            if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
-                            if (globalMatchData) { checkAndFireTicker(); }
-                        }
-                    }
-                } catch(e) { closeAndWipeSession(); }
-            }
-        };
+                           syncInputDeckToState();
+                renderCatchList();
+                startClock();
+                updateLiveTally();
+                if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----";
+                if (globalMatchData) { checkAndFireTicker(); }
+            } catch(e) { console.error(e); }
+        }
 
-        window.addEventListener('popstate', () => {
-            history.pushState(null, null, window.location.href);
-            if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open') || document.getElementById('guideDrawer').classList.contains('open') || !document.getElementById('historyDetailDrawer').classList.contains('hidden') || !document.getElementById('stewardRosterDrawer').classList.contains('hidden') || !document.getElementById('stewardLogDrawer').classList.contains('hidden')) { 
-                document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('guideDrawer').classList.remove('open'); stewardCloseLogs(); closeHistoryDetail(); document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);
-            }
-        });
-// --- RESTORED CORE ENGINE FUNCTIONS ---
         function proceedToRoleSelection() {
             let pName = document.getElementById('playerName').value || "";
             let vName = document.getElementById('venueName').value || "";
-            if (!pName || !vName) {
-                alert("Please enter both Name and Venue to continue.");
-                return;
-            }
-            pName = pName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
-            vName = vName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
-            document.getElementById('playerName').value = pName;
-            document.getElementById('venueName').value = vName;
-            state.name = pName; 
-            state.venue = vName;
+            if (!pName || !vName) { alert("Please enter both Name and Venue to continue."); return; }
+            state.name = pName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+            state.venue = vName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
             saveState();
             navTo('role');
         }
 
         function exitApp() {
-            if (confirm("CLOSE APP?\n\nThis will clear current lobby inputs. History remains untouched.")) {
-                closeAndWipeSession();
-                try { window.close(); } catch(e) {}
-                navTo('kill');
-            }
+            if (confirm("CLOSE APP?")) { closeAndWipeSession(); navTo('kill'); }
         }
 
-        async function forceUpdateApp() {
-            if (confirm("Hard Reset App Cache?")) {
-                const spin = document.getElementById('updateSpinnerInternal');
-                if (spin) spin.classList.add('fa-spin');
-                localStorage.removeItem('matchState');
-                if ('serviceWorker' in navigator) {
-                    const registrations = await navigator.serviceWorker.getRegistrations();
-                    for (let registration of registrations) { await registration.unregister(); }
-                }
-                if ('caches' in window) {
-                    const keys = await caches.keys();
-                    for (let key of keys) { await caches.delete(key); }
-                }
-                setTimeout(() => { 
-                    window.location.href = window.location.origin + window.location.pathname + '?v=' + Date.now();
-                }, 1000);
-            }
-        }
-
-        // --- GLOBAL BINDINGS (ENSURES BUTTONS CAN SEE THE FUNCTIONS) ---
+        // --- ALL GLOBAL BINDINGS ---
         window.proceedToRoleSelection = proceedToRoleSelection; 
-        window.exitApp = exitApp; 
+        window.exitApp = exitApp;
+        window.navTo = navTo;
+        window.recordCatch = recordCatch;
+        window.editCatch = editCatch;
+        window.deleteCatch = deleteCatch;
+        window.switchHistoryTab = switchHistoryTab;
+        window.closeHistoryDetail = closeHistoryDetail;
         window.forceUpdateApp = forceUpdateApp;
-        window.triggerHypeStart = triggerHypeStart; 
-        window.navTo = navTo; 
-        window.createMatch = createMatch; 
-        window.connectToMatch = connectToMatch; 
-        window.recordCatch = recordCatch; 
-        window.editCatch = editCatch; 
-        window.deleteCatch = deleteCatch; 
-        window.leaveMatchEarly = leaveMatchEarly; 
-        window.stewardSetNewEnd = stewardSetNewEnd; 
-        window.shareResults = shareResults; 
-        window.resetApp = resetApp; 
-        window.toggleArchive = toggleArchive; 
-        window.viewPastRecord = viewPastRecord; 
-        window.switchHistoryTab = switchHistoryTab; 
-        window.closeHistoryDetail = closeHistoryDetail; 
-        window.focusMeasurement = focusMeasurement; 
-        window.promptCustomSpecies = promptCustomSpecies; 
-        window.exitWaitingRoom = exitWaitingRoom; 
-        window.deleteHistoryItem = deleteHistoryItem; 
-        window.checkSpeciesSelection = checkSpeciesSelection; 
-        window.handleInputFocus = handleInputFocus; 
-        window.transferSteward = transferSteward; 
-        window.endMatchEarly = endMatchEarly; 
-        window.showInstallGuide = showInstallGuide; 
-        window.formatScoreDisplay = formatScoreDisplay; 
-        window.shareMasterLeaderboard = shareMasterLeaderboard; 
-        window.atmPress = atmPress; 
-        window.atmDelete = atmDelete; 
-        window.openTimeKeypad = openTimeKeypad; 
-        window.timeAtmPress = timeAtmPress; 
-        window.timeAtmDelete = timeAtmDelete; 
-        window.submitTimeAtm = submitTimeAtm; 
-        window.closeTimeKeypad = closeTimeKeypad; 
-        window.shareUnifiedReport = shareUnifiedReport; 
-        window.closeAndWipeSession = closeAndWipeSession; 
-        window.stewardReviewLogs = stewardReviewLogs; 
-        window.stewardCloseLogs = stewardCloseLogs; 
-        window.stewardOpenAngler = stewardOpenAngler; 
-        window.stewardDeleteCatch = stewardDeleteCatch; 
-        window.submitGodModeCatch = submitGodModeCatch; 
-        window.godCheckSpeciesSelection = godCheckSpeciesSelection; 
-        window.openCatchFeed = openCatchFeed; 
-        window.closeCatchFeed = closeCatchFeed; 
-        window.generateOfficialMasterReport = generateOfficialMasterReport; 
-        window.generateHistoricReport = generateHistoricReport; 
+        window.createMatch = createMatch;
+        window.connectToMatch = connectToMatch;
+        window.shareResults = shareResults;
+        window.generateHistoricReport = generateHistoricReport;
         window.syncInputDeckToState = syncInputDeckToState;
+        window.openPastCatchFeed = openPastCatchFeed;
+        window.stewardCloseLogs = stewardCloseLogs;
+        window.stewardOpenAngler = stewardOpenAngler;
+        window.stewardDeleteCatch = stewardDeleteCatch;
+        window.submitGodModeCatch = submitGodModeCatch;
+        window.godCheckSpeciesSelection = godCheckSpeciesSelection;
+        window.openCatchFeed = openCatchFeed;
+        window.closeCatchFeed = closeCatchFeed;
+        window.generateOfficialMasterReport = generateOfficialMasterReport;
+
+        window.addEventListener('popstate', () => {
+            history.pushState(null, null, window.location.href);
+            if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open')) {
+                document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open');
+            }
+        });
     </script>
 </body>
 </html>
