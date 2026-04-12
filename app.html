@@ -2338,16 +2338,13 @@
                 Object.entries(hourBins).forEach(([w, count]) => { if (count > peakCount) { peakCount = count; peakWindow = w; } });
 
                 let hubHtml = `
-                <div class="p-3 bg-black/30 border-b border-white/5 space-y-2 flex items-center justify-between rounded-xl">
-                    <div class="text-white text-[10px] font-bold flex items-center shrink-0">
-                        <i class="fa-solid fa-calendar-days mr-1.5 text-cyan-400"></i> ${m.date}
+                <div class="p-3 bg-black/30 border border-white/5 flex items-center justify-between rounded-xl">
+                    <div class="text-white text-[11px] font-bold flex items-center shrink-0">
+                        <i class="fa-solid fa-calendar-days mr-2 text-cyan-400"></i> ${m.date}
                     </div>
-                    <div class="flex items-center gap-3">
-                        <div class="text-xs font-black text-cyan-300 shrink-0">${m.personalCatches.length} of ${m.totalMatchFish || 0} Fish</div>
-                        <button onclick="generateHistoricReport()" class="text-white/60 text-base active:scale-95 active:text-cyan-400">
-                            <i class="fa-solid fa-share-nodes"></i>
-                        </button>
-                    </div>
+                    <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2 text-[10px] shadow-lg border border-cyan-400 transition-transform active:scale-95">
+                        <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
+                    </button>
                 </div>
 
                 <div class="bg-slate-800/60 p-3 text-center border-b border-white/5 space-y-2 rounded-xl mt-2">
@@ -2423,7 +2420,7 @@
                         </div>
                         <div class="text-right flex flex-col items-end shrink-0 leading-tight pt-1">
                             <div class="text-lg font-black ${i===0?'text-cyan-300':'text-slate-100'} leading-tight">${formatScoreDisplay(a.score, m.format, true).replace(' pts', '<span class="text-[10px] text-slate-400 ml-1 leading-tight">Pts</span>')}</div>
-                            <div class="text-[9px] text-slate-600 font-medium">(Winner)</div>
+                            <div class="text-[9px] text-slate-600 font-medium">(${i===0?'Winner':(i+1)+'th Place'})</div>
                         </div>
                     </div>`).join('')}</div>`;
                     
