@@ -2416,7 +2416,7 @@
                             <div class="text-lg font-black ${i===0?'text-cyan-300':'text-slate-100'} leading-tight">${formatScoreDisplay(a.score, m.format, true).replace(' pts', '<span class="text-[10px] text-slate-400 ml-1 leading-tight">Pts</span>')}</div>
                           <div class="text-[9px] text-slate-600 font-medium">${i===0?'Winner':getOrd(i+1)}</div>
                         </div>
-                    </div>).join('')}<div class="py-3 flex justify-center items-center opacity-50 animate-bounce"><i class="fa-solid fa-chevron-down text-slate-400 text-[12px]"></i></div></div>`;
+                    </div>`).join('')}<div class="py-3 flex justify-center items-center opacity-50 animate-bounce"><i class="fa-solid fa-chevron-down text-slate-400 text-[12px]"></i></div></div>`;
                     
                 document.getElementById('historyContent').innerHTML = hubHtml + tableHtml; 
             } else { 
