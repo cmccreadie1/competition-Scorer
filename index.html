@@ -79,10 +79,19 @@
             position: fixed;
             bottom: 30px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateY(100px);
             width: calc(100% - 40px);
             max-width: 440px;
             z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .app-btn-container.visible {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .app-btn {
@@ -361,6 +370,13 @@
                 navigator.serviceWorker.register('/service-worker.js');
             });
         }
+        window.addEventListener('scroll', () => {
+            const btnContainer = document.getElementById('floatingBtnContainer');
+            // Trigger when user is within 150px of the page bottom
+            if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 150)) {
+                btnContainer.classList.add('visible');
+            }
+        });
     </script>
 </body>
 </html>
