@@ -159,14 +159,17 @@
         </div>
 
         <div class="text-slate-600 font-bold text-[8px] tracking-[0.4em] uppercase mb-8 opacity-60 version-display">V8.0.0</div>
+        <div id="scrollReminder" class="flex flex-col items-center animate-bounce opacity-40 mt-4 transition-opacity duration-500">
+            <span class="text-[7px] uppercase tracking-[0.3em] font-bold mb-1">Features</span>
+            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </div>
 
         <p class="text-[var(--text-main)] text-[13px] leading-relaxed mb-8 px-4 font-medium">
             The ultimate <b class="neon-text-blue uppercase tracking-wider">live</b> scorecard built for shore anglers.
         </p>
         
-        <div class="w-full mb-10 animate-image px-2 mt-1">
-            <p class="text-[9px] font-bold text-cyan-400/60 uppercase tracking-widest mb-3"><i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Tap to zoom preview</p>
-            <img src="app-screens.png" onclick="openLightbox()" alt="App Preview" class="zoom-trigger w-full h-auto rounded-[1rem] border border-white/10 shadow-2xl">
+       <div class="w-full mb-10 animate-image px-2 mt-1">
+            <img src="app-screens.png" alt="ShoreScore App Preview" class="w-full h-auto rounded-[1rem] border border-white/10 shadow-2xl">
         </div>
 
         <div class="text-left space-y-12 w-full mb-16" id="featureList">
@@ -370,9 +373,22 @@
                 navigator.serviceWorker.register('/service-worker.js');
             });
         }
+
         window.addEventListener('scroll', () => {
             const btnContainer = document.getElementById('floatingBtnContainer');
-            // Trigger when user is within 150px of the page bottom
+            const reminder = document.getElementById('scrollReminder');
+            
+            // Hide the arrow when user starts scrolling
+            if (window.scrollY > 50) { 
+                if(reminder) {
+                    reminder.style.opacity = "0"; 
+                    reminder.style.pointerEvents = "none";
+                }
+            } else { 
+                if(reminder) reminder.style.opacity = "0.4"; 
+            }
+
+            // Show button at the bottom
             if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 150)) {
                 btnContainer.classList.add('visible');
             }
