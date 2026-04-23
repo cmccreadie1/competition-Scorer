@@ -661,14 +661,21 @@
                     <div class="w-12 h-14 bg-black border border-cyan-400/60 rounded-lg flex items-center justify-center text-2xl font-black metric-white shadow-md" id="pin-4"></div>
                 </div>
             </div>
-            <div class="flex-1 grid grid-cols-3 gap-2.5 p-3 max-w-sm mx-auto w-full content-center">
-                <button class="atm-btn" onclick="atmPress(1)">1</button><button class="atm-btn" onclick="atmPress(2)">2</button><button class="atm-btn" onclick="atmPress(3)">3</button>
-                <button class="atm-btn" onclick="atmPress(4)">4</button><button class="atm-btn" onclick="atmPress(5)">5</button><button class="atm-btn" onclick="atmPress(6)">6</button>
-                <button class="atm-btn" onclick="atmPress(7)">7</button><button class="atm-btn" onclick="atmPress(8)">8</button><button class="atm-btn" onclick="atmPress(9)">9</button>
-                <button class="atm-btn text-red-500" onclick="navTo('role')"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="atmPress(0)">0</button><button class="atm-btn neon-text-blue" onclick="atmDelete()"><i class="fa-solid fa-delete-left"></i></button>
-            </div>
-            <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto pill-btn text-base py-3 mb-8 shadow-xl">Validate</button>
+           <div class="flex-1 grid grid-cols-3 gap-2.5 p-3 max-w-sm mx-auto w-full content-center">
+            <button class="atm-btn" onclick="atmPress(1); playKeyFeedback()">1</button>
+            <button class="atm-btn" onclick="atmPress(2); playKeyFeedback()">2</button>
+            <button class="atm-btn" onclick="atmPress(3); playKeyFeedback()">3</button>
+            <button class="atm-btn" onclick="atmPress(4); playKeyFeedback()">4</button>
+            <button class="atm-btn" onclick="atmPress(5); playKeyFeedback()">5</button>
+            <button class="atm-btn" onclick="atmPress(6); playKeyFeedback()">6</button>
+            <button class="atm-btn" onclick="atmPress(7); playKeyFeedback()">7</button>
+            <button class="atm-btn" onclick="atmPress(8); playKeyFeedback()">8</button>
+            <button class="atm-btn" onclick="atmPress(9); playKeyFeedback()">9</button>
+            <button class="atm-btn text-red-500" onclick="navTo('role'); playKeyFeedback()"><i class="fa-solid fa-xmark"></i></button>
+            <button class="atm-btn" onclick="atmPress(0); playKeyFeedback()">0</button>
+            <button class="atm-btn neon-text-blue" onclick="atmDelete(); playKeyFeedback()"><i class="fa-solid fa-delete-left"></i></button>
         </div>
+        <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto pill-btn text-base py-3 mb-8 shadow-xl">Validate</button>
 
         <div id="view-host" class="hidden view-frame p-5 space-y-4 bg-black">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
@@ -978,6 +985,22 @@
             messagingSenderId: "32868968041",
             appId: "1:32868968041:web:a5c7547cbd69c323cb64f8"
         };
+        window.playKeyFeedback = function() {
+    if (navigator.vibrate) navigator.vibrate(15);
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+    } catch (e) {}
+};
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
