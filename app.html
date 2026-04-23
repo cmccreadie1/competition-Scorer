@@ -661,7 +661,7 @@
                     <div class="w-12 h-14 bg-black border border-cyan-400/60 rounded-lg flex items-center justify-center text-2xl font-black metric-white shadow-md" id="pin-4"></div>
                 </div>
             </div>
-           <div class="flex-1 grid grid-cols-3 gap-2.5 p-3 max-w-sm mx-auto w-full content-center">
+          <div class="flex-1 grid grid-cols-3 gap-2.5 p-3 max-w-sm mx-auto w-full content-center">
             <button class="atm-btn" onclick="atmPress(1); playKeyFeedback()">1</button>
             <button class="atm-btn" onclick="atmPress(2); playKeyFeedback()">2</button>
             <button class="atm-btn" onclick="atmPress(3); playKeyFeedback()">3</button>
@@ -676,8 +676,11 @@
             <button class="atm-btn neon-text-blue" onclick="atmDelete(); playKeyFeedback()"><i class="fa-solid fa-delete-left"></i></button>
         </div>
         <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto pill-btn text-base py-3 mb-8 shadow-xl">Validate</button>
+    </div>
 
-        <div id="view-host" class="hidden view-frame p-5 space-y-4 bg-black">
+    <div id="view-host" class="hidden view-frame p-5 space-y-4 bg-black">
+
+    <div id="view-host" class="hidden view-frame p-5 space-y-4 bg-black">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                 <button onclick="navTo('role')" class="text-slate-500 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-base font-black uppercase tracking-tight text-white">Match Creator</h2>
