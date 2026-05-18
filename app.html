@@ -558,8 +558,7 @@
                 <i class="fa-solid fa-book-open text-2xl mb-1"></i>
                 <span class="text-[8px] font-black uppercase tracking-widest">Guide</span>
             </button>
-
-            <button onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-white/50 active:text-red-400 cursor-pointer flex flex-col items-center z-[50]">
+<button id="main-close-btn" onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-white/50 active:text-red-400 cursor-pointer flex flex-col items-center z-[50]">
                 <i class="fa-solid fa-power-off text-2xl mb-1"></i>
                 <span class="text-[8px] font-black uppercase tracking-widest">Close</span>
             </button>
@@ -1300,13 +1299,19 @@
             navTo('role');
         }
 
-        function exitApp() {
-            if (confirm("CLOSE APP?\n\nThis will clear current lobby inputs. History remains untouched.")) {
-                closeAndWipeSession();
-                try { window.close(); } catch(e) {}
-                navTo('kill');
-            }
+    function exitApp() {
+    if (confirm("CLOSE APP?\n\nThis will clear current lobby inputs. History remains untouched.")) {
+        closeAndWipeSession();
+        try { window.close(); } catch(e) {}
+        navTo('kill');
+        
+        // Turn off the blinking effect 
+        const closeBtn = document.getElementById('main-close-btn');
+        if (closeBtn) {
+            closeBtn.classList.remove('animate-pulse', 'bg-red-700');
         }
+    }
+}
 
         async function forceUpdateApp() {
             if (confirm("Hard Reset App Cache?")) {
@@ -2166,7 +2171,12 @@
         function endMatchEarly(grace) { if(state.isSteward && state.pin) { if(grace) { document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('customEndModal').classList.remove('hidden'); } } }
         function stewardSetNewEnd(mins) { document.getElementById('customEndModal').classList.add('hidden'); document.getElementById('stewardDrawer').classList.remove('open'); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
         function transferSteward() { if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); document.getElementById('stewardDrawer').classList.remove('open'); } } }
-        function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); closeAndWipeSession(); } }
+        function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); closeAndWipeSession(); } 
+                                   // Turn on the blinking effect for the close button
+    const closeBtn = document.getElementById('main-close-btn');
+    if (closeBtn) {
+        closeBtn.classList.add('animate-pulse', 'bg-red-700');
+    } } }
         
         function lockdownMatch(isHostPushing) { 
             clearInterval(clockInterval); 
