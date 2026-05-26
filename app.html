@@ -2092,6 +2092,21 @@
                 t += `⚖️ Match Total Weight: ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Fish)\n\n`;
             }
 
+            t += `⏱️ *HOURLY TIMELINE*\n`;
+            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
+            if(sortedHours.length === 0) { 
+                t += `▪️ No captures recorded.\n\n`; 
+            } else {
+                let maxHourVal = Math.max(...Object.values(hourCounts));
+                sortedHours.forEach(hr => {
+                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "";
+                    let nHr = parseInt(hr);
+                    let nextHr = nHr === 23 ? 0 : nHr + 1;
+                    t += `▪️ ${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00: ${hourCounts[hr]} Fish${isFire}\n`;
+                });
+                t += `\n`;
+            }
+
             t += `🏆 *FULL STANDINGS*\n`;
             arr.forEach((a, i) => { 
                 t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
