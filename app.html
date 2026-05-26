@@ -509,7 +509,7 @@
             <div class="text-center">
                 <i class="fa-solid fa-mobile-screen-button text-blue-600 text-4xl mb-2"></i>
                 <h3 class="text-base font-black uppercase tracking-tight text-slate-900">Device Installation</h3>
-                <p id="installInstructionText" class="text-slate-600 mt-3 text-[11px] leading-relaxed"></p>
+                <p id="installInstructionText" class="text-slate-600 text-[11px] mt-3 leading-relaxed"></p>
             </div>
             <button onclick="document.getElementById('installModal').classList.add('hidden')" class="pill-btn w-full py-3 text-[10px]">Got it</button>
         </div>
@@ -694,16 +694,9 @@
                     </div>
                 </div>
 
-                <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="mt-2 text-[10px] font-black uppercase tracking-widest bg-white border border-slate-300 text-blue-600 px-5 py-1.5 rounded-full shadow-sm active:scale-95 transition-transform flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-trophy"></i>
-                    <span>View Live Leaderboard</span>
-                </button>
+                <div id="hub-watermark-text" class="w-full text-center text-slate-600 font-medium text-[9px] tracking-tight my-2 pointer-events-none z-10"></div>
 
-                <div id="cloudStatus" class="text-[8px] font-black uppercase tracking-wider text-slate-400 mt-1 flex items-center justify-center gap-1">
-                    <span>🟢 Connected</span>
-                </div>
-
-                <div class="w-full max-w-md h-6 py-1 relative mask-fade-edges overflow-hidden flex-none mt-1">
+                <div class="w-full max-w-md h-6 py-1 relative mask-fade-edges overflow-hidden flex-none">
                     <div id="wallStreetTicker" class="ticker-track text-[9px] uppercase items-center tracking-widest font-bold">
                         <span class="text-slate-600">LIVE TELEMETRY: AWAITING DATA...</span>
                     </div>
@@ -762,6 +755,9 @@
                 </div>
 
                 <div class="pt-2 pb-6 space-y-2 flex-none px-1 text-center">
+                    <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="pill-btn w-full py-3 text-[11px] tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-sm">
+                        🏆 VIEW LIVE LEADERBOARD
+                    </button>
                     <button id="btnStewardDesk" onclick="document.getElementById('stewardDrawer').classList.add('open')" class="hidden pill-btn w-full py-3 text-[11px] tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-sm">
                         ⚙️ STEWARD CONTROLS
                     </button>
@@ -879,10 +875,6 @@
                     <span class="text-[8px] font-black uppercase tracking-widest mb-1 opacity-80 text-blue-900">🎣 Total</span>
                     <span class="font-black text-xl leading-none mt-0.5 text-blue-700" id="totalMatchFishCount">0</span>
                 </div>
-            </div>
-
-            <div class="mx-3 mt-2 bg-slate-100 border border-slate-200 py-2 px-3 rounded-lg text-center text-[9px] font-black text-slate-600 uppercase tracking-wide flex-none">
-                👇 Tap any angler's name to view their live catch log
             </div>
 
             <div id="leaderboardList" class="scrollable-area p-3 space-y-1.5 text-center mt-1"></div>
@@ -1473,20 +1465,12 @@
             if(!state.pin) return; updateLiveTally();
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
             
-            const cloudEl = document.getElementById('cloudStatus');
-            if (cloudEl) cloudEl.innerHTML = `<span>⏳ Syncing to Cloud...</span>`;
-
             if (globalMatchData && globalMatchData.anglers && globalMatchData.anglers[uid]) {
                 globalMatchData.anglers[uid].catches = state.myCatches;
                 globalMatchData.anglers[uid].score = total;
             }
             
-            update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name || "Angler", score: total, catches: state.myCatches })
-            .then(() => {
-                if (cloudEl) cloudEl.innerHTML = `<span class="text-green-600">🟢 Cloud Synced</span>`;
-            }).catch(() => {
-                if (cloudEl) cloudEl.innerHTML = `<span class="text-amber-600">⚠️ Local Cache Saved</span>`;
-            });
+            update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name || "Angler", score: total, catches: state.myCatches });
         }
 
         function createMatch() {
@@ -1631,17 +1615,17 @@
             
             startClock();
             
-            if (globalMatchData) {
-                checkAndFireTicker();
-                const cloudEl = document.getElementById('cloudStatus');
-                if (cloudEl) cloudEl.innerHTML = `<span class="text-green-600">🟢 Cloud Connected</span>`;
-                renderCatchList();
-                }
-            }
+            if (globalMatchData) checkAndFireTicker();
         }
 
         let clockTickCount = 0;
         function startClock() {
+          const watermarkText = document.getElementById('hub-watermark-text');
+    if (watermarkText && state) {
+        watermarkText.innerText = state.isHost 
+            ? 'tap pill for leaderboard | hold for steward tools' 
+            : 'tap pill for leaderboard';
+    }
             clearInterval(clockInterval);
             clockTickCount = 0;
             clockInterval = setInterval(() => {
@@ -1665,13 +1649,13 @@
                         try { navigator.vibrate([100, 50, 100, 50, 100]); } catch(e){}
                         playHorn(); 
                         if (state.isHost) {
-                            let absoluteGraceEnd = state.endTime + 180000;
-                            if (now >= absoluteGraceEnd) {
-                                update(ref(db, 'matches/' + state.pin), { status: 'finished' });
-                            } else {
-                                update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: absoluteGraceEnd });
-                            }
-                        }
+    let absoluteGraceEnd = state.endTime + 180000;
+    if (now >= absoluteGraceEnd) {
+        update(ref(db, 'matches/' + state.pin), { status: 'finished' });
+    } else {
+        update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: absoluteGraceEnd });
+    }
+}
                     } else { 
                         updateTimerDisplay(remaining); 
                     }
@@ -1782,13 +1766,6 @@
         function renderCatchList() {
             const list = document.getElementById('localCatchList'); if (!list) return;
             list.innerHTML = "";
-            
-            /* Sleek Empty State Guide Adjustment */
-            if (state.myCatches.length === 0) {
-                list.innerHTML = `<div class="p-8 text-center border-2 border-dashed border-slate-200 rounded-xl bg-white"><p class="text-[10px] font-black uppercase tracking-widest text-slate-400">No catches logged yet</p><p class="text-[9px] font-bold text-slate-400 mt-1">Select a fish species above to log your first entry.</p></div>`;
-                return;
-            }
-
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
                 div.className = "match-card p-2 flex justify-between items-center mb-1 shadow-sm";
@@ -1802,9 +1779,9 @@
                         <br>
                         <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest leading-none block mt-0.5">${c.time}</span>
                     </div>
-                    <div class="flex items-center pr-1">
-                        <button onclick="editCatch('${c.id}')" class="text-blue-600 active:scale-90 transition p-3 -m-1 flex items-center justify-center" aria-label="Edit"><i class="fa-solid fa-pencil text-sm pointer-events-none"></i></button>
-                        <button onclick="deleteCatch('${c.id}')" class="text-slate-500 active:text-red-600 active:scale-90 transition p-3 -m-1 flex items-center justify-center ml-2" aria-label="Delete"><i class="fa-solid fa-trash-can text-sm pointer-events-none"></i></button>
+                    <div class="flex items-center space-x-4 pr-2">
+                        <button onclick="editCatch('${c.id}')" class="text-blue-600 active:scale-90 transition"><i class="fa-solid fa-pencil text-sm"></i></button>
+                        <button onclick="deleteCatch('${c.id}')" class="text-slate-500 active:text-red-600 active:scale-90 transition"><i class="fa-solid fa-trash-can text-sm"></i></button>
                     </div>`;
                 list.appendChild(div);
             });
@@ -2253,7 +2230,7 @@
                 wrapper.innerHTML = `<div class="max-w-md mx-auto relative cursor-pointer active:scale-[0.98] transition-all bg-white rounded-xl neon-border-glow border p-4 pb-0 space-y-4 overflow-hidden mb-4 text-left" onclick="viewPastRecord('${m.id}')">${cardHtml}</div>`;
                 let card = wrapper.firstElementChild;
                 
-                if(m.id && i < 8) r.appendChild(card); else a.appendChild(card); 
+                if(i < 8) r.appendChild(card); else a.appendChild(card); 
             });
             document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 8); 
         }
@@ -2380,7 +2357,7 @@
                     <div class="text-[12px] font-black uppercase tracking-widest text-slate-900">
                        <i class="fa-solid fa-trophy mr-1.5 text-orange-500"></i> Final Standings
                     </div>
-                    <div class="text-[10px] font-medium text-slate-400 leading-tight mt-0.5">
+                    <div class="text-[10px] font-medium text-slate-500 leading-tight mt-0.5">
                         (Tap name for individual catch record)
                     </div>
                 </div>
