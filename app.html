@@ -1635,6 +1635,8 @@
                 checkAndFireTicker();
                 const cloudEl = document.getElementById('cloudStatus');
                 if (cloudEl) cloudEl.innerHTML = `<span class="text-green-600">🟢 Cloud Connected</span>`;
+                renderCatchList();
+                }
             }
         }
 
