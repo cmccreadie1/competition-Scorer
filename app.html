@@ -72,16 +72,16 @@
 
         .domestic-action:active { transform: scale(0.97); }
 
-        /* --- SPECIES POINT BADGES (HIGH VIS) --- */
+        /* --- SPECIES POINT BADGES --- */
        .pts-badge {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 3px 8px;      
-            height: 18px;          
-            min-width: 28px;       
+            padding: 1px 6px;      
+            height: 16px;          
+            min-width: 26px;       
             border-radius: 4px;    
-            font-size: 12px;        
+            font-size: 11px;        
             font-weight: 900;
             margin-left: 6px;
             vertical-align: middle;
@@ -89,51 +89,21 @@
             border: 1px solid;
             text-transform: uppercase;
         }
-        .pts-std { 
-            background: #e0f2fe; 
-            border-color: #0ea5e9; 
-            color: #0284c7 !important; 
-        }
-        .pts-40 { 
-            background: #ffedd5; 
-            border-color: #f97316; 
-            color: #ea580c !important; 
-        } 
-        .pts-35 { 
-            background: #f1f5f9; 
-            border-color: #94a3b8; 
-            color: #475569 !important; 
-        } 
-        .pts-25 { 
-            background: #fef3c7; 
-            border-color: #d97706; 
-            color: #b45309 !important; 
-        } 
-        .pts-1 { 
-            background: #f8fafc; 
-            border: 1px dashed #cbd5e1; 
-            color: #64748b !important; 
-        }
+        .pts-std { background: #e0f2fe; border-color: #0ea5e9; color: #0284c7 !important; }
+        .pts-40 { background: #ffedd5; border-color: #f97316; color: #ea580c !important; } 
+        .pts-35 { background: #f1f5f9; border-color: #94a3b8; color: #475569 !important; } 
+        .pts-25 { background: #fef3c7; border-color: #d97706; color: #b45309 !important; } 
+        .pts-1 { background: #f8fafc; border: 1px dashed #cbd5e1; color: #64748b !important; }
         
-        #app-container {
-            width: 100%;
-            height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: background-color 0.6s ease;
-        }
-
-        #app-container.grace-active {
-            background-color: #fef2f2 !important; 
-        }
+        #app-container { width: 100%; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; transition: background-color 0.6s ease; }
+        #app-container.grace-active { background-color: #fef2f2 !important; }
 
         /* --- UNIFIED BORDERS & FILLS --- */
         .match-card {
             background-color: var(--card-bg) !important; 
             border: 1px solid var(--card-border) !important; 
-            border-radius: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border-radius: 1rem;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
         }
 
         .pill-input {
@@ -146,10 +116,7 @@
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-main) !important;
         }
-        .pill-input:focus {
-            border-color: var(--neon-blue) !important;
-            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
-        }
+        .pill-input:focus { border-color: var(--neon-blue) !important; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2); }
 
         .pill-btn {
             background-color: var(--neon-blue);
@@ -168,36 +135,13 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             touch-action: manipulation;
         }
-        .pill-btn:active { 
-            transform: scale(0.95); 
-            background-color: #0369a1;
-        }
+        .pill-btn:active { transform: scale(0.96); background-color: #0369a1; }
+        .btn-destructive { background-color: var(--neon-red) !important; color: #ffffff !important; }
 
-        /* The Destructive Red Exception */
-        .btn-destructive {
-            background-color: var(--neon-red) !important;
-            color: #ffffff !important;
-        }
+        .btn-record-pulse { animation: record-pulse 2s infinite; }
+        @keyframes record-pulse { 0% { box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(2, 132, 199, 0); } 100% { box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); } }
 
-        /* Pulsing Record Catch Button */
-        .btn-record-pulse {
-            animation: record-pulse 2s infinite;
-        }
-
-        @keyframes record-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(2, 132, 199, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
-        }
-
-        .telemetry-unit {
-            font-size: 0.65em;
-            opacity: 0.9;
-            font-weight: 700;
-            margin-left: 2px;
-            text-transform: lowercase;
-            color: var(--text-main);
-        }
+        .telemetry-unit { font-size: 0.65em; opacity: 0.9; font-weight: 700; margin-left: 2px; text-transform: lowercase; color: var(--text-main); }
 
         /* --- DYNAMIC ISLAND HUD --- */
         .island-container {
@@ -213,168 +157,45 @@
         .island-text-fade { transition: opacity 0.8s ease-in-out; }
 
         /* --- TICKERS (BORDERLESS) --- */
-        @keyframes ticker-scroll {
-            0% { left: 100%; transform: translateX(0); }
-            100% { left: 0; transform: translateX(-100%); }
-        }
-        .ticker-track {
-            position: absolute;
-            display: flex;
-            align-items: center;
-            height: 100%;
-            white-space: nowrap;
-            will-change: transform, left;
-            left: 100%;
-        }
-        .scroll-active {
-            animation: ticker-scroll 28s linear infinite; 
-        }
-
-        .mask-fade-edges {
-            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-        }
+        @keyframes ticker-scroll { 0% { left: 100%; transform: translateX(0); } 100% { left: 0; transform: translateX(-100%); } }
+        .ticker-track { position: absolute; display: flex; align-items: center; height: 100%; white-space: nowrap; will-change: transform, left; left: 100%; }
+        .scroll-active { animation: ticker-scroll 28s linear infinite; }
+        .mask-fade-edges { -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
 
         /* --- CONCENTRIC BUTTON ANIMATION --- */
-        @keyframes ripple-ring {
-            0% { transform: scale(0.8); opacity: 1; border-width: 4px; }
-            100% { transform: scale(2.5); opacity: 0; border-width: 0px; }
-        }
-        .btn-ripple::after {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 100px; height: 100px;
-            background: transparent;
-            border: solid #ffffff;
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            animation: ripple-ring 0.6s ease-out;
-            pointer-events: none;
-        }
-        .flash-white {
-            background-color: #22c55e !important;
-            color: #ffffff !important;
-            transition: all 0.1s;
-        }
+        @keyframes ripple-ring { 0% { transform: scale(0.8); opacity: 1; border-width: 4px; } 100% { transform: scale(2.5); opacity: 0; border-width: 0px; } }
+        .btn-ripple::after { content: ''; position: absolute; top: 50%; left: 50%; width: 100px; height: 100px; background: transparent; border: solid #ffffff; border-radius: 50%; transform: translate(-50%, -50%) scale(0); animation: ripple-ring 0.6s ease-out; pointer-events: none; }
+        .flash-white { background-color: #22c55e !important; color: #ffffff !important; transition: all 0.1s; }
 
-        @keyframes sync-pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.98); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
+        @keyframes sync-pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.98); } 100% { opacity: 1; transform: scale(1); } }
         .grace-pulse { animation: sync-pulse 1s infinite ease-in-out; color: var(--neon-red) !important; }
 
-        .scrollable-area {
-            flex: 1;
-            min-height: 0; 
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch; 
-            overscroll-behavior-y: contain;
-            padding-bottom: 40px !important; 
-            scrollbar-width: none;
-        }
+        .scrollable-area { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 20px !important; scrollbar-width: none; }
         .scrollable-area::-webkit-scrollbar { display: none; }
+        .view-frame { display: flex; flex-direction: column; height: 100%; width: 100%; overflow: hidden; }
 
-        .view-frame {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-        }
+        @keyframes pulse-ring { 0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.4); } 70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(2, 132, 199, 0); } 100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); } }
+        .hype-number { font-size: 7rem; font-weight: 900; color: var(--neon-blue); animation: pulse-ring 1s infinite; border-radius: 50%; border: 8px solid var(--neon-blue); }
 
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.4); }
-            70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(2, 132, 199, 0); }
-            100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
-        }
-        
-        .hype-number {
-            font-size: 7rem;
-            font-weight: 900;
-            color: var(--neon-blue);
-            animation: pulse-ring 1s infinite;
-            border-radius: 50%;
-            border: 8px solid var(--neon-blue);
-        }
-
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        .atm-btn {
-            background: #ffffff;
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            font-size: 1.25rem; 
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 50px; 
-            transition: all 0.1s;
-            color: var(--text-main);
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        }
+        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        .atm-btn { background: #ffffff; border: 1px solid var(--card-border); border-radius: 12px; font-size: 1.25rem; font-weight: 900; display: flex; align-items: center; justify-content: center; height: 50px; transition: all 0.1s; color: var(--text-main); box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
         .atm-btn:active { background: #f1f5f9; border-color: var(--neon-blue); }
         
-        #broadcastToast {
-            transform: translateY(-150%);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        #broadcastToast { transform: translateY(-150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #broadcastToast.show { transform: translateY(0); }
         
-        .drawer-right {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateX(100%);
-        }
+        .drawer-right { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(100%); }
         .drawer-right.open { transform: translateX(0); }
-
-        .drawer-left {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateX(-100%);
-        }
+        .drawer-left { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
         .drawer-left.open { transform: translateX(0); }
-        
         .hidden { display: none !important; }
+        .history-tab.active { background-color: var(--neon-blue); color: #ffffff; border-color: var(--neon-blue); }
+        #customEndModal, #installModal, #stewardGodModal, #catchFeedModal { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(15px); }
 
-        .history-tab.active {
-            background-color: var(--neon-blue); 
-            color: #ffffff;
-            border-color: var(--neon-blue);
-        }
+        .splash-text { font-size: 3rem; font-weight: 900; color: var(--neon-blue); text-align: center; text-transform: uppercase; letter-spacing: -0.05em; line-height: 1; }
 
-        #customEndModal, #installModal, #stewardGodModal, #catchFeedModal {
-            background: rgba(248, 250, 252, 0.95);
-            backdrop-filter: blur(15px);
-        }
-
-        .splash-text {
-            font-size: 3rem;
-            font-weight: 900;
-            color: var(--neon-blue);
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: -0.05em;
-            line-height: 1;
-        }
-
-        /* --- FIRST LOAD ASSEMBLY ANIMATIONS --- */
-        @keyframes text-reveal {
-            0% { opacity: 0; transform: translateY(20px); filter: blur(4px); }
-            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
-
-        .animate-icon {
-            opacity: 0;
-            animation: icon-assemble 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            animation-delay: 0.2s;
-        }
-
+        @keyframes text-reveal { 0% { opacity: 0; transform: translateY(20px); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+        .animate-icon { opacity: 0; animation: icon-assemble 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: 0.2s; }
         .animate-text { opacity: 0; animation: text-reveal 0.8s ease-out forwards; }
         .delay-title { animation-delay: 1s; }
         .delay-version { animation-delay: 1.3s; }
@@ -410,7 +231,7 @@
             </div>
             
             <div>
-                <select id="godInputSpecies" onchange="godCheckSpeciesSelection()" class="pill-input w-full p-3 text-sm appearance-none">
+                <select id="godInputSpecies" onchange="godCheckSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none">
                     <option value="" disabled selected>-- Select Fish Species --</option>
                     <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
                         <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
@@ -437,18 +258,18 @@
             </div>
             <div id="godDeckSizeInputs">
                 <div id="godDeckLength">
-                    <input type="number" id="godInputSize" inputmode="decimal" class="pill-input w-full p-3 text-base metric-white" placeholder="Measurement (cm)">
+                    <input type="number" id="godInputSize" inputmode="decimal" class="pill-input w-full p-2.5 text-base metric-white" placeholder="Measurement (cm)">
                 </div>
                 <div id="godDeckWeightLb" class="hidden flex space-x-2">
-                    <div class="flex-1"><input type="number" id="godInputLbs" inputmode="numeric" placeholder="Lbs" class="pill-input w-full p-3 text-base metric-white"></div>
-                    <div class="flex-1"><input type="number" id="godInputOz" inputmode="numeric" placeholder="Oz" class="pill-input w-full p-3 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputLbs" inputmode="numeric" placeholder="Lbs" class="pill-input w-full p-2.5 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputOz" inputmode="numeric" placeholder="Oz" class="pill-input w-full p-2.5 text-base metric-white"></div>
                 </div>
                 <div id="godDeckWeightKg" class="hidden flex space-x-2">
-                    <div class="flex-1"><input type="number" id="godInputKg" inputmode="numeric" placeholder="Kg" class="pill-input w-full p-3 text-base metric-white"></div>
-                    <div class="flex-1"><input type="number" id="godInputGrammes" inputmode="numeric" placeholder="Grams" class="pill-input w-full p-3 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputKg" inputmode="numeric" placeholder="Kg" class="pill-input w-full p-2.5 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputGrammes" inputmode="numeric" placeholder="Grams" class="pill-input w-full p-2.5 text-base metric-white"></div>
                 </div>
             </div>
-            <button onclick="submitGodModeCatch()" class="pill-btn w-full py-4 shadow-lg mt-2 text-base text-white">Force Save Record</button>
+            <button onclick="submitGodModeCatch()" class="pill-btn w-full py-3.5 shadow-lg mt-2 text-base text-white">Force Save Record</button>
         </div>
     </div>
 
@@ -543,7 +364,7 @@
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display">
-                    Loading...
+                    V9.0.0
                 </div>
             </div>
             
@@ -699,11 +520,7 @@
                     <i class="fa-solid fa-trophy"></i> View Live Leaderboard
                 </button>
 
-                <div id="cloudStatus" class="text-[10px] font-black uppercase tracking-wider text-slate-400 mt-2 flex items-center justify-center gap-1">
-                    <span>Checking Connection...</span>
-                </div>
-
-                <div class="w-full max-w-md mx-auto h-6 py-1 relative mask-fade-edges overflow-hidden flex-none mt-1">
+                <div class="w-full max-w-md mx-auto border-2 border-blue-500 rounded-full h-8 py-1 mt-3 relative mask-fade-edges overflow-hidden flex-none bg-white/95">
                     <div id="wallStreetTicker" class="ticker-track text-xs uppercase items-center tracking-widest font-bold">
                         <span class="text-slate-600">LIVE TELEMETRY: AWAITING DATA...</span>
                     </div>
@@ -711,9 +528,9 @@
             </div>
 
             <div id="loggingArea" class="scrollable-area p-4 space-y-3 flex flex-col w-full max-w-md mx-auto">
-                <div class="match-card p-5 space-y-4 text-center flex-none mt-1 shadow-md">
+                <div class="match-card p-3 space-y-3 text-center flex-none mt-1 shadow-md">
                     <div>
-                        <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-4 text-base appearance-none">
+                        <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none">
                             <option value="" disabled selected>-- Select Fish Species --</option>
                             <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
                                 <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
@@ -741,23 +558,23 @@
 
                     <div id="deckSizeInputs">
                         <div id="deckLength">
-                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-4 text-xl metric-white" placeholder="Measurement">
+                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-lg metric-white" placeholder="Measurement (cm)">
                         </div>
                         <div id="deckWeightLb" class="hidden flex space-x-2">
-                            <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="pill-input w-full p-4 text-base metric-white"></div>
-                            <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-4 text-base metric-white"></div>
+                            <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white"></div>
+                            <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white"></div>
                         </div>
                         <div id="deckWeightKg" class="hidden flex space-x-2">
-                            <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="pill-input w-full p-4 text-base metric-white"></div>
-                            <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" placeholder="Grams" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-4 text-base metric-white"></div>
+                            <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white"></div>
+                            <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" placeholder="Grams" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white"></div>
                         </div>
                     </div>
-                    <button id="btnRecord" onclick="recordCatch()" class="pill-btn w-full text-lg py-4 mt-2 shadow-lg">Record Catch</button>
+                    <button id="btnRecord" onclick="recordCatch()" class="pill-btn btn-record-pulse w-full text-base py-3 mt-2 shadow-lg">Record Catch</button>
                 </div>
 
-                <div class="pt-3 flex-1">
-                    <h3 class="text-slate-600 font-black text-[11px] uppercase tracking-[0.4em] mb-3 ml-3 text-left">Match Journal</h3>
-                    <div id="localCatchList" class="space-y-2"></div>
+                <div class="pt-2 flex-1">
+                    <h3 class="text-slate-600 font-black text-[10px] uppercase tracking-[0.4em] mb-1.5 ml-3 text-left">Match Journal</h3>
+                    <div id="localCatchList" class="space-y-1.5"></div>
                 </div>
 
                 <div class="pt-6 pb-4 space-y-3 flex-none px-1 text-center border-t border-slate-200 mt-6">
@@ -809,9 +626,9 @@
                     <div id="historyArchiveList" class="hidden pt-3 space-y-3 text-center"></div>
                 </div>
             </div>
-            <button onclick="navTo('home')" class="fixed bottom-0 left-0 right-0 w-full bg-white/95 backdrop-blur-md text-slate-900 font-black py-6 uppercase tracking-[0.2em] text-xs flex justify-center items-center border-t border-slate-300 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
-                <i class="fa-solid fa-arrow-down mr-3 text-blue-600 animate-bounce"></i> BACK TO MAIN MENU
-            </button>
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+                <button onclick="navTo('home')" class="pill-btn w-full py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-down mr-3"></i> BACK TO MAIN MENU</button>
+            </div>
         </div>
 
         <div id="view-kill" class="hidden view-frame items-center justify-center bg-slate-50 p-6 text-center">
@@ -845,24 +662,24 @@
                     </div>
                 </section>
                 <section class="pt-4 text-center pb-8">
-                    <button onclick="forceUpdateApp()" class="pill-btn w-full py-4 transition shadow-md">
+                    <button onclick="forceUpdateApp()" class="pill-btn w-full py-4 transition shadow-md bg-slate-900">
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V7.4.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V9.0.0</p>
                 </section>
             </div>
-            <button onclick="document.getElementById('guideDrawer').classList.remove('open')" class="flex-none w-full bg-white/95 backdrop-blur-md text-slate-900 font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center border-t border-slate-300 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] text-xs z-50">
-                <i class="fa-solid fa-arrow-down mr-3 text-blue-600 animate-bounce"></i> RETURN TO LOBBY
-            </button>
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+                <button onclick="document.getElementById('guideDrawer').classList.remove('open')" class="pill-btn w-full py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-down mr-3"></i> RETURN TO LOBBY</button>
+            </div>
         </div>
 
         <div id="historyDetailDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50 z-[150] flex flex-col hidden justify-between">
            <div class="hidden"><button id="tab-standings"></button><button id="tab-record"></button></div>
             <div id="historyContent" class="scrollable-area p-4 text-center"></div>
-            <button onclick="closeHistoryDetail()" class="flex-none w-full bg-white/95 backdrop-blur-md text-slate-900 font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center border-t border-slate-300 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] text-xs z-50">
-                <i class="fa-solid fa-arrow-down mr-3 text-blue-600 animate-bounce"></i> BACK TO MATCH LIST
-            </button>
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+                <button onclick="closeHistoryDetail()" class="pill-btn w-full py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-down mr-3"></i> BACK TO MATCH LIST</button>
+            </div>
         </div>
 
         <div id="leaderboardDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[101] flex flex-col justify-between">
@@ -884,9 +701,9 @@
 
             <div id="leaderboardList" class="scrollable-area p-4 space-y-2 text-center mt-1"></div>
             
-            <button onclick="document.getElementById('leaderboardDrawer').classList.remove('open')" class="flex-none w-full bg-white/95 backdrop-blur-md text-slate-900 font-black py-6 uppercase tracking-[0.3em] text-xs flex justify-center items-center border-t border-slate-300 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
-                <i class="fa-solid fa-arrow-down mr-3 animate-bounce text-blue-600"></i> RETURN TO FISH LOG
-            </button>
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+                <button onclick="document.getElementById('leaderboardDrawer').classList.remove('open')" class="pill-btn w-full py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-down mr-3"></i> RETURN TO FISH LOG</button>
+            </div>
         </div>
 
         <div id="stewardDrawer" class="drawer-left fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[101] flex flex-col shadow-2xl justify-between">
@@ -902,9 +719,9 @@
                     <button onclick="generateOfficialMasterReport()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
                 </div>
             </div>
-            <button onclick="document.getElementById('stewardDrawer').classList.remove('open')" class="flex-none w-full bg-white/95 backdrop-blur-md text-slate-900 font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center border-t border-slate-300 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] text-xs z-50">
-                <i class="fa-solid fa-arrow-down mr-3 text-blue-600 animate-bounce"></i> RETURN TO FISH LOG
-            </button>
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+                <button onclick="document.getElementById('stewardDrawer').classList.remove('open')" class="pill-btn w-full py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-down mr-3"></i> RETURN TO FISH LOG</button>
+            </div>
         </div>
 
         <div id="stewardRosterDrawer" class="drawer-left fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[102] flex flex-col shadow-2xl hidden justify-between">
@@ -912,9 +729,9 @@
                 <h2 class="font-black text-base text-blue-600 uppercase tracking-widest"><i class="fa-solid fa-gavel mr-2"></i> Select Angler to Audit</h2>
             </div>
             <div id="stewardRosterList" class="scrollable-area p-4 space-y-2 text-center"></div>
-            <button onclick="stewardCloseLogs()" class="flex-none w-full bg-white/95 backdrop-blur-md text-slate-900 font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center border-t border-slate-300 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] text-xs z-50">
-                <i class="fa-solid fa-arrow-down mr-3 text-blue-600 animate-bounce"></i> BACK TO STEWARD DESK
-            </button>
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+                <button onclick="stewardCloseLogs()" class="pill-btn w-full py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-down mr-3"></i> BACK TO STEWARD DESK</button>
+            </div>
         </div>
 
         <div id="stewardLogDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50 z-[103] flex flex-col hidden justify-between">
@@ -923,9 +740,9 @@
                 <button id="godModeAddBtn" class="pill-btn w-full text-[11px] tracking-widest py-4 mt-4 shadow-md"><i class="fa-solid fa-plus mr-2"></i> LOG CATCH FOR ANGLER</button>
             </div>
             <div id="stewardCatchList" class="scrollable-area p-4 space-y-2 text-center mt-1"></div>
-            <button onclick="document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);" class="flex-none w-full bg-white/95 backdrop-blur-md text-slate-900 font-black py-6 uppercase tracking-[0.3em] flex justify-center items-center border-t border-slate-300 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] text-xs z-50">
-                <i class="fa-solid fa-arrow-down mr-3 text-blue-600 animate-bounce"></i> CLOSE AUDIT
-            </button>
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+                <button onclick="document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-down mr-3"></i> CLOSE AUDIT</button>
+            </div>
         </div>
 
     </div>
@@ -1471,20 +1288,12 @@
             if(!state.pin) return; updateLiveTally();
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
             
-            const cloudEl = document.getElementById('cloudStatus');
-            if (cloudEl) cloudEl.innerHTML = `<span>⏳ Syncing to Cloud...</span>`;
-
             if (globalMatchData && globalMatchData.anglers && globalMatchData.anglers[uid]) {
                 globalMatchData.anglers[uid].catches = state.myCatches;
                 globalMatchData.anglers[uid].score = total;
             }
             
-            update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name || "Angler", score: total, catches: state.myCatches })
-            .then(() => {
-                if (cloudEl) cloudEl.innerHTML = `<span class="text-green-600">🟢 Cloud Synced</span>`;
-            }).catch(() => {
-                if (cloudEl) cloudEl.innerHTML = `<span class="text-amber-600">⚠️ Local Cache Saved</span>`;
-            });
+            update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name || "Angler", score: total, catches: state.myCatches });
         }
 
         function createMatch() {
@@ -1631,11 +1440,8 @@
             
             if (globalMatchData) {
                 checkAndFireTicker();
-                const cloudEl = document.getElementById('cloudStatus');
-                if (cloudEl) cloudEl.innerHTML = `<span class="text-green-600">🟢 Cloud Connected</span>`;
             }
             
-            // This ensures the empty state guide is visible immediately on load
             renderCatchList();
         }
 
@@ -1782,24 +1588,23 @@
             const list = document.getElementById('localCatchList'); if (!list) return;
             list.innerHTML = "";
             
-            /* Sleek Empty State Guide Adjustment */
             if (state.myCatches.length === 0) {
-                list.innerHTML = `<div class="p-8 text-center border-2 border-dashed border-slate-200 rounded-xl bg-white"><p class="text-xs font-black uppercase tracking-widest text-slate-400">No catches logged yet</p><p class="text-[10px] font-bold text-slate-400 mt-1">Select a fish species above to log your first entry.</p></div>`;
+                list.innerHTML = `<div class="p-6 text-center border-2 border-dashed border-slate-200 rounded-lg bg-white"><p class="text-xs font-black uppercase text-slate-400">Empty Diary</p></div>`;
                 return;
             }
 
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
-                div.className = "match-card p-3 flex justify-between items-center mb-2 shadow-sm";
+                div.className = "match-card p-1.5 flex justify-between items-center mb-1 shadow-sm";
                 
                let metricDisplay = getUniversalBadge(c);
 
                 div.innerHTML = `
-                   <div class="flex-1 text-left pl-2 py-1">
-                        <span class="font-black text-slate-900 text-sm uppercase tracking-tight">${c.species}</span> 
+                   <div class="flex-1 text-left pl-2">
+                        <span class="font-black text-slate-900 text-xs uppercase">${c.species}</span> 
                         ${metricDisplay}
                         <br>
-                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none block mt-1">${c.time}</span>
+                        <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest leading-none block">${c.time}</span>
                     </div>
                     <div class="flex items-center pr-1">
                         <button onclick="editCatch('${c.id}')" class="text-blue-600 active:scale-90 transition p-3 -m-1 flex items-center justify-center" aria-label="Edit"><i class="fa-solid fa-pencil text-base pointer-events-none"></i></button>
@@ -2147,7 +1952,7 @@
                 t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
             });
             
-            t += `\n_Generated by ShoreScore V8.0.0_`;
+            t += `\n_Generated by ShoreScore V9.0.0_`;
 
             if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
@@ -2469,11 +2274,7 @@
                             startClock();
                             updateLiveTally();
                             if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----";
-                            if (globalMatchData) { 
-                                checkAndFireTicker(); 
-                                const cloudEl = document.getElementById('cloudStatus');
-                                if (cloudEl) cloudEl.innerHTML = `<span class="text-green-600">🟢 Cloud Connected</span>`;
-                            }
+                            if (globalMatchData) { checkAndFireTicker(); }
                         }
                     }
                 } catch(e) { closeAndWipeSession(); }
