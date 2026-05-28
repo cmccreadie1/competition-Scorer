@@ -19,6 +19,7 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
@@ -109,7 +110,8 @@
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-main) !important;
         }
-        /* V10.5.0 Active Glow Boundary */
+        
+        /* High-Vis Active Glow Boundary */
         .pill-input:focus { 
             background-color: #ffffff !important; 
             border-color: var(--neon-blue) !important; 
@@ -135,6 +137,7 @@
             touch-action: manipulation;
         }
         .pill-btn:active { transform: scale(0.96); background-color: #0369a1; }
+        .pill-btn:disabled { background-color: #cbd5e1 !important; color: #64748b !important; transform: none !important; box-shadow: none !important; opacity: 0.8; }
         .btn-destructive { background-color: var(--neon-red) !important; color: #ffffff !important; }
 
         .btn-record-pulse { animation: record-pulse 2s infinite; }
@@ -188,6 +191,10 @@
         .animate-text { opacity: 0; animation: text-reveal 0.8s ease-out forwards; }
         .delay-title { animation-delay: 1s; }
         .delay-version { animation-delay: 1.3s; }
+        
+        /* Graphical Report Generator States */
+        #stewardReportBtn.reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
+        #historyReportBtn.reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -356,7 +363,7 @@
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display">
-                    V10.5.0
+                    V10.6.0
                 </div>
             </div>
             
@@ -670,7 +677,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.5.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.6.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -720,7 +727,7 @@
                 <button onclick="try{navigator.vibrate(50);}catch(e){}; transferSteward()" class="pill-btn w-full py-4 text-xs tracking-widest mt-2 bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-right-left mr-3 text-base"></i> Transfer Control</button>
                 <button onclick="try{navigator.vibrate(50);}catch(e){}; endMatchEarly(true)" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-clock mr-2 text-base"></i> Adjust Match Clock</button>
                 <div class="pt-4 border-t border-slate-200 mt-4">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; generateOfficialMasterReport()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
+                    <button id="stewardReportBtn" onclick="generateOfficialMasterReport()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
                 </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -1794,7 +1801,7 @@
 
         function stewardDeleteCatch(aid, cid) {
             try{navigator.vibrate(50);}catch(e){};
-            if(!confirm("Are you sure you want to remove this fish from your scorecard?")) return;
+            if(!confirm("GOD MODE: Delete this catch? It will be removed globally.")) return;
             let cData = globalMatchData.anglers[aid].catches;
             let arr = Array.isArray(cData) ? cData : Object.values(cData);
             arr = arr.filter(c => c.id !== cid);
@@ -1893,100 +1900,195 @@
             setTimeout(refreshStewardCatchList, 300);
         }
 
-        function generateOfficialMasterReport() {
+        // V10.6.0 GRAPHICAL REPORT CARD GENERATOR
+        async function generateOfficialMasterReport() {
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
+            
+            const btn = document.getElementById('stewardReportBtn');
+            const hBtn = document.getElementById('historyReportBtn');
+            const targetBtn = document.getElementById('stewardDrawer').classList.contains('open') ? btn : hBtn;
+            
+            if(targetBtn) { 
+                targetBtn.innerText = "GENERATING IMAGE... PLEASE WAIT"; 
+                targetBtn.classList.add('reporting'); 
+            }
+            try { navigator.vibrate(50); } catch(e){}
+
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format);
+            buildAndShareGraphicalReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn);
         }
 
-        function generateHistoricReport() {
+        async function generateHistoricReport() {
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if(!h || !h.standings) return alert("No leaderboard data available.");
-            buildAndShareReport(h.standings, h.venue, h.date, h.format);
+            
+            const btn = document.querySelector(`button[onclick="generateHistoricReport()"]`);
+            if(btn) { 
+                btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin mr-2'></i> GENERATING..."; 
+                btn.classList.add('reporting'); 
+            }
+            try { navigator.vibrate(50); } catch(e){}
+
+            buildAndShareGraphicalReport(h.standings, h.venue, h.date, h.format, btn, true);
         }
 
-        function buildAndShareReport(arr, venueName, matchDate, matchFormat) {
+        async function buildAndShareGraphicalReport(arr, venueName, matchDate, matchFormat, buttonRef, isHistory = false) {
             const fmt = matchFormat || state.format; 
             let podium = arr.slice(0, 3);
+            let others = arr.slice(3, 15); 
             let biggestVal = 0, biggestStr = "N/A";
             let hourCounts = {}, allSpecies = new Set(), totalFish = 0;
             let matchTotalPhysicalSize = 0;
-            let spCounts = {}; 
-
+            
             arr.forEach(a => {
                 if(a.catches) {
                     let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
                     totalFish += cList.length;
                     cList.forEach(f => {
                         allSpecies.add(f.species);
-                        spCounts[f.species] = (spCounts[f.species] || 0) + 1; 
                         matchTotalPhysicalSize += (parseFloat(f.size) || 0);
-                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; }
+                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${a.name} - ${f.species} (${f.display || f.size})`; }
                         if(f.ts) { const hr = new Date(f.ts).getHours(); hourCounts[hr] = (hourCounts[hr] || 0) + 1; }
                     });
                 }
             });
 
-            let matchTotalRaw = arr.reduce((sum, a) => sum + (a.score || 0), 0);
-
-            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📅 ${matchDate}\n\n`;
-            
-            t += `👑 *PODIUM*\n`;
-            t += `🥇 1st: ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n`;
-            t += `🥈 2nd: ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}\n`;
-            t += `🥉 3rd: ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n`;
-
-            if (totalFish > 0) {
-                t += `📊 *SPECIES BREAKDOWN*\n`;
-                let spArr = Object.entries(spCounts).sort((a,b) => b[1] - a[1]);
-                spArr.forEach(sp => {
-                    let pct = Math.round((sp[1] / totalFish) * 100);
-                    t += `▪️ ${sp[0]}: ${pct}% (${sp[1]} Fish)\n`;
-                });
-                t += `\n`;
-            }
-            
-            t += `📈 *MATCH STATS*\n`;
-            if (fmt !== 'speciesHunt') {
-                t += `🐋 Biggest Fish: ${biggestStr.replace(/<[^>]*>?/gm, '')}\n`;
-            }
-            t += `🧬 Diversity: ${allSpecies.size} Unique Species\n`;
-            
-            if (fmt === 'speciesHunt') {
-                t += `🎣 Match Total: ${totalFish} Fish\n\n`;
-            } else if (fmt.startsWith('length')) {
-                t += `📏 Match Total Length: ${formatTotalLength(matchTotalPhysicalSize)} (${totalFish} Fish)\n\n`;
-            } else {
-                t += `⚖️ Match Total Weight: ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Fish)\n\n`;
-            }
-
-            t += `⏱️ *HOURLY TIMELINE*\n`;
+            // Timeline logic
+            let timelineHtml = "";
             let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
-            if(sortedHours.length === 0) { 
-                t += `▪️ No captures recorded.\n\n`; 
-            } else {
+            if(sortedHours.length > 0) {
                 let maxHourVal = Math.max(...Object.values(hourCounts));
-                sortedHours.forEach(hr => {
+                timelineHtml = sortedHours.map(hr => {
                     let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "";
                     let nHr = parseInt(hr);
                     let nextHr = nHr === 23 ? 0 : nHr + 1;
-                    t += `▪️ ${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00: ${hourCounts[hr]} Fish${isFire}\n`;
-                });
-                t += `\n`;
+                    return `<div style="font-size: 20px; font-weight: bold; color: #475569; padding: 6px 0;">${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00 <span style="color: #0f172a; float: right;">${hourCounts[hr]} Fish${isFire}</span></div>`;
+                }).join('');
+            } else {
+                timelineHtml = `<div style="font-size: 20px; font-weight: bold; color: #94a3b8;">No catches recorded.</div>`;
             }
 
-            t += `🏆 *FULL STANDINGS*\n`;
-            arr.forEach((a, i) => { 
-                t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
-            });
+            // Build HTML Element out of sight
+            let poster = document.createElement('div');
+            poster.id = "temp-poster";
+            poster.style.position = "absolute";
+            poster.style.left = "-9999px";
+            poster.style.width = "750px"; 
+            poster.style.backgroundColor = "#f8fafc";
+            poster.style.padding = "40px";
+            poster.style.fontFamily = "'Inter', sans-serif";
+            poster.style.color = "#0f172a";
             
-            t += `\n_Generated by ShoreScore V10.5.0_`;
+            poster.innerHTML = `
+                <div style="background: white; border: 4px solid #0284c7; border-radius: 32px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+                    
+                    <div style="text-align: center; border-bottom: 4px solid #f1f5f9; padding-bottom: 30px; margin-bottom: 30px;">
+                        <h1 style="font-size: 46px; font-weight: 900; color: #0284c7; margin: 0; text-transform: uppercase; letter-spacing: -1px;">SHORESCORE</h1>
+                        <h2 style="font-size: 24px; font-weight: 900; color: #0f172a; margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 4px;">Official Match Report</h2>
+                        <p style="font-size: 22px; font-weight: bold; color: #64748b; margin: 15px 0 0 0;">📅 ${matchDate} &nbsp;|&nbsp; 📍 ${venueName}</p>
+                    </div>
+                    
+                    <h2 style="font-size: 32px; font-weight: 900; margin: 0 0 20px 0; text-transform: uppercase; color: #0f172a;"><span style="color: #f59e0b;">👑</span> The Podium</h2>
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px; padding: 25px; margin-bottom: 40px;">
+                        <div style="font-size: 38px; font-weight: 900; color: #0f172a; margin-bottom: 15px;">
+                            🥇 1st: <span style="color: #0284c7;">${podium[0]?.name || '-'}</span> 
+                            <span style="float: right; color: #0284c7;">${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}</span>
+                        </div>
+                        <div style="font-size: 28px; font-weight: bold; color: #334155; margin-bottom: 15px; border-top: 2px dashed #cbd5e1; padding-top: 15px;">
+                            🥈 2nd: ${podium[1]?.name || '-'} 
+                            <span style="float: right; color: #64748b;">${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}</span>
+                        </div>
+                        <div style="font-size: 26px; font-weight: bold; color: #475569; border-top: 2px dashed #cbd5e1; padding-top: 15px;">
+                            🥉 3rd: ${podium[2]?.name || '-'} 
+                            <span style="float: right; color: #64748b;">${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; gap: 30px; margin-bottom: 40px;">
+                        <div style="flex: 1; background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 20px; padding: 25px;">
+                            <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #1e3a8a;">🏆 Match Highlights</h2>
+                            <p style="font-size: 20px; font-weight: bold; margin: 0 0 10px 0; color: #0f172a;">🐋 <b>Biggest Fish:</b><br><span style="color: #0284c7;">${biggestStr.replace(/<[^>]*>?/gm, '')}</span></p>
+                            <p style="font-size: 20px; font-weight: bold; margin: 0; color: #0f172a;">🧬 <b>Diversity:</b><br><span style="color: #0284c7;">${speciesSet.size} Unique Species</span></p>
+                            <p style="font-size: 20px; font-weight: bold; margin: 10px 0 0 0; color: #0f172a;">🎣 <b>Total Catch:</b><br><span style="color: #0284c7;">${totalFish} Fish overall</span></p>
+                        </div>
+                        <div style="flex: 1; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px; padding: 25px;">
+                            <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #0f172a;">⏱️ Hourly Pulse</h2>
+                            ${timelineHtml}
+                        </div>
+                    </div>
+
+                    ${others.length > 0 ? `
+                    <h2 style="font-size: 32px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #0f172a; border-bottom: 3px solid #f1f5f9; padding-bottom: 10px;">📊 Full Standings (4-${arr.length})</h2>
+                    <div style="border: 2px solid #e2e8f0; border-radius: 16px; overflow: hidden; margin-bottom: 30px;">
+                        ${others.map((a, i) => `
+                        <div style="font-size: 22px; font-weight: bold; padding: 12px 20px; background: ${i%2===0?'#ffffff':'#f8fafc'}; color: #334155;">
+                            <span style="color: #94a3b8; font-weight: 900; margin-right: 15px;">#${i+4}</span> ${a.name} 
+                            <span style="float: right; color: #0f172a; font-weight: 900;">${formatScoreDisplay(a.score, fmt, true)}</span>
+                        </div>`).join('')}
+                    </div>
+                    ` : ''}
+                    
+                    <p style="text-align: center; font-size: 16px; font-weight: bold; color: #94a3b8; margin: 40px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Generated by ShoreScore V10.6.0</p>
+                </div>
+            `;
+            
+            document.body.appendChild(poster);
+            
+            try {
+                // Ensure fonts load before snapping
+                await document.fonts.ready;
+                const canvas = await html2canvas(poster, { scale: 2, useCORS: true, backgroundColor: '#f8fafc' });
+                
+                // Convert to high-quality JPEG
+                const imgData = canvas.toDataURL('image/jpeg', 0.85);
+                const blob = await (await fetch(imgData)).blob();
+                const file = new File([blob], "shorescore-report.jpg", { type: "image/jpeg" });
+                
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Official Match Report',
+                        text: 'Here is the official graphical scorecard!'
+                    });
+                } else {
+                    // Fallback for older browsers: Download the image directly
+                    const link = document.createElement('a');
+                    link.href = imgData;
+                    link.download = "shorescore-report.jpg";
+                    link.click();
+                }
+            } catch(err) {
+                console.error(err);
+                alert("Could not generate image. Device may be incompatible. Copying text version instead.");
+                buildAndShareTextFallback(arr, venueName, matchDate, fmt);
+            } finally {
+                document.body.removeChild(poster);
+                if(buttonRef) { 
+                    if(isHistory) {
+                        buttonRef.innerHTML = "<i class='fa-solid fa-share-nodes mr-2'></i> SHARE CARD"; 
+                    } else {
+                        buttonRef.innerHTML = "<i class='fa-solid fa-file-export mr-3 text-base text-blue-600'></i> Share Official Report"; 
+                    }
+                    buttonRef.classList.remove('reporting'); 
+                }
+            }
+        }
+
+        // TEXT FALLBACK FOR VERY OLD PHONES
+        function buildAndShareTextFallback(arr, venueName, matchDate, fmt) {
+            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📅 ${matchDate}\n\n👑 *PODIUM*\n`;
+            let podium = arr.slice(0, 3);
+            t += `🥇 1st: ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n`;
+            t += `🥈 2nd: ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}\n`;
+            t += `🥉 3rd: ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n`;
+            t += `🏆 *FULL STANDINGS*\n`;
+            arr.forEach((a, i) => { t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; });
+            t += `\n_Generated by ShoreScore V10.6.0_`;
 
             if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
         }
 
-        function shareUnifiedReport() { generateOfficialMasterReport(); }
         function endMatchEarly(grace) { if(state.isSteward && state.pin) { if(grace) { document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('customEndModal').classList.remove('hidden'); } } }
         function stewardSetNewEnd(mins) { document.getElementById('customEndModal').classList.add('hidden'); document.getElementById('stewardDrawer').classList.remove('open'); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
         function transferSteward() { if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); document.getElementById('stewardDrawer').classList.remove('open'); } } }
@@ -2188,7 +2290,7 @@
                     <div class="text-slate-900 text-sm font-bold flex items-center shrink-0">
                         <i class="fa-solid fa-calendar-days mr-2 text-blue-600"></i> ${m.date}
                     </div>
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
+                    <button id="historyReportBtn" onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
                         <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
                     </button>
                 </div>
@@ -2292,8 +2394,8 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            // V10.5.0 Manual Override
-            document.querySelectorAll('.version-display').forEach(el => el.innerText = "V10.5.0");
+            // V10.6.0 Manual Override
+            document.querySelectorAll('.version-display').forEach(el => el.innerText = "V10.6.0");
             
             fetch('version.json')
                 .then(res => res.json())
