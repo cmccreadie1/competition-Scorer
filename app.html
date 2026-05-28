@@ -22,7 +22,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
-        /* --- HIGH-VIS TACTICAL DAYLIGHT VARIABLES --- */
         :root {
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
@@ -54,12 +53,10 @@
         .bg-slate-50 { background-color: var(--bg-color) !important; }
         .bg-white\/95 { background-color: rgba(255, 255, 255, 0.95) !important; }
 
-        /* Solid Color Utility Classes */
         .neon-text-blue { color: var(--neon-blue); font-weight: 900; }
         .neon-text-amber { color: var(--neon-amber); font-weight: 900; }
         .metric-white { color: var(--text-header); font-weight: 900; }
 
-        /* Global Clean Border Style */
         .neon-border-glow {
             border: 1px solid var(--card-border);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -72,7 +69,6 @@
 
         .domestic-action:active { transform: scale(0.97); }
 
-        /* --- SPECIES POINT BADGES (ENLARGED) --- */
        .pts-badge {
             display: inline-flex;
             align-items: center;
@@ -98,7 +94,6 @@
         #app-container { width: 100%; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; transition: background-color 0.6s ease; }
         #app-container.grace-active { background-color: #fef2f2 !important; }
 
-        /* --- UNIFIED BORDERS & FILLS --- */
         .match-card {
             background-color: var(--card-bg) !important; 
             border: 1px solid var(--card-border) !important; 
@@ -145,13 +140,11 @@
 
         .island-text-fade { transition: opacity 0.8s ease-in-out; }
 
-        /* --- TICKERS (BORDERLESS) --- */
         @keyframes ticker-scroll { 0% { left: 100%; transform: translateX(0); } 100% { left: 0; transform: translateX(-100%); } }
         .ticker-track { position: absolute; display: flex; align-items: center; height: 100%; white-space: nowrap; will-change: transform, left; left: 100%; }
         .scroll-active { animation: ticker-scroll 28s linear infinite; }
         .mask-fade-edges { -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
 
-        /* --- CONCENTRIC BUTTON ANIMATION --- */
         @keyframes ripple-ring { 0% { transform: scale(0.8); opacity: 1; border-width: 4px; } 100% { transform: scale(2.5); opacity: 0; border-width: 0px; } }
         .btn-ripple::after { content: ''; position: absolute; top: 50%; left: 50%; width: 100px; height: 100px; background: transparent; border: solid #ffffff; border-radius: 50%; transform: translate(-50%, -50%) scale(0); animation: ripple-ring 0.6s ease-out; pointer-events: none; }
         .flash-white { background-color: #22c55e !important; color: #ffffff !important; transition: all 0.1s; }
@@ -159,7 +152,6 @@
         @keyframes sync-pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.98); } 100% { opacity: 1; transform: scale(1); } }
         .grace-pulse { animation: sync-pulse 1s infinite ease-in-out; color: var(--neon-red) !important; }
 
-        /* GHOST SCROLLBAR IMPLEMENTATION */
         .scrollable-area { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 90px !important; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
         .scrollable-area::-webkit-scrollbar { width: 4px; }
         .scrollable-area::-webkit-scrollbar-track { background: transparent; }
@@ -853,10 +845,12 @@
             }
         }
 
-        islandEl.addEventListener('touchstart', handleIslandTouchStart, {passive: true});
-        islandEl.addEventListener('touchend', handleIslandTouchEnd);
-        islandEl.addEventListener('mousedown', handleIslandTouchStart);
-        islandEl.addEventListener('mouseup', handleIslandTouchEnd);
+        if(islandEl) {
+            islandEl.addEventListener('touchstart', handleIslandTouchStart, {passive: true});
+            islandEl.addEventListener('touchend', handleIslandTouchEnd);
+            islandEl.addEventListener('mousedown', handleIslandTouchStart);
+            islandEl.addEventListener('mouseup', handleIslandTouchEnd);
+        }
 
         let hudState = 0;
         setInterval(() => {
@@ -1586,7 +1580,7 @@
 
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
-                div.className = "match-card p-2 flex justify-between items-center mb-1.5 shadow-sm";
+                div.className = "match-card p-1.5 flex justify-between items-center mb-1 shadow-sm";
                 
                let metricDisplay = getUniversalBadge(c);
 
@@ -1595,7 +1589,7 @@
                         <span class="font-black text-slate-900 text-sm uppercase">${c.species}</span> 
                         ${metricDisplay}
                         <br>
-                        <span class="text-xs text-slate-500 font-bold uppercase tracking-widest leading-none block mt-1">${c.time}</span>
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none block">${c.time}</span>
                     </div>
                     <div class="flex items-center pr-1">
                         <button onclick="editCatch('${c.id}')" class="text-blue-600 active:scale-90 transition p-3 -m-1 flex items-center justify-center" aria-label="Edit"><i class="fa-solid fa-pencil text-base pointer-events-none"></i></button>
@@ -2252,52 +2246,134 @@
             setTimeout(() => { modal.classList.remove('translate-x-full'); }, 10);
         };
 
-        function closeHistoryDetail() { document.getElementById('historyDetailDrawer').classList.remove('open'); setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); }
+        function closeHistoryDetail() { 
+            document.getElementById('historyDetailDrawer').classList.remove('open'); 
+            setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); 
+        }
         function shareResults() { generateOfficialMasterReport(); }
         function shareMasterLeaderboard() { generateOfficialMasterReport(); }
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
 
         window.onload = () => {
             history.pushState(null, null, window.location.href);
-            // V10.2.0 Hardcode manual override to prevent cache staling visual issues
+            
+            // V10.2.0 Manual Override
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V10.2.0");
             
-            fetch('version.json').then(res => res.json()).then(data => { document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); }).catch(() => { console.log('Version fetch fallback active.'); });
+            fetch('version.json')
+                .then(res => res.json())
+                .then(data => { 
+                    document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); 
+                })
+                .catch(() => { 
+                    console.log('Version fetch fallback active.'); 
+                });
+                
             checkInstallStatus();
+            
             const saved = localStorage.getItem('matchState');
             if (saved) {
                 try {
                     let oldState = JSON.parse(saved);
-                    state.name = oldState.name || ""; state.venue = oldState.venue || "Local Beach";
+                    state.name = oldState.name || ""; 
+                    state.venue = oldState.venue || "Local Beach";
                     document.getElementById('playerName').value = state.name; 
+                    
                     if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) {
                         state = oldState;
                         listenToCloud();
                         navTo(state.view);
+                        
                         if (['playing', 'grace'].includes(state.status)) {
                             syncInputDeckToState();
                             renderCatchList();
                             startClock();
                             updateLiveTally();
-                            if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----";
+                            if (document.getElementById('stewardPinDisplay')) {
+                                document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----";
+                            }
                             if (globalMatchData) { 
                                 checkAndFireTicker(); 
                             }
                         }
                     }
-                } catch(e) { closeAndWipeSession(); }
+                } catch(e) { 
+                    closeAndWipeSession(); 
+                }
             }
         };
 
         window.addEventListener('popstate', () => {
             history.pushState(null, null, window.location.href);
-            if (document.getElementById('leaderboardDrawer').classList.contains('open') || document.getElementById('stewardDrawer').classList.contains('open') || document.getElementById('guideDrawer').classList.contains('open') || !document.getElementById('historyDetailDrawer').classList.contains('hidden') || !document.getElementById('stewardRosterDrawer').classList.contains('hidden') || !document.getElementById('stewardLogDrawer').classList.contains('hidden')) { 
-                document.getElementById('leaderboardDrawer').classList.remove('open'); document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('guideDrawer').classList.remove('open'); stewardCloseLogs(); closeHistoryDetail(); document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);
+            if (document.getElementById('leaderboardDrawer').classList.contains('open') || 
+                document.getElementById('stewardDrawer').classList.contains('open') || 
+                document.getElementById('guideDrawer').classList.contains('open') || 
+                !document.getElementById('historyDetailDrawer').classList.contains('hidden') || 
+                !document.getElementById('stewardRosterDrawer').classList.contains('hidden') || 
+                !document.getElementById('stewardLogDrawer').classList.contains('hidden')) { 
+                
+                document.getElementById('leaderboardDrawer').classList.remove('open'); 
+                document.getElementById('stewardDrawer').classList.remove('open'); 
+                document.getElementById('guideDrawer').classList.remove('open'); 
+                stewardCloseLogs(); 
+                closeHistoryDetail(); 
+                document.getElementById('stewardLogDrawer').classList.remove('open'); 
+                setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);
             }
         });
 
-        // GLOBAL BINDINGS
-        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport; window.syncInputDeckToState = syncInputDeckToState;
+        // GLOBAL BINDINGS - Correctly formatted to prevent truncation on GitHub
+        window.proceedToRoleSelection = proceedToRoleSelection;
+        window.triggerHypeStart = triggerHypeStart;
+        window.navTo = navTo;
+        window.createMatch = createMatch;
+        window.connectToMatch = connectToMatch;
+        window.recordCatch = recordCatch;
+        window.editCatch = editCatch;
+        window.deleteCatch = deleteCatch;
+        window.leaveMatchEarly = leaveMatchEarly;
+        window.stewardSetNewEnd = stewardSetNewEnd;
+        window.shareResults = shareResults;
+        window.resetApp = resetApp;
+        window.toggleArchive = toggleArchive;
+        window.viewPastRecord = viewPastRecord;
+        window.switchHistoryTab = switchHistoryTab;
+        window.closeHistoryDetail = closeHistoryDetail;
+        window.forceUpdateApp = forceUpdateApp;
+        window.focusMeasurement = focusMeasurement;
+        window.promptCustomSpecies = promptCustomSpecies;
+        window.exitWaitingRoom = exitWaitingRoom;
+        window.deleteHistoryItem = deleteHistoryItem;
+        window.checkSpeciesSelection = checkSpeciesSelection;
+        window.exitApp = exitApp;
+        window.handleInputFocus = handleInputFocus;
+        window.transferSteward = transferSteward;
+        window.endMatchEarly = endMatchEarly;
+        window.showInstallGuide = showInstallGuide;
+        window.formatScoreDisplay = formatScoreDisplay;
+        window.shareMasterLeaderboard = shareMasterLeaderboard;
+        window.atmPress = atmPress;
+        window.atmDelete = atmDelete;
+        window.openTimeKeypad = openTimeKeypad;
+        window.timeAtmPress = timeAtmPress;
+        window.timeAtmDelete = timeAtmDelete;
+        window.timeAtmToggleAMPM = timeAtmToggleAMPM;
+        window.submitTimeAtm = submitTimeAtm;
+        window.closeTimeKeypad = closeTimeKeypad;
+        window.shareUnifiedReport = shareUnifiedReport;
+        window.closeAndWipeSession = closeAndWipeSession;
+        window.stewardReviewLogs = stewardReviewLogs;
+        window.stewardCloseLogs = stewardCloseLogs;
+        window.stewardOpenAngler = stewardOpenAngler;
+        window.stewardDeleteCatch = stewardDeleteCatch;
+        window.submitGodModeCatch = submitGodModeCatch;
+        window.godCheckSpeciesSelection = godCheckSpeciesSelection;
+        window.openCatchFeed = openCatchFeed;
+        window.closeCatchFeed = closeCatchFeed;
+        window.generateOfficialMasterReport = generateOfficialMasterReport;
+        window.generateHistoricReport = generateHistoricReport;
+        window.syncInputDeckToState = syncInputDeckToState;
+        window.openPastCatchFeed = openPastCatchFeed;
     </script>
 </body>
 </html>
