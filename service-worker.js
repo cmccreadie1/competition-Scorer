@@ -1,8 +1,8 @@
-/* ShoreScore V10.2.0 Service Worker */
-const CACHE_NAME = 'shorescore-v10.2.0';
+/* ShoreScore V10.3.0 Service Worker */
+const CACHE_NAME = 'shorescore-v10.3.0';
 
 self.addEventListener('install', event => {
-    self.skipWaiting(); // Force activation
+    self.skipWaiting(); // Force activation immediately
 });
 
 self.addEventListener('activate', event => {
@@ -18,6 +18,7 @@ self.addEventListener('fetch', event => {
             fetch(event.request).catch(() => caches.match(event.request))
         );
     } else {
+        // Cache-First for everything else
         event.respondWith(
             caches.match(event.request).then(response => response || fetch(event.request))
         );
