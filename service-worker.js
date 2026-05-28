@@ -1,5 +1,5 @@
-/* ShoreScore V10.6.0 Service Worker */
-const CACHE_NAME = 'shorescore-v10.6.0';
+/* ShoreScore V10.6.1 Service Worker */
+const CACHE_NAME = 'shorescore-v10.6.1';
 
 self.addEventListener('install', event => {
     self.skipWaiting(); 
@@ -12,13 +12,11 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-    // Network-First for HTML to ensure version numbers always update instantly
     if (event.request.headers.get('accept').includes('text/html')) {
         event.respondWith(
             fetch(event.request).catch(() => caches.match(event.request))
         );
     } else {
-        // Cache-First for everything else
         event.respondWith(
             caches.match(event.request).then(response => response || fetch(event.request))
         );
