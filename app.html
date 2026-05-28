@@ -24,16 +24,16 @@
         
         /* --- HIGH-VIS TACTICAL DAYLIGHT VARIABLES --- */
         :root {
-            --bg-color: #f8fafc;       /* Slate 50 Anti-Glare */
-            --card-bg: #ffffff;        /* Pure White Container */
-            --input-bg: #f1f5f9;       /* Slate 100 Visible Input */
-            --text-main: #0f172a;      /* Slate 900 Max Contrast */
-            --text-header: #020617;    /* Slate 950 */
-            --neon-blue: #0284c7;      /* Deep Sea Blue */
-            --neon-amber: #ea580c;     /* High-Vis Orange */
-            --neon-red: #dc2626;       /* Solid Red */
-            --card-border: #cbd5e1;    /* Slate 300 Outline */
-            --label-bright: #334155;   /* Slate 700 Label */ 
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --input-bg: #f1f5f9;
+            --text-main: #0f172a;
+            --text-header: #020617;
+            --neon-blue: #0284c7;
+            --neon-amber: #ea580c;
+            --neon-red: #dc2626;
+            --card-border: #cbd5e1;
+            --label-bright: #334155; 
         }
 
         html, body {
@@ -72,16 +72,16 @@
 
         .domestic-action:active { transform: scale(0.97); }
 
-        /* --- SPECIES POINT BADGES --- */
+        /* --- SPECIES POINT BADGES (ENLARGED) --- */
        .pts-badge {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 1px 6px;      
-            height: 16px;          
-            min-width: 26px;       
-            border-radius: 4px;    
-            font-size: 11px;        
+            padding: 2px 8px;      
+            height: 20px;          
+            min-width: 30px;       
+            border-radius: 6px;    
+            font-size: 13px;        
             font-weight: 900;
             margin-left: 6px;
             vertical-align: middle;
@@ -143,18 +143,6 @@
 
         .telemetry-unit { font-size: 0.65em; opacity: 0.9; font-weight: 700; margin-left: 2px; text-transform: lowercase; color: var(--text-main); }
 
-        /* --- DYNAMIC ISLAND COMMAND CENTER --- */
-        .island-container {
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--neon-blue);
-            box-shadow: 0 10px 15px -3px rgba(2, 132, 199, 0.15);
-            border-radius: 1.5rem;
-            cursor: pointer;
-            touch-action: manipulation; 
-            overflow: hidden;
-        }
-
         .island-text-fade { transition: opacity 0.8s ease-in-out; }
 
         /* --- TICKERS (BORDERLESS) --- */
@@ -171,8 +159,12 @@
         @keyframes sync-pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.98); } 100% { opacity: 1; transform: scale(1); } }
         .grace-pulse { animation: sync-pulse 1s infinite ease-in-out; color: var(--neon-red) !important; }
 
-        .scrollable-area { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 90px !important; scrollbar-width: none; }
-        .scrollable-area::-webkit-scrollbar { display: none; }
+        /* GHOST SCROLLBAR IMPLEMENTATION */
+        .scrollable-area { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 90px !important; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+        .scrollable-area::-webkit-scrollbar { width: 4px; }
+        .scrollable-area::-webkit-scrollbar-track { background: transparent; }
+        .scrollable-area::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        
         .view-frame { display: flex; flex-direction: column; height: 100%; width: 100%; overflow: hidden; }
 
         @keyframes pulse-ring { 0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.4); } 70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(2, 132, 199, 0); } 100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); } }
@@ -191,7 +183,7 @@
         .drawer-left.open { transform: translateX(0); }
         .hidden { display: none !important; }
         .history-tab.active { background-color: var(--neon-blue); color: #ffffff; border-color: var(--neon-blue); }
-        #customEndModal, #installModal, #stewardGodModal, #catchFeedModal { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(15px); }
+        #customEndModal, #installModal, #stewardGodModal { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(15px); }
 
         .splash-text { font-size: 3rem; font-weight: 900; color: var(--neon-blue); text-align: center; text-transform: uppercase; letter-spacing: -0.05em; line-height: 1; }
 
@@ -212,14 +204,17 @@
         </div>
     </div>
 
-    <div id="catchFeedModal" class="fixed inset-0 z-[500] hidden flex items-center justify-center p-6">
-        <div class="match-card w-full max-w-sm p-6 space-y-4 border-2 border-blue-500 shadow-xl">
-            <div class="flex justify-between items-center border-b border-slate-200 pb-3">
-                <h3 id="feedAnglerName" class="text-base font-black uppercase tracking-tight neon-text-blue">Angler Name</h3>
-                <button onclick="closeCatchFeed()" class="text-slate-500 text-lg"><i class="fa-solid fa-xmark"></i></button>
+    <div id="catchFeedModal" class="fixed inset-0 z-[500] hidden flex flex-col bg-slate-50 transition-transform duration-300 transform translate-x-full">
+        <div class="flex-none p-5 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between pt-6">
+            <div class="flex flex-col text-left">
+                <span class="text-[10px] font-black uppercase text-blue-600 tracking-widest">Angler Profile</span>
+                <h3 id="feedAnglerName" class="text-xl font-black uppercase tracking-tight text-slate-900">Angler Name</h3>
             </div>
-            <div id="feedContent" class="max-h-[300px] overflow-y-auto space-y-2.5"></div>
-            <button onclick="closeCatchFeed()" class="w-full text-slate-600 font-black uppercase text-[10px] tracking-[0.3em] pt-3 bg-slate-100 rounded-full py-3 mt-2">Close Panel</button>
+            <button onclick="closeCatchFeed()" class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center font-black text-lg active:scale-95"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="feedContent" class="flex-1 overflow-y-auto p-4 space-y-2 scrollable-area bg-slate-50"></div>
+        <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
+            <button onclick="closeCatchFeed()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO LEADERBOARD</button>
         </div>
     </div>
 
@@ -365,7 +360,7 @@
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display">
-                    V10.1.0
+                    V10.2.0
                 </div>
             </div>
             
@@ -501,9 +496,9 @@
 
         <div id="view-fishing" class="hidden view-frame relative bg-slate-50">
             
-            <div class="flex-none pt-4 px-4 pb-2 z-50 bg-slate-50/95 backdrop-blur-md">
-                <div id="dynamic-island" class="island-container w-full max-w-md flex flex-col px-0 relative overflow-hidden flex-none mx-auto">
-                    <div id="island-dormant" class="flex items-center justify-between w-full h-[50px] px-5 bg-white/95">
+            <div class="flex-none pt-2 px-3 pb-2 z-50 bg-slate-50/95 backdrop-blur-md shadow-[0_4px_10px_rgba(0,0,0,0.03)] border-b border-slate-200">
+                <div class="w-full max-w-md mx-auto bg-white border-2 border-blue-500 rounded-[1.25rem] overflow-hidden shadow-lg flex flex-col">
+                    <div id="island-dormant" class="flex items-center justify-between w-full h-[46px] px-4 bg-white">
                         <div class="flex items-center relative flex-1 h-full overflow-hidden mr-3">
                             <div id="island-rank-text" class="absolute inset-y-0 left-0 flex items-center text-xs font-black text-blue-700 uppercase tracking-widest island-text-fade opacity-100">🏆 MY RANK: --</div>
                             <div id="island-gap-text" class="absolute inset-y-0 left-0 flex items-center text-xs font-black text-slate-600 uppercase tracking-widest island-text-fade opacity-0">🎯 -- PTS TO NEXT</div>
@@ -516,17 +511,13 @@
                     </div>
                     <div class="w-full h-px bg-blue-200/50"></div>
                     <div class="w-full h-8 py-1.5 relative mask-fade-edges overflow-hidden flex-none bg-blue-50/90">
-                        <div id="wallStreetTicker" class="ticker-track text-[10px] uppercase items-center tracking-widest font-bold">
+                        <div id="wallStreetTicker" class="ticker-track text-[11px] uppercase items-center tracking-widest font-bold">
                             <span class="text-blue-700">LIVE TELEMETRY: AWAITING DATA...</span>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div id="loggingArea" class="scrollable-area p-4 space-y-2 flex flex-col w-full max-w-md mx-auto">
-                <div class="match-card p-3 space-y-2 text-center flex-none mt-1 shadow-md">
-                    <div>
-                        <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none">
+                    <div class="w-full h-px bg-slate-200"></div>
+                    <div class="p-3 bg-slate-50/50 space-y-2">
+                        <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-3 text-sm appearance-none bg-white">
                             <option value="" disabled selected>-- Select Fish Species --</option>
                             <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
                                 <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
@@ -550,27 +541,28 @@
                                 <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
                             </optgroup>
                         </select>
+                        <div id="deckSizeInputs">
+                            <div id="deckLength">
+                                <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-3 text-lg metric-white bg-white" placeholder="Measurement (cm)">
+                            </div>
+                            <div id="deckWeightLb" class="hidden flex space-x-2">
+                                <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="pill-input w-full p-3 text-base metric-white bg-white"></div>
+                                <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-3 text-base metric-white bg-white"></div>
+                            </div>
+                            <div id="deckWeightKg" class="hidden flex space-x-2">
+                                <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="pill-input w-full p-3 text-base metric-white bg-white"></div>
+                                <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" step="25" placeholder="Grams" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-3 text-base metric-white bg-white"></div>
+                            </div>
+                        </div>
+                        <button id="btnRecord" onclick="recordCatch()" class="pill-btn btn-record-pulse w-full text-base py-3.5 mt-1 shadow-md">Record Catch</button>
                     </div>
-
-                    <div id="deckSizeInputs">
-                        <div id="deckLength">
-                            <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-lg metric-white" placeholder="Measurement (cm)">
-                        </div>
-                        <div id="deckWeightLb" class="hidden flex space-x-2">
-                            <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white"></div>
-                            <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white"></div>
-                        </div>
-                        <div id="deckWeightKg" class="hidden flex space-x-2">
-                            <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white"></div>
-                            <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" step="25" placeholder="Grams" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white"></div>
-                        </div>
-                    </div>
-                    <button id="btnRecord" onclick="recordCatch()" class="pill-btn btn-record-pulse w-full text-base py-3 mt-1 shadow-lg">Record Catch</button>
                 </div>
+            </div>
 
+            <div id="loggingArea" class="scrollable-area p-4 space-y-2 flex flex-col w-full max-w-md mx-auto">
                 <div class="pt-2 flex-1">
-                    <h3 class="text-slate-600 font-black text-[10px] uppercase tracking-[0.4em] mb-1 ml-3 text-left">Match Journal</h3>
-                    <div id="localCatchList" class="space-y-1"></div>
+                    <h3 class="text-slate-600 font-black text-[10px] uppercase tracking-[0.4em] mb-1.5 ml-3 text-left">Match Journal</h3>
+                    <div id="localCatchList" class="space-y-1.5"></div>
                 </div>
 
                 <div class="pt-6 pb-4 space-y-3 flex-none px-1 text-center border-t border-slate-200 mt-6">
@@ -583,8 +575,8 @@
                 </div>
             </div>
 
-            <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] flex items-center justify-center text-xl z-[100] active:scale-90 transition-transform neon-border-glow border-none">
-                <i class="fa-solid fa-trophy"></i>
+            <button onclick="document.getElementById('leaderboardDrawer').classList.add('open')" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
+                <i class="fa-solid fa-trophy mr-2 text-base"></i> CLICK FOR LIVE LEADERBOARD
             </button>
 
         </div>
@@ -649,7 +641,7 @@
                     <div class="space-y-4 text-sm leading-relaxed text-slate-700">
                         <p><b class="text-slate-900">Step 1: Join the Match</b><br>Enter your Name. Tap "Join as Competitor" and type in the 4-digit PIN provided by your Steward.</p>
                         <p><b class="text-slate-900">Step 2: Log Your Catch</b><br>Select the fish species. Enter the size or weight, then hit "Record Catch". The app will instantly sync to the cloud.</p>
-                        <p><b class="text-slate-900">Step 3: The Dynamic HUD & Leaderboard</b><br>The pill at the top of your screen is your tactical HUD. It shows your current points, match timer, and live rank. <b>Tap the pill</b> at any time to unfold the full Live Leaderboard. <b class="text-blue-600">Tap any angler's name</b> on the leaderboard to view their live, individual catch feed in real-time.</p>
+                        <p><b class="text-slate-900">Step 3: The Dynamic HUD & Leaderboard</b><br>The pill at the top of your screen is your tactical HUD. It shows your current points, match timer, and live rank. <b>Tap the Leaderboard Button</b> at any time to unfold the full Live Leaderboard. <b class="text-blue-600">Tap any angler's name</b> on the leaderboard to view their live, individual catch feed in real-time.</p>
                         <p><b class="text-slate-900">Step 4: Smart Battery Saver</b><br>There is no sleep button. Put your phone in your pocket and let the screen turn off to save battery. The moment you wake your phone, the app will instantly sync and scroll any new catches across your screen.</p>
                     </div>
                 </section>
@@ -666,7 +658,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.1.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.2.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -820,7 +812,7 @@
                 return getSpeciesBadge(c.points);
             }
             const val = c.display || c.size;
-            return `<span class="pts-badge pts-std shadow-sm">${val}</span>`;
+            return `<span class="pts-badge pts-std shadow-sm text-sm">${val}</span>`;
         }
         
         function formatTotalLength(cm) {
@@ -1594,16 +1586,16 @@
 
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
-                div.className = "match-card p-1.5 flex justify-between items-center mb-1 shadow-sm";
+                div.className = "match-card p-2 flex justify-between items-center mb-1.5 shadow-sm";
                 
                let metricDisplay = getUniversalBadge(c);
 
                 div.innerHTML = `
                    <div class="flex-1 text-left pl-2">
-                        <span class="font-black text-slate-900 text-xs uppercase">${c.species}</span> 
+                        <span class="font-black text-slate-900 text-sm uppercase">${c.species}</span> 
                         ${metricDisplay}
                         <br>
-                        <span class="text-[9px] text-slate-500 font-bold uppercase tracking-widest leading-none block">${c.time}</span>
+                        <span class="text-xs text-slate-500 font-bold uppercase tracking-widest leading-none block mt-1">${c.time}</span>
                     </div>
                     <div class="flex items-center pr-1">
                         <button onclick="editCatch('${c.id}')" class="text-blue-600 active:scale-90 transition p-3 -m-1 flex items-center justify-center" aria-label="Edit"><i class="fa-solid fa-pencil text-base pointer-events-none"></i></button>
@@ -1635,15 +1627,17 @@
                 const anglerUid = Object.keys(globalMatchData.anglers).find(key => globalMatchData.anglers[key].name === a.name);
                 let catchCount = a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0;
                 
-                return `<div class="match-card p-4 flex justify-between items-center mb-2 shadow-sm active:bg-slate-100 transition" onclick="openCatchFeed('${anglerUid}')">
-                    <div class="flex items-center w-2/3 text-left">
-                        <span class="font-black ${i===0?'text-orange-600':'text-slate-500'} text-sm w-8">${i+1}</span>
-                        <div class="flex flex-col min-w-0">
-                            <span class="font-black text-slate-900 text-sm uppercase tracking-wide truncate">${a.name}</span>
+                return `<div class="match-card p-2.5 flex justify-between items-center mb-2 shadow-sm active:bg-slate-100 transition" onclick="openCatchFeed('${anglerUid}')">
+                    <div class="flex items-center flex-1 min-w-0 pr-2">
+                        <span class="font-black ${i===0?'text-orange-600':'text-slate-500'} text-base w-8 shrink-0 text-center">${i+1}</span>
+                        <div class="flex flex-col min-w-0 text-left">
+                            <span class="font-black text-slate-900 text-base uppercase tracking-wide truncate">${a.name}</span>
                             <span class="text-[11px] font-bold text-slate-500 pt-0.5">${catchCount} Fish</span>
                         </div>
                     </div>
-                   <div class="text-right w-1/3">${getUniversalBadge({points: a.score, size: a.score, display: formatScoreDisplay(a.score, state.format, true)})}</div>
+                   <div class="text-right shrink-0">
+                        <span class="font-black text-xl text-blue-600">${formatScoreDisplay(a.score, state.format, true)}</span>
+                   </div>
                 </div>`
             }).join('');
             
@@ -1677,24 +1671,31 @@
             catches.sort((a,b) => b.ts - a.ts);
 
             if(catches.length === 0) {
-                content.innerHTML = `<p class="text-center text-slate-500 py-10 font-black text-xs uppercase tracking-widest">No captures yet</p>`;
+                content.innerHTML = `<p class="text-center text-slate-500 py-10 font-black text-sm uppercase tracking-widest">No captures yet</p>`;
             } else {
                 content.innerHTML = catches.map(c => {
                     let feedBadge = state.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (c.display || c.size);
                     return `
                     <div class="match-card p-3 border border-blue-200 flex justify-between items-center mb-1.5 shadow-sm">
                         <div class="text-left">
-                            <span class="text-slate-900 font-black uppercase text-sm">${c.species}</span>
-                            <span class="block text-[10px] text-slate-500 uppercase tracking-widest mt-1">${c.time}</span>
+                            <span class="text-slate-900 font-black uppercase text-base">${c.species}</span>
+                            <span class="block text-xs text-slate-500 uppercase tracking-widest mt-1">${c.time}</span>
                         </div>
-                        <span class="text-blue-600 font-black text-sm">${feedBadge}</span>
+                        <span class="text-blue-600 font-black text-base">${feedBadge}</span>
                     </div>
                 `}).join('');
             }
-            document.getElementById('catchFeedModal').classList.remove('hidden');
+            
+            let modal = document.getElementById('catchFeedModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('translate-x-full'); }, 10);
         }
 
-        function closeCatchFeed() { document.getElementById('catchFeedModal').classList.add('hidden'); }
+        function closeCatchFeed() { 
+            let modal = document.getElementById('catchFeedModal');
+            modal.classList.add('translate-x-full');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
 
         function stewardReviewLogs() {
             if(!globalMatchData || !globalMatchData.anglers) return;
@@ -1759,7 +1760,7 @@
             let html = "";
             arr.forEach((c) => {
                 let feedBadge = state.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (c.display || c.size);
-                html += `<div class="match-card p-3 flex justify-between items-center mb-2 shadow-sm border border-red-200"><div class="flex-1 text-left pl-1"><span class="font-black text-slate-900 text-sm uppercase tracking-tight">${c.species}</span><span class="text-sm ml-3 text-blue-600 font-black">${feedBadge}</span><br><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none block mt-1">${c.time}</span></div><button onclick="stewardDeleteCatch('${godTargetAnglerId}', '${c.id}')" class="text-red-600 bg-red-50 p-3 rounded-xl active:scale-90 transition shadow-sm border border-red-200 flex items-center justify-center"><i class="fa-solid fa-trash-can text-base"></i></button></div>`;
+                html += `<div class="match-card p-3 flex justify-between items-center mb-2 shadow-sm border border-red-200"><div class="flex-1 text-left pl-1"><span class="font-black text-slate-900 text-sm uppercase tracking-tight">${c.species}</span><span class="text-base ml-3 text-blue-600 font-black">${feedBadge}</span><br><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none block mt-1">${c.time}</span></div><button onclick="stewardDeleteCatch('${godTargetAnglerId}', '${c.id}')" class="text-red-600 bg-red-50 p-3 rounded-xl active:scale-90 transition shadow-sm border border-red-200 flex items-center justify-center"><i class="fa-solid fa-trash-can text-base"></i></button></div>`;
             });
             listEl.innerHTML = html;
         }
@@ -1951,7 +1952,7 @@
                 t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
             });
             
-            t += `\n_Generated by ShoreScore V10.1.0_`;
+            t += `\n_Generated by ShoreScore V10.2.0_`;
 
             if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
@@ -2245,7 +2246,10 @@
                 let feedBadge = h.format === 'speciesHunt' ? getSpeciesBadge(f.points) : (f.display || f.size);
                 return `<div class="match-card p-3 flex justify-between items-center mb-1.5 border border-slate-200"><div class="text-left"><span class="text-slate-900 font-bold text-xs uppercase">${f.species}</span><br><span class="text-[10px] text-slate-500 uppercase tracking-widest mt-0.5 block">${f.time}</span></div><span class="text-blue-600 font-black text-sm">${feedBadge}</span></div>`
             }).join('');
-            document.getElementById('catchFeedModal').classList.remove('hidden');
+            
+            let modal = document.getElementById('catchFeedModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('translate-x-full'); }, 10);
         };
 
         function closeHistoryDetail() { document.getElementById('historyDetailDrawer').classList.remove('open'); setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); }
@@ -2255,6 +2259,9 @@
 
         window.onload = () => {
             history.pushState(null, null, window.location.href);
+            // V10.2.0 Hardcode manual override to prevent cache staling visual issues
+            document.querySelectorAll('.version-display').forEach(el => el.innerText = "V10.2.0");
+            
             fetch('version.json').then(res => res.json()).then(data => { document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); }).catch(() => { console.log('Version fetch fallback active.'); });
             checkInstallStatus();
             const saved = localStorage.getItem('matchState');
