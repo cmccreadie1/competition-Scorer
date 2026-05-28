@@ -32,7 +32,6 @@
             --neon-amber: #ea580c;
             --neon-red: #dc2626;
             --card-border: #cbd5e1;
-            --label-bright: #334155; 
         }
 
         html, body {
@@ -54,7 +53,6 @@
         .bg-white\/95 { background-color: rgba(255, 255, 255, 0.95) !important; }
 
         .neon-text-blue { color: var(--neon-blue); font-weight: 900; }
-        .neon-text-amber { color: var(--neon-amber); font-weight: 900; }
         .metric-white { color: var(--text-header); font-weight: 900; }
 
         .neon-border-glow {
@@ -104,7 +102,7 @@
         .pill-input {
             background-color: var(--input-bg) !important;
             border: 2px solid var(--card-border) !important;
-            border-radius: 9999px;
+            border-radius: 0.75rem;
             text-align: center;
             font-weight: 800;
             outline: none;
@@ -219,7 +217,7 @@
             </div>
             
             <div>
-                <select id="godInputSpecies" onchange="godCheckSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none">
+                <select id="godInputSpecies" onchange="godCheckSpeciesSelection()" class="pill-input rounded-full w-full p-2.5 text-sm appearance-none">
                     <option value="" disabled selected>-- Select Fish Species --</option>
                     <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
                         <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
@@ -246,15 +244,15 @@
             </div>
             <div id="godDeckSizeInputs">
                 <div id="godDeckLength">
-                    <input type="number" id="godInputSize" inputmode="decimal" class="pill-input w-full p-2.5 text-base metric-white" placeholder="Measurement (cm)">
+                    <input type="number" id="godInputSize" inputmode="decimal" class="pill-input rounded-full w-full p-2.5 text-base metric-white" placeholder="Measurement (cm)">
                 </div>
                 <div id="godDeckWeightLb" class="hidden flex space-x-2">
-                    <div class="flex-1"><input type="number" id="godInputLbs" inputmode="numeric" placeholder="Lbs" class="pill-input w-full p-2.5 text-base metric-white"></div>
-                    <div class="flex-1"><input type="number" id="godInputOz" inputmode="numeric" placeholder="Oz" class="pill-input w-full p-2.5 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputLbs" inputmode="numeric" placeholder="Lbs" class="pill-input rounded-full w-full p-2.5 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputOz" inputmode="numeric" placeholder="Oz" class="pill-input rounded-full w-full p-2.5 text-base metric-white"></div>
                 </div>
                 <div id="godDeckWeightKg" class="hidden flex space-x-2">
-                    <div class="flex-1"><input type="number" id="godInputKg" inputmode="numeric" placeholder="Kg" class="pill-input w-full p-2.5 text-base metric-white"></div>
-                    <div class="flex-1"><input type="number" id="godInputGrammes" inputmode="numeric" step="25" placeholder="Grams" class="pill-input w-full p-2.5 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputKg" inputmode="numeric" placeholder="Kg" class="pill-input rounded-full w-full p-2.5 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputGrammes" inputmode="numeric" step="25" placeholder="Grams" class="pill-input rounded-full w-full p-2.5 text-base metric-white"></div>
                 </div>
             </div>
             <button onclick="submitGodModeCatch()" class="pill-btn w-full py-3.5 shadow-lg mt-2 text-base text-white">Force Save Record</button>
@@ -352,7 +350,7 @@
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display">
-                    V10.2.0
+                    V10.3.0
                 </div>
             </div>
             
@@ -364,7 +362,7 @@
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                 <i class="fa-solid fa-user text-blue-600/50 text-lg"></i>
                             </div>
-                            <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Your Name" class="pill-input w-full py-4 pl-12 pr-4 text-base font-bold">
+                            <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Your Name" class="pill-input rounded-full w-full py-4 pl-12 pr-4 text-base font-bold">
                         </div>
                     </div>
                     <button onclick="proceedToRoleSelection()" class="pill-btn w-full text-base py-4 mt-2 shadow-md border-2 border-blue-600">
@@ -444,13 +442,13 @@
             <div class="match-card p-6 space-y-5 text-center mt-8 shadow-lg">
                 <div>
                     <label class="block text-slate-600 font-black text-[10px] uppercase tracking-[0.2em] mb-2 text-left ml-3">Tournament Duration</label>
-                    <select id="hostDuration" class="pill-input w-full p-3 text-base appearance-none">
+                    <select id="hostDuration" class="pill-input rounded-full w-full p-3 text-base appearance-none">
                         <option value="1">1.0 Hour</option><option value="2">2.0 Hours</option><option value="3">3.0 Hours</option><option value="4" selected>4.0 Hours</option><option value="5">5.0 Hours</option><option value="6">6.0 Hours</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-slate-600 font-black text-[10px] uppercase tracking-[0.2em] mb-2 text-left ml-3">Rules Engine</label>
-                    <select id="hostFormat" class="pill-input w-full p-3 text-base appearance-none">
+                    <select id="hostFormat" class="pill-input rounded-full w-full p-3 text-base appearance-none">
                         <option value="length" selected>Length Only (cm)</option>
                         <option value="length10">Length + 10 Pts</option>
                         <option value="weightLb">Weight (Lbs & Oz)</option>
@@ -488,82 +486,90 @@
 
         <div id="view-fishing" class="hidden view-frame relative bg-slate-50">
             
-            <div class="flex-none pt-2 px-3 pb-2 z-50 bg-slate-50/95 backdrop-blur-md shadow-[0_4px_10px_rgba(0,0,0,0.03)] border-b border-slate-200">
-                <div class="w-full max-w-md mx-auto bg-white border-2 border-blue-500 rounded-[1.25rem] overflow-hidden shadow-lg flex flex-col">
-                    <div id="island-dormant" class="flex items-center justify-between w-full h-[46px] px-4 bg-white">
-                        <div class="flex items-center relative flex-1 h-full overflow-hidden mr-3">
-                            <div id="island-rank-text" class="absolute inset-y-0 left-0 flex items-center text-xs font-black text-blue-700 uppercase tracking-widest island-text-fade opacity-100">🏆 MY RANK: --</div>
-                            <div id="island-gap-text" class="absolute inset-y-0 left-0 flex items-center text-xs font-black text-slate-600 uppercase tracking-widest island-text-fade opacity-0">🎯 -- PTS TO NEXT</div>
+            <div class="flex-none pt-2 px-3 pb-1 z-50 bg-slate-50/95 backdrop-blur-md shadow-[0_4px_10px_rgba(0,0,0,0.03)] border-b border-slate-200">
+                <div id="dynamic-island" class="w-full max-w-md mx-auto bg-white border-2 border-blue-500 rounded-[1.25rem] shadow-md flex flex-col overflow-hidden">
+                    
+                    <div class="flex items-center justify-between h-[42px] px-3">
+                        <div class="flex items-center space-x-2 truncate">
+                            <span id="island-rank-text" class="text-sm font-black text-blue-700">🏆 --</span>
+                            <span id="island-gap-text" class="hidden text-xs font-bold text-slate-500">🎯 --</span>
                         </div>
-                        <div class="flex items-center space-x-3 z-10 justify-end flex-none">
-                            <span id="islandScore" class="text-xl font-black metric-white tracking-tight text-right whitespace-nowrap">0</span>
+                        <div class="flex items-center space-x-2 shrink-0">
+                            <span id="islandScore" class="text-xl font-black text-slate-900">0</span>
                             <div class="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
-                            <div class="text-sm font-black tabular-nums tracking-tighter metric-white leading-none" id="mainTimer">--:--</div>
+                            <div id="mainTimer" class="text-sm font-black text-slate-900">--:--</div>
                         </div>
                     </div>
-                    <div class="w-full h-px bg-blue-200/50"></div>
-                    <div class="w-full h-8 py-1.5 relative mask-fade-edges overflow-hidden flex-none bg-blue-50/90">
-                        <div id="wallStreetTicker" class="ticker-track text-[11px] uppercase items-center tracking-widest font-bold">
-                            <span class="text-blue-700">LIVE TELEMETRY: AWAITING DATA...</span>
+                    
+                    <div class="w-full bg-blue-50 border-t border-blue-100 h-7 flex items-center relative overflow-hidden mask-fade-edges">
+                        <div id="wallStreetTicker" class="ticker-track text-[11px] font-bold text-blue-700 tracking-wider">
+                            AWAITING TELEMETRY...
                         </div>
                     </div>
-                    <div class="w-full h-px bg-slate-200"></div>
-                    <div class="p-3 bg-slate-50/50 space-y-2">
-                        <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-3 text-sm appearance-none bg-white">
-                            <option value="" disabled selected>-- Select Fish Species --</option>
-                            <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
-                                <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
-                            </optgroup>
-                            <optgroup label="ROUNDFISH">
-                                <option value="Blue Whiting">Blue Whiting</option><option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option><option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option><option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option><option value="Gurnard (Grey)">Gurnard (Grey)</option><option value="Gurnard (Red)">Gurnard (Red)</option><option value="Gurnard (Tub)">Gurnard (Red)</option><option value="Haddock">Haddock</option><option value="Herring">Herring</option><option value="John Dory">John Dory</option><option value="Poor Cod">Poor Cod</option><option value="Red Mullet">Red Mullet</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
-                            </optgroup>
-                            <optgroup label="FLATFISH">
-                                <option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Halibut">Halibut</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
-                            </optgroup>
-                            <optgroup label="RAYS & SHARKS">
-                                <option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Blonde Ray">Blonde Ray</option><option value="Blue Shark">Blue Shark</option><option value="Common Skate">Common Skate</option><option value="Cuckoo Ray">Cuckoo Ray</option><option value="Porbeagle Shark">Porbeagle Shark</option><option value="Small-eyed Ray">Small-eyed Ray</option><option value="Smooth-hound">Smooth-hound</option><option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option><option value="Spotted Ray">Spotted Ray</option><option value="Stingray">Stingray</option><option value="Tope">Tope</option><option value="Undulate Ray">Undulate Ray</option>
-                            </optgroup>
-                            <optgroup label="WRASSE">
-                                <option value="Baillon's Wrasse">Baillon's Wrasse</option><option value="Ballan Wrasse">Ballan Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option>
-                            </optgroup>
-                            <optgroup label="MINI SPECIES">
-                                <option value="Black Goby">Black Goby</option><option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Common Dragonet">Common Dragonet</option><option value="Eelpout (Viviparous Blenny)">Eelpout (Viviparous Blenny)</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option><option value="Leopard-spotted Goby">Leopard-spotted Goby</option><option value="Lesser Weever">Lesser Weever</option><option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Northern Rockling">Northern Rockling</option><option value="Painted Goby">Painted Goby</option><option value="Pogge (Armed Bullhead)">Pogge (Armed Bullhead)</option><option value="Rock Goby">Rock Goby</option><option value="Shore Rockling">Shore Rockling</option><option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Topknot">Topknot</option><option value="Yarrell's Blenny">Yarrell's Blenny</option>
-                            </optgroup>
-                            <optgroup label="UNLISTED / CUSTOM" id="customSpeciesGroup">
-                                <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
-                            </optgroup>
-                        </select>
-                        <div id="deckSizeInputs">
-                            <div id="deckLength">
-                                <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-3 text-lg metric-white bg-white" placeholder="Measurement (cm)">
-                            </div>
-                            <div id="deckWeightLb" class="hidden flex space-x-2">
-                                <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="pill-input w-full p-3 text-base metric-white bg-white"></div>
-                                <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-3 text-base metric-white bg-white"></div>
-                            </div>
-                            <div id="deckWeightKg" class="hidden flex space-x-2">
-                                <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="pill-input w-full p-3 text-base metric-white bg-white"></div>
-                                <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" step="25" placeholder="Grams" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-3 text-base metric-white bg-white"></div>
+
+                    <div class="bg-slate-50/80 p-2 border-t border-slate-200">
+                        <div class="flex flex-col space-y-2">
+                            <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none bg-white border-slate-300">
+                                <option value="" disabled selected>-- Select Fish Species --</option>
+                                <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
+                                    <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
+                                </optgroup>
+                                <optgroup label="ROUNDFISH">
+                                    <option value="Blue Whiting">Blue Whiting</option><option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option><option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option><option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option><option value="Gurnard (Grey)">Gurnard (Grey)</option><option value="Gurnard (Red)">Gurnard (Red)</option><option value="Gurnard (Tub)">Gurnard (Red)</option><option value="Haddock">Haddock</option><option value="Herring">Herring</option><option value="John Dory">John Dory</option><option value="Poor Cod">Poor Cod</option><option value="Red Mullet">Red Mullet</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
+                                </optgroup>
+                                <optgroup label="FLATFISH">
+                                    <option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Halibut">Halibut</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
+                                </optgroup>
+                                <optgroup label="RAYS & SHARKS">
+                                    <option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Blonde Ray">Blonde Ray</option><option value="Blue Shark">Blue Shark</option><option value="Common Skate">Common Skate</option><option value="Cuckoo Ray">Cuckoo Ray</option><option value="Porbeagle Shark">Porbeagle Shark</option><option value="Small-eyed Ray">Small-eyed Ray</option><option value="Smooth-hound">Smooth-hound</option><option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option><option value="Spotted Ray">Spotted Ray</option><option value="Stingray">Stingray</option><option value="Tope">Tope</option><option value="Undulate Ray">Undulate Ray</option>
+                                </optgroup>
+                                <optgroup label="WRASSE">
+                                    <option value="Baillon's Wrasse">Baillon's Wrasse</option><option value="Ballan Wrasse">Ballan Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option>
+                                </optgroup>
+                                <optgroup label="MINI SPECIES">
+                                    <option value="Black Goby">Black Goby</option><option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Common Dragonet">Common Dragonet</option><option value="Eelpout (Viviparous Blenny)">Eelpout (Viviparous Blenny)</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option><option value="Leopard-spotted Goby">Leopard-spotted Goby</option><option value="Lesser Weever">Lesser Weever</option><option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Northern Rockling">Northern Rockling</option><option value="Painted Goby">Painted Goby</option><option value="Pogge (Armed Bullhead)">Pogge (Armed Bullhead)</option><option value="Rock Goby">Rock Goby</option><option value="Shore Rockling">Shore Rockling</option><option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Topknot">Topknot</option><option value="Yarrell's Blenny">Yarrell's Blenny</option>
+                                </optgroup>
+                                <optgroup label="UNLISTED / CUSTOM" id="customSpeciesGroup">
+                                    <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
+                                </optgroup>
+                            </select>
+                            
+                            <div class="flex space-x-2">
+                                <div id="deckSizeInputs" class="flex-1">
+                                    <div id="deckLength">
+                                        <input type="number" id="inputSize" inputmode="decimal" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white bg-white border-slate-300" placeholder="Measurement (cm)">
+                                    </div>
+                                    <div id="deckWeightLb" class="hidden flex space-x-2">
+                                        <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" placeholder="Lbs" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white bg-white border-slate-300"></div>
+                                        <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white bg-white border-slate-300"></div>
+                                    </div>
+                                    <div id="deckWeightKg" class="hidden flex space-x-2">
+                                        <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" placeholder="Kg" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white bg-white border-slate-300"></div>
+                                        <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" step="25" placeholder="Grams" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white bg-white border-slate-300"></div>
+                                    </div>
+                                </div>
+                                <button id="btnRecord" onclick="recordCatch()" class="pill-btn px-4 bg-blue-600 text-white font-black text-sm rounded-xl shadow-md btn-record-pulse flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-plus mr-1"></i> ADD
+                                </button>
                             </div>
                         </div>
-                        <button id="btnRecord" onclick="recordCatch()" class="pill-btn btn-record-pulse w-full text-base py-3.5 mt-1 shadow-md">Record Catch</button>
                     </div>
                 </div>
             </div>
 
-            <div id="loggingArea" class="scrollable-area p-4 space-y-2 flex flex-col w-full max-w-md mx-auto">
-                <div class="pt-2 flex-1">
+            <div id="loggingArea" class="scrollable-area p-4 flex flex-col w-full max-w-md mx-auto">
+                <div class="pt-1 flex-1 flex flex-col min-h-[50vh]">
                     <h3 class="text-slate-600 font-black text-[10px] uppercase tracking-[0.4em] mb-1.5 ml-3 text-left">Match Journal</h3>
-                    <div id="localCatchList" class="space-y-1.5"></div>
-                </div>
-
-                <div class="pt-6 pb-4 space-y-3 flex-none px-1 text-center border-t border-slate-200 mt-6">
-                    <button id="btnStewardDesk" onclick="document.getElementById('stewardDrawer').classList.add('open')" class="hidden pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-sm">
-                        ⚙️ STEWARD CONTROLS
-                    </button>
-                    <button onclick="leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest transition shadow-sm">
-                        <i class="fa-solid fa-person-walking-arrow-right mr-2 text-white"></i> Leave Match Early
-                    </button>
+                    <div id="localCatchList" class="space-y-1.5 flex-1"></div>
+                    
+                    <div class="pt-8 pb-4 space-y-3 flex-none px-1 text-center mt-auto">
+                        <button id="btnStewardDesk" onclick="document.getElementById('stewardDrawer').classList.add('open')" class="hidden pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-sm">
+                            ⚙️ STEWARD CONTROLS
+                        </button>
+                        <button onclick="leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest transition shadow-sm">
+                            <i class="fa-solid fa-person-walking-arrow-right mr-2 text-white"></i> Leave Match Early
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -650,7 +656,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.2.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.3.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -1041,7 +1047,7 @@
             document.getElementById('finalSpecies').innerText = '0';
             if (document.getElementById('localCatchList')) document.getElementById('localCatchList').innerHTML = '';
             if (document.getElementById('islandScore')) document.getElementById('islandScore').innerText = '0';
-            if (document.getElementById('island-rank-text')) document.getElementById('island-rank-text').innerText = '🏆 MY RANK: --';
+            if (document.getElementById('island-rank-text')) document.getElementById('island-rank-text').innerText = '🏆 --';
             
             document.getElementById('app-container').classList.remove('grace-active');
             document.getElementById('mainTimer').classList.remove('grace-pulse');
@@ -1535,7 +1541,7 @@
                     obj.edited = true; 
                 } 
                 state.editingId = null; 
-                document.getElementById('btnRecord').innerText = "Record Catch";
+                document.getElementById('btnRecord').innerText = "ADD";
             } else { 
                 state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now(), edited: false }); 
             }
@@ -1554,7 +1560,7 @@
                 if (state.format === 'weightLb') { document.getElementById('inputLbs').value = Math.floor(obj.size / 16); document.getElementById('inputOz').value = obj.size % 16; } 
                 else if (state.format === 'weightKg') { document.getElementById('inputKg').value = Math.floor(obj.size / 1000); document.getElementById('inputGrammes').value = obj.size % 1000; } 
                 else if (state.format !== 'speciesHunt') { document.getElementById('inputSize').value = obj.size; }
-                state.editingId = id; document.getElementById('btnRecord').innerText = "Update Record"; focusMeasurement();
+                state.editingId = id; document.getElementById('btnRecord').innerHTML = "UPDATE"; focusMeasurement();
             }
         }
 
@@ -1574,13 +1580,13 @@
             list.innerHTML = "";
             
             if (state.myCatches.length === 0) {
-                list.innerHTML = `<div class="p-6 text-center border-2 border-dashed border-slate-200 rounded-lg bg-white"><p class="text-xs font-black uppercase text-slate-400">Empty Diary</p></div>`;
+                list.innerHTML = `<div class="p-6 text-center border-2 border-dashed border-slate-300 rounded-xl bg-white"><p class="text-xs font-black uppercase text-slate-400">Empty Diary</p></div>`;
                 return;
             }
 
             state.myCatches.forEach(c => {
                 let div = document.createElement('div');
-                div.className = "match-card p-1.5 flex justify-between items-center mb-1 shadow-sm";
+                div.className = "match-card p-1.5 flex justify-between items-center shadow-sm bg-white";
                 
                let metricDisplay = getUniversalBadge(c);
 
@@ -1606,14 +1612,14 @@
             
             let myRank = arr.findIndex(a => a.name === state.name) + 1;
             const rankEl = document.getElementById('island-rank-text');
-            if (rankEl) rankEl.innerText = `🏆 MY RANK: ${myRank}${myRank === 1 ? 'ST' : myRank === 2 ? 'ND' : myRank === 3 ? 'RD' : 'TH'}`;
+            if (rankEl) rankEl.innerText = `🏆 ${myRank}${myRank === 1 ? 'ST' : myRank === 2 ? 'ND' : myRank === 3 ? 'RD' : 'TH'}`;
             
             const gapEl = document.getElementById('island-gap-text');
             if (gapEl) {
                 if(myRank === 1) gapEl.innerText = `🔥 IN THE LEAD`;
                 else if (myRank > 1) {
                     let diff = arr[myRank - 2].score - arr[myRank - 1].score;
-                    gapEl.innerText = `🎯 ${diff} PTS TO ${myRank - 1}${myRank - 1 === 1 ? 'ST' : myRank - 1 === 2 ? 'ND' : myRank - 1 === 3 ? 'RD' : 'TH'}`;
+                    gapEl.innerText = `🎯 ${diff} PTS NEXT`;
                 }
             }
 
@@ -1946,7 +1952,7 @@
                 t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
             });
             
-            t += `\n_Generated by ShoreScore V10.2.0_`;
+            t += `\n_Generated by ShoreScore V10.3.0_`;
 
             if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
@@ -2257,8 +2263,7 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            // V10.2.0 Manual Override
-            document.querySelectorAll('.version-display').forEach(el => el.innerText = "V10.2.0");
+            document.querySelectorAll('.version-display').forEach(el => el.innerText = "V10.3.0");
             
             fetch('version.json')
                 .then(res => res.json())
