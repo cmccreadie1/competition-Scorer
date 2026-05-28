@@ -19,6 +19,7 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
@@ -109,7 +110,7 @@
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-main) !important;
         }
-        /* V10.5.0 Active Glow Boundary */
+        
         .pill-input:focus { 
             background-color: #ffffff !important; 
             border-color: var(--neon-blue) !important; 
@@ -135,6 +136,7 @@
             touch-action: manipulation;
         }
         .pill-btn:active { transform: scale(0.96); background-color: #0369a1; }
+        .pill-btn:disabled { background-color: #cbd5e1 !important; color: #64748b !important; transform: none !important; box-shadow: none !important; opacity: 0.8; }
         .btn-destructive { background-color: var(--neon-red) !important; color: #ffffff !important; }
 
         .btn-record-pulse { animation: record-pulse 2s infinite; }
@@ -188,6 +190,9 @@
         .animate-text { opacity: 0; animation: text-reveal 0.8s ease-out forwards; }
         .delay-title { animation-delay: 1s; }
         .delay-version { animation-delay: 1.3s; }
+        
+        #stewardReportBtn.reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
+        #historyReportBtn.reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -200,23 +205,38 @@
         </div>
     </div>
 
+    <div id="reportPreviewModal" class="fixed inset-0 z-[600] hidden flex flex-col bg-slate-50 p-4">
+        <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
+            <button onclick="closeReportPreview()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+            <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Scorecard</h2>
+            <div class="w-6"></div>
+        </div>
+        <div class="flex-1 overflow-y-auto pt-4 pb-20 flex flex-col items-center">
+            <p class="text-xs font-bold text-blue-600 mb-2 uppercase tracking-widest text-center animate-pulse">👇 Long-press image to Save or Share</p>
+            <img id="reportPreviewImage" src="" alt="Match Report" class="w-full max-w-sm rounded-xl shadow-lg border border-slate-300">
+            <button onclick="shareTextFallbackFromPreview()" class="mt-6 pill-btn w-full max-w-sm py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md">
+                <i class="fa-solid fa-comment-sms mr-2 text-blue-600"></i> SHARE AS PLAIN TEXT
+            </button>
+        </div>
+    </div>
+
     <div id="catchFeedModal" class="fixed inset-0 z-[500] hidden flex flex-col bg-slate-50 transition-transform duration-300 transform translate-x-full">
         <div class="flex-none p-5 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between pt-6">
             <div class="flex flex-col text-left">
                 <span class="text-[10px] font-black uppercase text-blue-600 tracking-widest">Angler Profile</span>
                 <h3 id="feedAnglerName" class="text-xl font-black uppercase tracking-tight text-slate-900">Angler Name</h3>
             </div>
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; closeCatchFeed()" class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center font-black text-lg active:scale-95"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeCatchFeed()" class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center font-black text-lg active:scale-95"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div id="feedContent" class="flex-1 overflow-y-auto p-4 space-y-2 scrollable-area bg-slate-50"></div>
         <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; closeCatchFeed()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO LEADERBOARD</button>
+            <button onclick="closeCatchFeed()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO LEADERBOARD</button>
         </div>
     </div>
 
     <div id="stewardGodModal" class="fixed inset-0 z-[400] hidden flex flex-col items-center justify-center p-4">
         <div class="match-card w-full max-w-sm p-5 space-y-4 border border-blue-500 relative shadow-2xl">
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('stewardGodModal').classList.add('hidden')" class="absolute top-3 right-4 text-slate-500 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeStewardGodModal()" class="absolute top-3 right-4 text-slate-500 text-xl"><i class="fa-solid fa-xmark"></i></button>
             <div class="text-center pb-2 border-b border-slate-200">
                 <h3 class="text-sm font-black uppercase tracking-tight neon-text-blue"><i class="fa-solid fa-user-shield mr-1"></i> Steward Override</h3>
                 <p id="godModeAnglerName" class="text-slate-900 text-base font-black mt-1">Angler Name</p>
@@ -261,7 +281,7 @@
                     <div class="flex-1"><input type="number" id="godInputGrammes" inputmode="numeric" pattern="\d*" step="25" placeholder="Grams" class="pill-input rounded-full w-full p-2.5 text-base metric-white"></div>
                 </div>
             </div>
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; submitGodModeCatch()" class="pill-btn w-full py-3.5 shadow-lg mt-2 text-base text-white">Force Save Record</button>
+            <button onclick="submitGodModeCatch()" class="pill-btn w-full py-3.5 shadow-lg mt-2 text-base text-white">Force Save Record</button>
         </div>
     </div>
 
@@ -279,7 +299,7 @@
                 <button onclick="openTimeKeypad()" class="pill-btn py-3.5 text-xs"><i class="fa-solid fa-keyboard mr-2"></i> ENTER FINISH TIME</button>
                 <button onclick="stewardSetNewEnd(0)" class="pill-btn btn-destructive py-3.5 text-[10px] leading-none flex flex-col">STRIKE NOW<span class="text-[9px] opacity-80 mt-1">(Activates 3 Min Grace)</span></button>
             </div>
-            <button onclick="document.getElementById('customEndModal').classList.add('hidden')" class="w-full text-slate-600 font-black uppercase text-[10px] tracking-[0.3em] pt-3 bg-slate-100 rounded-full py-3">Return</button>
+            <button onclick="closeCustomEndModal()" class="w-full text-slate-600 font-black uppercase text-[10px] tracking-[0.3em] pt-3 bg-slate-100 rounded-full py-3">Return</button>
         </div>
     </div>
 
@@ -326,7 +346,7 @@
                 <h3 class="text-lg font-black uppercase tracking-tight text-slate-900">Device Installation</h3>
                 <p id="installInstructionText" class="text-slate-600 mt-3 text-xs leading-relaxed"></p>
             </div>
-            <button onclick="document.getElementById('installModal').classList.add('hidden')" class="pill-btn w-full py-4 text-xs">Got it</button>
+            <button onclick="closeInstallGuide()" class="pill-btn w-full py-4 text-xs">Got it</button>
         </div>
     </div>
 
@@ -334,12 +354,12 @@
 
         <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative">
             
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('guideDrawer').classList.add('open')" class="absolute top-5 left-5 domestic-action text-slate-500 active:text-blue-600 cursor-pointer flex flex-col items-center z-[50]">
+            <button onclick="openGuide()" class="absolute top-5 left-5 domestic-action text-slate-500 active:text-blue-600 cursor-pointer flex flex-col items-center z-[50]">
                 <i class="fa-solid fa-book-open text-2xl mb-1"></i>
                 <span class="text-[10px] font-black uppercase tracking-widest">Guide</span>
             </button>
 
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; exitApp()" class="absolute top-5 right-5 domestic-action text-slate-500 active:text-red-500 cursor-pointer flex flex-col items-center z-[50]">
+            <button onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-slate-500 active:text-red-500 cursor-pointer flex flex-col items-center z-[50]">
                 <i class="fa-solid fa-power-off text-2xl mb-1"></i>
                 <span class="text-[10px] font-black uppercase tracking-widest">Close</span>
             </button>
@@ -356,7 +376,7 @@
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display">
-                    V10.5.0
+                    V10.7.0
                 </div>
             </div>
             
@@ -371,13 +391,13 @@
                             <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Your Name" class="pill-input rounded-full w-full py-4 pl-12 pr-4 text-base font-bold">
                         </div>
                     </div>
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; proceedToRoleSelection()" class="pill-btn w-full text-base py-4 mt-2 shadow-md border-2 border-blue-600">
+                    <button onclick="proceedToRoleSelection()" class="pill-btn w-full text-base py-4 mt-2 shadow-md border-2 border-blue-600">
                         Continue <i class="fa-solid fa-arrow-right ml-2"></i>
                     </button>
                 </div>
                 
                 <div class="w-full bg-white rounded-xl neon-border-glow border overflow-hidden domestic-action relative z-10 shadow-md">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('history')" class="w-full p-4 flex flex-col items-center cursor-pointer">
+                    <button onclick="navTo('history')" class="w-full p-4 flex flex-col items-center cursor-pointer">
                         <div class="flex items-center justify-center space-x-3 w-full mb-1">
                             <i class="fa-solid fa-vault text-blue-600 text-2xl"></i>
                             <div class="text-[var(--text-header)] text-lg font-black uppercase tracking-tight">View Past <span class="neon-text-blue">Matches</span></div>
@@ -395,19 +415,19 @@
         </div>
         <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-slate-50">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('home')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="navTo('home')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Select Role</h2>
                 <div class="w-6"></div>
             </div>
             
             <div class="flex-1 flex flex-col justify-center space-y-6 max-w-sm mx-auto w-full pb-20">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('join')" class="w-full pill-btn font-black text-xl py-10 rounded-[2rem] shadow-xl border border-blue-600 flex flex-col items-center justify-center">
+                <button onclick="navTo('join')" class="w-full pill-btn font-black text-xl py-10 rounded-[2rem] shadow-xl border border-blue-600 flex flex-col items-center justify-center">
                     <i class="fa-solid fa-user-tag text-4xl mb-3 text-white"></i>
                     Join as Competitor
                 </button>
                 
                 <div class="pt-6">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('host')" class="w-3/4 mx-auto pill-btn text-sm py-5 rounded-[1.5rem] shadow-md border border-blue-600 flex flex-col items-center justify-center opacity-90 bg-white !text-blue-600">
+                    <button onclick="navTo('host')" class="w-3/4 mx-auto pill-btn text-sm py-5 rounded-[1.5rem] shadow-md border border-blue-600 flex flex-col items-center justify-center opacity-90 bg-white !text-blue-600">
                         <i class="fa-solid fa-crown text-xl mb-1.5"></i>
                         Host as Steward
                     </button>
@@ -417,7 +437,7 @@
 
         <div id="view-join" class="hidden view-frame p-4 bg-slate-50">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Authentication</h2>
                 <div class="w-6"></div>
             </div>
@@ -434,14 +454,14 @@
                 <button class="atm-btn" onclick="atmPress(1)">1</button><button class="atm-btn" onclick="atmPress(2)">2</button><button class="atm-btn" onclick="atmPress(3)">3</button>
                 <button class="atm-btn" onclick="atmPress(4)">4</button><button class="atm-btn" onclick="atmPress(5)">5</button><button class="atm-btn" onclick="atmPress(6)">6</button>
                 <button class="atm-btn" onclick="atmPress(7)">7</button><button class="atm-btn" onclick="atmPress(8)">8</button><button class="atm-btn" onclick="atmPress(9)">9</button>
-                <button class="atm-btn text-red-600" onclick="try{navigator.vibrate(50);}catch(e){}; navTo('role')"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="atmPress(0)">0</button><button class="atm-btn neon-text-blue" onclick="atmDelete()"><i class="fa-solid fa-delete-left"></i></button>
+                <button class="atm-btn text-red-600" onclick="navTo('role')"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="atmPress(0)">0</button><button class="atm-btn neon-text-blue" onclick="atmDelete()"><i class="fa-solid fa-delete-left"></i></button>
             </div>
-            <button id="btn-connect" onclick="try{navigator.vibrate(50);}catch(e){}; connectToMatch()" class="hidden w-full max-w-sm mx-auto pill-btn text-base py-4 mb-8 shadow-xl">Validate</button>
+            <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto pill-btn text-base py-4 mb-8 shadow-xl">Validate</button>
         </div>
 
         <div id="view-host" class="hidden view-frame p-5 space-y-4 bg-slate-50">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Match Creator</h2>
                 <div class="w-6"></div>
             </div>
@@ -462,20 +482,20 @@
                         <option value="speciesHunt">Species Hunt</option>
                     </select>
                 </div>
-                <button id="btnInitMatch" onclick="try{navigator.vibrate(50);}catch(e){}; createMatch()" class="pill-btn w-full text-lg py-4 mt-4 border-blue-600 shadow-md">Initialize Match</button>
+                <button id="btnInitMatch" onclick="createMatch()" class="pill-btn w-full text-lg py-4 mt-4 border-blue-600 shadow-md">Initialize Match</button>
             </div>
         </div>
 
         <div id="view-waiting" class="hidden view-frame p-5 space-y-4 bg-slate-50">
             <div class="flex justify-between items-center w-full pb-2 border-b border-slate-200">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; exitWaitingRoom()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="exitWaitingRoom()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <div class="neon-text-blue font-black tracking-[0.2em] bg-white px-5 py-1.5 rounded-full border border-slate-300 shadow-sm text-xl" id="displayPin">0000</div>
             </div>
             <div class="flex-1 flex flex-col items-center space-y-4 pt-3">
                 <h3 class="text-xl font-black text-slate-900 uppercase tracking-tight">Angler Lobby</h3>
                 <div id="attendanceList" class="w-full max-w-sm flex-1 bg-white rounded-[1.5rem] border border-slate-300 p-4 space-y-2 overflow-y-auto shadow-inner"></div>
                 <div id="hostControls" class="hidden w-full max-w-sm pb-5">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; triggerHypeStart()" class="pill-btn w-full font-black text-xl py-4 shadow-xl border-blue-600" style="animation: record-pulse 2s infinite;">🚀 START MATCH</button>
+                    <button onclick="triggerHypeStart()" class="pill-btn w-full font-black text-xl py-4 shadow-xl border-blue-600" style="animation: record-pulse 2s infinite;">🚀 START MATCH</button>
                 </div>
                 <div id="joinerWaitingText" class="w-full max-w-sm pb-5 text-center">
                     <p class="text-base font-bold text-slate-600 italic">Linked... Waiting for Steward.</p>
@@ -560,7 +580,7 @@
                                             <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" pattern="\d*" step="25" placeholder="Grams" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white border-slate-300"></div>
                                         </div>
                                     </div>
-                                    <button id="btnRecord" onclick="try{navigator.vibrate(50);}catch(e){}; recordCatch()" class="pill-btn px-4 bg-blue-600 text-white font-black text-sm rounded-xl shadow-md btn-record-pulse flex items-center justify-center shrink-0">
+                                    <button id="btnRecord" onclick="recordCatch()" class="pill-btn px-4 bg-blue-600 text-white font-black text-sm rounded-xl shadow-md btn-record-pulse flex items-center justify-center shrink-0">
                                         ADD
                                     </button>
                                 </div>
@@ -576,10 +596,10 @@
                     <div id="localCatchList" class="space-y-2 flex-1"></div>
                     
                     <div class="pt-8 pb-4 space-y-3 flex-none px-1 text-center mt-auto">
-                        <button id="btnStewardDesk" onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('stewardDrawer').classList.add('open')" class="hidden pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-sm">
+                        <button id="btnStewardDesk" onclick="openStewardDrawer()" class="hidden pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-sm">
                             ⚙️ STEWARD CONTROLS
                         </button>
-                        <button onclick="try{navigator.vibrate(50);}catch(e){}; leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest transition shadow-sm">
+                        <button onclick="leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest transition shadow-sm">
                             Leave Match Early
                         </button>
                         <div class="h-28 w-full flex-none"></div>
@@ -587,7 +607,7 @@
                 </div>
             </div>
 
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('leaderboardDrawer').classList.add('open')" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
+            <button onclick="openLeaderboard()" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
                 <i class="fa-solid fa-trophy mr-2 text-base"></i> CLICK FOR LIVE LEADERBOARD
             </button>
 
@@ -612,7 +632,7 @@
             </div>
 
             <button id="stewardReportBtn" onclick="generateOfficialMasterReport()" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-full shadow-sm">Return Home (Clear Match)</button>
+            <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-full shadow-sm">Return Home (Clear Match)</button>
         </div>
 
         <div id="view-history" class="hidden view-frame bg-slate-50">
@@ -631,7 +651,7 @@
                 </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('home')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO MAIN MENU</button>
+                <button onclick="navTo('home')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO MAIN MENU</button>
             </div>
         </div>
 
@@ -666,15 +686,15 @@
                     </div>
                 </section>
                 <section class="pt-4 text-center pb-8">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; forceUpdateApp()" class="pill-btn w-full py-4 transition shadow-md bg-slate-900">
+                    <button onclick="forceUpdateApp()" class="pill-btn w-full py-4 transition shadow-md bg-slate-900">
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.5.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.7.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('guideDrawer').classList.remove('open')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO LOBBY</button>
+                <button onclick="closeGuide()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO LOBBY</button>
             </div>
         </div>
 
@@ -682,7 +702,7 @@
            <div class="hidden"><button id="tab-standings"></button><button id="tab-record"></button></div>
             <div id="historyContent" class="scrollable-area p-4 text-center"></div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; closeHistoryDetail()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO MATCH LIST</button>
+                <button onclick="closeHistoryDetail()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO MATCH LIST</button>
             </div>
         </div>
 
@@ -706,7 +726,7 @@
             <div id="leaderboardList" class="scrollable-area p-4 space-y-2 text-center mt-1"></div>
             
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('leaderboardDrawer').classList.remove('open')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
+                <button onclick="closeLeaderboard()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
             </div>
         </div>
 
@@ -716,15 +736,15 @@
                 <div class="mt-3"><span id="stewardPinDisplay" class="text-xs text-slate-600 font-black border border-slate-300 bg-white shadow-sm px-4 py-1.5 rounded-full tracking-widest">PIN: ----</span></div>
             </div>
             <div class="scrollable-area p-5 space-y-4 text-center max-w-sm mx-auto w-full">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; stewardReviewLogs()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-list-check mr-2 text-base"></i> Review Angler Logs</button>
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; transferSteward()" class="pill-btn w-full py-4 text-xs tracking-widest mt-2 bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-right-left mr-3 text-base"></i> Transfer Control</button>
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; endMatchEarly(true)" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-clock mr-2 text-base"></i> Adjust Match Clock</button>
+                <button onclick="stewardReviewLogs()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-list-check mr-2 text-base"></i> Review Angler Logs</button>
+                <button onclick="transferSteward()" class="pill-btn w-full py-4 text-xs tracking-widest mt-2 bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-right-left mr-3 text-base"></i> Transfer Control</button>
+                <button onclick="endMatchEarly(true)" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-clock mr-2 text-base"></i> Adjust Match Clock</button>
                 <div class="pt-4 border-t border-slate-200 mt-4">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; generateOfficialMasterReport()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
+                    <button id="stewardReportBtn" onclick="generateOfficialMasterReport()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
                 </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('stewardDrawer').classList.remove('open')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
+                <button onclick="closeStewardDrawer()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
             </div>
         </div>
 
@@ -734,18 +754,18 @@
             </div>
             <div id="stewardRosterList" class="scrollable-area p-4 space-y-2 text-center"></div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; stewardCloseLogs()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO STEWARD DESK</button>
+                <button onclick="stewardCloseLogs()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO STEWARD DESK</button>
             </div>
         </div>
 
         <div id="stewardLogDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50 z-[103] flex flex-col hidden justify-between">
             <div class="flex-none p-5 bg-white text-center border-b border-slate-200 shadow-sm">
                 <h3 class="text-base font-black text-slate-900 uppercase tracking-tight mt-2" id="auditAnglerName">Angler Name</h3>
-                <button id="godModeAddBtn" class="pill-btn w-full text-[11px] tracking-widest py-4 mt-4 shadow-md"><i class="fa-solid fa-plus mr-2"></i> LOG CATCH FOR ANGLER</button>
+                <button onclick="openStewardGodModal()" id="godModeAddBtn" class="pill-btn w-full text-[11px] tracking-widest py-4 mt-4 shadow-md"><i class="fa-solid fa-plus mr-2"></i> LOG CATCH FOR ANGLER</button>
             </div>
             <div id="stewardCatchList" class="scrollable-area p-4 space-y-2 text-center mt-1"></div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);" class="pill-btn btn-destructive w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> CLOSE AUDIT</button>
+                <button onclick="closeStewardLogDrawer()" class="pill-btn btn-destructive w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> CLOSE AUDIT</button>
             </div>
         </div>
 
@@ -813,6 +833,24 @@
         let godTargetAnglerId = null;
         let godTargetAnglerName = "";
 
+        // CORE HAPTIC & UI FUNCTIONS (V10.7.0 Fix)
+        function haptic() {
+            try { if (navigator.vibrate) navigator.vibrate(50); } catch(e) {}
+        }
+        
+        function openGuide() { haptic(); document.getElementById('guideDrawer').classList.add('open'); }
+        function closeGuide() { haptic(); document.getElementById('guideDrawer').classList.remove('open'); }
+        function closeInstallGuide() { haptic(); document.getElementById('installModal').classList.add('hidden'); }
+        function openStewardDrawer() { haptic(); document.getElementById('stewardDrawer').classList.add('open'); }
+        function closeStewardDrawer() { haptic(); document.getElementById('stewardDrawer').classList.remove('open'); }
+        function openLeaderboard() { haptic(); document.getElementById('leaderboardDrawer').classList.add('open'); }
+        function closeLeaderboard() { haptic(); document.getElementById('leaderboardDrawer').classList.remove('open'); }
+        function openStewardGodModal() { haptic(); document.getElementById('stewardGodModal').classList.remove('hidden'); }
+        function closeStewardGodModal() { haptic(); document.getElementById('stewardGodModal').classList.add('hidden'); }
+        function closeCustomEndModal() { haptic(); document.getElementById('customEndModal').classList.add('hidden'); }
+        function closeStewardLogDrawer() { haptic(); document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300); }
+
+
         function getSpeciesBadge(pts) {
             if (pts === 25) return `<span class="pts-badge pts-25 shadow-sm">25</span>`;
             if (pts === 35) return `<span class="pts-badge pts-35 shadow-sm">35</span>`;
@@ -820,11 +858,8 @@
             return `<span class="pts-badge pts-1 shadow-sm">1</span>`;
         }
         function getUniversalBadge(c) {
-            if (state.format === 'speciesHunt') {
-                return getSpeciesBadge(c.points);
-            }
-            const val = c.display || c.size;
-            return `<span class="pts-badge pts-std shadow-sm text-sm">${val}</span>`;
+            if (state.format === 'speciesHunt') { return getSpeciesBadge(c.points); }
+            return `<span class="pts-badge pts-std shadow-sm text-sm">${c.display || c.size}</span>`;
         }
         
         function formatTotalLength(cm) {
@@ -834,7 +869,7 @@
             return `${m}m ${c.toString().padStart(2, '0')}cm`;
         }
 
-      function formatCatchTime(c) {
+        function formatCatchTime(c) {
             if (!c.ts) return c.time;
             let diffMins = Math.floor((Date.now() - c.ts) / 60000);
             if (diffMins < 1) return 'Just now';
@@ -851,8 +886,7 @@
             if(state.isSteward) {
                 islandPressTimer = setTimeout(() => {
                     isLongPress = true;
-                    try{navigator.vibrate(50);}catch(err){};
-                    document.getElementById('stewardDrawer').classList.add('open');
+                    openStewardDrawer();
                 }, 600); 
             }
         }
@@ -877,13 +911,9 @@
         setInterval(() => {
             const rankTxt = document.getElementById('island-rank-text');
             const gapTxt = document.getElementById('island-gap-text');
-            
             if (rankTxt && gapTxt) {
-                rankTxt.classList.replace('opacity-100', 'opacity-0');
-                gapTxt.classList.replace('opacity-100', 'opacity-0');
-                
+                rankTxt.classList.replace('opacity-100', 'opacity-0'); gapTxt.classList.replace('opacity-100', 'opacity-0');
                 hudState = (hudState + 1) % 2;
-                
                 if (hudState === 0) rankTxt.classList.replace('opacity-0', 'opacity-100');
                 else if (hudState === 1) gapTxt.classList.replace('opacity-0', 'opacity-100');
             }
@@ -918,41 +948,28 @@
         }
 
         document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible' && state.pin) {
-                if (['playing', 'grace'].includes(state.status)) {
-                    syncInputDeckToState(); 
-                    get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
-                        if (snapshot.exists()) {
-                            globalMatchData = snapshot.val();
-                            processCloudUpdate();
-                            checkAndFireTicker();
-                        }
-                    });
-                }
+            if (document.visibilityState === 'visible' && state.pin && ['playing', 'grace'].includes(state.status)) {
+                syncInputDeckToState(); 
+                get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        globalMatchData = snapshot.val();
+                        processCloudUpdate(); checkAndFireTicker();
+                    }
+                });
             }
         });
 
         function formatScoreDisplay(val, fmt, isPlaintext = false) {
             const unitOpen = isPlaintext ? "" : '<span class="telemetry-unit">';
             const unitClose = isPlaintext ? "" : "</span>";
-            
-            if (fmt === 'weightLb') {
-                let lbs = Math.floor(val / 16);
-                let oz = val % 16;
-                return `${lbs}${unitOpen}lb${unitClose} ${oz}${unitOpen}oz${unitClose}`;
-            }
-            if (fmt === 'weightKg') {
-                let kg = Math.floor(val / 1000);
-                let g = val % 1000;
-                return `${kg}${unitOpen}kg${unitClose} ${g}${unitOpen}g${unitClose}`;
-            }
+            if (fmt === 'weightLb') { let lbs = Math.floor(val / 16); let oz = val % 16; return `${lbs}${unitOpen}lb${unitClose} ${oz}${unitOpen}oz${unitClose}`; }
+            if (fmt === 'weightKg') { let kg = Math.floor(val / 1000); let g = val % 1000; return `${kg}${unitOpen}kg${unitClose} ${g}${unitOpen}g${unitClose}`; }
             return `${val} ${unitOpen}pts${unitClose}`;
         }
 
         function checkAndFireTicker(force = false) {
             if(!globalMatchData || !globalMatchData.anglers) return;
-            let allCatches = [];
-            let totalFish = 0, biggestVal = 0, biggestStr = "No Captures";
+            let allCatches = [], totalFish = 0, biggestVal = 0, biggestStr = "No Captures";
             
             Object.values(globalMatchData.anglers).forEach(angler => {
                 if (angler.catches) {
@@ -964,130 +981,93 @@
                     });
                 }
             });
-            
-            if (allCatches.length !== lastSyncCount || force) {
-                renderTickerHTML(allCatches, totalFish, biggestStr, force);
-            }
+            if (allCatches.length !== lastSyncCount || force) { renderTickerHTML(allCatches, totalFish, biggestStr, force); }
             lastSyncCount = allCatches.length;
         }
 
         function renderTickerHTML(allCatches, totalFish, biggestStr, forceRefresh = false) {
             allCatches.sort((a,b) => parseInt(b.id) - parseInt(a.id)); 
-            let mostRecent = allCatches[0];
-            let last5 = allCatches.slice(1, 6);
-            
-            let matchScore = 0;
-            let matchPhysicalSize = 0;
-            let speciesSet = new Set();
+            let mostRecent = allCatches[0], last5 = allCatches.slice(1, 6), matchScore = 0, matchPhysicalSize = 0, speciesSet = new Set();
             
             Object.values(globalMatchData.anglers).forEach(a => {
                 matchScore += a.score || 0;
                 if(a.catches) {
                     let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
-                    cList.forEach(f => {
-                        speciesSet.add(f.species);
-                        matchPhysicalSize += (parseFloat(f.size) || 0);
-                    });
+                    cList.forEach(f => { speciesSet.add(f.species); matchPhysicalSize += (parseFloat(f.size) || 0); });
                 }
             });
 
             let htmlBlock = '';
-            
             function getCatchDisplay(c) { return `${c.species} ${getUniversalBadge(c)}`; }
-            if (mostRecent) {
-                let catchDisplay = getCatchDisplay(mostRecent);
-                htmlBlock += `<span class="text-blue-600 font-black tracking-widest">MOST RECENT:</span> <span class="text-slate-900 font-bold ml-2">${catchDisplay} <span class="text-orange-600">${mostRecent.anglerName}</span> • <span class="text-blue-600">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-400 mx-6">///</span> `;
-            }
             
+            if (mostRecent) { htmlBlock += `<span class="text-blue-600 font-black tracking-widest">MOST RECENT:</span> <span class="text-slate-900 font-bold ml-2">${getCatchDisplay(mostRecent)} <span class="text-orange-600">${mostRecent.anglerName}</span> • <span class="text-blue-600">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-400 mx-6">///</span> `; }
             if (last5.length > 0) {
                 htmlBlock += `<span class="text-slate-500 font-black tracking-widest">LAST 5 FISH:</span> <span class="ml-2">`;
                 last5.forEach((c, i) => {
-                    let display = getCatchDisplay(c);
-                    htmlBlock += `<span class="text-slate-700">${display} <span class="text-orange-600">${c.anglerName}</span> <span class="text-slate-500 text-[10px] opacity-80 ml-1">• ${formatCatchTime(c)}</span></span>`;
+                    htmlBlock += `<span class="text-slate-700">${getCatchDisplay(c)} <span class="text-orange-600">${c.anglerName}</span> <span class="text-slate-500 text-[10px] opacity-80 ml-1">• ${formatCatchTime(c)}</span></span>`;
                     if (i < last5.length - 1) htmlBlock += `<span class="text-slate-400 mx-2">|</span>`;
                 });
                 htmlBlock += `</span> <span class="text-slate-400 mx-6">///</span> `;
             }
-            
             if (state.format !== 'speciesHunt' && biggestStr !== "No Captures") {
-                let cleanBiggest = biggestStr.replace(/<span class="telemetry-unit">/g, ' ').replace(/<[^>]*>?/gm, '');
               htmlBlock += `<span class="text-blue-600 font-black tracking-widest uppercase">MATCH BIGGEST:</span> <span class="text-slate-900 font-bold ml-2">${biggestStr.split('(')[0]}</span> <span class="pts-badge pts-std">${(biggestStr.match(/\(([^)]+)\)/) || [])[1] || biggestVal}</span> <span class="text-slate-400 mx-6">///</span> `;
             }
 
             let totalStr = "";
-            if (state.format === 'speciesHunt') {
-                totalStr = `${totalFish} TOTAL FISH • ${speciesSet.size} UNIQUE SPECIES`;
-            } else if (state.format.startsWith('length')) {
-                totalStr = `${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatTotalLength(matchPhysicalSize)}`;
-            } else {
-                totalStr = `${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatScoreDisplay(matchScore, state.format, true)}`;
-            }
-            htmlBlock += `<span class="text-slate-900 font-black tracking-widest uppercase">MATCH TOTAL:</span> <span class="pts-badge pts-std ml-2">${totalStr}</span>`;            htmlBlock += `<span class="inline-block w-[100vw]"></span>`;
+            if (state.format === 'speciesHunt') { totalStr = `${totalFish} TOTAL FISH • ${speciesSet.size} UNIQUE SPECIES`; } 
+            else if (state.format.startsWith('length')) { totalStr = `${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatTotalLength(matchPhysicalSize)}`; } 
+            else { totalStr = `${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatScoreDisplay(matchScore, state.format, true)}`; }
+            htmlBlock += `<span class="text-slate-900 font-black tracking-widest uppercase">MATCH TOTAL:</span> <span class="pts-badge pts-std ml-2">${totalStr}</span><span class="inline-block w-[100vw]"></span>`;
 
             const track = document.getElementById('wallStreetTicker');
             if(track) {
-                if (!forceRefresh) {
-                    track.classList.remove('scroll-active');
-                    void track.offsetWidth; 
-                }
+                if (!forceRefresh) { track.classList.remove('scroll-active'); void track.offsetWidth; }
                 track.innerHTML = htmlBlock; 
-                if (!track.classList.contains('scroll-active')) {
-                    track.classList.add('scroll-active');
-                }
+                if (!track.classList.contains('scroll-active')) { track.classList.add('scroll-active'); }
             }
         }
 
-        function saveState() {
-            localStorage.setItem('matchState', JSON.stringify(state));
-        }
+        function saveState() { localStorage.setItem('matchState', JSON.stringify(state)); }
 
         function navTo(viewId) {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             document.querySelectorAll('.view-frame').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
             state.view = viewId;
-            if (viewId === 'history') { 
-                renderHistory(); 
-                startHistoryClock();
-            } else {
-                stopHistoryClock();
-            }
+            if (viewId === 'history') { renderHistory(); startHistoryClock(); } else { stopHistoryClock(); }
             saveState();
         }
 
         function closeAndWipeSession() {
+            haptic();
             localStorage.removeItem('matchState');
             localStorage.removeItem('userRole');
             state = { view: 'home', name: '', venue: 'Local Beach', isHost: false, isSteward: false, pin: '', format: 'length', endTime: null, graceEndTime: null, myCatches: [], editingId: null, status: 'idle' };
             document.getElementById('playerName').value = '';
             
-            clearInterval(clockInterval);
-            clearInterval(hypeInterval);
-            document.getElementById('finalScore').innerText = '0';
-            document.getElementById('finalCount').innerText = '0';
-            document.getElementById('finalSpecies').innerText = '0';
+            clearInterval(clockInterval); clearInterval(hypeInterval);
+            document.getElementById('finalScore').innerText = '0'; document.getElementById('finalCount').innerText = '0'; document.getElementById('finalSpecies').innerText = '0';
             if (document.getElementById('localCatchList')) document.getElementById('localCatchList').innerHTML = '';
             if (document.getElementById('islandScore')) document.getElementById('islandScore').innerText = '0';
             if (document.getElementById('island-rank-text')) document.getElementById('island-rank-text').innerText = '🏆 --';
             
             document.getElementById('app-container').classList.remove('grace-active');
             document.getElementById('mainTimer').classList.remove('grace-pulse');
-            
             navTo('home');
         }
 
         function proceedToRoleSelection() {
+            haptic();
             let pName = document.getElementById('playerName').value || "";
             if (!pName) { alert("Please enter your Name to continue."); return; }
             pName = pName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
             document.getElementById('playerName').value = pName;
-            state.name = pName; 
-            state.venue = "Local Beach";
-            saveState();
-            navTo('role');
+            state.name = pName; state.venue = "Local Beach";
+            saveState(); navTo('role');
         }
 
         function exitApp() {
+            haptic();
             if (confirm("CLOSE APP?\n\nThis will clear current lobby inputs. History remains untouched.")) {
                 closeAndWipeSession();
                 try { window.close(); } catch(e) {}
@@ -1096,6 +1076,7 @@
         }
 
         async function forceUpdateApp() {
+            haptic();
             if (confirm("Hard Reset App Cache?")) {
                 const spin = document.getElementById('updateSpinnerInternal');
                 if (spin) spin.classList.add('fa-spin');
@@ -1108,28 +1089,18 @@
                     const keys = await caches.keys();
                     for (let key of keys) { await caches.delete(key); }
                 }
-                setTimeout(() => { 
-                    window.location.href = window.location.origin + window.location.pathname + '?v=' + Date.now();
-                }, 1000);
+                setTimeout(() => { window.location.href = window.location.origin + window.location.pathname + '?v=' + Date.now(); }, 1000);
             }
         }
 
-        function handleInputFocus(el) {
-            setTimeout(() => {
-                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
-        }
+        function handleInputFocus(el) { setTimeout(() => { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 300); }
 
         function checkInstallStatus() {
             let isStandalone = false;
             try { isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone; } catch(e){}
             const installBtn = document.getElementById('btnInstallGuide');
             if (installBtn) {
-                if (isStandalone) {
-                    installBtn.classList.add('hidden');
-                } else {
-                    installBtn.classList.remove('hidden');
-                }
+                if (isStandalone) { installBtn.classList.add('hidden'); } else { installBtn.classList.remove('hidden'); }
             }
         }
 
@@ -1137,31 +1108,19 @@
             const userAgent = navigator.userAgent.toLowerCase();
             const isIos = /iphone|ipad|ipod/.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
             const textEl = document.getElementById('installInstructionText');
-            if (isIos) {
-                textEl.innerHTML = "iPhone User detected.<br><br>1. Open this link in <b>Safari</b>.<br>2. Tap the <b>Share</b> icon (box with up arrow).<br>3. Select <b>'Add to Home Screen'</b>.";
-            } else if (userAgent.includes('android')) {
-                textEl.innerHTML = "Android User detected.<br><br>1. Open this link in <b>Google Chrome</b>.<br>2. Tap the <b>Settings</b> icon (three dots ⋮).<br>3. Select <b>'Add to Home Screen'</b>.";
-            } else {
-                textEl.innerHTML = "Please open this website on your Mobile Phone to install the Scorecard.";
-            }
+            if (isIos) { textEl.innerHTML = "iPhone User detected.<br><br>1. Open this link in <b>Safari</b>.<br>2. Tap the <b>Share</b> icon (box with up arrow).<br>3. Select <b>'Add to Home Screen'</b>."; } 
+            else if (userAgent.includes('android')) { textEl.innerHTML = "Android User detected.<br><br>1. Open this link in <b>Google Chrome</b>.<br>2. Tap the <b>Settings</b> icon (three dots ⋮).<br>3. Select <b>'Add to Home Screen'</b>."; } 
+            else { textEl.innerHTML = "Please open this website on your Mobile Phone to install the Scorecard."; }
             document.getElementById('installModal').classList.remove('hidden');
         }
 
         let atmPin = "";
         function atmPress(num) {
-            try{navigator.vibrate(50);}catch(e){};
-            if (atmPin.length < 4) {
-                atmPin += num;
-                updateAtm();
-                if (atmPin.length === 4) { connectToMatch(); }
-            }
+            haptic();
+            if (atmPin.length < 4) { atmPin += num; updateAtm(); if (atmPin.length === 4) { connectToMatch(); } }
         }
 
-        function atmDelete() {
-            try{navigator.vibrate(50);}catch(e){};
-            atmPin = atmPin.slice(0, -1);
-            updateAtm();
-        }
+        function atmDelete() { haptic(); atmPin = atmPin.slice(0, -1); updateAtm(); }
 
         function updateAtm() {
             for (let i = 1; i <= 4; i++) {
@@ -1171,37 +1130,23 @@
         }
 
         function openTimeKeypad() {
-            timeAtmInput = "";
-            timeAtmIsPM = true;
+            haptic(); timeAtmInput = ""; timeAtmIsPM = true;
             document.getElementById('customEndModal').classList.add('hidden');
             document.getElementById('timeKeypadModal').classList.remove('hidden');
             updateTimeAtmDisplay();
         }
 
         function timeAtmPress(num) {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             if (timeAtmInput.length >= 4) return;
             let pending = timeAtmInput + num;
-            if (pending.length === 2) { 
-                let h = parseInt(pending); 
-                if (h > 23) return; 
-            }
-            if (pending.length === 3) { 
-                let m1 = parseInt(num); 
-                if (m1 > 5) return; 
-            }
-            timeAtmInput = pending;
-            updateTimeAtmDisplay();
+            if (pending.length === 2) { let h = parseInt(pending); if (h > 23) return; }
+            if (pending.length === 3) { let m1 = parseInt(num); if (m1 > 5) return; }
+            timeAtmInput = pending; updateTimeAtmDisplay();
         }
-        function timeAtmDelete() {
-            try{navigator.vibrate(50);}catch(e){};
-            timeAtmInput = timeAtmInput.slice(0, -1);
-            updateTimeAtmDisplay();
-        }
-
-        function timeAtmToggleAMPM() {
-            
-        }
+        
+        function timeAtmDelete() { haptic(); timeAtmInput = timeAtmInput.slice(0, -1); updateTimeAtmDisplay(); }
+        function timeAtmToggleAMPM() {}
 
         function updateTimeAtmDisplay() {
             for (let i = 1; i <= 4; i++) {
@@ -1214,19 +1159,15 @@
                 submitBtn.innerText = `SET FINISH TO ${timeAtmInput.slice(0,2)}:${timeAtmInput.slice(2,4)} (24H)`;
             } else { submitBtn.classList.add('hidden'); }
         }
+        
         function submitTimeAtm() {
+            haptic();
             if(timeAtmInput.length !== 4) return;
-            let hh = parseInt(timeAtmInput.slice(0,2));
-            let mm = parseInt(timeAtmInput.slice(2,4));
-            
-            if (hh > 23 || mm > 59) {
-                alert("Invalid Time (Use 00:00 to 23:59)");
-                return;
-            }
+            let hh = parseInt(timeAtmInput.slice(0,2)); let mm = parseInt(timeAtmInput.slice(2,4));
+            if (hh > 23 || mm > 59) { alert("Invalid Time (Use 00:00 to 23:59)"); return; }
 
             const targetDate = new Date();
             targetDate.setHours(hh, mm, 0, 0);
-            
             if (targetDate.getTime() < Date.now()) { targetDate.setDate(targetDate.getDate() + 1); }
             
             update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: targetDate.getTime(), graceEndTime: null });
@@ -1235,18 +1176,15 @@
             showNotification(`Match finish set to ${timeAtmInput.slice(0,2)}:${timeAtmInput.slice(2,4)}`);
         }
 
-        function closeTimeKeypad() { document.getElementById('timeKeypadModal').classList.add('hidden'); }
+        function closeTimeKeypad() { haptic(); document.getElementById('timeKeypadModal').classList.add('hidden'); }
 
         function listenToCloud() {
             if(!state.pin) return;
             onValue(ref(db, 'matches/' + state.pin), (snapshot) => {
                 if (snapshot.exists()) {
-                    globalMatchData = snapshot.val();
-                    processCloudUpdate();
-                    checkAndFireTicker(); 
+                    globalMatchData = snapshot.val(); processCloudUpdate(); checkAndFireTicker(); 
                 } else if (['waiting', 'playing', 'grace', 'hype'].includes(state.status)) {
-                    alert("Lobby expired.");
-                    closeAndWipeSession();
+                    alert("Lobby expired."); closeAndWipeSession();
                 }
             });
         }
@@ -1269,8 +1207,7 @@
             if (globalMatchData.status === 'playing') {
                 if (state.status === 'grace') {
                     state.status = 'playing'; state.graceEndTime = null;
-                    document.getElementById('app-container').classList.remove('grace-active');
-                    document.getElementById('mainTimer').classList.remove('grace-pulse');
+                    document.getElementById('app-container').classList.remove('grace-active'); document.getElementById('mainTimer').classList.remove('grace-pulse');
                 }
                 state.endTime = globalMatchData.endTime;
                 if (state.view !== 'fishing' && state.status !== 'hype') { beginFishing(false); }
@@ -1279,18 +1216,12 @@
             if (globalMatchData.status === 'grace' && state.status !== 'grace') {
                 state.graceEndTime = globalMatchData.graceEndTime; state.endTime = globalMatchData.endTime; state.status = 'grace';
                 if(state.view !== 'fishing') { navTo('fishing'); }
-                document.getElementById('app-container').classList.add('grace-active');
-                document.getElementById('mainTimer').classList.add('grace-pulse');
+                document.getElementById('app-container').classList.add('grace-active'); document.getElementById('mainTimer').classList.add('grace-pulse');
                 showNotification("3 MINUTE GRACE: Log final fish."); saveState();
             }
             if (globalMatchData.status === 'finished' && state.status !== 'finished') { lockdownMatch(false); }
             
-            if (globalMatchData.hostId === uid) {
-                state.isHost = true;
-                state.isSteward = true;
-            } else { 
-                state.isHost = false; 
-            }
+            if (globalMatchData.hostId === uid) { state.isHost = true; state.isSteward = true; } else { state.isHost = false; }
             renderGlobalLeaderboard(); 
         }
 
@@ -1303,56 +1234,33 @@
         function pushMyScoreToCloud() {
             if(!state.pin) return; updateLiveTally();
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
-            
             if (globalMatchData && globalMatchData.anglers && globalMatchData.anglers[uid]) {
-                globalMatchData.anglers[uid].catches = state.myCatches;
-                globalMatchData.anglers[uid].score = total;
+                globalMatchData.anglers[uid].catches = state.myCatches; globalMatchData.anglers[uid].score = total;
             }
-            
             update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name || "Angler", score: total, catches: state.myCatches });
         }
 
         function createMatch() {
-            state.name = document.getElementById('playerName').value || "Steward";
-            state.venue = "Local Beach";
-            state.isHost = true; state.isSteward = true; 
-            localStorage.setItem('userRole', 'steward');
-            state.format = document.getElementById('hostFormat').value; 
+            haptic();
+            state.name = document.getElementById('playerName').value || "Steward"; state.venue = "Local Beach"; state.isHost = true; state.isSteward = true; 
+            localStorage.setItem('userRole', 'steward'); state.format = document.getElementById('hostFormat').value; 
             state.pin = Math.floor(1000 + Math.random() * 9000).toString(); 
             
-            const btn = document.getElementById('btnInitMatch');
-            const originalText = btn.innerText;
-            btn.innerText = "Connecting to Engine...";
+            const btn = document.getElementById('btnInitMatch'); const originalText = btn.innerText; btn.innerText = "Connecting to Engine...";
             
-            set(ref(db, 'matches/' + state.pin), { 
-                hostId: uid, 
-                format: state.format, 
-                status: 'waiting', 
-                anglers: { [uid]: { name: state.name, score: 0 } } 
+            set(ref(db, 'matches/' + state.pin), { hostId: uid, format: state.format, status: 'waiting', anglers: { [uid]: { name: state.name, score: 0 } } 
             }).then(() => {
-                btn.innerText = originalText;
-                state.status = 'waiting'; 
-                listenToCloud(); 
-                document.getElementById('displayPin').innerText = state.pin;
-                document.getElementById('hostControls').classList.remove('hidden'); 
-                document.getElementById('joinerWaitingText').classList.add('hidden'); 
-                navTo('waiting');
-            }).catch((err) => {
-                btn.innerText = originalText;
-                alert("Match Creation Failed. Please check your signal or Firebase permissions.\nError Code: " + err.message);
-            });
+                btn.innerText = originalText; state.status = 'waiting'; listenToCloud(); 
+                document.getElementById('displayPin').innerText = state.pin; document.getElementById('hostControls').classList.remove('hidden'); document.getElementById('joinerWaitingText').classList.add('hidden'); navTo('waiting');
+            }).catch((err) => { btn.innerText = originalText; alert("Match Creation Failed.\nError Code: " + err.message); });
         }
 
         function connectToMatch() {
-            state.name = document.getElementById('playerName').value || "Angler";
-            state.venue = "Local Beach";
-            state.pin = atmPin; state.status = 'waiting';
-            localStorage.setItem('userRole', 'competitor');
-            state.isSteward = false;
+            haptic();
+            state.name = document.getElementById('playerName').value || "Angler"; state.venue = "Local Beach"; state.pin = atmPin; state.status = 'waiting';
+            localStorage.setItem('userRole', 'competitor'); state.isSteward = false;
             
-            const btn = document.getElementById('btn-connect');
-            const originalText = btn.innerText;
-            btn.innerText = "Checking PIN...";
+            const btn = document.getElementById('btn-connect'); const originalText = btn.innerText; btn.innerText = "Checking PIN...";
             
             get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
                 btn.innerText = originalText;
@@ -1361,30 +1269,21 @@
                     if(snapshot.val().status === 'playing' || snapshot.val().status === 'grace') { state.endTime = snapshot.val().endTime; state.status = snapshot.val().status; beginFishing(false); }
                     else { navTo('waiting'); }
                 } else { alert("Invalid PIN."); atmPin = ""; updateAtm(); }
-            }).catch((err) => {
-                btn.innerText = originalText;
-                alert("Connection failed: " + err.message);
-            });
+            }).catch((err) => { btn.innerText = originalText; alert("Connection failed: " + err.message); });
         }
 
-        function exitWaitingRoom() { if (confirm("Cancel session?")) { if (state.isHost) { remove(ref(db, 'matches/' + state.pin)); } closeAndWipeSession(); } }
+        function exitWaitingRoom() { haptic(); if (confirm("Cancel session?")) { if (state.isHost) { remove(ref(db, 'matches/' + state.pin)); } closeAndWipeSession(); } }
 
         let audioCtx; try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
-
         function playTone(freq, duration) {
             if(!audioCtx) return;
-            try {
-                if(audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-                osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration);
-            } catch(e) {}
+            try { if(audioCtx.state === 'suspended') audioCtx.resume(); const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration); } catch(e) {}
         }
         function playHorn() { playTone(200, 1.5); }
         function playAlert() { playTone(880, 0.4); setTimeout(()=>playTone(440, 0.4), 400); }
 
         function triggerHypeStart() {
-            if(!state.isHost) return;
+            haptic(); if(!state.isHost) return;
             const matchDuration = parseFloat(document.getElementById('hostDuration').value);
             update(ref(db, 'matches/' + state.pin), { status: 'hype', endTime: Date.now() + (matchDuration * 3600000) + 6000 });
         }
@@ -1393,8 +1292,7 @@
             if (countdownActive) return;
             countdownActive = true; state.status = 'hype'; navTo('hype');
             document.getElementById('hypeCount').classList.remove('hidden'); document.getElementById('hypeSplash').classList.add('hidden');
-            let count = 5; document.getElementById('hypeCount').innerText = count;
-            playTone(400, 0.1);
+            let count = 5; document.getElementById('hypeCount').innerText = count; playTone(400, 0.1);
             hypeInterval = setInterval(() => {
                 count--;
                 if (count > 0) { document.getElementById('hypeCount').innerText = count; playTone(400, 0.1); } 
@@ -1403,8 +1301,7 @@
         }
 
         function triggerSplashSequence() {
-            document.getElementById('hypeCount').classList.add('hidden'); document.getElementById('hypeSplash').classList.remove('hidden');
-            playHorn();
+            document.getElementById('hypeCount').classList.add('hidden'); document.getElementById('hypeSplash').classList.remove('hidden'); playHorn();
             setTimeout(() => { countdownActive = false; if(state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'playing' }); } beginFishing(false); }, 1500);
         }
 
@@ -1412,90 +1309,50 @@
             let el = document.getElementById('inputSize');
             if (state.format === 'weightLb') { el = document.getElementById('inputLbs'); }
             if (state.format === 'weightKg') { el = document.getElementById('inputKg'); }
-            
-            if (el) {
-                setTimeout(() => {
-                    el.focus();
-                    el.click(); 
-                }, 100); 
-            }
+            if (el) { setTimeout(() => { el.focus(); el.click(); }, 100); }
         }
 
         function checkSpeciesSelection() {
             const select = document.getElementById('inputSpecies');
-            if (select.value === "[ADD OTHER]") { 
-                promptCustomSpecies(); 
-            } else if (state.format === 'speciesHunt') { 
-                document.getElementById('btnRecord').focus(); 
-            } else { 
-                focusMeasurement(); 
-            }
+            if (select.value === "[ADD OTHER]") { promptCustomSpecies(); } else if (state.format === 'speciesHunt') { document.getElementById('btnRecord').focus(); } else { focusMeasurement(); }
         }
 
         function promptCustomSpecies() {
             let name = prompt("Name of Unusual Species:");
             if (name) {
                 let grp = document.getElementById('customSpeciesGroup');
-                let opt = document.createElement('option');
-                opt.value = name; opt.innerText = name; opt.selected = true;
-                grp.insertBefore(opt, grp.lastElementChild); 
-                focusMeasurement();
+                let opt = document.createElement('option'); opt.value = name; opt.innerText = name; opt.selected = true;
+                grp.insertBefore(opt, grp.lastElementChild); focusMeasurement();
             } else { document.getElementById('inputSpecies').value = ""; }
         }
 
         function beginFishing(isPushing) {
             state.status = 'playing'; navTo('fishing');
-            
             if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
-
-            pushMyScoreToCloud();
-            
-            syncInputDeckToState();
-            
-            startClock();
-            
-            if (globalMatchData) {
-                checkAndFireTicker();
-            }
-            
-            renderCatchList();
+            pushMyScoreToCloud(); syncInputDeckToState(); startClock();
+            if (globalMatchData) { checkAndFireTicker(); } renderCatchList();
         }
 
         let clockTickCount = 0;
         function startClock() {
-            clearInterval(clockInterval);
-            clockTickCount = 0;
+            clearInterval(clockInterval); clockTickCount = 0;
             clockInterval = setInterval(() => {
                 clockTickCount++;
-                if (clockTickCount % 60 === 0) {
-                    if (globalMatchData) checkAndFireTicker(true);
-                }
-                
+                if (clockTickCount % 60 === 0) { if (globalMatchData) checkAndFireTicker(true); }
                 let now = Date.now();
                 if (state.status === 'playing') {
                     let remaining = state.endTime - now;
-                    
                     if (remaining <= 1800000 && remaining > 1798000 && !alert30Played) { 
-                        alert30Played = true; 
-                        try { navigator.vibrate([100, 50, 100]); } catch(e){} 
-                        playAlert(); 
-                        showNotification("⚠️ 30 MINUTE TACTICAL WINDOW!"); 
+                        alert30Played = true; try { navigator.vibrate([100, 50, 100]); } catch(e){} playAlert(); showNotification("⚠️ 30 MINUTE TACTICAL WINDOW!"); 
                     }
-                    
                     if (remaining <= 0) { 
-                        try { navigator.vibrate([100, 50, 100, 50, 100]); } catch(e){}
-                        playHorn(); 
+                        try { navigator.vibrate([100, 50, 100, 50, 100]); } catch(e){} playHorn(); 
                         if (state.isHost) {
                             let absoluteGraceEnd = state.endTime + 180000;
-                            if (now >= absoluteGraceEnd) {
-                                update(ref(db, 'matches/' + state.pin), { status: 'finished' });
-                            } else {
-                                update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: absoluteGraceEnd });
-                            }
+                            if (now >= absoluteGraceEnd) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
+                            else { update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: absoluteGraceEnd }); }
                         }
-                    } else { 
-                        updateTimerDisplay(remaining); 
-                    }
+                    } else { updateTimerDisplay(remaining); }
                 } else if (state.status === 'grace') {
                     if(!alertGracePlayed) { alertGracePlayed = true; }
                     let graceRem = state.graceEndTime - now;
@@ -1506,43 +1363,23 @@
         }
 
         function updateTimerDisplay(ms) {
-            let totalSec = Math.max(0, Math.floor(ms / 1000));
-            let hours = Math.floor(totalSec / 3600);
-            let mins = Math.floor((totalSec % 3600) / 60);
-            let secs = totalSec % 60;
-            let el = document.getElementById('mainTimer');
-            
-            if (!el) return;
-            
-            if (state.status === 'grace') {
-                el.innerText = `${mins}:${secs.toString().padStart(2,'0')}`;
-                el.className = "text-lg font-black tabular-nums tracking-tight leading-none grace-pulse";
-            } else if (ms <= 1800000) { 
-                let mStr = mins.toString();
-                el.innerText = `${mStr}:${secs.toString().padStart(2,'0')}`;
-                el.className = "text-sm font-black tabular-nums tracking-tighter text-blue-600 leading-none";
-            } else {
-                el.innerHTML = `${hours}h ${mins.toString().padStart(2,'0')}m <span class="text-[10px] opacity-75">${secs.toString().padStart(2,'0')}s</span>`;
-                el.className = "text-sm font-black tabular-nums tracking-tighter metric-white opacity-80 leading-none";
-            }
+            let totalSec = Math.max(0, Math.floor(ms / 1000)), hours = Math.floor(totalSec / 3600), mins = Math.floor((totalSec % 3600) / 60), secs = totalSec % 60;
+            let el = document.getElementById('mainTimer'); if (!el) return;
+            if (state.status === 'grace') { el.innerText = `${mins}:${secs.toString().padStart(2,'0')}`; el.className = "text-lg font-black tabular-nums tracking-tight leading-none grace-pulse"; } 
+            else if (ms <= 1800000) { let mStr = mins.toString(); el.innerText = `${mStr}:${secs.toString().padStart(2,'0')}`; el.className = "text-sm font-black tabular-nums tracking-tighter text-blue-600 leading-none"; } 
+            else { el.innerHTML = `${hours}h ${mins.toString().padStart(2,'0')}m <span class="text-[10px] opacity-75">${secs.toString().padStart(2,'0')}s</span>`; el.className = "text-sm font-black tabular-nums tracking-tighter metric-white opacity-80 leading-none"; }
         }
 
         function triggerConcentricAnimation() {
-            try { navigator.vibrate(50); } catch(e){}
-            const btn = document.getElementById('btnRecord');
-            if(!btn) return;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-check text-xl"></i>';
-            btn.classList.add('flash-white', 'btn-ripple');
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.classList.remove('flash-white', 'btn-ripple');
-            }, 600);
+            haptic();
+            const btn = document.getElementById('btnRecord'); if(!btn) return;
+            const originalText = btn.innerHTML; btn.innerHTML = '<i class="fa-solid fa-check text-xl"></i>'; btn.classList.add('flash-white', 'btn-ripple');
+            setTimeout(() => { btn.innerHTML = originalText; btn.classList.remove('flash-white', 'btn-ripple'); }, 600);
         }
 
         function recordCatch() {
-            let selectEl = document.getElementById('inputSpecies');
-            let species = selectEl.value;
+            haptic();
+            let selectEl = document.getElementById('inputSpecies'); let species = selectEl.value;
             if(!species) { return alert("Select species first!"); }
             let finalSize = 0, displaySize = "", pts = 0;
             if (state.format === 'weightLb') { let lbs = parseInt(document.getElementById('inputLbs').value) || 0, oz = parseInt(document.getElementById('inputOz').value) || 0; finalSize = (lbs * 16) + oz; displaySize = `${lbs}<span class="telemetry-unit">lb</span> ${oz}<span class="telemetry-unit">oz</span>`; pts = finalSize; } 
@@ -1558,27 +1395,19 @@
             
             if (state.editingId) { 
                 let obj = state.myCatches.find(x => x.id === state.editingId); 
-                if(obj) { 
-                    obj.species = species; 
-                    obj.size = finalSize; 
-                    obj.display = displaySize; 
-                    obj.points = pts; 
-                    obj.edited = true; 
-                } 
-                state.editingId = null; 
-                document.getElementById('btnRecord').innerHTML = 'ADD';
+                if(obj) { obj.species = species; obj.size = finalSize; obj.display = displaySize; obj.points = pts; obj.edited = true; } 
+                state.editingId = null; document.getElementById('btnRecord').innerHTML = 'ADD';
             } else { 
                 state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now(), edited: false }); 
             }
             
             document.getElementById('inputSpecies').value = ""; document.getElementById('inputSize').value = ""; document.getElementById('inputLbs').value = ""; document.getElementById('inputOz').value = ""; document.getElementById('inputKg').value = ""; document.getElementById('inputGrammes').value = "";
             document.activeElement.blur(); 
-            
-            triggerConcentricAnimation();
-            saveState(); renderCatchList(); pushMyScoreToCloud();
+            triggerConcentricAnimation(); saveState(); renderCatchList(); pushMyScoreToCloud();
         }
 
         function editCatch(id) {
+            haptic();
             let obj = state.myCatches.find(x => x.id === id);
             if(obj) {
                 document.getElementById('inputSpecies').value = obj.species;
@@ -1590,6 +1419,7 @@
         }
 
         function deleteCatch(id) {
+            haptic();
             if (!confirm("Are you sure you want to remove this fish from your scorecard?")) return;
             state.myCatches = state.myCatches.filter(x => x.id !== id);
             if (state.format === 'speciesHunt') {
@@ -1603,28 +1433,20 @@
         function renderCatchList() {
             const list = document.getElementById('localCatchList'); if (!list) return;
             list.innerHTML = "";
-            
             if (state.myCatches.length === 0) {
-                list.innerHTML = `<div class="p-6 text-center border-2 border-dashed border-slate-300 rounded-xl bg-white"><p class="text-sm font-black uppercase text-slate-900 mb-1">No Fish Logged</p><p class="text-[11px] font-bold text-slate-500">Select a species and tap ADD to log your first fish.</p></div>`;
-                return;
+                list.innerHTML = `<div class="p-6 text-center border-2 border-dashed border-slate-300 rounded-xl bg-white"><p class="text-sm font-black uppercase text-slate-900 mb-1">No Fish Logged</p><p class="text-[11px] font-bold text-slate-500">Select a species and tap ADD to log your first fish.</p></div>`; return;
             }
-
             state.myCatches.forEach(c => {
-                let div = document.createElement('div');
-                div.className = "match-card p-1.5 flex justify-between items-center shadow-sm bg-white";
-                
+                let div = document.createElement('div'); div.className = "match-card p-1.5 flex justify-between items-center shadow-sm bg-white";
                let metricDisplay = getUniversalBadge(c);
-
                 div.innerHTML = `
                    <div class="flex-1 text-left pl-2">
-                        <span class="font-black text-slate-900 text-sm uppercase">${c.species}</span> 
-                        ${metricDisplay}
-                        <br>
+                        <span class="font-black text-slate-900 text-sm uppercase">${c.species}</span> ${metricDisplay}<br>
                         <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none block mt-1">${c.time}</span>
                     </div>
                     <div class="flex items-center pr-1 space-x-1">
-                        <button onclick="try{navigator.vibrate(50);}catch(e){}; editCatch('${c.id}')" class="text-blue-600 bg-blue-50 px-3 py-2 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-blue-100" aria-label="Edit"><span class="text-[10px] font-black uppercase pointer-events-none">Edit</span></button>
-                        <button onclick="try{navigator.vibrate(50);}catch(e){}; deleteCatch('${c.id}')" class="text-red-600 bg-red-50 px-3 py-2 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-red-100" aria-label="Delete"><span class="text-[10px] font-black uppercase pointer-events-none">Del</span></button>
+                        <button onclick="editCatch('${c.id}')" class="text-blue-600 bg-blue-50 px-3 py-2 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-blue-100" aria-label="Edit"><span class="text-[10px] font-black uppercase pointer-events-none">Edit</span></button>
+                        <button onclick="deleteCatch('${c.id}')" class="text-red-600 bg-red-50 px-3 py-2 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-red-100" aria-label="Delete"><span class="text-[10px] font-black uppercase pointer-events-none">Del</span></button>
                     </div>`;
                 list.appendChild(div);
             });
@@ -1634,35 +1456,23 @@
             if(!globalMatchData || !globalMatchData.anglers) return;
             const list = document.getElementById('leaderboardList'); if (!list) return;
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            
             let myRank = arr.findIndex(a => a.name === state.name) + 1;
-            const rankEl = document.getElementById('island-rank-text');
-            if (rankEl) rankEl.innerText = `🏆 ${myRank}${myRank === 1 ? 'ST' : myRank === 2 ? 'ND' : myRank === 3 ? 'RD' : 'TH'}`;
-            
+            const rankEl = document.getElementById('island-rank-text'); if (rankEl) rankEl.innerText = `🏆 ${myRank}${myRank === 1 ? 'ST' : myRank === 2 ? 'ND' : myRank === 3 ? 'RD' : 'TH'}`;
             const gapEl = document.getElementById('island-gap-text');
             if (gapEl) {
                 if(myRank === 1) gapEl.innerText = `🔥 IN THE LEAD`;
-                else if (myRank > 1) {
-                    let diff = arr[myRank - 2].score - arr[myRank - 1].score;
-                    gapEl.innerText = `🎯 ${diff} PTS NEXT`;
-                }
+                else if (myRank > 1) { let diff = arr[myRank - 2].score - arr[myRank - 1].score; gapEl.innerText = `🎯 ${diff} PTS NEXT`; }
             }
 
             list.innerHTML = arr.map((a, i) => {
                 const anglerUid = Object.keys(globalMatchData.anglers).find(key => globalMatchData.anglers[key].name === a.name);
                 let catchCount = a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0;
-                
                 return `<div class="match-card p-2.5 flex justify-between items-center mb-2 shadow-sm active:bg-slate-100 transition" onclick="openCatchFeed('${anglerUid}')">
                     <div class="flex items-center flex-1 min-w-0 pr-2">
                         <span class="font-black ${i===0?'text-orange-600':'text-slate-500'} text-base w-8 shrink-0 text-center">${i+1}</span>
-                        <div class="flex flex-col min-w-0 text-left">
-                            <span class="font-black text-slate-900 text-base uppercase tracking-wide truncate">${a.name}</span>
-                            <span class="text-[11px] font-bold text-slate-500 pt-0.5">${catchCount} Fish</span>
-                        </div>
+                        <div class="flex flex-col min-w-0 text-left"><span class="font-black text-slate-900 text-base uppercase tracking-wide truncate">${a.name}</span><span class="text-[11px] font-bold text-slate-500 pt-0.5">${catchCount} Fish</span></div>
                     </div>
-                   <div class="text-right shrink-0">
-                        <span class="font-black text-xl text-blue-600">${formatScoreDisplay(a.score, state.format, true)}</span>
-                   </div>
+                   <div class="text-right shrink-0"><span class="font-black text-xl text-blue-600">${formatScoreDisplay(a.score, state.format, true)}</span></div>
                 </div>`
             }).join('');
             
@@ -1671,65 +1481,37 @@
                 if(angler.catches) { 
                     const catchList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches);
                     totalFish += catchList.length;
-                    catchList.forEach(fish => { 
-                        if(fish.size > biggestVal) { 
-                            biggestVal = fish.size; 
-                            biggestSpecies = `${fish.species} (${fish.display || fish.size})`; 
-                            biggestAngler = angler.name;
-                        } 
-                    }); 
+                    catchList.forEach(fish => { if(fish.size > biggestVal) { biggestVal = fish.size; biggestSpecies = `${fish.species} (${fish.display || fish.size})`; biggestAngler = angler.name; } }); 
                 } 
             });
-            
             if (document.getElementById('bountyAngler')) document.getElementById('bountyAngler').innerText = biggestAngler;
             if (document.getElementById('bountyFish')) document.getElementById('bountyFish').innerHTML = biggestSpecies.replace(/<[^>]*>?/gm, '');
             if (document.getElementById('totalMatchFishCount')) document.getElementById('totalMatchFishCount').innerText = totalFish;
         }
 
         function openCatchFeed(aid) {
-            try{navigator.vibrate(50);}catch(e){};
-            const aData = globalMatchData.anglers[aid];
-            if(!aData) return;
-            const content = document.getElementById('feedContent');
-            document.getElementById('feedAnglerName').innerText = aData.name;
-            
-            let catches = aData.catches ? (Array.isArray(aData.catches) ? aData.catches : Object.values(aData.catches)) : [];
-            catches.sort((a,b) => b.ts - a.ts);
+            haptic();
+            const aData = globalMatchData.anglers[aid]; if(!aData) return;
+            const content = document.getElementById('feedContent'); document.getElementById('feedAnglerName').innerText = aData.name;
+            let catches = aData.catches ? (Array.isArray(aData.catches) ? aData.catches : Object.values(aData.catches)) : []; catches.sort((a,b) => b.ts - a.ts);
 
-            if(catches.length === 0) {
-                content.innerHTML = `<p class="text-center text-slate-500 py-10 font-black text-sm uppercase tracking-widest">No captures yet</p>`;
-            } else {
+            if(catches.length === 0) { content.innerHTML = `<p class="text-center text-slate-500 py-10 font-black text-sm uppercase tracking-widest">No captures yet</p>`; } 
+            else {
                 content.innerHTML = catches.map(c => {
                     let feedBadge = state.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (c.display || c.size);
-                    return `
-                    <div class="match-card p-3 border border-blue-200 flex justify-between items-center mb-1.5 shadow-sm">
-                        <div class="text-left">
-                            <span class="text-slate-900 font-black uppercase text-base">${c.species}</span>
-                            <span class="block text-xs text-slate-500 uppercase tracking-widest mt-1">${c.time}</span>
-                        </div>
-                        <span class="text-blue-600 font-black text-base">${feedBadge}</span>
-                    </div>
-                `}).join('');
+                    return `<div class="match-card p-3 border border-blue-200 flex justify-between items-center mb-1.5 shadow-sm"><div class="text-left"><span class="text-slate-900 font-black uppercase text-base">${c.species}</span><span class="block text-xs text-slate-500 uppercase tracking-widest mt-1">${c.time}</span></div><span class="text-blue-600 font-black text-base">${feedBadge}</span></div>`
+                }).join('');
             }
-            
-            let modal = document.getElementById('catchFeedModal');
-            modal.classList.remove('hidden');
-            setTimeout(() => { modal.classList.remove('translate-x-full'); }, 10);
+            let modal = document.getElementById('catchFeedModal'); modal.classList.remove('hidden'); setTimeout(() => { modal.classList.remove('translate-x-full'); }, 10);
         }
 
-        function closeCatchFeed() { 
-            let modal = document.getElementById('catchFeedModal');
-            modal.classList.add('translate-x-full');
-            setTimeout(() => { modal.classList.add('hidden'); }, 300);
-        }
+        function closeCatchFeed() { haptic(); let modal = document.getElementById('catchFeedModal'); modal.classList.add('translate-x-full'); setTimeout(() => { modal.classList.add('hidden'); }, 300); }
 
         function stewardReviewLogs() {
+            haptic();
             if(!globalMatchData || !globalMatchData.anglers) return;
-            const drawer = document.getElementById('stewardRosterDrawer');
-            const list = document.getElementById('stewardRosterList');
-            drawer.classList.remove('hidden');
-            drawer.classList.add('open');
-            
+            const drawer = document.getElementById('stewardRosterDrawer'); const list = document.getElementById('stewardRosterList');
+            drawer.classList.remove('hidden'); drawer.classList.add('open');
             let html = "";
             Object.entries(globalMatchData.anglers).forEach(([aid, aData]) => {
                 let catchCount = aData.catches ? (Array.isArray(aData.catches) ? aData.catches.length : Object.keys(aData.catches).length) : 0;
@@ -1738,52 +1520,24 @@
             list.innerHTML = html;
         }
         
-        function stewardCloseLogs() {
-            document.getElementById('stewardRosterDrawer').classList.remove('open');
-            setTimeout(() => document.getElementById('stewardRosterDrawer').classList.add('hidden'), 300);
-        }
+        function stewardCloseLogs() { haptic(); document.getElementById('stewardRosterDrawer').classList.remove('open'); setTimeout(() => document.getElementById('stewardRosterDrawer').classList.add('hidden'), 300); }
 
         function stewardOpenAngler(aid, aName) {
-            try{navigator.vibrate(50);}catch(e){};
-            godTargetAnglerId = aid;
-            godTargetAnglerName = aName;
-            document.getElementById('auditAnglerName').innerText = `AUDIT: ${aName}`;
-            document.getElementById('godModeAnglerName').innerText = aName;
-            
+            haptic(); godTargetAnglerId = aid; godTargetAnglerName = aName; document.getElementById('auditAnglerName').innerText = `AUDIT: ${aName}`; document.getElementById('godModeAnglerName').innerText = aName;
             const godSizeDeck = document.getElementById('godDeckSizeInputs');
-            if (state.format === 'speciesHunt') { 
-                if(godSizeDeck) godSizeDeck.classList.add('hidden'); 
-            } else {
+            if (state.format === 'speciesHunt') { if(godSizeDeck) godSizeDeck.classList.add('hidden'); } else {
                 if(godSizeDeck) godSizeDeck.classList.remove('hidden');
-                document.getElementById('godDeckLength').classList.add('hidden'); 
-                document.getElementById('godDeckWeightLb').classList.add('hidden'); 
-                document.getElementById('godDeckWeightKg').classList.add('hidden'); 
-                
-                if (state.format === 'weightLb') { document.getElementById('godDeckWeightLb').classList.remove('hidden'); } 
-                else if (state.format === 'weightKg') { document.getElementById('godDeckWeightKg').classList.remove('hidden'); } 
-                else { document.getElementById('godDeckLength').classList.remove('hidden'); }
+                document.getElementById('godDeckLength').classList.add('hidden'); document.getElementById('godDeckWeightLb').classList.add('hidden'); document.getElementById('godDeckWeightKg').classList.add('hidden'); 
+                if (state.format === 'weightLb') { document.getElementById('godDeckWeightLb').classList.remove('hidden'); } else if (state.format === 'weightKg') { document.getElementById('godDeckWeightKg').classList.remove('hidden'); } else { document.getElementById('godDeckLength').classList.remove('hidden'); }
             }
-
-            const logDrawer = document.getElementById('stewardLogDrawer');
-            logDrawer.classList.remove('hidden');
-            logDrawer.classList.add('open');
-            
-            refreshStewardCatchList();
+            const logDrawer = document.getElementById('stewardLogDrawer'); logDrawer.classList.remove('hidden'); logDrawer.classList.add('open'); refreshStewardCatchList();
         }
 
         function refreshStewardCatchList() {
-            const listEl = document.getElementById('stewardCatchList');
-            if(!globalMatchData || !globalMatchData.anglers) return;
-            
-            let anglerData = globalMatchData.anglers[godTargetAnglerId];
-            if(!anglerData) return;
-            
-            let cData = anglerData.catches;
-            if(!cData) { listEl.innerHTML = '<p class="text-slate-500 font-bold text-xs uppercase tracking-widest mt-10">No Catches Recorded</p>'; return; }
-            
-            let arr = Array.isArray(cData) ? cData : Object.values(cData);
-            arr.sort((a,b) => parseInt(b.id) - parseInt(a.id));
-            
+            const listEl = document.getElementById('stewardCatchList'); if(!globalMatchData || !globalMatchData.anglers) return;
+            let anglerData = globalMatchData.anglers[godTargetAnglerId]; if(!anglerData) return;
+            let cData = anglerData.catches; if(!cData) { listEl.innerHTML = '<p class="text-slate-500 font-bold text-xs uppercase tracking-widest mt-10">No Catches Recorded</p>'; return; }
+            let arr = Array.isArray(cData) ? cData : Object.values(cData); arr.sort((a,b) => parseInt(b.id) - parseInt(a.id));
             let html = "";
             arr.forEach((c) => {
                 let feedBadge = state.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (c.display || c.size);
@@ -1793,93 +1547,37 @@
         }
 
         function stewardDeleteCatch(aid, cid) {
-            try{navigator.vibrate(50);}catch(e){};
-            if(!confirm("Are you sure you want to remove this fish from your scorecard?")) return;
-            let cData = globalMatchData.anglers[aid].catches;
-            let arr = Array.isArray(cData) ? cData : Object.values(cData);
-            arr = arr.filter(c => c.id !== cid);
-            
+            haptic();
+            if(!confirm("GOD MODE: Delete this catch? It will be removed globally.")) return;
+            let cData = globalMatchData.anglers[aid].catches; let arr = Array.isArray(cData) ? cData : Object.values(cData); arr = arr.filter(c => c.id !== cid);
             let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             update(ref(db, `matches/${state.pin}/anglers/${aid}`), { catches: arr, score: newScore });
-            
-            if(aid === uid) {
-                state.myCatches = arr;
-                saveState(); renderCatchList(); updateLiveTally();
-            }
-
-            showNotification(`Steward override applied.`);
-            setTimeout(refreshStewardCatchList, 300);
+            if(aid === uid) { state.myCatches = arr; saveState(); renderCatchList(); updateLiveTally(); }
+            showNotification(`Steward override applied.`); setTimeout(refreshStewardCatchList, 300);
         }
-
-        document.getElementById('godModeAddBtn').addEventListener('click', () => {
-            document.getElementById('stewardGodModal').classList.remove('hidden');
-        });
 
         function godCheckSpeciesSelection() {
             const select = document.getElementById('godInputSpecies');
-            if (select.value === "[ADD OTHER]") {
-                let name = prompt("Name of Unusual Species:");
-                if (name) {
-                    let grp = document.getElementById('godCustomSpeciesGroup');
-                    let opt = document.createElement('option');
-                    opt.value = name; opt.innerText = name; opt.selected = true;
-                    grp.insertBefore(opt, grp.lastElementChild); 
-                } else { select.value = ""; }
-            }
+            if (select.value === "[ADD OTHER]") { let name = prompt("Name of Unusual Species:"); if (name) { let grp = document.getElementById('godCustomSpeciesGroup'); let opt = document.createElement('option'); opt.value = name; opt.innerText = name; opt.selected = true; grp.insertBefore(opt, grp.lastElementChild); } else { select.value = ""; } }
         }
 
         function submitGodModeCatch() {
-            if(!godTargetAnglerId) return;
-            let species = document.getElementById('godInputSpecies').value;
-            if(!species) { alert("Select species first!"); return; }
-
+            haptic();
+            if(!godTargetAnglerId) return; let species = document.getElementById('godInputSpecies').value; if(!species) { alert("Select species first!"); return; }
             let finalSize = 0, displaySize = "", pts = 0;
-            
-            if (state.format === 'weightLb') { 
-                let lbs = parseInt(document.getElementById('godInputLbs').value) || 0, oz = parseInt(document.getElementById('godInputOz').value) || 0; 
-                finalSize = (lbs * 16) + oz; 
-                displaySize = `${lbs}<span class="telemetry-unit">lb</span> ${oz}<span class="telemetry-unit">oz</span>`; 
-                pts = finalSize; 
-            } 
-            else if (state.format === 'weightKg') { 
-                let kg = parseInt(document.getElementById('godInputKg').value) || 0, g = parseInt(document.getElementById('godInputGrammes').value) || 0; 
-                finalSize = (kg * 1000) + g; 
-                displaySize = `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`; 
-                pts = finalSize; 
-            } 
-            else if (state.format === 'speciesHunt') { 
-                finalSize = 1; displaySize = ""; 
-            } 
-            else { 
-                finalSize = parseFloat(document.getElementById('godInputSize').value) || 0; 
-                displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; 
-                pts = finalSize; 
-                if (state.format === 'length10') pts = finalSize + 10; 
-            }
-            
+            if (state.format === 'weightLb') { let lbs = parseInt(document.getElementById('godInputLbs').value) || 0, oz = parseInt(document.getElementById('godInputOz').value) || 0; finalSize = (lbs * 16) + oz; displaySize = `${lbs}<span class="telemetry-unit">lb</span> ${oz}<span class="telemetry-unit">oz</span>`; pts = finalSize; } 
+            else if (state.format === 'weightKg') { let kg = parseInt(document.getElementById('godInputKg').value) || 0, g = parseInt(document.getElementById('godInputGrammes').value) || 0; finalSize = (kg * 1000) + g; displaySize = `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`; pts = finalSize; } 
+            else if (state.format === 'speciesHunt') { finalSize = 1; displaySize = ""; } 
+            else { finalSize = parseFloat(document.getElementById('godInputSize').value) || 0; displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; pts = finalSize; if (state.format === 'length10') pts = finalSize + 10; }
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
             
-            let cData = globalMatchData.anglers[godTargetAnglerId].catches || [];
-            let arr = Array.isArray(cData) ? cData : Object.values(cData);
-
-            if (state.format === 'speciesHunt') { 
-                let existing = arr.filter(x => x.species === species).length; 
-                pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; 
-            } else if (species === 'Mackerel') { 
-                if (arr.filter(x => x.species === 'Mackerel').length >= 3) { pts = 0; } 
-            }
+            let cData = globalMatchData.anglers[godTargetAnglerId].catches || []; let arr = Array.isArray(cData) ? cData : Object.values(cData);
+            if (state.format === 'speciesHunt') { let existing = arr.filter(x => x.species === species).length; pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; } else if (species === 'Mackerel') { if (arr.filter(x => x.species === 'Mackerel').length >= 3) { pts = 0; } }
 
             let newCatch = { id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now() };
-            
-            arr.unshift(newCatch);
-            let newScore = arr.reduce((sum, c) => sum + c.points, 0);
-            
+            arr.unshift(newCatch); let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             update(ref(db, `matches/${state.pin}/anglers/${godTargetAnglerId}`), { catches: arr, score: newScore });
-            
-            if(godTargetAnglerId === uid) {
-                state.myCatches = arr;
-                saveState(); renderCatchList(); updateLiveTally();
-            }
+            if(godTargetAnglerId === uid) { state.myCatches = arr; saveState(); renderCatchList(); updateLiveTally(); }
 
             document.getElementById('godInputSpecies').value = ""; 
             if(document.getElementById('godInputSize')) document.getElementById('godInputSize').value = ""; 
@@ -1887,110 +1585,157 @@
             if(document.getElementById('godInputOz')) document.getElementById('godInputOz').value = ""; 
             if(document.getElementById('godInputKg')) document.getElementById('godInputKg').value = ""; 
             if(document.getElementById('godInputGrammes')) document.getElementById('godInputGrammes').value = "";
-            
-            document.getElementById('stewardGodModal').classList.add('hidden');
-            showNotification("Catch forcibly logged.");
-            setTimeout(refreshStewardCatchList, 300);
+            closeStewardGodModal(); showNotification("Catch forcibly logged."); setTimeout(refreshStewardCatchList, 300);
         }
 
-        function generateOfficialMasterReport() {
+        // V10.7.0 GRAPHICAL REPORT CARD GENERATOR WITH PREVIEW MODAL
+        window.tempFallbackData = null; 
+
+        async function generateOfficialMasterReport() {
+            haptic();
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
+            
+            const btn = document.getElementById('stewardReportBtn');
+            const hBtn = document.getElementById('historyReportBtn');
+            const targetBtn = document.getElementById('stewardDrawer').classList.contains('open') ? btn : hBtn;
+            
+            if(targetBtn) { targetBtn.innerText = "GENERATING IMAGE... PLEASE WAIT"; targetBtn.classList.add('reporting'); }
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format);
+            buildAndShareGraphicalReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn);
         }
 
-        function generateHistoricReport() {
+        async function generateHistoricReport() {
+            haptic();
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if(!h || !h.standings) return alert("No leaderboard data available.");
-            buildAndShareReport(h.standings, h.venue, h.date, h.format);
+            
+            const btn = document.querySelector(`button[onclick="generateHistoricReport()"]`);
+            if(btn) { btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin mr-2'></i> GENERATING..."; btn.classList.add('reporting'); }
+            buildAndShareGraphicalReport(h.standings, h.venue, h.date, h.format, btn, true);
         }
 
-        function buildAndShareReport(arr, venueName, matchDate, matchFormat) {
+        async function buildAndShareGraphicalReport(arr, venueName, matchDate, matchFormat, buttonRef, isHistory = false) {
             const fmt = matchFormat || state.format; 
-            let podium = arr.slice(0, 3);
-            let biggestVal = 0, biggestStr = "N/A";
-            let hourCounts = {}, allSpecies = new Set(), totalFish = 0;
-            let matchTotalPhysicalSize = 0;
-            let spCounts = {}; 
+            window.tempFallbackData = { arr: arr, venueName: venueName, matchDate: matchDate, fmt: fmt }; 
 
+            let podium = arr.slice(0, 3), others = arr.slice(3, 15), biggestVal = 0, biggestStr = "N/A", hourCounts = {}, allSpecies = new Set(), totalFish = 0, matchTotalPhysicalSize = 0;
             arr.forEach(a => {
                 if(a.catches) {
                     let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
                     totalFish += cList.length;
                     cList.forEach(f => {
-                        allSpecies.add(f.species);
-                        spCounts[f.species] = (spCounts[f.species] || 0) + 1; 
-                        matchTotalPhysicalSize += (parseFloat(f.size) || 0);
-                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; }
+                        allSpecies.add(f.species); matchTotalPhysicalSize += (parseFloat(f.size) || 0);
+                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${a.name} - ${f.species} (${f.display || f.size})`; }
                         if(f.ts) { const hr = new Date(f.ts).getHours(); hourCounts[hr] = (hourCounts[hr] || 0) + 1; }
                     });
                 }
             });
 
-            let matchTotalRaw = arr.reduce((sum, a) => sum + (a.score || 0), 0);
+            let timelineHtml = "";
+            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
+            if(sortedHours.length > 0) {
+                let maxHourVal = Math.max(...Object.values(hourCounts));
+                timelineHtml = sortedHours.map(hr => {
+                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "", nHr = parseInt(hr), nextHr = nHr === 23 ? 0 : nHr + 1;
+                    return `<div style="font-size: 20px; font-weight: bold; color: #475569; padding: 6px 0;">${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00 <span style="color: #0f172a; float: right;">${hourCounts[hr]} Fish${isFire}</span></div>`;
+                }).join('');
+            } else { timelineHtml = `<div style="font-size: 20px; font-weight: bold; color: #94a3b8;">No catches recorded.</div>`; }
 
-            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📅 ${matchDate}\n\n`;
+            let poster = document.createElement('div');
+            poster.id = "temp-poster";
+            poster.style.position = "absolute"; poster.style.left = "-9999px"; poster.style.width = "750px"; poster.style.backgroundColor = "#f8fafc"; poster.style.padding = "40px"; poster.style.fontFamily = "'Inter', sans-serif"; poster.style.color = "#0f172a";
             
-            t += `👑 *PODIUM*\n`;
+            poster.innerHTML = `
+                <div style="background: white; border: 4px solid #0284c7; border-radius: 32px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+                    <div style="text-align: center; border-bottom: 4px solid #f1f5f9; padding-bottom: 30px; margin-bottom: 30px;">
+                        <h1 style="font-size: 46px; font-weight: 900; color: #0284c7; margin: 0; text-transform: uppercase; letter-spacing: -1px;">SHORESCORE</h1>
+                        <h2 style="font-size: 24px; font-weight: 900; color: #0f172a; margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 4px;">Official Match Report</h2>
+                        <p style="font-size: 22px; font-weight: bold; color: #64748b; margin: 15px 0 0 0;">📅 ${matchDate} &nbsp;|&nbsp; 📍 ${venueName}</p>
+                    </div>
+                    
+                    <h2 style="font-size: 32px; font-weight: 900; margin: 0 0 20px 0; text-transform: uppercase; color: #0f172a;"><span style="color: #f59e0b;">👑</span> The Podium</h2>
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px; padding: 25px; margin-bottom: 40px;">
+                        <div style="font-size: 38px; font-weight: 900; color: #0f172a; margin-bottom: 15px;">
+                            🥇 1st: <span style="color: #0284c7;">${podium[0]?.name || '-'}</span> <span style="float: right; color: #0284c7;">${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}</span>
+                        </div>
+                        <div style="font-size: 28px; font-weight: bold; color: #334155; margin-bottom: 15px; border-top: 2px dashed #cbd5e1; padding-top: 15px;">
+                            🥈 2nd: ${podium[1]?.name || '-'} <span style="float: right; color: #64748b;">${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}</span>
+                        </div>
+                        <div style="font-size: 26px; font-weight: bold; color: #475569; border-top: 2px dashed #cbd5e1; padding-top: 15px;">
+                            🥉 3rd: ${podium[2]?.name || '-'} <span style="float: right; color: #64748b;">${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; gap: 30px; margin-bottom: 40px;">
+                        <div style="flex: 1; background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 20px; padding: 25px;">
+                            <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #1e3a8a;">🏆 Match Highlights</h2>
+                            <p style="font-size: 20px; font-weight: bold; margin: 0 0 10px 0; color: #0f172a;">🐋 <b>Biggest Fish:</b><br><span style="color: #0284c7;">${biggestStr.replace(/<[^>]*>?/gm, '')}</span></p>
+                            <p style="font-size: 20px; font-weight: bold; margin: 0; color: #0f172a;">🧬 <b>Diversity:</b><br><span style="color: #0284c7;">${speciesSet.size} Unique Species</span></p>
+                            <p style="font-size: 20px; font-weight: bold; margin: 10px 0 0 0; color: #0f172a;">🎣 <b>Total Catch:</b><br><span style="color: #0284c7;">${totalFish} Fish overall</span></p>
+                        </div>
+                        <div style="flex: 1; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px; padding: 25px;">
+                            <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #0f172a;">⏱️ Hourly Pulse</h2>
+                            ${timelineHtml}
+                        </div>
+                    </div>
+
+                    ${others.length > 0 ? `
+                    <h2 style="font-size: 32px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #0f172a; border-bottom: 3px solid #f1f5f9; padding-bottom: 10px;">📊 Full Standings (4-${arr.length})</h2>
+                    <div style="border: 2px solid #e2e8f0; border-radius: 16px; overflow: hidden; margin-bottom: 30px;">
+                        ${others.map((a, i) => `
+                        <div style="font-size: 22px; font-weight: bold; padding: 12px 20px; background: ${i%2===0?'#ffffff':'#f8fafc'}; color: #334155;">
+                            <span style="color: #94a3b8; font-weight: 900; margin-right: 15px;">#${i+4}</span> ${a.name} <span style="float: right; color: #0f172a; font-weight: 900;">${formatScoreDisplay(a.score, fmt, true)}</span>
+                        </div>`).join('')}
+                    </div>
+                    ` : ''}
+                    <p style="text-align: center; font-size: 16px; font-weight: bold; color: #94a3b8; margin: 40px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Generated by ShoreScore V10.7.0</p>
+                </div>
+            `;
+            
+            document.body.appendChild(poster);
+            
+            try {
+                await document.fonts.ready;
+                const canvas = await html2canvas(poster, { scale: 2, useCORS: true, backgroundColor: '#f8fafc' });
+                const imgData = canvas.toDataURL('image/jpeg', 0.85);
+                document.getElementById('reportPreviewImage').src = imgData;
+                document.getElementById('reportPreviewModal').classList.remove('hidden');
+            } catch(err) {
+                console.error(err); alert("Could not generate image. Device may be incompatible. Copying text version instead.");
+                buildAndShareTextFallback(arr, venueName, matchDate, fmt);
+            } finally {
+                document.body.removeChild(poster);
+                if(buttonRef) { 
+                    if(isHistory) { buttonRef.innerHTML = "<i class='fa-solid fa-share-nodes mr-2'></i> SHARE CARD"; } 
+                    else { buttonRef.innerHTML = "<i class='fa-solid fa-file-export mr-3 text-base text-blue-600'></i> Share Official Report"; }
+                    buttonRef.classList.remove('reporting'); 
+                }
+            }
+        }
+
+        function shareTextFallbackFromPreview() {
+            haptic();
+            if (window.tempFallbackData) { const { arr, venueName, matchDate, fmt } = window.tempFallbackData; buildAndShareTextFallback(arr, venueName, matchDate, fmt); }
+        }
+
+        function buildAndShareTextFallback(arr, venueName, matchDate, fmt) {
+            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📅 ${matchDate}\n\n👑 *PODIUM*\n`;
+            let podium = arr.slice(0, 3);
             t += `🥇 1st: ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n`;
             t += `🥈 2nd: ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}\n`;
             t += `🥉 3rd: ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n`;
-
-            if (totalFish > 0) {
-                t += `📊 *SPECIES BREAKDOWN*\n`;
-                let spArr = Object.entries(spCounts).sort((a,b) => b[1] - a[1]);
-                spArr.forEach(sp => {
-                    let pct = Math.round((sp[1] / totalFish) * 100);
-                    t += `▪️ ${sp[0]}: ${pct}% (${sp[1]} Fish)\n`;
-                });
-                t += `\n`;
-            }
-            
-            t += `📈 *MATCH STATS*\n`;
-            if (fmt !== 'speciesHunt') {
-                t += `🐋 Biggest Fish: ${biggestStr.replace(/<[^>]*>?/gm, '')}\n`;
-            }
-            t += `🧬 Diversity: ${allSpecies.size} Unique Species\n`;
-            
-            if (fmt === 'speciesHunt') {
-                t += `🎣 Match Total: ${totalFish} Fish\n\n`;
-            } else if (fmt.startsWith('length')) {
-                t += `📏 Match Total Length: ${formatTotalLength(matchTotalPhysicalSize)} (${totalFish} Fish)\n\n`;
-            } else {
-                t += `⚖️ Match Total Weight: ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Fish)\n\n`;
-            }
-
-            t += `⏱️ *HOURLY TIMELINE*\n`;
-            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
-            if(sortedHours.length === 0) { 
-                t += `▪️ No captures recorded.\n\n`; 
-            } else {
-                let maxHourVal = Math.max(...Object.values(hourCounts));
-                sortedHours.forEach(hr => {
-                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "";
-                    let nHr = parseInt(hr);
-                    let nextHr = nHr === 23 ? 0 : nHr + 1;
-                    t += `▪️ ${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00: ${hourCounts[hr]} Fish${isFire}\n`;
-                });
-                t += `\n`;
-            }
-
             t += `🏆 *FULL STANDINGS*\n`;
-            arr.forEach((a, i) => { 
-                t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
-            });
-            
-            t += `\n_Generated by ShoreScore V10.5.0_`;
-
-            if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
-            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
+            arr.forEach((a, i) => { t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; });
+            t += `\n_Generated by ShoreScore V10.7.0_`;
+            if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
         }
 
-        function shareUnifiedReport() { generateOfficialMasterReport(); }
-        function endMatchEarly(grace) { if(state.isSteward && state.pin) { if(grace) { document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('customEndModal').classList.remove('hidden'); } } }
-        function stewardSetNewEnd(mins) { document.getElementById('customEndModal').classList.add('hidden'); document.getElementById('stewardDrawer').classList.remove('open'); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
-        function transferSteward() { if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); document.getElementById('stewardDrawer').classList.remove('open'); } } }
-        function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); closeAndWipeSession(); } }
+        function closeReportPreview() { haptic(); document.getElementById('reportPreviewModal').classList.add('hidden'); }
+
+        function endMatchEarly(grace) { haptic(); if(state.isSteward && state.pin) { if(grace) { closeStewardDrawer(); document.getElementById('customEndModal').classList.remove('hidden'); } } }
+        function stewardSetNewEnd(mins) { haptic(); closeCustomEndModal(); closeStewardDrawer(); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
+        function transferSteward() { haptic(); if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); closeStewardDrawer(); } } }
+        function leaveMatchEarly() { haptic(); if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); closeAndWipeSession(); } }
         
         function lockdownMatch(isHostPushing) { 
             clearInterval(clockInterval); 
@@ -2046,7 +1791,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         ${showLive ? '<span class="text-[9px] bg-red-600 px-2 py-1 rounded-full text-white font-black animate-pulse">LIVE</span>' : ''}
-                        <button onclick="try{navigator.vibrate(50);}catch(e){}; deleteHistoryItem('${m.id}'); event.stopPropagation();" class="text-slate-400 active:text-red-600 text-xl ml-2"><i class="fa-solid fa-trash-can"></i></button>
+                        <button onclick="deleteHistoryItem('${m.id}'); event.stopPropagation();" class="text-slate-400 active:text-red-600 text-xl ml-2"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 </div>
                 <div class="flex items-start justify-between gap-4 mt-2">
@@ -2087,7 +1832,7 @@
                 </div>`;
 
                 let wrapper = document.createElement('div');
-                wrapper.innerHTML = `<div class="max-w-md mx-auto relative cursor-pointer active:scale-[0.98] transition-all bg-white rounded-2xl neon-border-glow border p-4 pb-0 space-y-4 overflow-hidden mb-4 text-left shadow-sm" onclick="try{navigator.vibrate(50);}catch(e){}; viewPastRecord('${m.id}')">${cardHtml}</div>`;
+                wrapper.innerHTML = `<div class="max-w-md mx-auto relative cursor-pointer active:scale-[0.98] transition-all bg-white rounded-2xl neon-border-glow border p-4 pb-0 space-y-4 overflow-hidden mb-4 text-left shadow-sm" onclick="viewPastRecord('${m.id}')">${cardHtml}</div>`;
                 let card = wrapper.firstElementChild;
                 
                 if(m.id && i < 8) r.appendChild(card); else a.appendChild(card); 
@@ -2112,11 +1857,12 @@
         }
 
         function stopHistoryClock() { if (historyTick) clearInterval(historyTick); }
-        function deleteHistoryItem(id) { if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
-        function toggleArchive() { isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
-        function viewPastRecord(id) { activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
+        function deleteHistoryItem(id) { haptic(); if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
+        function toggleArchive() { haptic(); isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
+        function viewPastRecord(id) { haptic(); activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
         
         function switchHistoryTab(tab) {
+            haptic();
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active'); }); document.getElementById(`tab-${tab}`).classList.add('active');
             
@@ -2188,7 +1934,7 @@
                     <div class="text-slate-900 text-sm font-bold flex items-center shrink-0">
                         <i class="fa-solid fa-calendar-days mr-2 text-blue-600"></i> ${m.date}
                     </div>
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
+                    <button id="historyReportBtn" onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
                         <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
                     </button>
                 </div>
@@ -2227,7 +1973,7 @@
                 let tableHtml = `<div class="divide-y divide-slate-200 mt-0 bg-white rounded-b-xl border border-slate-200 border-t-0 shadow-sm">${m.standings.map((a, i) => {
                     let catchCount = a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0;
                     return `
-                    <div onclick="try{navigator.vibrate(50);}catch(e){}; openPastCatchFeed('${a.id || a.name}')" class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} active:bg-slate-100 cursor-pointer transition-all duration-200">
+                    <div onclick="openPastCatchFeed('${a.id || a.name}')" class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} active:bg-slate-100 cursor-pointer transition-all duration-200">
                         <div class="flex items-center space-x-3 flex-1 min-w-0">
                             <div class="${i===0?'bg-blue-100 text-blue-700':'bg-slate-200 text-slate-600'} font-black p-3 rounded-full text-xs shrink-0">R${i+1}</div>
                             <div class="flex flex-col min-w-0 text-left">
@@ -2263,6 +2009,7 @@
         }
 
         window.openPastCatchFeed = (aid) => {
+            haptic();
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if (!h || !h.standings) return;
             const a = h.standings.find(s => s.id === aid || s.name === aid);
@@ -2281,7 +2028,7 @@
         };
 
         function closeHistoryDetail() { 
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             document.getElementById('historyDetailDrawer').classList.remove('open'); 
             setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); 
         }
@@ -2292,17 +2039,22 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            // V10.5.0 Manual Override
-            document.querySelectorAll('.version-display').forEach(el => el.innerText = "V10.5.0");
+            const CURRENT_FALLBACK_VERSION = "10.7.0";
+            document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
-            fetch('version.json')
+            // Single Source of Truth version check (Bypass cache)
+            fetch('version.json?t=' + new Date().getTime())
                 .then(res => res.json())
                 .then(data => { 
-                    document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); 
-                })
-                .catch(() => { 
-                    console.log('Version fetch fallback active.'); 
-                });
+                    const serverVer = data.version || CURRENT_FALLBACK_VERSION;
+                    document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${serverVer}`); 
+                    
+                    if (serverVer !== CURRENT_FALLBACK_VERSION && 'serviceWorker' in navigator) {
+                        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                            for(let registration of registrations) { registration.unregister(); }
+                        });
+                    }
+                }).catch(() => { console.log('Version fetch fallback active.'); });
                 
             checkInstallStatus();
             
@@ -2316,25 +2068,15 @@
                     
                     if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) {
                         state = oldState;
-                        listenToCloud();
-                        navTo(state.view);
+                        listenToCloud(); navTo(state.view);
                         
                         if (['playing', 'grace'].includes(state.status)) {
-                            syncInputDeckToState();
-                            renderCatchList();
-                            startClock();
-                            updateLiveTally();
-                            if (document.getElementById('stewardPinDisplay')) {
-                                document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----";
-                            }
-                            if (globalMatchData) { 
-                                checkAndFireTicker(); 
-                            }
+                            syncInputDeckToState(); renderCatchList(); startClock(); updateLiveTally();
+                            if (document.getElementById('stewardPinDisplay')) { document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----"; }
+                            if (globalMatchData) { checkAndFireTicker(); }
                         }
                     }
-                } catch(e) { 
-                    closeAndWipeSession(); 
-                }
+                } catch(e) { closeAndWipeSession(); }
             }
         };
 
@@ -2345,69 +2087,16 @@
                 document.getElementById('guideDrawer').classList.contains('open') || 
                 !document.getElementById('historyDetailDrawer').classList.contains('hidden') || 
                 !document.getElementById('stewardRosterDrawer').classList.contains('hidden') || 
-                !document.getElementById('stewardLogDrawer').classList.contains('hidden')) { 
+                !document.getElementById('stewardLogDrawer').classList.contains('hidden') ||
+                !document.getElementById('reportPreviewModal').classList.contains('hidden')) { 
                 
-                document.getElementById('leaderboardDrawer').classList.remove('open'); 
-                document.getElementById('stewardDrawer').classList.remove('open'); 
-                document.getElementById('guideDrawer').classList.remove('open'); 
-                stewardCloseLogs(); 
-                closeHistoryDetail(); 
-                document.getElementById('stewardLogDrawer').classList.remove('open'); 
-                setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);
+                closeLeaderboard(); closeStewardDrawer(); closeGuide(); 
+                stewardCloseLogs(); closeHistoryDetail(); closeReportPreview(); closeStewardLogDrawer();
             }
         });
 
-        window.proceedToRoleSelection = proceedToRoleSelection;
-        window.triggerHypeStart = triggerHypeStart;
-        window.navTo = navTo;
-        window.createMatch = createMatch;
-        window.connectToMatch = connectToMatch;
-        window.recordCatch = recordCatch;
-        window.editCatch = editCatch;
-        window.deleteCatch = deleteCatch;
-        window.leaveMatchEarly = leaveMatchEarly;
-        window.stewardSetNewEnd = stewardSetNewEnd;
-        window.shareResults = shareResults;
-        window.resetApp = resetApp;
-        window.toggleArchive = toggleArchive;
-        window.viewPastRecord = viewPastRecord;
-        window.switchHistoryTab = switchHistoryTab;
-        window.closeHistoryDetail = closeHistoryDetail;
-        window.forceUpdateApp = forceUpdateApp;
-        window.focusMeasurement = focusMeasurement;
-        window.promptCustomSpecies = promptCustomSpecies;
-        window.exitWaitingRoom = exitWaitingRoom;
-        window.deleteHistoryItem = deleteHistoryItem;
-        window.checkSpeciesSelection = checkSpeciesSelection;
-        window.exitApp = exitApp;
-        window.handleInputFocus = handleInputFocus;
-        window.transferSteward = transferSteward;
-        window.endMatchEarly = endMatchEarly;
-        window.showInstallGuide = showInstallGuide;
-        window.formatScoreDisplay = formatScoreDisplay;
-        window.shareMasterLeaderboard = shareMasterLeaderboard;
-        window.atmPress = atmPress;
-        window.atmDelete = atmDelete;
-        window.openTimeKeypad = openTimeKeypad;
-        window.timeAtmPress = timeAtmPress;
-        window.timeAtmDelete = timeAtmDelete;
-        window.timeAtmToggleAMPM = timeAtmToggleAMPM;
-        window.submitTimeAtm = submitTimeAtm;
-        window.closeTimeKeypad = closeTimeKeypad;
-        window.shareUnifiedReport = shareUnifiedReport;
-        window.closeAndWipeSession = closeAndWipeSession;
-        window.stewardReviewLogs = stewardReviewLogs;
-        window.stewardCloseLogs = stewardCloseLogs;
-        window.stewardOpenAngler = stewardOpenAngler;
-        window.stewardDeleteCatch = stewardDeleteCatch;
-        window.submitGodModeCatch = submitGodModeCatch;
-        window.godCheckSpeciesSelection = godCheckSpeciesSelection;
-        window.openCatchFeed = openCatchFeed;
-        window.closeCatchFeed = closeCatchFeed;
-        window.generateOfficialMasterReport = generateOfficialMasterReport;
-        window.generateHistoricReport = generateHistoricReport;
-        window.syncInputDeckToState = syncInputDeckToState;
-        window.openPastCatchFeed = openPastCatchFeed;
+        // Global Bindings
+        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport; window.syncInputDeckToState = syncInputDeckToState; window.openPastCatchFeed = openPastCatchFeed; window.closeReportPreview = closeReportPreview; window.shareTextFallbackFromPreview = shareTextFallbackFromPreview; window.openGuide = openGuide; window.closeGuide = closeGuide; window.closeInstallGuide = closeInstallGuide; window.openStewardDrawer = openStewardDrawer; window.closeStewardDrawer = closeStewardDrawer; window.openLeaderboard = openLeaderboard; window.closeLeaderboard = closeLeaderboard; window.openStewardGodModal = openStewardGodModal; window.closeStewardGodModal = closeStewardGodModal; window.closeCustomEndModal = closeCustomEndModal; window.closeStewardLogDrawer = closeStewardLogDrawer;
     </script>
 </body>
 </html>
