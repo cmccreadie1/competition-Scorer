@@ -109,7 +109,7 @@
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--text-main) !important;
         }
-        /* V10.5.0 Active Glow Boundary */
+        
         .pill-input:focus { 
             background-color: #ffffff !important; 
             border-color: var(--neon-blue) !important; 
@@ -356,7 +356,7 @@
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display">
-                    V10.5.0
+                    V10.6.0
                 </div>
             </div>
             
@@ -508,18 +508,16 @@
                             </div>
                         </div>
                         
-                        <div class="w-full bg-blue-100/50 border-t border-blue-200 h-7 flex items-center relative overflow-hidden mask-fade-edges">
-                            <div id="wallStreetTicker" class="ticker-track text-[11px] font-bold text-blue-700 tracking-wider">
+                        <div class="w-full bg-slate-900 border-t border-slate-900 h-7 flex items-center relative overflow-hidden mask-fade-edges text-white">
+                            <div id="wallStreetTicker" class="ticker-track text-[11px] font-bold text-blue-100 tracking-wider">
                                 AWAITING TELEMETRY...
                             </div>
                         </div>
                     </div>
 
-                    <div class="w-full h-1 bg-slate-200 border-x-2 border-blue-500 shadow-inner"></div>
-
-                    <div class="bg-white border-2 border-t-0 border-blue-500 rounded-b-[1.25rem] p-3 pb-3">
-                        <div class="flex flex-col space-y-2">
-                            <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none border-slate-300">
+                    <div class="bg-white border-2 border-t-0 border-blue-500 rounded-b-[1.25rem] p-1.5 pb-2">
+                        <div class="flex flex-col space-y-1.5">
+                            <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2 text-sm appearance-none border-slate-300">
                                 <option value="" disabled selected>-- Select Fish Species --</option>
                                 <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
                                     <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
@@ -549,15 +547,15 @@
                                 <div class="flex space-x-2">
                                     <div id="deckSizeInputs" class="flex-1">
                                         <div id="deckLength">
-                                            <input type="number" id="inputSize" inputmode="decimal" pattern="\d*" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white border-slate-300" placeholder="">
+                                            <input type="number" id="inputSize" inputmode="decimal" pattern="\d*" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2 text-base metric-white border-slate-300" placeholder="">
                                         </div>
                                         <div id="deckWeightLb" class="hidden flex space-x-2">
-                                            <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" pattern="\d*" placeholder="Lbs" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white border-slate-300"></div>
-                                            <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" pattern="\d*" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white border-slate-300"></div>
+                                            <div class="flex-1"><input type="number" id="inputLbs" inputmode="numeric" pattern="\d*" placeholder="Lbs" onfocus="handleInputFocus(this)" class="pill-input w-full p-2 text-base metric-white border-slate-300"></div>
+                                            <div class="flex-1"><input type="number" id="inputOz" inputmode="numeric" pattern="\d*" placeholder="Oz" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2 text-base metric-white border-slate-300"></div>
                                         </div>
                                         <div id="deckWeightKg" class="hidden flex space-x-2">
-                                            <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" pattern="\d*" placeholder="Kg" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white border-slate-300"></div>
-                                            <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" pattern="\d*" step="25" placeholder="Grams" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2.5 text-base metric-white border-slate-300"></div>
+                                            <div class="flex-1"><input type="number" id="inputKg" inputmode="numeric" pattern="\d*" placeholder="Kg" onfocus="handleInputFocus(this)" class="pill-input w-full p-2 text-base metric-white border-slate-300"></div>
+                                            <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" pattern="\d*" step="25" placeholder="Grams" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2 text-base metric-white border-slate-300"></div>
                                         </div>
                                     </div>
                                     <button id="btnRecord" onclick="try{navigator.vibrate(50);}catch(e){}; recordCatch()" class="pill-btn px-4 bg-blue-600 text-white font-black text-sm rounded-xl shadow-md btn-record-pulse flex items-center justify-center shrink-0">
@@ -571,19 +569,14 @@
             </div>
 
             <div id="loggingArea" class="scrollable-area p-4 flex flex-col w-full max-w-md mx-auto">
-                <div class="pt-1 flex-1 flex flex-col min-h-[50vh]">
-                    <h3 class="text-slate-600 font-black text-[10px] uppercase tracking-[0.4em] mb-1.5 ml-3 text-left">Match Journal</h3>
+                <div class="flex justify-end mb-2 w-full">
+                    <button onclick="try{navigator.vibrate(50);}catch(e){}; openOptionsDrawer()" class="bg-white border border-slate-300 text-slate-700 font-black text-[10px] uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm active:scale-95 transition">
+                        ⚙️ OPTIONS & EXIT
+                    </button>
+                </div>
+                
+                <div class="flex-1 flex flex-col min-h-[50vh]">
                     <div id="localCatchList" class="space-y-2 flex-1"></div>
-                    
-                    <div class="pt-8 pb-4 space-y-3 flex-none px-1 text-center mt-auto">
-                        <button id="btnStewardDesk" onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('stewardDrawer').classList.add('open')" class="hidden pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-sm">
-                            ⚙️ STEWARD CONTROLS
-                        </button>
-                        <button onclick="try{navigator.vibrate(50);}catch(e){}; leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest transition shadow-sm">
-                            Leave Match Early
-                        </button>
-                        <div class="h-28 w-full flex-none"></div>
-                    </div>
                 </div>
             </div>
 
@@ -670,7 +663,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.5.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.6.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -710,21 +703,28 @@
             </div>
         </div>
 
-        <div id="stewardDrawer" class="drawer-left fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[101] flex flex-col shadow-2xl justify-between">
+        <div id="optionsDrawer" class="drawer-left fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[101] flex flex-col shadow-2xl justify-between">
             <div class="flex-none p-5 text-center mt-4">
-                <h2 class="font-black text-xl text-blue-600 uppercase tracking-[0.2em] flex items-center justify-center"><i class="fa-solid fa-user-shield mr-2"></i> Steward Desk</h2>
+                <h2 class="font-black text-xl text-blue-600 uppercase tracking-[0.2em] flex items-center justify-center"><i class="fa-solid fa-sliders mr-2"></i> Match Options</h2>
                 <div class="mt-3"><span id="stewardPinDisplay" class="text-xs text-slate-600 font-black border border-slate-300 bg-white shadow-sm px-4 py-1.5 rounded-full tracking-widest">PIN: ----</span></div>
             </div>
             <div class="scrollable-area p-5 space-y-4 text-center max-w-sm mx-auto w-full">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; stewardReviewLogs()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-list-check mr-2 text-base"></i> Review Angler Logs</button>
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; transferSteward()" class="pill-btn w-full py-4 text-xs tracking-widest mt-2 bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-right-left mr-3 text-base"></i> Transfer Control</button>
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; endMatchEarly(true)" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-clock mr-2 text-base"></i> Adjust Match Clock</button>
-                <div class="pt-4 border-t border-slate-200 mt-4">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; generateOfficialMasterReport()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
+                
+                <button onclick="try{navigator.vibrate(50);}catch(e){}; leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest shadow-sm mb-6">
+                    <i class="fa-solid fa-person-walking-arrow-right mr-2 text-white"></i> Leave Match Early
+                </button>
+
+                <div id="stewardControlsGroup" class="hidden space-y-4 pt-4 border-t border-slate-300">
+                    <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Steward Desk</h3>
+                    <button onclick="try{navigator.vibrate(50);}catch(e){}; stewardReviewLogs()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-list-check mr-2 text-base"></i> Review Angler Logs</button>
+                    <button onclick="try{navigator.vibrate(50);}catch(e){}; transferSteward()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-right-left mr-3 text-base"></i> Transfer Control</button>
+                    <button onclick="try{navigator.vibrate(50);}catch(e){}; endMatchEarly(true)" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-clock mr-2 text-base"></i> Adjust Match Clock</button>
+                    <button id="stewardReportBtn" onclick="generateOfficialMasterReport()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md mt-4"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
                 </div>
+                
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('stewardDrawer').classList.remove('open')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
+                <button onclick="try{navigator.vibrate(50);}catch(e){}; closeOptionsDrawer()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
             </div>
         </div>
 
@@ -734,7 +734,7 @@
             </div>
             <div id="stewardRosterList" class="scrollable-area p-4 space-y-2 text-center"></div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; stewardCloseLogs()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO STEWARD DESK</button>
+                <button onclick="try{navigator.vibrate(50);}catch(e){}; stewardCloseLogs()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO OPTIONS</button>
             </div>
         </div>
 
@@ -813,6 +813,10 @@
         let godTargetAnglerId = null;
         let godTargetAnglerName = "";
 
+        // V10.6.0 UI Functions
+        window.openOptionsDrawer = () => { document.getElementById('optionsDrawer').classList.add('open'); };
+        window.closeOptionsDrawer = () => { document.getElementById('optionsDrawer').classList.remove('open'); };
+
         function getSpeciesBadge(pts) {
             if (pts === 25) return `<span class="pts-badge pts-25 shadow-sm">25</span>`;
             if (pts === 35) return `<span class="pts-badge pts-35 shadow-sm">35</span>`;
@@ -848,13 +852,11 @@
         function handleIslandTouchStart(e) {
             isLongPress = false;
             touchStartTime = Date.now();
-            if(state.isSteward) {
-                islandPressTimer = setTimeout(() => {
-                    isLongPress = true;
-                    try{navigator.vibrate(50);}catch(err){};
-                    document.getElementById('stewardDrawer').classList.add('open');
-                }, 600); 
-            }
+            islandPressTimer = setTimeout(() => {
+                isLongPress = true;
+                try{navigator.vibrate(50);}catch(err){};
+                openOptionsDrawer();
+            }, 600); 
         }
         
         function handleIslandTouchEnd(e) {
@@ -914,7 +916,7 @@
                 }
             }
             if (document.getElementById('bountyContainer')) { document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); }
-            if (document.getElementById('btnStewardDesk')) { document.getElementById('btnStewardDesk').classList.toggle('hidden', !state.isSteward); }
+            if (document.getElementById('stewardControlsGroup')) { document.getElementById('stewardControlsGroup').classList.toggle('hidden', !state.isSteward); }
         }
 
         document.addEventListener('visibilitychange', () => {
@@ -996,22 +998,22 @@
             function getCatchDisplay(c) { return `${c.species} ${getUniversalBadge(c)}`; }
             if (mostRecent) {
                 let catchDisplay = getCatchDisplay(mostRecent);
-                htmlBlock += `<span class="text-blue-600 font-black tracking-widest">MOST RECENT:</span> <span class="text-slate-900 font-bold ml-2">${catchDisplay} <span class="text-orange-600">${mostRecent.anglerName}</span> • <span class="text-blue-600">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-400 mx-6">///</span> `;
+                htmlBlock += `<span class="text-blue-300 font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay} <span class="text-orange-400">${mostRecent.anglerName}</span> • <span class="text-blue-200">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-500 mx-6">///</span> `;
             }
             
             if (last5.length > 0) {
-                htmlBlock += `<span class="text-slate-500 font-black tracking-widest">LAST 5 FISH:</span> <span class="ml-2">`;
+                htmlBlock += `<span class="text-slate-300 font-black tracking-widest">LAST 5 FISH:</span> <span class="ml-2">`;
                 last5.forEach((c, i) => {
                     let display = getCatchDisplay(c);
-                    htmlBlock += `<span class="text-slate-700">${display} <span class="text-orange-600">${c.anglerName}</span> <span class="text-slate-500 text-[10px] opacity-80 ml-1">• ${formatCatchTime(c)}</span></span>`;
-                    if (i < last5.length - 1) htmlBlock += `<span class="text-slate-400 mx-2">|</span>`;
+                    htmlBlock += `<span class="text-slate-100">${display} <span class="text-orange-400">${c.anglerName}</span> <span class="text-slate-400 text-[10px] opacity-80 ml-1">• ${formatCatchTime(c)}</span></span>`;
+                    if (i < last5.length - 1) htmlBlock += `<span class="text-slate-500 mx-2">|</span>`;
                 });
-                htmlBlock += `</span> <span class="text-slate-400 mx-6">///</span> `;
+                htmlBlock += `</span> <span class="text-slate-500 mx-6">///</span> `;
             }
             
             if (state.format !== 'speciesHunt' && biggestStr !== "No Captures") {
                 let cleanBiggest = biggestStr.replace(/<span class="telemetry-unit">/g, ' ').replace(/<[^>]*>?/gm, '');
-              htmlBlock += `<span class="text-blue-600 font-black tracking-widest uppercase">MATCH BIGGEST:</span> <span class="text-slate-900 font-bold ml-2">${biggestStr.split('(')[0]}</span> <span class="pts-badge pts-std">${(biggestStr.match(/\(([^)]+)\)/) || [])[1] || biggestVal}</span> <span class="text-slate-400 mx-6">///</span> `;
+              htmlBlock += `<span class="text-blue-300 font-black tracking-widest uppercase">MATCH BIGGEST:</span> <span class="text-white font-bold ml-2">${biggestStr.split('(')[0]}</span> <span class="pts-badge pts-std">${(biggestStr.match(/\(([^)]+)\)/) || [])[1] || biggestVal}</span> <span class="text-slate-500 mx-6">///</span> `;
             }
 
             let totalStr = "";
@@ -1022,7 +1024,7 @@
             } else {
                 totalStr = `${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatScoreDisplay(matchScore, state.format, true)}`;
             }
-            htmlBlock += `<span class="text-slate-900 font-black tracking-widest uppercase">MATCH TOTAL:</span> <span class="pts-badge pts-std ml-2">${totalStr}</span>`;            htmlBlock += `<span class="inline-block w-[100vw]"></span>`;
+            htmlBlock += `<span class="text-white font-black tracking-widest uppercase">MATCH TOTAL:</span> <span class="pts-badge pts-std ml-2">${totalStr}</span>`;            htmlBlock += `<span class="inline-block w-[100vw]"></span>`;
 
             const track = document.getElementById('wallStreetTicker');
             if(track) {
@@ -1231,7 +1233,7 @@
             
             update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: targetDate.getTime(), graceEndTime: null });
             document.getElementById('timeKeypadModal').classList.add('hidden');
-            document.getElementById('stewardDrawer').classList.remove('open');
+            closeOptionsDrawer();
             showNotification(`Match finish set to ${timeAtmInput.slice(0,2)}:${timeAtmInput.slice(2,4)}`);
         }
 
@@ -1794,7 +1796,7 @@
 
         function stewardDeleteCatch(aid, cid) {
             try{navigator.vibrate(50);}catch(e){};
-            if(!confirm("Are you sure you want to remove this fish from your scorecard?")) return;
+            if(!confirm("GOD MODE: Delete this catch? It will be removed globally.")) return;
             let cData = globalMatchData.anglers[aid].catches;
             let arr = Array.isArray(cData) ? cData : Object.values(cData);
             arr = arr.filter(c => c.id !== cid);
@@ -1980,16 +1982,16 @@
                 t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
             });
             
-            t += `\n_Generated by ShoreScore V10.5.0_`;
+            t += `\n_Generated by ShoreScore V10.6.0_`;
 
             if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
             else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
         }
 
         function shareUnifiedReport() { generateOfficialMasterReport(); }
-        function endMatchEarly(grace) { if(state.isSteward && state.pin) { if(grace) { document.getElementById('stewardDrawer').classList.remove('open'); document.getElementById('customEndModal').classList.remove('hidden'); } } }
-        function stewardSetNewEnd(mins) { document.getElementById('customEndModal').classList.add('hidden'); document.getElementById('stewardDrawer').classList.remove('open'); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
-        function transferSteward() { if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); document.getElementById('stewardDrawer').classList.remove('open'); } } }
+        function endMatchEarly(grace) { if(state.isSteward && state.pin) { if(grace) { closeOptionsDrawer(); document.getElementById('customEndModal').classList.remove('hidden'); } } }
+        function stewardSetNewEnd(mins) { closeCustomEndModal(); closeOptionsDrawer(); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
+        function transferSteward() { if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); closeOptionsDrawer(); } } }
         function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); closeAndWipeSession(); } }
         
         function lockdownMatch(isHostPushing) { 
@@ -2112,11 +2114,12 @@
         }
 
         function stopHistoryClock() { if (historyTick) clearInterval(historyTick); }
-        function deleteHistoryItem(id) { if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
-        function toggleArchive() { isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
-        function viewPastRecord(id) { activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
+        function deleteHistoryItem(id) { try{navigator.vibrate(50);}catch(e){}; if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
+        function toggleArchive() { try{navigator.vibrate(50);}catch(e){}; isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
+        function viewPastRecord(id) { try{navigator.vibrate(50);}catch(e){}; activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
         
         function switchHistoryTab(tab) {
+            try{navigator.vibrate(50);}catch(e){};
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active'); }); document.getElementById(`tab-${tab}`).classList.add('active');
             
@@ -2263,6 +2266,7 @@
         }
 
         window.openPastCatchFeed = (aid) => {
+            try{navigator.vibrate(50);}catch(e){};
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if (!h || !h.standings) return;
             const a = h.standings.find(s => s.id === aid || s.name === aid);
@@ -2292,17 +2296,22 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            // V10.5.0 Manual Override
-            document.querySelectorAll('.version-display').forEach(el => el.innerText = "V10.5.0");
+            const CURRENT_FALLBACK_VERSION = "10.6.0";
+            document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
-            fetch('version.json')
+            fetch('version.json?t=' + new Date().getTime())
                 .then(res => res.json())
                 .then(data => { 
-                    document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${data.version}`); 
+                    const serverVer = data.version || CURRENT_FALLBACK_VERSION;
+                    document.querySelectorAll('.version-display').forEach(el => el.innerText = `V${serverVer}`); 
+                    
+                    if (serverVer !== CURRENT_FALLBACK_VERSION && 'serviceWorker' in navigator) {
+                        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                            for(let registration of registrations) { registration.unregister(); }
+                        });
+                    }
                 })
-                .catch(() => { 
-                    console.log('Version fetch fallback active.'); 
-                });
+                .catch(() => { console.log('Version fetch fallback active.'); });
                 
             checkInstallStatus();
             
@@ -2343,6 +2352,7 @@
             if (document.getElementById('leaderboardDrawer').classList.contains('open') || 
                 document.getElementById('stewardDrawer').classList.contains('open') || 
                 document.getElementById('guideDrawer').classList.contains('open') || 
+                document.getElementById('optionsDrawer').classList.contains('open') || 
                 !document.getElementById('historyDetailDrawer').classList.contains('hidden') || 
                 !document.getElementById('stewardRosterDrawer').classList.contains('hidden') || 
                 !document.getElementById('stewardLogDrawer').classList.contains('hidden')) { 
@@ -2350,6 +2360,7 @@
                 document.getElementById('leaderboardDrawer').classList.remove('open'); 
                 document.getElementById('stewardDrawer').classList.remove('open'); 
                 document.getElementById('guideDrawer').classList.remove('open'); 
+                closeOptionsDrawer();
                 stewardCloseLogs(); 
                 closeHistoryDetail(); 
                 document.getElementById('stewardLogDrawer').classList.remove('open'); 
