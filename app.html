@@ -191,8 +191,7 @@
         .delay-title { animation-delay: 1s; }
         .delay-version { animation-delay: 1.3s; }
         
-        #stewardReportBtn.reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
-        #historyReportBtn.reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
+        .reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -376,7 +375,7 @@
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display">
-                    V10.9.0
+                    V10.9.1
                 </div>
             </div>
             
@@ -535,6 +534,8 @@
                         </div>
                     </div>
 
+                    <div class="w-full h-1 bg-slate-200 border-x-2 border-blue-500 shadow-inner"></div>
+
                     <div class="bg-white border-2 border-t-0 border-blue-500 rounded-b-[1.25rem] p-1.5 pb-2">
                         <div class="flex flex-col space-y-1.5">
                             <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2 text-sm appearance-none border-slate-300">
@@ -627,7 +628,7 @@
                 </div>
             </div>
 
-            <button id="stewardReportBtn" onclick="generateOfficialMasterReport()" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
+            <button id="resultsReportBtn" onclick="generateOfficialMasterReport('results')" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
             <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-full shadow-sm">Return Home (Clear Match)</button>
         </div>
 
@@ -692,7 +693,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.9.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.9.1</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -786,7 +787,7 @@
                     <button onclick="stewardReviewLogs()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-list-check mr-2 text-base"></i> Review Angler Logs</button>
                     <button onclick="transferSteward()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-right-left mr-3 text-base"></i> Transfer Control</button>
                     <button onclick="endMatchEarly(true)" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-clock mr-2 text-base"></i> Adjust Match Clock</button>
-                    <button id="stewardReportBtn" onclick="generateOfficialMasterReport()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md mt-4"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
+                    <button id="drawerReportBtn" onclick="generateOfficialMasterReport('drawer')" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md mt-4"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
                 </div>
                 
             </div>
@@ -880,7 +881,7 @@
         let godTargetAnglerId = null;
         let godTargetAnglerName = "";
 
-        // V10.9.0 UI Functions
+        // V10.9.1 SAFE UI FUNCTIONS
         function haptic() {
             try { 
                 if (typeof navigator !== 'undefined' && navigator.vibrate) {
@@ -889,16 +890,16 @@
             } catch(e) {}
         }
         
-        window.openOptionsDrawer = () => { haptic(); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); };
-        window.closeOptionsDrawer = () => { haptic(); document.getElementById('optionsDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('hidden'), 300); };
-        window.openInMatchHelp = () => { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('open'), 10); };
-        window.closeInMatchHelp = () => { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('hidden'), 300); };
+        function openOptionsDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
+        function closeOptionsDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('hidden'), 300); }
+        function openInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('open'), 10); }
+        function closeInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('hidden'), 300); }
         
         function openGuide() { haptic(); document.getElementById('guideDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('guideDrawer').classList.add('open'), 10); }
         function closeGuide() { haptic(); document.getElementById('guideDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('guideDrawer').classList.add('hidden'), 300); }
         function closeInstallGuide() { haptic(); document.getElementById('installModal').classList.add('hidden'); }
-        function openStewardDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
-        function closeStewardDrawer() { haptic(); closeOptionsDrawer(); }
+        function openStewardDrawer() { openOptionsDrawer(); }
+        function closeStewardDrawer() { closeOptionsDrawer(); }
         function openLeaderboard() { haptic(); document.getElementById('leaderboardDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('leaderboardDrawer').classList.add('open'), 10); }
         function closeLeaderboard() { haptic(); document.getElementById('leaderboardDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('leaderboardDrawer').classList.add('hidden'), 300); }
         function openStewardGodModal() { haptic(); document.getElementById('stewardGodModal').classList.remove('hidden'); }
@@ -2003,13 +2004,16 @@
 
         window.tempFallbackData = null; 
 
-        async function generateOfficialMasterReport() {
+        async function generateOfficialMasterReport(source) {
             haptic();
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
             
-            const btn = document.getElementById('stewardReportBtn');
-            const hBtn = document.getElementById('historyReportBtn');
-            const targetBtn = document.getElementById('optionsDrawer').classList.contains('open') ? btn : hBtn;
+            let targetBtn = null;
+            if (source === 'drawer') {
+                targetBtn = document.getElementById('drawerReportBtn');
+            } else {
+                targetBtn = document.getElementById('resultsReportBtn');
+            }
             
             if(targetBtn) { targetBtn.innerText = "GENERATING IMAGE... PLEASE WAIT"; targetBtn.classList.add('reporting'); }
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
@@ -2101,7 +2105,7 @@
                         </div>`).join('')}
                     </div>
                     ` : ''}
-                    <p style="text-align: center; font-size: 16px; font-weight: bold; color: #94a3b8; margin: 40px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Generated by ShoreScore V10.9.0</p>
+                    <p style="text-align: center; font-size: 16px; font-weight: bold; color: #94a3b8; margin: 40px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Generated by ShoreScore V10.9.1</p>
                 </div>
             `;
             
@@ -2129,8 +2133,8 @@
             } finally {
                 document.body.removeChild(poster);
                 if(buttonRef) { 
-                    if(isHistory) { buttonRef.innerHTML = "SHARE CARD"; } 
-                    else { buttonRef.innerHTML = "Share Official Report"; }
+                    if(isHistory) { buttonRef.innerHTML = "<i class='fa-solid fa-share-nodes mr-2'></i> SHARE CARD"; } 
+                    else { buttonRef.innerHTML = "<i class='fa-solid fa-file-export mr-3 text-base text-blue-600'></i> Share Official Report"; }
                     buttonRef.classList.remove('reporting'); 
                 }
             }
@@ -2149,7 +2153,7 @@
             t += `🥉 3rd: ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n`;
             t += `🏆 *FULL STANDINGS*\n`;
             arr.forEach((a, i) => { t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; });
-            t += `\n_Generated by ShoreScore V10.9.0_`;
+            t += `\n_Generated by ShoreScore V10.9.1_`;
             if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
         }
 
@@ -2178,7 +2182,7 @@
             document.getElementById('finalScore').innerHTML = formatScoreDisplay(totalPts, state.format); 
             document.getElementById('finalCount').innerText = state.myCatches.length; 
             document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; 
-            if(state.isSteward) document.getElementById('stewardReportBtn').classList.remove('hidden');
+            if(state.isSteward) document.getElementById('resultsReportBtn').classList.remove('hidden');
             navTo('results'); 
         }
         
@@ -2465,14 +2469,14 @@
             document.getElementById('historyDetailDrawer').classList.remove('open'); 
             setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); 
         }
-        function shareResults() { generateOfficialMasterReport(); }
-        function shareMasterLeaderboard() { generateOfficialMasterReport(); }
+        function shareResults() { generateOfficialMasterReport('results'); }
+        function shareMasterLeaderboard() { generateOfficialMasterReport('results'); }
         function resetApp() { localStorage.removeItem('matchState'); location.reload(); }
 
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            const CURRENT_FALLBACK_VERSION = "10.9.0";
+            const CURRENT_FALLBACK_VERSION = "10.9.1";
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
             fetch('version.json?t=' + new Date().getTime())
@@ -2529,8 +2533,59 @@
             }
         });
 
-        // Global Bindings
-        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport; window.syncInputDeckToState = syncInputDeckToState; window.openPastCatchFeed = openPastCatchFeed; window.closeReportPreview = closeReportPreview; window.shareTextFallbackFromPreview = shareTextFallbackFromPreview; window.openGuide = openGuide; window.closeGuide = closeGuide; window.closeInstallGuide = closeInstallGuide; window.openStewardDrawer = openStewardDrawer; window.closeStewardDrawer = closeStewardDrawer; window.openLeaderboard = openLeaderboard; window.closeLeaderboard = closeLeaderboard; window.openStewardGodModal = openStewardGodModal; window.closeStewardGodModal = closeStewardGodModal; window.closeCustomEndModal = closeCustomEndModal; window.closeStewardLogDrawer = closeStewardLogDrawer; window.openOptionsDrawer = openOptionsDrawer; window.closeOptionsDrawer = closeOptionsDrawer; window.openInMatchHelp = openInMatchHelp; window.closeInMatchHelp = closeInMatchHelp;
+        // SAFE GLOBAL BINDINGS
+        window.proceedToRoleSelection = proceedToRoleSelection; 
+        window.triggerHypeStart = triggerHypeStart; 
+        window.navTo = navTo; 
+        window.createMatch = createMatch; 
+        window.connectToMatch = connectToMatch; 
+        window.recordCatch = recordCatch; 
+        window.editCatch = editCatch; 
+        window.deleteCatch = deleteCatch; 
+        window.leaveMatchEarly = leaveMatchEarly; 
+        window.stewardSetNewEnd = stewardSetNewEnd; 
+        window.shareResults = shareResults; 
+        window.resetApp = resetApp; 
+        window.toggleArchive = toggleArchive; 
+        window.viewPastRecord = viewPastRecord; 
+        window.switchHistoryTab = switchHistoryTab; 
+        window.closeHistoryDetail = closeHistoryDetail; 
+        window.forceUpdateApp = forceUpdateApp; 
+        window.focusMeasurement = focusMeasurement; 
+        window.promptCustomSpecies = promptCustomSpecies; 
+        window.exitWaitingRoom = exitWaitingRoom; 
+        window.deleteHistoryItem = deleteHistoryItem; 
+        window.checkSpeciesSelection = checkSpeciesSelection; 
+        window.exitApp = exitApp; 
+        window.handleInputFocus = handleInputFocus; 
+        window.transferSteward = transferSteward; 
+        window.endMatchEarly = endMatchEarly; 
+        window.showInstallGuide = showInstallGuide; 
+        window.formatScoreDisplay = formatScoreDisplay; 
+        window.shareMasterLeaderboard = shareMasterLeaderboard; 
+        window.atmPress = atmPress; 
+        window.atmDelete = atmDelete; 
+        window.openTimeKeypad = openTimeKeypad; 
+        window.timeAtmPress = timeAtmPress; 
+        window.timeAtmDelete = timeAtmDelete; 
+        window.timeAtmToggleAMPM = timeAtmToggleAMPM; 
+        window.submitTimeAtm = submitTimeAtm; 
+        window.closeTimeKeypad = closeTimeKeypad; 
+        window.closeAndWipeSession = closeAndWipeSession; 
+        window.stewardReviewLogs = stewardReviewLogs; 
+        window.stewardCloseLogs = stewardCloseLogs; 
+        window.stewardOpenAngler = stewardOpenAngler; 
+        window.stewardDeleteCatch = stewardDeleteCatch; 
+        window.submitGodModeCatch = submitGodModeCatch; 
+        window.godCheckSpeciesSelection = godCheckSpeciesSelection; 
+        window.openCatchFeed = openCatchFeed; 
+        window.closeCatchFeed = closeCatchFeed; 
+        window.generateOfficialMasterReport = generateOfficialMasterReport; 
+        window.generateHistoricReport = generateHistoricReport; 
+        window.syncInputDeckToState = syncInputDeckToState; 
+        window.openPastCatchFeed = openPastCatchFeed; 
+        window.closeReportPreview = closeReportPreview; 
+        window.shareTextFallbackFromPreview = shareTextFallbackFromPreview;
     </script>
 </body>
 </html>
