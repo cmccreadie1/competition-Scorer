@@ -19,7 +19,6 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
@@ -204,21 +203,6 @@
         </div>
     </div>
 
-    <div id="reportPreviewModal" class="fixed inset-0 z-[600] hidden flex flex-col bg-slate-50 p-4">
-        <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
-            <button onclick="closeReportPreview()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Scorecard</h2>
-            <div class="w-6"></div>
-        </div>
-        <div class="flex-1 overflow-y-auto pt-4 pb-20 flex flex-col items-center">
-            <p id="reportPreviewInstruction" class="text-xs font-bold text-blue-600 mb-2 uppercase tracking-widest text-center animate-pulse">👇 Long-press image to Save or Share</p>
-            <img id="reportPreviewImage" src="" alt="Match Report" class="w-full max-w-sm rounded-xl shadow-lg border border-slate-300 hidden">
-            <button onclick="shareTextFallbackFromPreview()" class="mt-6 pill-btn w-full max-w-sm py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md">
-                <i class="fa-solid fa-comment-sms mr-2 text-blue-600"></i> SHARE AS PLAIN TEXT
-            </button>
-        </div>
-    </div>
-
     <div id="catchFeedModal" class="fixed inset-0 z-[500] hidden flex flex-col bg-slate-50 transition-transform duration-300 transform translate-x-full">
         <div class="flex-none p-5 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between pt-6">
             <div class="flex flex-col text-left">
@@ -375,7 +359,7 @@
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display">
-                    V10.9.1
+                    V10.10.0
                 </div>
             </div>
             
@@ -685,7 +669,7 @@
                     <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
                         <p><b class="text-slate-900">1. The Command Bridge:</b><br>During a match, tap the <b class="text-slate-900">[ ⚙️ OPTIONS & EXIT ]</b> button at the top of your screen. From here, you can adjust the match clock, trigger a 3-minute "lines up" grace period, or hand over Steward control to someone else if your battery is dying.</p>
                         <p><b class="text-slate-900">2. God Mode Audits:</b><br>Need to fix an angler's mistake? From the Options menu, tap <b>Review Angler Logs</b>. Select any angler to view their diary. You have the power to <b>Log a Catch</b> directly onto their scorecard, or permanently <b>Delete</b> a bogus fish from the global leaderboard.</p>
-                        <p><b class="text-slate-900">3. The Official Report:</b><br>When the clock hits zero, tap <b>Share Official Report</b>. The app generates a beautiful graphic of the final podium and match stats that you can send straight to WhatsApp.</p>
+                        <p><b class="text-slate-900">3. The Official Report:</b><br>When the clock hits zero, tap <b>Share Official Report</b>. The app generates a plain-text summary of the final podium and match stats that you can send straight to WhatsApp.</p>
                     </div>
                 </section>
                 <section class="pt-4 text-center pb-8">
@@ -693,7 +677,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.9.1</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.10.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -881,7 +865,7 @@
         let godTargetAnglerId = null;
         let godTargetAnglerName = "";
 
-        // V10.9.1 SAFE UI FUNCTIONS
+        // V10.10.0 SAFE UI FUNCTIONS
         function haptic() {
             try { 
                 if (typeof navigator !== 'undefined' && navigator.vibrate) {
@@ -894,7 +878,6 @@
         function closeOptionsDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('hidden'), 300); }
         function openInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('open'), 10); }
         function closeInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('hidden'), 300); }
-        
         function openGuide() { haptic(); document.getElementById('guideDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('guideDrawer').classList.add('open'), 10); }
         function closeGuide() { haptic(); document.getElementById('guideDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('guideDrawer').classList.add('hidden'), 300); }
         function closeInstallGuide() { haptic(); document.getElementById('installModal').classList.add('hidden'); }
@@ -2002,9 +1985,8 @@
             setTimeout(refreshStewardCatchList, 300);
         }
 
-        window.tempFallbackData = null; 
-
-        async function generateOfficialMasterReport(source) {
+        // V10.10.0 RESTORED PLAIN TEXT REPORT
+        function generateOfficialMasterReport(source) {
             haptic();
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
             
@@ -2015,150 +1997,116 @@
                 targetBtn = document.getElementById('resultsReportBtn');
             }
             
-            if(targetBtn) { targetBtn.innerText = "GENERATING IMAGE... PLEASE WAIT"; targetBtn.classList.add('reporting'); }
+            if(targetBtn) { targetBtn.innerText = "GENERATING REPORT..."; targetBtn.classList.add('reporting'); }
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            buildAndShareGraphicalReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn);
+            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn);
         }
 
-        async function generateHistoricReport() {
+        function generateHistoricReport() {
             haptic();
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if(!h || !h.standings) return alert("No leaderboard data available.");
             
             const btn = document.querySelector(`button[onclick="generateHistoricReport()"]`);
             if(btn) { btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin mr-2'></i> GENERATING..."; btn.classList.add('reporting'); }
-            buildAndShareGraphicalReport(h.standings, h.venue, h.date, h.format, btn, true);
+            buildAndShareReport(h.standings, h.venue, h.date, h.format, btn);
         }
 
-        async function buildAndShareGraphicalReport(arr, venueName, matchDate, matchFormat, buttonRef, isHistory = false) {
+        function buildAndShareReport(arr, venueName, matchDate, matchFormat, buttonRef) {
             const fmt = matchFormat || state.format; 
-            window.tempFallbackData = { arr: arr, venueName: venueName, matchDate: matchDate, fmt: fmt }; 
+            let podium = arr.slice(0, 3);
+            let biggestVal = 0, biggestStr = "N/A";
+            let hourCounts = {}, allSpecies = new Set(), totalFish = 0;
+            let matchTotalPhysicalSize = 0;
+            let spCounts = {}; 
 
-            let podium = arr.slice(0, 3), others = arr.slice(3, 15), biggestVal = 0, biggestStr = "N/A", hourCounts = {}, allSpecies = new Set(), totalFish = 0, matchTotalPhysicalSize = 0;
             arr.forEach(a => {
                 if(a.catches) {
                     let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
                     totalFish += cList.length;
                     cList.forEach(f => {
-                        allSpecies.add(f.species); matchTotalPhysicalSize += (parseFloat(f.size) || 0);
-                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${a.name} - ${f.species} (${f.display || f.size})`; }
+                        allSpecies.add(f.species);
+                        spCounts[f.species] = (spCounts[f.species] || 0) + 1; 
+                        matchTotalPhysicalSize += (parseFloat(f.size) || 0);
+                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; }
                         if(f.ts) { const hr = new Date(f.ts).getHours(); hourCounts[hr] = (hourCounts[hr] || 0) + 1; }
                     });
                 }
             });
 
-            let timelineHtml = "";
-            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
-            if(sortedHours.length > 0) {
-                let maxHourVal = Math.max(...Object.values(hourCounts));
-                timelineHtml = sortedHours.map(hr => {
-                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "", nHr = parseInt(hr), nextHr = nHr === 23 ? 0 : nHr + 1;
-                    return `<div style="font-size: 20px; font-weight: bold; color: #475569; padding: 6px 0;">${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00 <span style="color: #0f172a; float: right;">${hourCounts[hr]} Fish${isFire}</span></div>`;
-                }).join('');
-            } else { timelineHtml = `<div style="font-size: 20px; font-weight: bold; color: #94a3b8;">No catches recorded.</div>`; }
+            let matchTotalRaw = arr.reduce((sum, a) => sum + (a.score || 0), 0);
 
-            let poster = document.createElement('div');
-            poster.id = "temp-poster";
-            poster.style.position = "fixed"; poster.style.top = "0"; poster.style.left = "0"; poster.style.zIndex = "-9999"; poster.style.opacity = "0.01"; poster.style.pointerEvents = "none";
-            poster.style.width = "750px"; poster.style.backgroundColor = "#f8fafc"; poster.style.padding = "40px"; poster.style.fontFamily = "'Inter', sans-serif"; poster.style.color = "#0f172a";
+            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📅 ${matchDate}\n\n`;
             
-            poster.innerHTML = `
-                <div style="background: white; border: 4px solid #0284c7; border-radius: 32px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
-                    <div style="text-align: center; border-bottom: 4px solid #f1f5f9; padding-bottom: 30px; margin-bottom: 30px;">
-                        <h1 style="font-size: 46px; font-weight: 900; color: #0284c7; margin: 0; text-transform: uppercase; letter-spacing: -1px;">SHORESCORE</h1>
-                        <h2 style="font-size: 24px; font-weight: 900; color: #0f172a; margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 4px;">Official Match Report</h2>
-                        <p style="font-size: 22px; font-weight: bold; color: #64748b; margin: 15px 0 0 0;">DATE: ${matchDate} &nbsp;|&nbsp; VENUE: ${venueName}</p>
-                    </div>
-                    
-                    <h2 style="font-size: 32px; font-weight: 900; margin: 0 0 20px 0; text-transform: uppercase; color: #0f172a;">THE PODIUM</h2>
-                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px; padding: 25px; margin-bottom: 40px;">
-                        <div style="font-size: 38px; font-weight: 900; color: #0f172a; margin-bottom: 15px;">
-                            1ST: <span style="color: #0284c7;">${podium[0]?.name || '-'}</span> <span style="float: right; color: #0284c7;">${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}</span>
-                        </div>
-                        <div style="font-size: 28px; font-weight: bold; color: #334155; margin-bottom: 15px; border-top: 2px dashed #cbd5e1; padding-top: 15px;">
-                            2ND: ${podium[1]?.name || '-'} <span style="float: right; color: #64748b;">${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}</span>
-                        </div>
-                        <div style="font-size: 26px; font-weight: bold; color: #475569; border-top: 2px dashed #cbd5e1; padding-top: 15px;">
-                            3RD: ${podium[2]?.name || '-'} <span style="float: right; color: #64748b;">${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}</span>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; gap: 30px; margin-bottom: 40px;">
-                        <div style="flex: 1; background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 20px; padding: 25px;">
-                            <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #1e3a8a;">MATCH HIGHLIGHTS</h2>
-                            <p style="font-size: 20px; font-weight: bold; margin: 0 0 10px 0; color: #0f172a;"><b>Biggest Fish:</b><br><span style="color: #0284c7;">${biggestStr.replace(/<[^>]*>?/gm, '')}</span></p>
-                            <p style="font-size: 20px; font-weight: bold; margin: 0; color: #0f172a;"><b>Diversity:</b><br><span style="color: #0284c7;">${speciesSet.size} Unique Species</span></p>
-                            <p style="font-size: 20px; font-weight: bold; margin: 10px 0 0 0; color: #0f172a;"><b>Total Catch:</b><br><span style="color: #0284c7;">${totalFish} Fish overall</span></p>
-                        </div>
-                        <div style="flex: 1; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px; padding: 25px;">
-                            <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #0f172a;">HOURLY TIMELINE</h2>
-                            ${timelineHtml}
-                        </div>
-                    </div>
-
-                    ${others.length > 0 ? `
-                    <h2 style="font-size: 32px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #0f172a; border-bottom: 3px solid #f1f5f9; padding-bottom: 10px;">FULL STANDINGS (4-${arr.length})</h2>
-                    <div style="border: 2px solid #e2e8f0; border-radius: 16px; overflow: hidden; margin-bottom: 30px;">
-                        ${others.map((a, i) => `
-                        <div style="font-size: 22px; font-weight: bold; padding: 12px 20px; background: ${i%2===0?'#ffffff':'#f8fafc'}; color: #334155;">
-                            <span style="color: #94a3b8; font-weight: 900; margin-right: 15px;">#${i+4}</span> ${a.name} <span style="float: right; color: #0f172a; font-weight: 900;">${formatScoreDisplay(a.score, fmt, true)}</span>
-                        </div>`).join('')}
-                    </div>
-                    ` : ''}
-                    <p style="text-align: center; font-size: 16px; font-weight: bold; color: #94a3b8; margin: 40px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Generated by ShoreScore V10.9.1</p>
-                </div>
-            `;
-            
-            document.body.appendChild(poster);
-            
-            await new Promise(r => setTimeout(r, 150));
-            
-            try {
-                await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 500))]);
-                
-                const canvas = await html2canvas(poster, { scale: 2, useCORS: true, backgroundColor: '#f8fafc', width: 750, windowWidth: 750 });
-                const imgData = canvas.toDataURL('image/jpeg', 0.85);
-                
-                document.getElementById('reportPreviewImage').src = imgData;
-                document.getElementById('reportPreviewImage').classList.remove('hidden');
-                document.getElementById('reportPreviewInstruction').innerText = "👇 Long-press image to Save or Share";
-                document.getElementById('reportPreviewModal').classList.remove('hidden');
-                
-            } catch(err) {
-                console.error("Canvas Gen Error:", err);
-                document.getElementById('reportPreviewImage').classList.add('hidden');
-                document.getElementById('reportPreviewInstruction').innerText = "Image Generation Failed. Please use Plain Text sharing.";
-                document.getElementById('reportPreviewModal').classList.remove('hidden');
-                
-            } finally {
-                document.body.removeChild(poster);
-                if(buttonRef) { 
-                    if(isHistory) { buttonRef.innerHTML = "<i class='fa-solid fa-share-nodes mr-2'></i> SHARE CARD"; } 
-                    else { buttonRef.innerHTML = "<i class='fa-solid fa-file-export mr-3 text-base text-blue-600'></i> Share Official Report"; }
-                    buttonRef.classList.remove('reporting'); 
-                }
-            }
-        }
-
-        function shareTextFallbackFromPreview() {
-            haptic();
-            if (window.tempFallbackData) { const { arr, venueName, matchDate, fmt } = window.tempFallbackData; buildAndShareTextFallback(arr, venueName, matchDate, fmt); }
-        }
-
-        function buildAndShareTextFallback(arr, venueName, matchDate, fmt) {
-            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📅 ${matchDate}\n\n👑 *PODIUM*\n`;
-            let podium = arr.slice(0, 3);
+            t += `👑 *PODIUM*\n`;
             t += `🥇 1st: ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n`;
             t += `🥈 2nd: ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}\n`;
             t += `🥉 3rd: ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n`;
+
+            if (totalFish > 0) {
+                t += `📊 *SPECIES BREAKDOWN*\n`;
+                let spArr = Object.entries(spCounts).sort((a,b) => b[1] - a[1]);
+                spArr.forEach(sp => {
+                    let pct = Math.round((sp[1] / totalFish) * 100);
+                    t += `▪️ ${sp[0]}: ${pct}% (${sp[1]} Fish)\n`;
+                });
+                t += `\n`;
+            }
+            
+            t += `📈 *MATCH STATS*\n`;
+            if (fmt !== 'speciesHunt') {
+                t += `🐋 Biggest Fish: ${biggestStr.replace(/<[^>]*>?/gm, '')}\n`;
+            }
+            t += `🧬 Diversity: ${allSpecies.size} Unique Species\n`;
+            
+            if (fmt === 'speciesHunt') {
+                t += `🎣 Match Total: ${totalFish} Fish\n\n`;
+            } else if (fmt.startsWith('length')) {
+                t += `📏 Match Total Length: ${formatTotalLength(matchTotalPhysicalSize)} (${totalFish} Fish)\n\n`;
+            } else {
+                t += `⚖️ Match Total Weight: ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Fish)\n\n`;
+            }
+
+            t += `⏱️ *HOURLY TIMELINE*\n`;
+            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
+            if(sortedHours.length === 0) { 
+                t += `▪️ No captures recorded.\n\n`; 
+            } else {
+                let maxHourVal = Math.max(...Object.values(hourCounts));
+                sortedHours.forEach(hr => {
+                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "";
+                    let nHr = parseInt(hr);
+                    let nextHr = nHr === 23 ? 0 : nHr + 1;
+                    t += `▪️ ${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00: ${hourCounts[hr]} Fish${isFire}\n`;
+                });
+                t += `\n`;
+            }
+
             t += `🏆 *FULL STANDINGS*\n`;
-            arr.forEach((a, i) => { t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; });
-            t += `\n_Generated by ShoreScore V10.9.1_`;
-            if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
+            arr.forEach((a, i) => { 
+                t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
+            });
+            
+            t += `\n_Generated by ShoreScore V10.10.0_`;
+
+            if (navigator.share) { 
+                navigator.share({ title: 'Official Report', text: t }).catch(console.error); 
+            }
+            else { 
+                window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); 
+            }
+            
+            if(buttonRef) {
+                if(buttonRef.id === 'drawerReportBtn' || buttonRef.id === 'resultsReportBtn') {
+                    buttonRef.innerHTML = "<i class='fa-solid fa-file-export mr-3 text-base text-blue-600'></i> Share Official Report";
+                } else {
+                    buttonRef.innerHTML = "<i class='fa-solid fa-share-nodes mr-2'></i> SHARE CARD";
+                }
+                buttonRef.classList.remove('reporting');
+            }
         }
 
-        function closeReportPreview() { haptic(); document.getElementById('reportPreviewModal').classList.add('hidden'); }
-
+        function shareUnifiedReport() { generateOfficialMasterReport('results'); }
         function endMatchEarly(grace) { haptic(); if(state.isSteward && state.pin) { if(grace) { closeOptionsDrawer(); document.getElementById('customEndModal').classList.remove('hidden'); } } }
         function stewardSetNewEnd(mins) { haptic(); closeCustomEndModal(); closeOptionsDrawer(); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
         function transferSteward() { haptic(); if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); closeOptionsDrawer(); } } }
@@ -2476,7 +2424,7 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            const CURRENT_FALLBACK_VERSION = "10.9.1";
+            const CURRENT_FALLBACK_VERSION = "10.10.0";
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
             fetch('version.json?t=' + new Date().getTime())
@@ -2525,11 +2473,10 @@
                 document.getElementById('inMatchHelpDrawer').classList.contains('open') || 
                 !document.getElementById('historyDetailDrawer').classList.contains('hidden') || 
                 !document.getElementById('stewardRosterDrawer').classList.contains('hidden') || 
-                !document.getElementById('stewardLogDrawer').classList.contains('hidden') ||
-                !document.getElementById('reportPreviewModal').classList.contains('hidden')) { 
+                !document.getElementById('stewardLogDrawer').classList.contains('hidden')) { 
                 
                 closeLeaderboard(); closeStewardDrawer(); closeGuide(); closeOptionsDrawer(); closeInMatchHelp();
-                stewardCloseLogs(); closeHistoryDetail(); closeReportPreview(); closeStewardLogDrawer();
+                stewardCloseLogs(); closeHistoryDetail(); closeStewardLogDrawer();
             }
         });
 
@@ -2584,8 +2531,21 @@
         window.generateHistoricReport = generateHistoricReport; 
         window.syncInputDeckToState = syncInputDeckToState; 
         window.openPastCatchFeed = openPastCatchFeed; 
-        window.closeReportPreview = closeReportPreview; 
-        window.shareTextFallbackFromPreview = shareTextFallbackFromPreview;
+        window.openGuide = openGuide; 
+        window.closeGuide = closeGuide; 
+        window.closeInstallGuide = closeInstallGuide; 
+        window.openStewardDrawer = openStewardDrawer; 
+        window.closeStewardDrawer = closeStewardDrawer; 
+        window.openLeaderboard = openLeaderboard; 
+        window.closeLeaderboard = closeLeaderboard; 
+        window.openStewardGodModal = openStewardGodModal; 
+        window.closeStewardGodModal = closeStewardGodModal; 
+        window.closeCustomEndModal = closeCustomEndModal; 
+        window.closeStewardLogDrawer = closeStewardLogDrawer; 
+        window.openOptionsDrawer = openOptionsDrawer; 
+        window.closeOptionsDrawer = closeOptionsDrawer; 
+        window.openInMatchHelp = openInMatchHelp; 
+        window.closeInMatchHelp = closeInMatchHelp;
     </script>
 </body>
 </html>
