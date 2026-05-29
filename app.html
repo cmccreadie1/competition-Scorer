@@ -19,6 +19,7 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
@@ -135,6 +136,7 @@
             touch-action: manipulation;
         }
         .pill-btn:active { transform: scale(0.96); background-color: #0369a1; }
+        .pill-btn:disabled { background-color: #cbd5e1 !important; color: #64748b !important; transform: none !important; box-shadow: none !important; opacity: 0.8; }
         .btn-destructive { background-color: var(--neon-red) !important; color: #ffffff !important; }
 
         .btn-record-pulse { animation: record-pulse 2s infinite; }
@@ -188,6 +190,9 @@
         .animate-text { opacity: 0; animation: text-reveal 0.8s ease-out forwards; }
         .delay-title { animation-delay: 1s; }
         .delay-version { animation-delay: 1.3s; }
+        
+        #stewardReportBtn.reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
+        #historyReportBtn.reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -200,23 +205,38 @@
         </div>
     </div>
 
+    <div id="reportPreviewModal" class="fixed inset-0 z-[600] hidden flex flex-col bg-slate-50 p-4">
+        <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
+            <button onclick="closeReportPreview()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+            <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Scorecard</h2>
+            <div class="w-6"></div>
+        </div>
+        <div class="flex-1 overflow-y-auto pt-4 pb-20 flex flex-col items-center">
+            <p id="reportPreviewInstruction" class="text-xs font-bold text-blue-600 mb-2 uppercase tracking-widest text-center animate-pulse">👇 Long-press image to Save or Share</p>
+            <img id="reportPreviewImage" src="" alt="Match Report" class="w-full max-w-sm rounded-xl shadow-lg border border-slate-300 hidden">
+            <button onclick="shareTextFallbackFromPreview()" class="mt-6 pill-btn w-full max-w-sm py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md">
+                <i class="fa-solid fa-comment-sms mr-2 text-blue-600"></i> SHARE AS PLAIN TEXT
+            </button>
+        </div>
+    </div>
+
     <div id="catchFeedModal" class="fixed inset-0 z-[500] hidden flex flex-col bg-slate-50 transition-transform duration-300 transform translate-x-full">
         <div class="flex-none p-5 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between pt-6">
             <div class="flex flex-col text-left">
                 <span class="text-[10px] font-black uppercase text-blue-600 tracking-widest">Angler Profile</span>
                 <h3 id="feedAnglerName" class="text-xl font-black uppercase tracking-tight text-slate-900">Angler Name</h3>
             </div>
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; closeCatchFeed()" class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center font-black text-lg active:scale-95"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeCatchFeed()" class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center font-black text-lg active:scale-95"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div id="feedContent" class="flex-1 overflow-y-auto p-4 space-y-2 scrollable-area bg-slate-50"></div>
         <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; closeCatchFeed()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO LEADERBOARD</button>
+            <button onclick="closeCatchFeed()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO LEADERBOARD</button>
         </div>
     </div>
 
     <div id="stewardGodModal" class="fixed inset-0 z-[400] hidden flex flex-col items-center justify-center p-4">
         <div class="match-card w-full max-w-sm p-5 space-y-4 border border-blue-500 relative shadow-2xl">
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('stewardGodModal').classList.add('hidden')" class="absolute top-3 right-4 text-slate-500 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeStewardGodModal()" class="absolute top-3 right-4 text-slate-500 text-xl"><i class="fa-solid fa-xmark"></i></button>
             <div class="text-center pb-2 border-b border-slate-200">
                 <h3 class="text-sm font-black uppercase tracking-tight neon-text-blue"><i class="fa-solid fa-user-shield mr-1"></i> Steward Override</h3>
                 <p id="godModeAnglerName" class="text-slate-900 text-base font-black mt-1">Angler Name</p>
@@ -261,7 +281,7 @@
                     <div class="flex-1"><input type="number" id="godInputGrammes" inputmode="numeric" pattern="\d*" step="25" placeholder="Grams" class="pill-input rounded-full w-full p-2.5 text-base metric-white"></div>
                 </div>
             </div>
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; submitGodModeCatch()" class="pill-btn w-full py-3.5 shadow-lg mt-2 text-base text-white">Force Save Record</button>
+            <button onclick="submitGodModeCatch()" class="pill-btn w-full py-3.5 shadow-lg mt-2 text-base text-white">Force Save Record</button>
         </div>
     </div>
 
@@ -279,7 +299,7 @@
                 <button onclick="openTimeKeypad()" class="pill-btn py-3.5 text-xs"><i class="fa-solid fa-keyboard mr-2"></i> ENTER FINISH TIME</button>
                 <button onclick="stewardSetNewEnd(0)" class="pill-btn btn-destructive py-3.5 text-[10px] leading-none flex flex-col">STRIKE NOW<span class="text-[9px] opacity-80 mt-1">(Activates 3 Min Grace)</span></button>
             </div>
-            <button onclick="document.getElementById('customEndModal').classList.add('hidden')" class="w-full text-slate-600 font-black uppercase text-[10px] tracking-[0.3em] pt-3 bg-slate-100 rounded-full py-3">Return</button>
+            <button onclick="closeCustomEndModal()" class="w-full text-slate-600 font-black uppercase text-[10px] tracking-[0.3em] pt-3 bg-slate-100 rounded-full py-3">Return</button>
         </div>
     </div>
 
@@ -326,7 +346,7 @@
                 <h3 class="text-lg font-black uppercase tracking-tight text-slate-900">Device Installation</h3>
                 <p id="installInstructionText" class="text-slate-600 mt-3 text-xs leading-relaxed"></p>
             </div>
-            <button onclick="document.getElementById('installModal').classList.add('hidden')" class="pill-btn w-full py-4 text-xs">Got it</button>
+            <button onclick="closeInstallGuide()" class="pill-btn w-full py-4 text-xs">Got it</button>
         </div>
     </div>
 
@@ -334,12 +354,12 @@
 
         <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative">
             
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('guideDrawer').classList.add('open')" class="absolute top-5 left-5 domestic-action text-slate-500 active:text-blue-600 cursor-pointer flex flex-col items-center z-[50]">
+            <button onclick="openGuide()" class="absolute top-5 left-5 domestic-action text-slate-500 active:text-blue-600 cursor-pointer flex flex-col items-center z-[50]">
                 <i class="fa-solid fa-book-open text-2xl mb-1"></i>
-                <span class="text-[10px] font-black uppercase tracking-widest">Guide</span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-center leading-tight mt-1">Guide &<br>Update</span>
             </button>
 
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; exitApp()" class="absolute top-5 right-5 domestic-action text-slate-500 active:text-red-500 cursor-pointer flex flex-col items-center z-[50]">
+            <button onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-slate-500 active:text-red-500 cursor-pointer flex flex-col items-center z-[50]">
                 <i class="fa-solid fa-power-off text-2xl mb-1"></i>
                 <span class="text-[10px] font-black uppercase tracking-widest">Close</span>
             </button>
@@ -356,7 +376,7 @@
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display">
-                    V10.6.0
+                    V10.9.0
                 </div>
             </div>
             
@@ -371,13 +391,13 @@
                             <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Your Name" class="pill-input rounded-full w-full py-4 pl-12 pr-4 text-base font-bold">
                         </div>
                     </div>
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; proceedToRoleSelection()" class="pill-btn w-full text-base py-4 mt-2 shadow-md border-2 border-blue-600">
+                    <button onclick="proceedToRoleSelection()" class="pill-btn w-full text-base py-4 mt-2 shadow-md border-2 border-blue-600">
                         Continue <i class="fa-solid fa-arrow-right ml-2"></i>
                     </button>
                 </div>
                 
                 <div class="w-full bg-white rounded-xl neon-border-glow border overflow-hidden domestic-action relative z-10 shadow-md">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('history')" class="w-full p-4 flex flex-col items-center cursor-pointer">
+                    <button onclick="navTo('history')" class="w-full p-4 flex flex-col items-center cursor-pointer">
                         <div class="flex items-center justify-center space-x-3 w-full mb-1">
                             <i class="fa-solid fa-vault text-blue-600 text-2xl"></i>
                             <div class="text-[var(--text-header)] text-lg font-black uppercase tracking-tight">View Past <span class="neon-text-blue">Matches</span></div>
@@ -395,19 +415,19 @@
         </div>
         <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-slate-50">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('home')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="navTo('home')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Select Role</h2>
                 <div class="w-6"></div>
             </div>
             
             <div class="flex-1 flex flex-col justify-center space-y-6 max-w-sm mx-auto w-full pb-20">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('join')" class="w-full pill-btn font-black text-xl py-10 rounded-[2rem] shadow-xl border border-blue-600 flex flex-col items-center justify-center">
+                <button onclick="navTo('join')" class="w-full pill-btn font-black text-xl py-10 rounded-[2rem] shadow-xl border border-blue-600 flex flex-col items-center justify-center">
                     <i class="fa-solid fa-user-tag text-4xl mb-3 text-white"></i>
                     Join as Competitor
                 </button>
                 
                 <div class="pt-6">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('host')" class="w-3/4 mx-auto pill-btn text-sm py-5 rounded-[1.5rem] shadow-md border border-blue-600 flex flex-col items-center justify-center opacity-90 bg-white !text-blue-600">
+                    <button onclick="navTo('host')" class="w-3/4 mx-auto pill-btn text-sm py-5 rounded-[1.5rem] shadow-md border border-blue-600 flex flex-col items-center justify-center opacity-90 bg-white !text-blue-600">
                         <i class="fa-solid fa-crown text-xl mb-1.5"></i>
                         Host as Steward
                     </button>
@@ -417,7 +437,7 @@
 
         <div id="view-join" class="hidden view-frame p-4 bg-slate-50">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Authentication</h2>
                 <div class="w-6"></div>
             </div>
@@ -434,14 +454,14 @@
                 <button class="atm-btn" onclick="atmPress(1)">1</button><button class="atm-btn" onclick="atmPress(2)">2</button><button class="atm-btn" onclick="atmPress(3)">3</button>
                 <button class="atm-btn" onclick="atmPress(4)">4</button><button class="atm-btn" onclick="atmPress(5)">5</button><button class="atm-btn" onclick="atmPress(6)">6</button>
                 <button class="atm-btn" onclick="atmPress(7)">7</button><button class="atm-btn" onclick="atmPress(8)">8</button><button class="atm-btn" onclick="atmPress(9)">9</button>
-                <button class="atm-btn text-red-600" onclick="try{navigator.vibrate(50);}catch(e){}; navTo('role')"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="atmPress(0)">0</button><button class="atm-btn neon-text-blue" onclick="atmDelete()"><i class="fa-solid fa-delete-left"></i></button>
+                <button class="atm-btn text-red-600" onclick="navTo('role')"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="atmPress(0)">0</button><button class="atm-btn neon-text-blue" onclick="atmDelete()"><i class="fa-solid fa-delete-left"></i></button>
             </div>
-            <button id="btn-connect" onclick="try{navigator.vibrate(50);}catch(e){}; connectToMatch()" class="hidden w-full max-w-sm mx-auto pill-btn text-base py-4 mb-8 shadow-xl">Validate</button>
+            <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto pill-btn text-base py-4 mb-8 shadow-xl">Validate</button>
         </div>
 
         <div id="view-host" class="hidden view-frame p-5 space-y-4 bg-slate-50">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Match Creator</h2>
                 <div class="w-6"></div>
             </div>
@@ -462,20 +482,20 @@
                         <option value="speciesHunt">Species Hunt</option>
                     </select>
                 </div>
-                <button id="btnInitMatch" onclick="try{navigator.vibrate(50);}catch(e){}; createMatch()" class="pill-btn w-full text-lg py-4 mt-4 border-blue-600 shadow-md">Initialize Match</button>
+                <button id="btnInitMatch" onclick="createMatch()" class="pill-btn w-full text-lg py-4 mt-4 border-blue-600 shadow-md">Initialize Match</button>
             </div>
         </div>
 
         <div id="view-waiting" class="hidden view-frame p-5 space-y-4 bg-slate-50">
             <div class="flex justify-between items-center w-full pb-2 border-b border-slate-200">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; exitWaitingRoom()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <button onclick="exitWaitingRoom()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <div class="neon-text-blue font-black tracking-[0.2em] bg-white px-5 py-1.5 rounded-full border border-slate-300 shadow-sm text-xl" id="displayPin">0000</div>
             </div>
             <div class="flex-1 flex flex-col items-center space-y-4 pt-3">
                 <h3 class="text-xl font-black text-slate-900 uppercase tracking-tight">Angler Lobby</h3>
                 <div id="attendanceList" class="w-full max-w-sm flex-1 bg-white rounded-[1.5rem] border border-slate-300 p-4 space-y-2 overflow-y-auto shadow-inner"></div>
                 <div id="hostControls" class="hidden w-full max-w-sm pb-5">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; triggerHypeStart()" class="pill-btn w-full font-black text-xl py-4 shadow-xl border-blue-600" style="animation: record-pulse 2s infinite;">🚀 START MATCH</button>
+                    <button onclick="triggerHypeStart()" class="pill-btn w-full font-black text-xl py-4 shadow-xl border-blue-600" style="animation: record-pulse 2s infinite;">🚀 START MATCH</button>
                 </div>
                 <div id="joinerWaitingText" class="w-full max-w-sm pb-5 text-center">
                     <p class="text-base font-bold text-slate-600 italic">Linked... Waiting for Steward.</p>
@@ -558,7 +578,7 @@
                                             <div class="flex-1"><input type="number" id="inputGrammes" inputmode="numeric" pattern="\d*" step="25" placeholder="Grams" onkeydown="if(event.key === 'Enter') { recordCatch(); this.blur(); }" onfocus="handleInputFocus(this)" class="pill-input w-full p-2 text-base metric-white border-slate-300"></div>
                                         </div>
                                     </div>
-                                    <button id="btnRecord" onclick="try{navigator.vibrate(50);}catch(e){}; recordCatch()" class="pill-btn px-4 bg-blue-600 text-white font-black text-sm rounded-xl shadow-md btn-record-pulse flex items-center justify-center shrink-0">
+                                    <button id="btnRecord" onclick="recordCatch()" class="pill-btn px-4 bg-blue-600 text-white font-black text-sm rounded-xl shadow-md btn-record-pulse flex items-center justify-center shrink-0">
                                         ADD
                                     </button>
                                 </div>
@@ -569,8 +589,11 @@
             </div>
 
             <div id="loggingArea" class="scrollable-area p-4 flex flex-col w-full max-w-md mx-auto">
-                <div class="flex justify-end mb-2 w-full">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; openOptionsDrawer()" class="bg-white border border-slate-300 text-slate-700 font-black text-[10px] uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm active:scale-95 transition">
+                <div class="flex justify-between items-center mb-2 w-full px-1">
+                    <button onclick="openInMatchHelp()" class="bg-white border border-slate-300 text-slate-700 font-black text-[10px] uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm active:scale-95 transition">
+                        📖 HELP
+                    </button>
+                    <button onclick="openOptionsDrawer()" class="bg-white border border-slate-300 text-slate-700 font-black text-[10px] uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm active:scale-95 transition">
                         ⚙️ OPTIONS & EXIT
                     </button>
                 </div>
@@ -580,7 +603,7 @@
                 </div>
             </div>
 
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('leaderboardDrawer').classList.add('open')" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
+            <button onclick="openLeaderboard()" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
                 <i class="fa-solid fa-trophy mr-2 text-base"></i> CLICK FOR LIVE LEADERBOARD
             </button>
 
@@ -605,7 +628,7 @@
             </div>
 
             <button id="stewardReportBtn" onclick="generateOfficialMasterReport()" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
-            <button onclick="try{navigator.vibrate(50);}catch(e){}; closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-full shadow-sm">Return Home (Clear Match)</button>
+            <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-full shadow-sm">Return Home (Clear Match)</button>
         </div>
 
         <div id="view-history" class="hidden view-frame bg-slate-50">
@@ -624,7 +647,7 @@
                 </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; navTo('home')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO MAIN MENU</button>
+                <button onclick="navTo('home')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO MAIN MENU</button>
             </div>
         </div>
 
@@ -639,35 +662,79 @@
             </div>
         </div>
 
-        <div id="guideDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50 z-[250] flex flex-col justify-between">
+        <div id="guideDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50 z-[250] flex flex-col justify-between hidden">
             <div class="scrollable-area p-6 space-y-8 text-slate-900 text-left pt-8">
                 <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <h4 class="text-blue-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">🎣 ANGLER'S QUICK START</h4>
-                    <div class="space-y-4 text-sm leading-relaxed text-slate-700">
-                        <p><b class="text-slate-900">Step 1: Join the Match</b><br>Enter your Name. Tap "Join as Competitor" and type in the 4-digit PIN provided by your Steward.</p>
-                        <p><b class="text-slate-900">Step 2: Log Your Catch</b><br>Select the fish species. Enter the size or weight, then hit "ADD". The app will instantly sync to the cloud.</p>
-                        <p><b class="text-slate-900">Step 3: The Dynamic HUD & Leaderboard</b><br>The pill at the top of your screen is your tactical HUD. It shows your current points, match timer, and live rank. <b>Tap the Leaderboard Button</b> at any time to unfold the full Live Leaderboard. <b class="text-blue-600">Tap any angler's name</b> on the leaderboard to view their live, individual catch feed in real-time.</p>
-                        <p><b class="text-slate-900">Step 4: Smart Battery Saver</b><br>There is no sleep button. Put your phone in your pocket and let the screen turn off to save battery. The moment you wake your phone, the app will instantly sync and scroll any new catches across your screen.</p>
+                    <h4 class="text-blue-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">WHAT IS SHORESCORE?</h4>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
+                        <p>ShoreScore is a zero-latency digital scorecard for beach fishing. It works instantly across all devices.</p>
+                        <p><b class="text-slate-900">Competitors:</b> Join a match, log your fish, and watch the live leaderboard update in real-time. If you lose phone signal on the beach, keep logging! The app safely saves your fish and will automatically sync them the second your signal returns.</p>
+                        <p><b class="text-slate-900">Stewards:</b> Host a match, set the rules, and manage the tournament from your own device.</p>
                     </div>
                 </section>
                 <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <h4 class="text-orange-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">👑 STEWARD'S GUIDE</h4>
-                    <div class="space-y-4 text-sm leading-relaxed text-slate-700">
-                        <p><b class="text-slate-900">Step 1: Setup</b><br>Tap "Host as Steward". Choose the match duration and scoring format, then give your anglers the Room PIN.</p>
-                        <p><b class="text-slate-900">Step 2: Management (The Command Bridge)</b><br>During the match, scroll to the bottom of the catch log and tap the <b>Steward Controls</b> button. From here, you can adjust the match clock, end the match early, or transfer Steward control to another angler.</p>
-                        <p><b class="text-slate-900">Step 3: God Mode Audit</b><br>From the Steward Desk, tap "Review Angler Logs". Tap any angler to audit their catches. Stewards have the authority to <b>Force Log</b> a missing catch or <b>Delete</b> an invalid catch globally from the match.</p>
+                    <h4 class="text-blue-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">HOW TO START OR JOIN</h4>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
+                        <p>Every tournament revolves around a <b>4-Digit Room PIN</b>. The Steward creates the match and receives the PIN. They shout this PIN down the beach or post it in your WhatsApp group.</p>
+                        <p>Competitors tap "Join as Competitor" and enter that exact PIN to link their phones to the tournament.</p>
+                    </div>
+                </section>
+                <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h4 class="text-orange-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">👑 FULL STEWARD'S MANUAL</h4>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
+                        <p><b class="text-slate-900">1. The Command Bridge:</b><br>During a match, tap the <b class="text-slate-900">[ ⚙️ OPTIONS & EXIT ]</b> button at the top of your screen. From here, you can adjust the match clock, trigger a 3-minute "lines up" grace period, or hand over Steward control to someone else if your battery is dying.</p>
+                        <p><b class="text-slate-900">2. God Mode Audits:</b><br>Need to fix an angler's mistake? From the Options menu, tap <b>Review Angler Logs</b>. Select any angler to view their diary. You have the power to <b>Log a Catch</b> directly onto their scorecard, or permanently <b>Delete</b> a bogus fish from the global leaderboard.</p>
+                        <p><b class="text-slate-900">3. The Official Report:</b><br>When the clock hits zero, tap <b>Share Official Report</b>. The app generates a beautiful graphic of the final podium and match stats that you can send straight to WhatsApp.</p>
                     </div>
                 </section>
                 <section class="pt-4 text-center pb-8">
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; forceUpdateApp()" class="pill-btn w-full py-4 transition shadow-md bg-slate-900">
+                    <button onclick="forceUpdateApp()" class="pill-btn w-full py-4 transition shadow-md bg-slate-900">
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.6.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.9.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('guideDrawer').classList.remove('open')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO LOBBY</button>
+                <button onclick="closeGuide()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN</button>
+            </div>
+        </div>
+
+        <div id="inMatchHelpDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50 z-[250] flex flex-col justify-between hidden">
+            <div class="flex-none p-5 bg-white text-center border-b border-slate-200 shadow-sm">
+                <h2 class="font-black text-xl text-blue-600 uppercase tracking-widest"><i class="fa-solid fa-life-ring mr-2"></i> Survival Guide</h2>
+            </div>
+            <div class="scrollable-area p-6 space-y-6 text-slate-900 text-left">
+                <section class="space-y-4">
+                    <p class="font-black text-sm text-slate-900">Don't panic! Here is everything you need to know to log your fish safely.</p>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">How do I log a fish?</h4>
+                        <ol class="list-decimal pl-4 text-xs text-slate-700 space-y-1.5 font-medium">
+                            <li>Tap the "Select Fish Species" box and pick your catch.</li>
+                            <li>Tap the Measurement box. A giant number pad will appear. Type in the size.</li>
+                            <li>Hit the bold blue <b>ADD</b> button. Your phone will vibrate to confirm the fish is saved and synced.</li>
+                        </ol>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">I made a mistake. Can I fix it?</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium">Yes. Look at your Match Journal below. Next to every fish you log, there is an <b>Edit</b> and a <b>Del</b> (Delete) button.</p>
+                        <ul class="list-disc pl-4 text-xs text-slate-700 space-y-1 mt-2 font-medium">
+                            <li>Tap <b>Edit</b> to put the fish back into the entry boxes so you can fix the size.</li>
+                            <li>Tap <b>Del</b> to remove it entirely. The app will double-check with you before deleting anything.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">How do I check the scores?</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium">The blue "Island" at the very top of your screen shows your current Rank and Points. To see everyone else, tap the floating <b>🏆 CLICK FOR LIVE LEADERBOARD</b> button at the bottom of your screen. <i>Hint: You can tap anyone's name on that leaderboard to peek at exactly what they are catching!</i></p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">Will this drain my battery?</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium">No. ShoreScore does not have a "sleep" button. When you are done logging a fish, just press your phone's physical power button to turn the screen off and drop it in your pocket. The exact second you wake your screen up, the app will instantly reconnect and download any new fish caught by the rest of the beach.</p>
+                    </div>
+                </section>
+            </div>
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
+                <button onclick="closeInMatchHelp()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
             </div>
         </div>
 
@@ -675,11 +742,11 @@
            <div class="hidden"><button id="tab-standings"></button><button id="tab-record"></button></div>
             <div id="historyContent" class="scrollable-area p-4 text-center"></div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; closeHistoryDetail()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO MATCH LIST</button>
+                <button onclick="closeHistoryDetail()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO MATCH LIST</button>
             </div>
         </div>
 
-        <div id="leaderboardDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[101] flex flex-col justify-between">
+        <div id="leaderboardDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[101] flex flex-col justify-between hidden">
             <div class="flex-none grid grid-cols-4 border border-blue-600 rounded-2xl mx-4 mt-6 shadow-lg overflow-hidden bg-blue-50">
                 <div class="col-span-3 py-3 px-4 flex flex-col items-start justify-center border-r border-blue-200">
                     <span class="text-[10px] font-black uppercase tracking-widest mb-1 opacity-80 text-blue-900">👑 Match Biggest Fish</span>
@@ -699,32 +766,32 @@
             <div id="leaderboardList" class="scrollable-area p-4 space-y-2 text-center mt-1"></div>
             
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('leaderboardDrawer').classList.remove('open')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
+                <button onclick="closeLeaderboard()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
             </div>
         </div>
 
-        <div id="optionsDrawer" class="drawer-left fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[101] flex flex-col shadow-2xl justify-between">
+        <div id="optionsDrawer" class="drawer-left fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[101] flex flex-col shadow-2xl justify-between hidden">
             <div class="flex-none p-5 text-center mt-4">
                 <h2 class="font-black text-xl text-blue-600 uppercase tracking-[0.2em] flex items-center justify-center"><i class="fa-solid fa-sliders mr-2"></i> Match Options</h2>
                 <div class="mt-3"><span id="stewardPinDisplay" class="text-xs text-slate-600 font-black border border-slate-300 bg-white shadow-sm px-4 py-1.5 rounded-full tracking-widest">PIN: ----</span></div>
             </div>
             <div class="scrollable-area p-5 space-y-4 text-center max-w-sm mx-auto w-full">
                 
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest shadow-sm mb-6">
+                <button onclick="leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest shadow-sm mb-6">
                     <i class="fa-solid fa-person-walking-arrow-right mr-2 text-white"></i> Leave Match Early
                 </button>
 
                 <div id="stewardControlsGroup" class="hidden space-y-4 pt-4 border-t border-slate-300">
                     <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Steward Desk</h3>
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; stewardReviewLogs()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-list-check mr-2 text-base"></i> Review Angler Logs</button>
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; transferSteward()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-right-left mr-3 text-base"></i> Transfer Control</button>
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; endMatchEarly(true)" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-clock mr-2 text-base"></i> Adjust Match Clock</button>
+                    <button onclick="stewardReviewLogs()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-list-check mr-2 text-base"></i> Review Angler Logs</button>
+                    <button onclick="transferSteward()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-right-left mr-3 text-base"></i> Transfer Control</button>
+                    <button onclick="endMatchEarly(true)" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-clock mr-2 text-base"></i> Adjust Match Clock</button>
                     <button id="stewardReportBtn" onclick="generateOfficialMasterReport()" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md mt-4"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
                 </div>
                 
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; closeOptionsDrawer()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
+                <button onclick="closeOptionsDrawer()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
             </div>
         </div>
 
@@ -734,18 +801,18 @@
             </div>
             <div id="stewardRosterList" class="scrollable-area p-4 space-y-2 text-center"></div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; stewardCloseLogs()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO OPTIONS</button>
+                <button onclick="stewardCloseLogs()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO OPTIONS</button>
             </div>
         </div>
 
         <div id="stewardLogDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50 z-[103] flex flex-col hidden justify-between">
             <div class="flex-none p-5 bg-white text-center border-b border-slate-200 shadow-sm">
                 <h3 class="text-base font-black text-slate-900 uppercase tracking-tight mt-2" id="auditAnglerName">Angler Name</h3>
-                <button id="godModeAddBtn" class="pill-btn w-full text-[11px] tracking-widest py-4 mt-4 shadow-md"><i class="fa-solid fa-plus mr-2"></i> LOG CATCH FOR ANGLER</button>
+                <button onclick="openStewardGodModal()" id="godModeAddBtn" class="pill-btn w-full text-[11px] tracking-widest py-4 mt-4 shadow-md"><i class="fa-solid fa-plus mr-2"></i> LOG CATCH FOR ANGLER</button>
             </div>
             <div id="stewardCatchList" class="scrollable-area p-4 space-y-2 text-center mt-1"></div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
-                <button onclick="try{navigator.vibrate(50);}catch(e){}; document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);" class="pill-btn btn-destructive w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> CLOSE AUDIT</button>
+                <button onclick="closeStewardLogDrawer()" class="pill-btn btn-destructive w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> CLOSE AUDIT</button>
             </div>
         </div>
 
@@ -753,7 +820,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue, update, get, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set, onValue, update, get, remove, off } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAEDi6Zr6eR88jfCiBE05zTiXaRtd3dioY",
@@ -813,9 +880,31 @@
         let godTargetAnglerId = null;
         let godTargetAnglerName = "";
 
-        // V10.6.0 UI Functions
-        window.openOptionsDrawer = () => { document.getElementById('optionsDrawer').classList.add('open'); };
-        window.closeOptionsDrawer = () => { document.getElementById('optionsDrawer').classList.remove('open'); };
+        // V10.9.0 UI Functions
+        function haptic() {
+            try { 
+                if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                    navigator.vibrate(50); 
+                }
+            } catch(e) {}
+        }
+        
+        window.openOptionsDrawer = () => { haptic(); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); };
+        window.closeOptionsDrawer = () => { haptic(); document.getElementById('optionsDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('hidden'), 300); };
+        window.openInMatchHelp = () => { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('open'), 10); };
+        window.closeInMatchHelp = () => { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('hidden'), 300); };
+        
+        function openGuide() { haptic(); document.getElementById('guideDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('guideDrawer').classList.add('open'), 10); }
+        function closeGuide() { haptic(); document.getElementById('guideDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('guideDrawer').classList.add('hidden'), 300); }
+        function closeInstallGuide() { haptic(); document.getElementById('installModal').classList.add('hidden'); }
+        function openStewardDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
+        function closeStewardDrawer() { haptic(); closeOptionsDrawer(); }
+        function openLeaderboard() { haptic(); document.getElementById('leaderboardDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('leaderboardDrawer').classList.add('open'), 10); }
+        function closeLeaderboard() { haptic(); document.getElementById('leaderboardDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('leaderboardDrawer').classList.add('hidden'), 300); }
+        function openStewardGodModal() { haptic(); document.getElementById('stewardGodModal').classList.remove('hidden'); }
+        function closeStewardGodModal() { haptic(); document.getElementById('stewardGodModal').classList.add('hidden'); }
+        function closeCustomEndModal() { haptic(); document.getElementById('customEndModal').classList.add('hidden'); }
+        function closeStewardLogDrawer() { haptic(); document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300); }
 
         function getSpeciesBadge(pts) {
             if (pts === 25) return `<span class="pts-badge pts-25 shadow-sm">25</span>`;
@@ -854,7 +943,6 @@
             touchStartTime = Date.now();
             islandPressTimer = setTimeout(() => {
                 isLongPress = true;
-                try{navigator.vibrate(50);}catch(err){};
                 openOptionsDrawer();
             }, 600); 
         }
@@ -1044,7 +1132,7 @@
         }
 
         function navTo(viewId) {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             document.querySelectorAll('.view-frame').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${viewId}`).classList.remove('hidden');
             state.view = viewId;
@@ -1058,6 +1146,13 @@
         }
 
         function closeAndWipeSession() {
+            haptic();
+            if (state.pin && db) {
+                try { off(ref(db, 'matches/' + state.pin)); } catch(e) {}
+            }
+            closeOptionsDrawer();
+            closeInMatchHelp();
+            
             localStorage.removeItem('matchState');
             localStorage.removeItem('userRole');
             state = { view: 'home', name: '', venue: 'Local Beach', isHost: false, isSteward: false, pin: '', format: 'length', endTime: null, graceEndTime: null, myCatches: [], editingId: null, status: 'idle' };
@@ -1079,6 +1174,7 @@
         }
 
         function proceedToRoleSelection() {
+            haptic();
             let pName = document.getElementById('playerName').value || "";
             if (!pName) { alert("Please enter your Name to continue."); return; }
             pName = pName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
@@ -1090,6 +1186,7 @@
         }
 
         function exitApp() {
+            haptic();
             if (confirm("CLOSE APP?\n\nThis will clear current lobby inputs. History remains untouched.")) {
                 closeAndWipeSession();
                 try { window.close(); } catch(e) {}
@@ -1098,6 +1195,7 @@
         }
 
         async function forceUpdateApp() {
+            haptic();
             if (confirm("Hard Reset App Cache?")) {
                 const spin = document.getElementById('updateSpinnerInternal');
                 if (spin) spin.classList.add('fa-spin');
@@ -1151,7 +1249,7 @@
 
         let atmPin = "";
         function atmPress(num) {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             if (atmPin.length < 4) {
                 atmPin += num;
                 updateAtm();
@@ -1160,7 +1258,7 @@
         }
 
         function atmDelete() {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             atmPin = atmPin.slice(0, -1);
             updateAtm();
         }
@@ -1173,6 +1271,7 @@
         }
 
         function openTimeKeypad() {
+            haptic();
             timeAtmInput = "";
             timeAtmIsPM = true;
             document.getElementById('customEndModal').classList.add('hidden');
@@ -1181,7 +1280,7 @@
         }
 
         function timeAtmPress(num) {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             if (timeAtmInput.length >= 4) return;
             let pending = timeAtmInput + num;
             if (pending.length === 2) { 
@@ -1196,7 +1295,7 @@
             updateTimeAtmDisplay();
         }
         function timeAtmDelete() {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             timeAtmInput = timeAtmInput.slice(0, -1);
             updateTimeAtmDisplay();
         }
@@ -1217,6 +1316,7 @@
             } else { submitBtn.classList.add('hidden'); }
         }
         function submitTimeAtm() {
+            haptic();
             if(timeAtmInput.length !== 4) return;
             let hh = parseInt(timeAtmInput.slice(0,2));
             let mm = parseInt(timeAtmInput.slice(2,4));
@@ -1237,7 +1337,7 @@
             showNotification(`Match finish set to ${timeAtmInput.slice(0,2)}:${timeAtmInput.slice(2,4)}`);
         }
 
-        function closeTimeKeypad() { document.getElementById('timeKeypadModal').classList.add('hidden'); }
+        function closeTimeKeypad() { haptic(); document.getElementById('timeKeypadModal').classList.add('hidden'); }
 
         function listenToCloud() {
             if(!state.pin) return;
@@ -1315,6 +1415,7 @@
         }
 
         function createMatch() {
+            haptic();
             state.name = document.getElementById('playerName').value || "Steward";
             state.venue = "Local Beach";
             state.isHost = true; state.isSteward = true; 
@@ -1346,6 +1447,7 @@
         }
 
         function connectToMatch() {
+            haptic();
             state.name = document.getElementById('playerName').value || "Angler";
             state.venue = "Local Beach";
             state.pin = atmPin; state.status = 'waiting';
@@ -1369,7 +1471,7 @@
             });
         }
 
-        function exitWaitingRoom() { if (confirm("Cancel session?")) { if (state.isHost) { remove(ref(db, 'matches/' + state.pin)); } closeAndWipeSession(); } }
+        function exitWaitingRoom() { haptic(); if (confirm("Cancel session?")) { if (state.isHost) { remove(ref(db, 'matches/' + state.pin)); } closeAndWipeSession(); } }
 
         let audioCtx; try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
 
@@ -1386,6 +1488,7 @@
         function playAlert() { playTone(880, 0.4); setTimeout(()=>playTone(440, 0.4), 400); }
 
         function triggerHypeStart() {
+            haptic();
             if(!state.isHost) return;
             const matchDuration = parseFloat(document.getElementById('hostDuration').value);
             update(ref(db, 'matches/' + state.pin), { status: 'hype', endTime: Date.now() + (matchDuration * 3600000) + 6000 });
@@ -1530,7 +1633,7 @@
         }
 
         function triggerConcentricAnimation() {
-            try { navigator.vibrate(50); } catch(e){}
+            haptic();
             const btn = document.getElementById('btnRecord');
             if(!btn) return;
             const originalText = btn.innerHTML;
@@ -1543,6 +1646,7 @@
         }
 
         function recordCatch() {
+            haptic();
             let selectEl = document.getElementById('inputSpecies');
             let species = selectEl.value;
             if(!species) { return alert("Select species first!"); }
@@ -1581,6 +1685,7 @@
         }
 
         function editCatch(id) {
+            haptic();
             let obj = state.myCatches.find(x => x.id === id);
             if(obj) {
                 document.getElementById('inputSpecies').value = obj.species;
@@ -1592,6 +1697,7 @@
         }
 
         function deleteCatch(id) {
+            haptic();
             if (!confirm("Are you sure you want to remove this fish from your scorecard?")) return;
             state.myCatches = state.myCatches.filter(x => x.id !== id);
             if (state.format === 'speciesHunt') {
@@ -1625,8 +1731,8 @@
                         <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none block mt-1">${c.time}</span>
                     </div>
                     <div class="flex items-center pr-1 space-x-1">
-                        <button onclick="try{navigator.vibrate(50);}catch(e){}; editCatch('${c.id}')" class="text-blue-600 bg-blue-50 px-3 py-2 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-blue-100" aria-label="Edit"><span class="text-[10px] font-black uppercase pointer-events-none">Edit</span></button>
-                        <button onclick="try{navigator.vibrate(50);}catch(e){}; deleteCatch('${c.id}')" class="text-red-600 bg-red-50 px-3 py-2 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-red-100" aria-label="Delete"><span class="text-[10px] font-black uppercase pointer-events-none">Del</span></button>
+                        <button onclick="editCatch('${c.id}')" class="text-blue-600 bg-blue-50 px-3 py-2 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-blue-100" aria-label="Edit"><span class="text-[10px] font-black uppercase pointer-events-none">Edit</span></button>
+                        <button onclick="deleteCatch('${c.id}')" class="text-red-600 bg-red-50 px-3 py-2 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-red-100" aria-label="Delete"><span class="text-[10px] font-black uppercase pointer-events-none">Del</span></button>
                     </div>`;
                 list.appendChild(div);
             });
@@ -1689,7 +1795,7 @@
         }
 
         function openCatchFeed(aid) {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             const aData = globalMatchData.anglers[aid];
             if(!aData) return;
             const content = document.getElementById('feedContent');
@@ -1720,12 +1826,14 @@
         }
 
         function closeCatchFeed() { 
+            haptic();
             let modal = document.getElementById('catchFeedModal');
             modal.classList.add('translate-x-full');
             setTimeout(() => { modal.classList.add('hidden'); }, 300);
         }
 
         function stewardReviewLogs() {
+            haptic();
             if(!globalMatchData || !globalMatchData.anglers) return;
             const drawer = document.getElementById('stewardRosterDrawer');
             const list = document.getElementById('stewardRosterList');
@@ -1741,12 +1849,13 @@
         }
         
         function stewardCloseLogs() {
+            haptic();
             document.getElementById('stewardRosterDrawer').classList.remove('open');
             setTimeout(() => document.getElementById('stewardRosterDrawer').classList.add('hidden'), 300);
         }
 
         function stewardOpenAngler(aid, aName) {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             godTargetAnglerId = aid;
             godTargetAnglerName = aName;
             document.getElementById('auditAnglerName').innerText = `AUDIT: ${aName}`;
@@ -1795,7 +1904,7 @@
         }
 
         function stewardDeleteCatch(aid, cid) {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             if(!confirm("GOD MODE: Delete this catch? It will be removed globally.")) return;
             let cData = globalMatchData.anglers[aid].catches;
             let arr = Array.isArray(cData) ? cData : Object.values(cData);
@@ -1813,10 +1922,6 @@
             setTimeout(refreshStewardCatchList, 300);
         }
 
-        document.getElementById('godModeAddBtn').addEventListener('click', () => {
-            document.getElementById('stewardGodModal').classList.remove('hidden');
-        });
-
         function godCheckSpeciesSelection() {
             const select = document.getElementById('godInputSpecies');
             if (select.value === "[ADD OTHER]") {
@@ -1831,6 +1936,7 @@
         }
 
         function submitGodModeCatch() {
+            haptic();
             if(!godTargetAnglerId) return;
             let species = document.getElementById('godInputSpecies').value;
             if(!species) { alert("Select species first!"); return; }
@@ -1890,109 +1996,179 @@
             if(document.getElementById('godInputKg')) document.getElementById('godInputKg').value = ""; 
             if(document.getElementById('godInputGrammes')) document.getElementById('godInputGrammes').value = "";
             
-            document.getElementById('stewardGodModal').classList.add('hidden');
+            closeStewardGodModal();
             showNotification("Catch forcibly logged.");
             setTimeout(refreshStewardCatchList, 300);
         }
 
-        function generateOfficialMasterReport() {
+        window.tempFallbackData = null; 
+
+        async function generateOfficialMasterReport() {
+            haptic();
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
+            
+            const btn = document.getElementById('stewardReportBtn');
+            const hBtn = document.getElementById('historyReportBtn');
+            const targetBtn = document.getElementById('optionsDrawer').classList.contains('open') ? btn : hBtn;
+            
+            if(targetBtn) { targetBtn.innerText = "GENERATING IMAGE... PLEASE WAIT"; targetBtn.classList.add('reporting'); }
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format);
+            buildAndShareGraphicalReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn);
         }
 
-        function generateHistoricReport() {
+        async function generateHistoricReport() {
+            haptic();
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if(!h || !h.standings) return alert("No leaderboard data available.");
-            buildAndShareReport(h.standings, h.venue, h.date, h.format);
+            
+            const btn = document.querySelector(`button[onclick="generateHistoricReport()"]`);
+            if(btn) { btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin mr-2'></i> GENERATING..."; btn.classList.add('reporting'); }
+            buildAndShareGraphicalReport(h.standings, h.venue, h.date, h.format, btn, true);
         }
 
-        function buildAndShareReport(arr, venueName, matchDate, matchFormat) {
+        async function buildAndShareGraphicalReport(arr, venueName, matchDate, matchFormat, buttonRef, isHistory = false) {
             const fmt = matchFormat || state.format; 
-            let podium = arr.slice(0, 3);
-            let biggestVal = 0, biggestStr = "N/A";
-            let hourCounts = {}, allSpecies = new Set(), totalFish = 0;
-            let matchTotalPhysicalSize = 0;
-            let spCounts = {}; 
+            window.tempFallbackData = { arr: arr, venueName: venueName, matchDate: matchDate, fmt: fmt }; 
 
+            let podium = arr.slice(0, 3), others = arr.slice(3, 15), biggestVal = 0, biggestStr = "N/A", hourCounts = {}, allSpecies = new Set(), totalFish = 0, matchTotalPhysicalSize = 0;
             arr.forEach(a => {
                 if(a.catches) {
                     let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
                     totalFish += cList.length;
                     cList.forEach(f => {
-                        allSpecies.add(f.species);
-                        spCounts[f.species] = (spCounts[f.species] || 0) + 1; 
-                        matchTotalPhysicalSize += (parseFloat(f.size) || 0);
-                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; }
+                        allSpecies.add(f.species); matchTotalPhysicalSize += (parseFloat(f.size) || 0);
+                        if(f.size > biggestVal) { biggestVal = f.size; biggestStr = `${a.name} - ${f.species} (${f.display || f.size})`; }
                         if(f.ts) { const hr = new Date(f.ts).getHours(); hourCounts[hr] = (hourCounts[hr] || 0) + 1; }
                     });
                 }
             });
 
-            let matchTotalRaw = arr.reduce((sum, a) => sum + (a.score || 0), 0);
+            let timelineHtml = "";
+            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
+            if(sortedHours.length > 0) {
+                let maxHourVal = Math.max(...Object.values(hourCounts));
+                timelineHtml = sortedHours.map(hr => {
+                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "", nHr = parseInt(hr), nextHr = nHr === 23 ? 0 : nHr + 1;
+                    return `<div style="font-size: 20px; font-weight: bold; color: #475569; padding: 6px 0;">${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00 <span style="color: #0f172a; float: right;">${hourCounts[hr]} Fish${isFire}</span></div>`;
+                }).join('');
+            } else { timelineHtml = `<div style="font-size: 20px; font-weight: bold; color: #94a3b8;">No catches recorded.</div>`; }
 
-            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📅 ${matchDate}\n\n`;
+            let poster = document.createElement('div');
+            poster.id = "temp-poster";
+            poster.style.position = "fixed"; poster.style.top = "0"; poster.style.left = "0"; poster.style.zIndex = "-9999"; poster.style.opacity = "0.01"; poster.style.pointerEvents = "none";
+            poster.style.width = "750px"; poster.style.backgroundColor = "#f8fafc"; poster.style.padding = "40px"; poster.style.fontFamily = "'Inter', sans-serif"; poster.style.color = "#0f172a";
             
-            t += `👑 *PODIUM*\n`;
+            poster.innerHTML = `
+                <div style="background: white; border: 4px solid #0284c7; border-radius: 32px; padding: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+                    <div style="text-align: center; border-bottom: 4px solid #f1f5f9; padding-bottom: 30px; margin-bottom: 30px;">
+                        <h1 style="font-size: 46px; font-weight: 900; color: #0284c7; margin: 0; text-transform: uppercase; letter-spacing: -1px;">SHORESCORE</h1>
+                        <h2 style="font-size: 24px; font-weight: 900; color: #0f172a; margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 4px;">Official Match Report</h2>
+                        <p style="font-size: 22px; font-weight: bold; color: #64748b; margin: 15px 0 0 0;">DATE: ${matchDate} &nbsp;|&nbsp; VENUE: ${venueName}</p>
+                    </div>
+                    
+                    <h2 style="font-size: 32px; font-weight: 900; margin: 0 0 20px 0; text-transform: uppercase; color: #0f172a;">THE PODIUM</h2>
+                    <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px; padding: 25px; margin-bottom: 40px;">
+                        <div style="font-size: 38px; font-weight: 900; color: #0f172a; margin-bottom: 15px;">
+                            1ST: <span style="color: #0284c7;">${podium[0]?.name || '-'}</span> <span style="float: right; color: #0284c7;">${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}</span>
+                        </div>
+                        <div style="font-size: 28px; font-weight: bold; color: #334155; margin-bottom: 15px; border-top: 2px dashed #cbd5e1; padding-top: 15px;">
+                            2ND: ${podium[1]?.name || '-'} <span style="float: right; color: #64748b;">${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}</span>
+                        </div>
+                        <div style="font-size: 26px; font-weight: bold; color: #475569; border-top: 2px dashed #cbd5e1; padding-top: 15px;">
+                            3RD: ${podium[2]?.name || '-'} <span style="float: right; color: #64748b;">${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; gap: 30px; margin-bottom: 40px;">
+                        <div style="flex: 1; background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 20px; padding: 25px;">
+                            <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #1e3a8a;">MATCH HIGHLIGHTS</h2>
+                            <p style="font-size: 20px; font-weight: bold; margin: 0 0 10px 0; color: #0f172a;"><b>Biggest Fish:</b><br><span style="color: #0284c7;">${biggestStr.replace(/<[^>]*>?/gm, '')}</span></p>
+                            <p style="font-size: 20px; font-weight: bold; margin: 0; color: #0f172a;"><b>Diversity:</b><br><span style="color: #0284c7;">${speciesSet.size} Unique Species</span></p>
+                            <p style="font-size: 20px; font-weight: bold; margin: 10px 0 0 0; color: #0f172a;"><b>Total Catch:</b><br><span style="color: #0284c7;">${totalFish} Fish overall</span></p>
+                        </div>
+                        <div style="flex: 1; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px; padding: 25px;">
+                            <h2 style="font-size: 24px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #0f172a;">HOURLY TIMELINE</h2>
+                            ${timelineHtml}
+                        </div>
+                    </div>
+
+                    ${others.length > 0 ? `
+                    <h2 style="font-size: 32px; font-weight: 900; margin: 0 0 15px 0; text-transform: uppercase; color: #0f172a; border-bottom: 3px solid #f1f5f9; padding-bottom: 10px;">FULL STANDINGS (4-${arr.length})</h2>
+                    <div style="border: 2px solid #e2e8f0; border-radius: 16px; overflow: hidden; margin-bottom: 30px;">
+                        ${others.map((a, i) => `
+                        <div style="font-size: 22px; font-weight: bold; padding: 12px 20px; background: ${i%2===0?'#ffffff':'#f8fafc'}; color: #334155;">
+                            <span style="color: #94a3b8; font-weight: 900; margin-right: 15px;">#${i+4}</span> ${a.name} <span style="float: right; color: #0f172a; font-weight: 900;">${formatScoreDisplay(a.score, fmt, true)}</span>
+                        </div>`).join('')}
+                    </div>
+                    ` : ''}
+                    <p style="text-align: center; font-size: 16px; font-weight: bold; color: #94a3b8; margin: 40px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Generated by ShoreScore V10.9.0</p>
+                </div>
+            `;
+            
+            document.body.appendChild(poster);
+            
+            await new Promise(r => setTimeout(r, 150));
+            
+            try {
+                await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 500))]);
+                
+                const canvas = await html2canvas(poster, { scale: 2, useCORS: true, backgroundColor: '#f8fafc', width: 750, windowWidth: 750 });
+                const imgData = canvas.toDataURL('image/jpeg', 0.85);
+                
+                document.getElementById('reportPreviewImage').src = imgData;
+                document.getElementById('reportPreviewImage').classList.remove('hidden');
+                document.getElementById('reportPreviewInstruction').innerText = "👇 Long-press image to Save or Share";
+                document.getElementById('reportPreviewModal').classList.remove('hidden');
+                
+            } catch(err) {
+                console.error("Canvas Gen Error:", err);
+                document.getElementById('reportPreviewImage').classList.add('hidden');
+                document.getElementById('reportPreviewInstruction').innerText = "Image Generation Failed. Please use Plain Text sharing.";
+                document.getElementById('reportPreviewModal').classList.remove('hidden');
+                
+            } finally {
+                document.body.removeChild(poster);
+                if(buttonRef) { 
+                    if(isHistory) { buttonRef.innerHTML = "SHARE CARD"; } 
+                    else { buttonRef.innerHTML = "Share Official Report"; }
+                    buttonRef.classList.remove('reporting'); 
+                }
+            }
+        }
+
+        function shareTextFallbackFromPreview() {
+            haptic();
+            if (window.tempFallbackData) { const { arr, venueName, matchDate, fmt } = window.tempFallbackData; buildAndShareTextFallback(arr, venueName, matchDate, fmt); }
+        }
+
+        function buildAndShareTextFallback(arr, venueName, matchDate, fmt) {
+            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📅 ${matchDate}\n\n👑 *PODIUM*\n`;
+            let podium = arr.slice(0, 3);
             t += `🥇 1st: ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n`;
             t += `🥈 2nd: ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}\n`;
             t += `🥉 3rd: ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n`;
-
-            if (totalFish > 0) {
-                t += `📊 *SPECIES BREAKDOWN*\n`;
-                let spArr = Object.entries(spCounts).sort((a,b) => b[1] - a[1]);
-                spArr.forEach(sp => {
-                    let pct = Math.round((sp[1] / totalFish) * 100);
-                    t += `▪️ ${sp[0]}: ${pct}% (${sp[1]} Fish)\n`;
-                });
-                t += `\n`;
-            }
-            
-            t += `📈 *MATCH STATS*\n`;
-            if (fmt !== 'speciesHunt') {
-                t += `🐋 Biggest Fish: ${biggestStr.replace(/<[^>]*>?/gm, '')}\n`;
-            }
-            t += `🧬 Diversity: ${allSpecies.size} Unique Species\n`;
-            
-            if (fmt === 'speciesHunt') {
-                t += `🎣 Match Total: ${totalFish} Fish\n\n`;
-            } else if (fmt.startsWith('length')) {
-                t += `📏 Match Total Length: ${formatTotalLength(matchTotalPhysicalSize)} (${totalFish} Fish)\n\n`;
-            } else {
-                t += `⚖️ Match Total Weight: ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Fish)\n\n`;
-            }
-
-            t += `⏱️ *HOURLY TIMELINE*\n`;
-            let sortedHours = Object.keys(hourCounts).sort((a,b) => parseInt(a) - parseInt(b));
-            if(sortedHours.length === 0) { 
-                t += `▪️ No captures recorded.\n\n`; 
-            } else {
-                let maxHourVal = Math.max(...Object.values(hourCounts));
-                sortedHours.forEach(hr => {
-                    let isFire = hourCounts[hr] === maxHourVal ? " 🔥" : "";
-                    let nHr = parseInt(hr);
-                    let nextHr = nHr === 23 ? 0 : nHr + 1;
-                    t += `▪️ ${nHr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00: ${hourCounts[hr]} Fish${isFire}\n`;
-                });
-                t += `\n`;
-            }
-
             t += `🏆 *FULL STANDINGS*\n`;
-            arr.forEach((a, i) => { 
-                t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
-            });
-            
-            t += `\n_Generated by ShoreScore V10.6.0_`;
-
-            if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); }
-            else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
+            arr.forEach((a, i) => { t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; });
+            t += `\n_Generated by ShoreScore V10.9.0_`;
+            if (navigator.share) { navigator.share({ title: 'Official Report', text: t }); } else { window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); }
         }
 
-        function shareUnifiedReport() { generateOfficialMasterReport(); }
-        function endMatchEarly(grace) { if(state.isSteward && state.pin) { if(grace) { closeOptionsDrawer(); document.getElementById('customEndModal').classList.remove('hidden'); } } }
-        function stewardSetNewEnd(mins) { closeCustomEndModal(); closeOptionsDrawer(); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
-        function transferSteward() { if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); closeOptionsDrawer(); } } }
-        function leaveMatchEarly() { if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { saveHistory(true); closeAndWipeSession(); } }
+        function closeReportPreview() { haptic(); document.getElementById('reportPreviewModal').classList.add('hidden'); }
+
+        function endMatchEarly(grace) { haptic(); if(state.isSteward && state.pin) { if(grace) { closeOptionsDrawer(); document.getElementById('customEndModal').classList.remove('hidden'); } } }
+        function stewardSetNewEnd(mins) { haptic(); closeCustomEndModal(); closeOptionsDrawer(); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
+        function transferSteward() { haptic(); if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); closeOptionsDrawer(); } } }
+        
+        function leaveMatchEarly() { 
+            haptic(); 
+            if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { 
+                if (state.pin && db) {
+                    try { off(ref(db, 'matches/' + state.pin)); } catch(e) {}
+                }
+                saveHistory(true); 
+                closeAndWipeSession(); 
+            } 
+        }
         
         function lockdownMatch(isHostPushing) { 
             clearInterval(clockInterval); 
@@ -2048,7 +2224,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         ${showLive ? '<span class="text-[9px] bg-red-600 px-2 py-1 rounded-full text-white font-black animate-pulse">LIVE</span>' : ''}
-                        <button onclick="try{navigator.vibrate(50);}catch(e){}; deleteHistoryItem('${m.id}'); event.stopPropagation();" class="text-slate-400 active:text-red-600 text-xl ml-2"><i class="fa-solid fa-trash-can"></i></button>
+                        <button onclick="deleteHistoryItem('${m.id}'); event.stopPropagation();" class="text-slate-400 active:text-red-600 text-xl ml-2"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 </div>
                 <div class="flex items-start justify-between gap-4 mt-2">
@@ -2089,7 +2265,7 @@
                 </div>`;
 
                 let wrapper = document.createElement('div');
-                wrapper.innerHTML = `<div class="max-w-md mx-auto relative cursor-pointer active:scale-[0.98] transition-all bg-white rounded-2xl neon-border-glow border p-4 pb-0 space-y-4 overflow-hidden mb-4 text-left shadow-sm" onclick="try{navigator.vibrate(50);}catch(e){}; viewPastRecord('${m.id}')">${cardHtml}</div>`;
+                wrapper.innerHTML = `<div class="max-w-md mx-auto relative cursor-pointer active:scale-[0.98] transition-all bg-white rounded-2xl neon-border-glow border p-4 pb-0 space-y-4 overflow-hidden mb-4 text-left shadow-sm" onclick="viewPastRecord('${m.id}')">${cardHtml}</div>`;
                 let card = wrapper.firstElementChild;
                 
                 if(m.id && i < 8) r.appendChild(card); else a.appendChild(card); 
@@ -2114,12 +2290,12 @@
         }
 
         function stopHistoryClock() { if (historyTick) clearInterval(historyTick); }
-        function deleteHistoryItem(id) { try{navigator.vibrate(50);}catch(e){}; if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
-        function toggleArchive() { try{navigator.vibrate(50);}catch(e){}; isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
-        function viewPastRecord(id) { try{navigator.vibrate(50);}catch(e){}; activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
+        function deleteHistoryItem(id) { haptic(); if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
+        function toggleArchive() { haptic(); isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
+        function viewPastRecord(id) { haptic(); activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
         
         function switchHistoryTab(tab) {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active'); }); document.getElementById(`tab-${tab}`).classList.add('active');
             
@@ -2191,7 +2367,7 @@
                     <div class="text-slate-900 text-sm font-bold flex items-center shrink-0">
                         <i class="fa-solid fa-calendar-days mr-2 text-blue-600"></i> ${m.date}
                     </div>
-                    <button onclick="try{navigator.vibrate(50);}catch(e){}; generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
+                    <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
                         <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
                     </button>
                 </div>
@@ -2230,7 +2406,7 @@
                 let tableHtml = `<div class="divide-y divide-slate-200 mt-0 bg-white rounded-b-xl border border-slate-200 border-t-0 shadow-sm">${m.standings.map((a, i) => {
                     let catchCount = a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0;
                     return `
-                    <div onclick="try{navigator.vibrate(50);}catch(e){}; openPastCatchFeed('${a.id || a.name}')" class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} active:bg-slate-100 cursor-pointer transition-all duration-200">
+                    <div onclick="openPastCatchFeed('${a.id || a.name}')" class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} active:bg-slate-100 cursor-pointer transition-all duration-200">
                         <div class="flex items-center space-x-3 flex-1 min-w-0">
                             <div class="${i===0?'bg-blue-100 text-blue-700':'bg-slate-200 text-slate-600'} font-black p-3 rounded-full text-xs shrink-0">R${i+1}</div>
                             <div class="flex flex-col min-w-0 text-left">
@@ -2266,7 +2442,7 @@
         }
 
         window.openPastCatchFeed = (aid) => {
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
             if (!h || !h.standings) return;
             const a = h.standings.find(s => s.id === aid || s.name === aid);
@@ -2285,7 +2461,7 @@
         };
 
         function closeHistoryDetail() { 
-            try{navigator.vibrate(50);}catch(e){};
+            haptic();
             document.getElementById('historyDetailDrawer').classList.remove('open'); 
             setTimeout(() => { document.getElementById('historyDetailDrawer').classList.add('hidden'); }, 300); 
         }
@@ -2296,7 +2472,7 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            const CURRENT_FALLBACK_VERSION = "10.6.0";
+            const CURRENT_FALLBACK_VERSION = "10.9.0";
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
             fetch('version.json?t=' + new Date().getTime())
@@ -2310,8 +2486,7 @@
                             for(let registration of registrations) { registration.unregister(); }
                         });
                     }
-                })
-                .catch(() => { console.log('Version fetch fallback active.'); });
+                }).catch(() => { console.log('Version fetch fallback active.'); });
                 
             checkInstallStatus();
             
@@ -2325,25 +2500,15 @@
                     
                     if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) {
                         state = oldState;
-                        listenToCloud();
-                        navTo(state.view);
+                        listenToCloud(); navTo(state.view);
                         
                         if (['playing', 'grace'].includes(state.status)) {
-                            syncInputDeckToState();
-                            renderCatchList();
-                            startClock();
-                            updateLiveTally();
-                            if (document.getElementById('stewardPinDisplay')) {
-                                document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----";
-                            }
-                            if (globalMatchData) { 
-                                checkAndFireTicker(); 
-                            }
+                            syncInputDeckToState(); renderCatchList(); startClock(); updateLiveTally();
+                            if (document.getElementById('stewardPinDisplay')) { document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----"; }
+                            if (globalMatchData) { checkAndFireTicker(); }
                         }
                     }
-                } catch(e) { 
-                    closeAndWipeSession(); 
-                }
+                } catch(e) { closeAndWipeSession(); }
             }
         };
 
@@ -2353,72 +2518,19 @@
                 document.getElementById('stewardDrawer').classList.contains('open') || 
                 document.getElementById('guideDrawer').classList.contains('open') || 
                 document.getElementById('optionsDrawer').classList.contains('open') || 
+                document.getElementById('inMatchHelpDrawer').classList.contains('open') || 
                 !document.getElementById('historyDetailDrawer').classList.contains('hidden') || 
                 !document.getElementById('stewardRosterDrawer').classList.contains('hidden') || 
-                !document.getElementById('stewardLogDrawer').classList.contains('hidden')) { 
+                !document.getElementById('stewardLogDrawer').classList.contains('hidden') ||
+                !document.getElementById('reportPreviewModal').classList.contains('hidden')) { 
                 
-                document.getElementById('leaderboardDrawer').classList.remove('open'); 
-                document.getElementById('stewardDrawer').classList.remove('open'); 
-                document.getElementById('guideDrawer').classList.remove('open'); 
-                closeOptionsDrawer();
-                stewardCloseLogs(); 
-                closeHistoryDetail(); 
-                document.getElementById('stewardLogDrawer').classList.remove('open'); 
-                setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300);
+                closeLeaderboard(); closeStewardDrawer(); closeGuide(); closeOptionsDrawer(); closeInMatchHelp();
+                stewardCloseLogs(); closeHistoryDetail(); closeReportPreview(); closeStewardLogDrawer();
             }
         });
 
-        window.proceedToRoleSelection = proceedToRoleSelection;
-        window.triggerHypeStart = triggerHypeStart;
-        window.navTo = navTo;
-        window.createMatch = createMatch;
-        window.connectToMatch = connectToMatch;
-        window.recordCatch = recordCatch;
-        window.editCatch = editCatch;
-        window.deleteCatch = deleteCatch;
-        window.leaveMatchEarly = leaveMatchEarly;
-        window.stewardSetNewEnd = stewardSetNewEnd;
-        window.shareResults = shareResults;
-        window.resetApp = resetApp;
-        window.toggleArchive = toggleArchive;
-        window.viewPastRecord = viewPastRecord;
-        window.switchHistoryTab = switchHistoryTab;
-        window.closeHistoryDetail = closeHistoryDetail;
-        window.forceUpdateApp = forceUpdateApp;
-        window.focusMeasurement = focusMeasurement;
-        window.promptCustomSpecies = promptCustomSpecies;
-        window.exitWaitingRoom = exitWaitingRoom;
-        window.deleteHistoryItem = deleteHistoryItem;
-        window.checkSpeciesSelection = checkSpeciesSelection;
-        window.exitApp = exitApp;
-        window.handleInputFocus = handleInputFocus;
-        window.transferSteward = transferSteward;
-        window.endMatchEarly = endMatchEarly;
-        window.showInstallGuide = showInstallGuide;
-        window.formatScoreDisplay = formatScoreDisplay;
-        window.shareMasterLeaderboard = shareMasterLeaderboard;
-        window.atmPress = atmPress;
-        window.atmDelete = atmDelete;
-        window.openTimeKeypad = openTimeKeypad;
-        window.timeAtmPress = timeAtmPress;
-        window.timeAtmDelete = timeAtmDelete;
-        window.timeAtmToggleAMPM = timeAtmToggleAMPM;
-        window.submitTimeAtm = submitTimeAtm;
-        window.closeTimeKeypad = closeTimeKeypad;
-        window.shareUnifiedReport = shareUnifiedReport;
-        window.closeAndWipeSession = closeAndWipeSession;
-        window.stewardReviewLogs = stewardReviewLogs;
-        window.stewardCloseLogs = stewardCloseLogs;
-        window.stewardOpenAngler = stewardOpenAngler;
-        window.stewardDeleteCatch = stewardDeleteCatch;
-        window.submitGodModeCatch = submitGodModeCatch;
-        window.godCheckSpeciesSelection = godCheckSpeciesSelection;
-        window.openCatchFeed = openCatchFeed;
-        window.closeCatchFeed = closeCatchFeed;
-        window.generateOfficialMasterReport = generateOfficialMasterReport;
-        window.generateHistoricReport = generateHistoricReport;
-        window.syncInputDeckToState = syncInputDeckToState;
-        window.openPastCatchFeed = openPastCatchFeed;
+        // Global Bindings
+        window.proceedToRoleSelection = proceedToRoleSelection; window.triggerHypeStart = triggerHypeStart; window.navTo = navTo; window.createMatch = createMatch; window.connectToMatch = connectToMatch; window.recordCatch = recordCatch; window.editCatch = editCatch; window.deleteCatch = deleteCatch; window.leaveMatchEarly = leaveMatchEarly; window.stewardSetNewEnd = stewardSetNewEnd; window.shareResults = shareResults; window.resetApp = resetApp; window.toggleArchive = toggleArchive; window.viewPastRecord = viewPastRecord; window.switchHistoryTab = switchHistoryTab; window.closeHistoryDetail = closeHistoryDetail; window.forceUpdateApp = forceUpdateApp; window.focusMeasurement = focusMeasurement; window.promptCustomSpecies = promptCustomSpecies; window.exitWaitingRoom = exitWaitingRoom; window.deleteHistoryItem = deleteHistoryItem; window.checkSpeciesSelection = checkSpeciesSelection; window.exitApp = exitApp; window.handleInputFocus = handleInputFocus; window.transferSteward = transferSteward; window.endMatchEarly = endMatchEarly; window.showInstallGuide = showInstallGuide; window.formatScoreDisplay = formatScoreDisplay; window.shareMasterLeaderboard = shareMasterLeaderboard; window.atmPress = atmPress; window.atmDelete = atmDelete; window.openTimeKeypad = openTimeKeypad; window.timeAtmPress = timeAtmPress; window.timeAtmDelete = timeAtmDelete; window.timeAtmToggleAMPM = timeAtmToggleAMPM; window.submitTimeAtm = submitTimeAtm; window.closeTimeKeypad = closeTimeKeypad; window.shareUnifiedReport = shareUnifiedReport; window.closeAndWipeSession = closeAndWipeSession; window.stewardReviewLogs = stewardReviewLogs; window.stewardCloseLogs = stewardCloseLogs; window.stewardOpenAngler = stewardOpenAngler; window.stewardDeleteCatch = stewardDeleteCatch; window.submitGodModeCatch = submitGodModeCatch; window.godCheckSpeciesSelection = godCheckSpeciesSelection; window.openCatchFeed = openCatchFeed; window.closeCatchFeed = closeCatchFeed; window.generateOfficialMasterReport = generateOfficialMasterReport; window.generateHistoricReport = generateHistoricReport; window.syncInputDeckToState = syncInputDeckToState; window.openPastCatchFeed = openPastCatchFeed; window.closeReportPreview = closeReportPreview; window.shareTextFallbackFromPreview = shareTextFallbackFromPreview; window.openGuide = openGuide; window.closeGuide = closeGuide; window.closeInstallGuide = closeInstallGuide; window.openStewardDrawer = openStewardDrawer; window.closeStewardDrawer = closeStewardDrawer; window.openLeaderboard = openLeaderboard; window.closeLeaderboard = closeLeaderboard; window.openStewardGodModal = openStewardGodModal; window.closeStewardGodModal = closeStewardGodModal; window.closeCustomEndModal = closeCustomEndModal; window.closeStewardLogDrawer = closeStewardLogDrawer; window.openOptionsDrawer = openOptionsDrawer; window.closeOptionsDrawer = closeOptionsDrawer; window.openInMatchHelp = openInMatchHelp; window.closeInMatchHelp = closeInMatchHelp;
     </script>
 </body>
 </html>
