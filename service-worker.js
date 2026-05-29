@@ -1,5 +1,5 @@
-/* ShoreScore V10.9.0 Service Worker */
-const CACHE_NAME = 'shorescore-v10.9.0';
+/* ShoreScore V10.9.1 Service Worker */
+const CACHE_NAME = 'shorescore-v10.9.1';
 
 self.addEventListener('install', event => {
     self.skipWaiting(); 
