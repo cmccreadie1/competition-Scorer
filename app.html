@@ -891,7 +891,7 @@
             } catch(e) {}
         }
         
-        function openOptionsDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
+        function openOptionsDrawer() { haptic(); if(document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
         function closeOptionsDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('hidden'), 300); }
         function openInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('open'), 10); }
         function closeInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('hidden'), 300); }
@@ -2483,7 +2483,7 @@
                         
                         if (['playing', 'grace'].includes(state.status)) {
                             syncInputDeckToState(); renderCatchList(); startClock(); updateLiveTally();
-                            if (document.getElementById('stewardPinDisplay')) { document.getElementById('stewardPinDisplay').innerText = state.stewardPin || "----"; }
+                            if (document.getElementById('stewardPinDisplay')) { document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); }
                             if (globalMatchData) { checkAndFireTicker(); }
                         }
                     }
