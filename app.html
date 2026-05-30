@@ -19,7 +19,6 @@
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         
@@ -181,7 +180,7 @@
         .drawer-left.open { transform: translateX(0); }
         .hidden { display: none !important; }
         .history-tab.active { background-color: var(--neon-blue); color: #ffffff; border-color: var(--neon-blue); }
-        #customEndModal, #installModal, #stewardGodModal { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(15px); }
+        #customEndModal, #installModal, #stewardGodModal, #manageModal { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(15px); }
 
         .splash-text { font-size: 3rem; font-weight: 900; color: var(--neon-blue); text-align: center; text-transform: uppercase; letter-spacing: -0.05em; line-height: 1; }
 
@@ -204,18 +203,21 @@
         </div>
     </div>
 
-    <div id="reportPreviewModal" class="fixed inset-0 z-[600] hidden flex flex-col bg-slate-50 p-4">
-        <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
-            <button onclick="closeReportPreview()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
-            <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Scorecard</h2>
-            <div class="w-6"></div>
-        </div>
-        <div class="flex-1 overflow-y-auto pt-4 pb-20 flex flex-col items-center">
-            <p id="reportPreviewInstruction" class="text-xs font-bold text-blue-600 mb-2 uppercase tracking-widest text-center animate-pulse">👇 Long-press image to Save or Share</p>
-            <img id="reportPreviewImage" src="" alt="Match Report" class="w-full max-w-sm rounded-xl shadow-lg border border-slate-300 hidden">
-            <button onclick="shareTextFallbackFromPreview()" class="mt-6 pill-btn w-full max-w-sm py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md">
-                <i class="fa-solid fa-comment-sms mr-2 text-blue-600"></i> SHARE AS PLAIN TEXT
-            </button>
+    <div id="manageModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
+        <div class="match-card w-full max-w-sm p-6 space-y-4 border border-blue-500 shadow-2xl">
+            <div class="text-center border-b border-slate-200 pb-3 mb-2">
+                <h3 class="text-base font-black uppercase tracking-tight text-slate-900"><i class="fa-solid fa-gear mr-2 text-blue-600"></i> Manage Catch</h3>
+                <p class="text-slate-600 text-xs mt-1 leading-relaxed">Update species/size, or remove completely.</p>
+            </div>
+            <div class="grid grid-cols-1 gap-3">
+                <button onclick="handleManageUpdate()" class="pill-btn py-4 text-xs tracking-widest shadow-md border-2 border-blue-600 bg-white !text-blue-700">
+                    <i class="fa-solid fa-pen mr-2"></i> UPDATE FISH
+                </button>
+                <button onclick="handleManageDelete()" class="pill-btn btn-destructive py-4 text-xs tracking-widest shadow-md border-2 border-red-600">
+                    <i class="fa-solid fa-trash mr-2"></i> DELETE FISH
+                </button>
+            </div>
+            <button onclick="closeManageModal()" class="w-full text-slate-500 font-black uppercase text-[10px] tracking-[0.2em] pt-4 pb-2 active:scale-95 transition">Cancel</button>
         </div>
     </div>
 
@@ -375,7 +377,7 @@
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display">
-                    V10.11.0
+                    V10.12.0
                 </div>
             </div>
             
@@ -685,7 +687,7 @@
                     <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
                         <p><b class="text-slate-900">1. The Command Bridge:</b><br>During a match, tap the <b class="text-slate-900">[ ⚙️ OPTIONS & EXIT ]</b> button at the top of your screen. From here, you can adjust the match clock, trigger a 3-minute "lines up" grace period, or hand over Steward control to someone else if your battery is dying.</p>
                         <p><b class="text-slate-900">2. God Mode Audits:</b><br>Need to fix an angler's mistake? From the Options menu, tap <b>Review Angler Logs</b>. Select any angler to view their diary. You have the power to <b>Log a Catch</b> directly onto their scorecard, or permanently <b>Delete</b> a bogus fish from the global leaderboard.</p>
-                        <p><b class="text-slate-900">3. The Official Report:</b><br>When the clock hits zero, tap <b>Share Official Report</b>. The app generates a beautiful graphic of the final podium and match stats that you can send straight to WhatsApp.</p>
+                        <p><b class="text-slate-900">3. The Official Report:</b><br>When the clock hits zero, tap <b>Share Official Report</b>. The app generates a plain-text summary of the final podium and match stats that you can send straight to WhatsApp.</p>
                     </div>
                 </section>
                 <section class="pt-4 text-center pb-8">
@@ -693,7 +695,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.11.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.12.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -718,10 +720,11 @@
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">I made a mistake. Can I fix it?</h4>
-                        <p class="text-xs text-slate-700 leading-relaxed font-medium">Yes. Look at your Match Journal below. Next to every fish you log, there is an <b>Edit</b> and a <b>Del</b> (Delete) button.</p>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium">Yes. Look at your Match Journal below. Next to every fish you log, there is an <b>Edit / Delete</b> button.</p>
                         <ul class="list-disc pl-4 text-xs text-slate-700 space-y-1 mt-2 font-medium">
-                            <li>Tap <b>Edit</b> to put the fish back into the entry boxes so you can fix the size.</li>
-                            <li>Tap <b>Del</b> to remove it entirely. The app will double-check with you before deleting anything.</li>
+                            <li>Tap <b>Edit / Delete</b> to open the manage menu.</li>
+                            <li>Tap <b>Update Fish</b> to put the fish back into the entry boxes so you can fix the size or species.</li>
+                            <li>Tap <b>Delete Fish</b> to remove it entirely.</li>
                         </ul>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
@@ -859,6 +862,7 @@
         };
 
         let activeHistoryId = null;
+        let activeManageId = null;
         let globalMatchData = null;
         let clockInterval = null;
         let hypeInterval = null;
@@ -882,7 +886,37 @@
         let godTargetAnglerId = null;
         let godTargetAnglerName = "";
 
-        // SAFE UI FUNCTIONS
+        let audioCtx; try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+
+        function playSuccessBeep() {
+            if(!audioCtx) return;
+            try {
+                if(audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator(); 
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+                osc.connect(gain); gain.connect(audioCtx.destination); 
+                osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+            } catch(e) {}
+        }
+
+        function playTone(freq, duration) {
+            if(!audioCtx) return;
+            try {
+                if(audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+        function playHorn() { playTone(200, 1.5); }
+        function playAlert() { playTone(880, 0.4); setTimeout(()=>playTone(440, 0.4), 400); }
+
         function haptic() {
             try { 
                 if (typeof navigator !== 'undefined' && navigator.vibrate) {
@@ -906,6 +940,11 @@
         function closeStewardGodModal() { haptic(); document.getElementById('stewardGodModal').classList.add('hidden'); }
         function closeCustomEndModal() { haptic(); document.getElementById('customEndModal').classList.add('hidden'); }
         function closeStewardLogDrawer() { haptic(); document.getElementById('stewardLogDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('stewardLogDrawer').classList.add('hidden'), 300); }
+
+        function openManageModal(id) { haptic(); activeManageId = id; document.getElementById('manageModal').classList.remove('hidden'); }
+        function closeManageModal() { haptic(); activeManageId = null; document.getElementById('manageModal').classList.add('hidden'); }
+        function handleManageUpdate() { if(activeManageId) { editCatch(activeManageId); closeManageModal(); } }
+        function handleManageDelete() { if(activeManageId) { deleteCatch(activeManageId); closeManageModal(); } }
 
         function getSpeciesBadge(pts) {
             if (pts === 25) return `<span class="pts-badge pts-25 shadow-sm">25</span>`;
@@ -1153,6 +1192,7 @@
             }
             closeOptionsDrawer();
             closeInMatchHelp();
+            closeManageModal();
             
             localStorage.removeItem('matchState');
             localStorage.removeItem('userRole');
@@ -1474,20 +1514,6 @@
 
         function exitWaitingRoom() { haptic(); if (confirm("Cancel session?")) { if (state.isHost) { remove(ref(db, 'matches/' + state.pin)); } closeAndWipeSession(); } }
 
-        let audioCtx; try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
-
-        function playTone(freq, duration) {
-            if(!audioCtx) return;
-            try {
-                if(audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-                osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration);
-            } catch(e) {}
-        }
-        function playHorn() { playTone(200, 1.5); }
-        function playAlert() { playTone(880, 0.4); setTimeout(()=>playTone(440, 0.4), 400); }
-
         function triggerHypeStart() {
             haptic();
             if(!state.isHost) return;
@@ -1646,22 +1672,57 @@
             }, 600);
         }
 
+        // V10.12.0 UNIVERSAL RECALCULATOR CORE ENGINE
+        function recalculateAnglerScores(arr, format) {
+            // Sort chronologically from oldest to newest to replay match logically
+            arr.sort((a, b) => a.ts - b.ts);
+            
+            let spCounts = {};
+            arr.forEach(c => {
+                let pts = 0;
+                if (format === 'weightLb' || format === 'weightKg' || format === 'length') {
+                    pts = c.size;
+                } else if (format === 'length10') {
+                    pts = c.size + 10;
+                }
+                
+                if (format === 'speciesHunt') {
+                    let existing = spCounts[c.species] || 0;
+                    pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1;
+                    spCounts[c.species] = existing + 1;
+                } else if (c.species === 'Mackerel') {
+                    let existingMac = spCounts['Mackerel'] || 0;
+                    if (existingMac >= 3) {
+                        pts = 0;
+                    }
+                    spCounts['Mackerel'] = existingMac + 1;
+                } else {
+                    spCounts[c.species] = (spCounts[c.species] || 0) + 1;
+                }
+                c.points = pts;
+            });
+            
+            // Sort back reverse chronologically for display (newest on top)
+            arr.sort((a, b) => b.ts - a.ts);
+            return arr;
+        }
+
+        function recalculateMyScores() {
+            state.myCatches = recalculateAnglerScores(state.myCatches, state.format);
+        }
+
         function recordCatch() {
             haptic();
             let selectEl = document.getElementById('inputSpecies');
             let species = selectEl.value;
             if(!species) { return alert("Select species first!"); }
-            let finalSize = 0, displaySize = "", pts = 0;
-            if (state.format === 'weightLb') { let lbs = parseInt(document.getElementById('inputLbs').value) || 0, oz = parseInt(document.getElementById('inputOz').value) || 0; finalSize = (lbs * 16) + oz; displaySize = `${lbs}<span class="telemetry-unit">lb</span> ${oz}<span class="telemetry-unit">oz</span>`; pts = finalSize; } 
-            else if (state.format === 'weightKg') { let kg = parseInt(document.getElementById('inputKg').value) || 0, g = parseInt(document.getElementById('inputGrammes').value) || 0; finalSize = (kg * 1000) + g; displaySize = `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`; pts = finalSize; } 
+            let finalSize = 0, displaySize = "";
+            if (state.format === 'weightLb') { let lbs = parseInt(document.getElementById('inputLbs').value) || 0, oz = parseInt(document.getElementById('inputOz').value) || 0; finalSize = (lbs * 16) + oz; displaySize = `${lbs}<span class="telemetry-unit">lb</span> ${oz}<span class="telemetry-unit">oz</span>`; } 
+            else if (state.format === 'weightKg') { let kg = parseInt(document.getElementById('inputKg').value) || 0, g = parseInt(document.getElementById('inputGrammes').value) || 0; finalSize = (kg * 1000) + g; displaySize = `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`; } 
             else if (state.format === 'speciesHunt') { finalSize = 1; displaySize = ""; } 
-            else { finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; pts = finalSize; if (state.format === 'length10') pts = finalSize + 10; }
-            if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
+            else { finalSize = parseFloat(document.getElementById('inputSize').value) || 0; displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; }
             
-            if (state.format === 'speciesHunt') { 
-                let existing = state.myCatches.filter(x => x.species === species && x.id !== state.editingId).length; 
-                pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; 
-            } else if (species === 'Mackerel') { if (state.myCatches.filter(x => x.species === 'Mackerel' && x.id !== state.editingId).length >= 3) { pts = 0; } }
+            if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
             
             if (state.editingId) { 
                 let obj = state.myCatches.find(x => x.id === state.editingId); 
@@ -1669,18 +1730,19 @@
                     obj.species = species; 
                     obj.size = finalSize; 
                     obj.display = displaySize; 
-                    obj.points = pts; 
                     obj.edited = true; 
                 } 
                 state.editingId = null; 
                 document.getElementById('btnRecord').innerHTML = 'ADD';
             } else { 
-                state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now(), edited: false }); 
+                state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: 0, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now(), edited: false }); 
             }
             
             document.getElementById('inputSpecies').value = ""; document.getElementById('inputSize').value = ""; document.getElementById('inputLbs').value = ""; document.getElementById('inputOz').value = ""; document.getElementById('inputKg').value = ""; document.getElementById('inputGrammes').value = "";
             document.activeElement.blur(); 
             
+            recalculateMyScores();
+            playSuccessBeep();
             triggerConcentricAnimation();
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
@@ -1701,11 +1763,7 @@
             haptic();
             if (!confirm("Are you sure you want to remove this fish from your scorecard?")) return;
             state.myCatches = state.myCatches.filter(x => x.id !== id);
-            if (state.format === 'speciesHunt') {
-                let counts = {}; let temp = [...state.myCatches].reverse();
-                temp.forEach(c => { counts[c.species] = (counts[c.species] || 0) + 1; let n = counts[c.species]; c.points = (n === 1) ? 25 : (n === 2) ? 35 : (n === 3) ? 40 : 1; });
-                state.myCatches = temp.reverse();
-            }
+            recalculateMyScores();
             saveState(); renderCatchList(); pushMyScoreToCloud();
         }
 
@@ -1731,9 +1789,10 @@
                         <br>
                         <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none block mt-1">${c.time}</span>
                     </div>
-                    <div class="flex items-center pr-1 space-x-1">
-                        <button onclick="editCatch('${c.id}')" class="text-blue-600 bg-blue-50 px-3 py-2 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-blue-100" aria-label="Edit"><span class="text-[10px] font-black uppercase pointer-events-none">Edit</span></button>
-                        <button onclick="deleteCatch('${c.id}')" class="text-red-600 bg-red-50 px-3 py-2 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-red-100" aria-label="Delete"><span class="text-[10px] font-black uppercase pointer-events-none">Del</span></button>
+                    <div class="flex items-center pr-1">
+                        <button onclick="openManageModal('${c.id}')" class="text-slate-600 bg-slate-100 px-4 py-2.5 rounded-lg active:scale-95 transition flex items-center justify-center shadow-sm border border-slate-200" aria-label="Manage">
+                            <span class="text-[10px] font-black uppercase pointer-events-none tracking-widest"><i class="fa-solid fa-pen mr-1"></i> Edit / Delete</span>
+                        </button>
                     </div>`;
                 list.appendChild(div);
             });
@@ -1911,6 +1970,7 @@
             let arr = Array.isArray(cData) ? cData : Object.values(cData);
             arr = arr.filter(c => c.id !== cid);
             
+            arr = recalculateAnglerScores(arr, state.format);
             let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             update(ref(db, `matches/${state.pin}/anglers/${aid}`), { catches: arr, score: newScore });
             
@@ -1942,19 +2002,17 @@
             let species = document.getElementById('godInputSpecies').value;
             if(!species) { alert("Select species first!"); return; }
 
-            let finalSize = 0, displaySize = "", pts = 0;
+            let finalSize = 0, displaySize = "";
             
             if (state.format === 'weightLb') { 
                 let lbs = parseInt(document.getElementById('godInputLbs').value) || 0, oz = parseInt(document.getElementById('godInputOz').value) || 0; 
                 finalSize = (lbs * 16) + oz; 
                 displaySize = `${lbs}<span class="telemetry-unit">lb</span> ${oz}<span class="telemetry-unit">oz</span>`; 
-                pts = finalSize; 
             } 
             else if (state.format === 'weightKg') { 
                 let kg = parseInt(document.getElementById('godInputKg').value) || 0, g = parseInt(document.getElementById('godInputGrammes').value) || 0; 
                 finalSize = (kg * 1000) + g; 
                 displaySize = `${kg}<span class="telemetry-unit">kg</span> ${g}<span class="telemetry-unit">g</span>`; 
-                pts = finalSize; 
             } 
             else if (state.format === 'speciesHunt') { 
                 finalSize = 1; displaySize = ""; 
@@ -1962,8 +2020,6 @@
             else { 
                 finalSize = parseFloat(document.getElementById('godInputSize').value) || 0; 
                 displaySize = `${finalSize}<span class="telemetry-unit">cm</span>`; 
-                pts = finalSize; 
-                if (state.format === 'length10') pts = finalSize + 10; 
             }
             
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
@@ -1971,16 +2027,10 @@
             let cData = globalMatchData.anglers[godTargetAnglerId].catches || [];
             let arr = Array.isArray(cData) ? cData : Object.values(cData);
 
-            if (state.format === 'speciesHunt') { 
-                let existing = arr.filter(x => x.species === species).length; 
-                pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1; 
-            } else if (species === 'Mackerel') { 
-                if (arr.filter(x => x.species === 'Mackerel').length >= 3) { pts = 0; } 
-            }
-
-            let newCatch = { id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: pts, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now() };
-            
+            let newCatch = { id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: 0, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now() };
             arr.unshift(newCatch);
+            
+            arr = recalculateAnglerScores(arr, state.format);
             let newScore = arr.reduce((sum, c) => sum + c.points, 0);
             
             update(ref(db, `matches/${state.pin}/anglers/${godTargetAnglerId}`), { catches: arr, score: newScore });
@@ -2002,7 +2052,6 @@
             setTimeout(refreshStewardCatchList, 300);
         }
 
-        // V10.11.0 ENHANCED WHATSAPP TEXT REPORT
         function generateOfficialMasterReport(source) {
             haptic();
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
@@ -2114,7 +2163,7 @@
                 t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
             });
             
-            t += `\n_Generated by ShoreScore V10.11.0_`;
+            t += `\n_Generated by ShoreScore V10.12.0_`;
 
             if (navigator.share) { 
                 navigator.share({ title: 'Official Report', text: t }).catch(console.error); 
@@ -2451,7 +2500,7 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            const CURRENT_FALLBACK_VERSION = "10.11.0";
+            const CURRENT_FALLBACK_VERSION = "10.12.0";
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
             fetch('version.json?t=' + new Date().getTime())
@@ -2573,6 +2622,10 @@
         window.closeOptionsDrawer = closeOptionsDrawer; 
         window.openInMatchHelp = openInMatchHelp; 
         window.closeInMatchHelp = closeInMatchHelp;
+        window.openManageModal = openManageModal;
+        window.closeManageModal = closeManageModal;
+        window.handleManageUpdate = handleManageUpdate;
+        window.handleManageDelete = handleManageDelete;
     </script>
 </body>
 </html>
