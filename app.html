@@ -513,6 +513,28 @@
                         <option value="speciesHunt">Species Hunt</option>
                     </select>
                 </div>
+
+                <div class="pt-2 border-t border-slate-200 mt-5 mb-1">
+                    <p class="text-xs font-black text-blue-600 uppercase tracking-widest text-left ml-3 mb-3">Optional Analytics</p>
+                    <div class="grid grid-cols-2 gap-4 px-1">
+                        <div class="text-left">
+                            <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">High Water</label>
+                            <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-blue-600 focus-within:bg-white transition-all p-1">
+                                <input type="text" id="hostHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostHtM').focus();">
+                                <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
+                                <input type="text" id="hostHtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
+                            </div>
+                        </div>
+                        <div class="text-left">
+                            <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">Low Water</label>
+                            <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-blue-600 focus-within:bg-white transition-all p-1">
+                                <input type="text" id="hostLtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostLtM').focus();">
+                                <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
+                                <input type="text" id="hostLtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <button id="btnInitMatch" onclick="createMatch()" class="pill-btn w-full text-lg py-4 mt-4 border-blue-600 shadow-md">Continue</button>
             </div>
         </div>
@@ -640,14 +662,15 @@
 
         </div>
 
-        <div id="view-results" class="hidden view-frame bg-slate-50 p-5 justify-center space-y-5 text-center pb-24">
-            <h1 class="text-3xl font-black uppercase text-slate-900 border-b-4 border-slate-300 pb-4 tracking-tighter w-full">Final <span class="text-blue-600">Result</span></h1>
-            <div class="match-card p-6 shadow-xl text-center">
+        <div id="view-results" class="hidden view-frame bg-slate-50 p-5 justify-center space-y-5 text-center pb-24 overflow-y-auto">
+            <h1 class="text-3xl font-black uppercase text-slate-900 border-b-4 border-slate-300 pb-4 tracking-tighter w-full mt-8">Final <span class="text-blue-600">Result</span></h1>
+            
+            <div class="match-card p-6 shadow-xl text-center max-w-sm mx-auto w-full">
                 <p class="text-slate-600 font-black uppercase tracking-[0.3em] text-xs mb-2">Tournament Total Score</p>
                 <p class="text-6xl font-black metric-white tracking-tighter" id="finalScore">0</p>
             </div>
             
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto w-full">
                 <div class="match-card p-4 flex flex-col items-center shadow-md">
                     <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest mb-1">Fish Count</span>
                     <span class="text-3xl font-black metric-white" id="finalCount">0</span>
@@ -658,8 +681,22 @@
                 </div>
             </div>
 
-            <button id="resultsReportBtn" onclick="generateOfficialMasterReport('results')" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
-            <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-lg shadow-sm">Return Home (Clear Match)</button>
+            <div class="max-w-sm mx-auto w-full space-y-4" id="analyticsContainer">
+                <div class="match-card p-4 flex flex-col items-center shadow-md hidden" id="goldenHourCard">
+                    <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest mb-1">Golden Hour (Peak 60 Min)</span>
+                    <span class="text-2xl font-black text-orange-600" id="stat-golden-hour">--:--</span>
+                </div>
+                <div class="match-card p-4 shadow-md text-left hidden" id="tideGraphCard">
+                    <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest text-center block mb-2">Tidal Curve Vector Map</span>
+                    <div class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2">
+                        <canvas id="tideGraphCanvas" style="width: 100%; height: 120px;"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-sm mx-auto w-full">
+                <button id="resultsReportBtn" onclick="generateOfficialMasterReport('results')" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
+                <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-lg shadow-sm w-full">Return Home (Clear Match)</button>
+            </div>
         </div>
 
         <div id="view-history" class="hidden view-frame bg-slate-50">
@@ -709,6 +746,15 @@
                         <p>Competitors tap "Join as Competitor" and enter that exact PIN to link their phones to the tournament.</p>
                     </div>
                 </section>
+                <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+    <h4 class="text-blue-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">LEAVING EARLY</h4>
+    <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
+        <p>If you need to pack up before the clock hits zero, just open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from the <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
+        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">What if I need to leave early?</h4>
+        <p class="text-xs text-slate-700 leading-relaxed font-medium">If you need to pack up before the clock hits zero, open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later the View Past Matches button on the home screen.</p>
+    </div>.</p>
+    </div>
+</section>
                 <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <h4 class="text-orange-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">👑 FULL STEWARD'S MANUAL</h4>
                     <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
@@ -763,6 +809,10 @@
                         <p class="text-xs text-slate-700 leading-relaxed font-medium">No. ShoreScore does not have a "sleep" button. When you are done logging a fish, just press your phone's physical power button to turn the screen off and drop it in your pocket. The exact second you wake your screen up, the app will instantly reconnect and download any new fish caught by the rest of the beach.</p>
                     </div>
                 </section>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
+        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">What if I need to leave early?</h4>
+        <p class="text-xs text-slate-700 leading-relaxed font-medium">If you need to pack up before the clock hits zero, open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from your History Vault.</p>
+    </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
                 <button onclick="closeInMatchHelp()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
@@ -811,7 +861,7 @@
                 <button onclick="leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest shadow-sm">
                     <i class="fa-solid fa-person-walking-arrow-right mr-2 text-white"></i> Leave Match Early
                 </button>
-                <p class="text-[10px] text-slate-500 italic mt-2 mb-6 leading-tight px-2">Don't worry! Your scores are safely saved to the live tournament. You can check the final standings later from your History Vault.</p>
+                <p class="text-xs font-bold text-slate-700 bg-slate-200/50 p-3 rounded-lg border border-slate-300 mt-3 mb-6 leading-relaxed px-3 text-center">Safe to leave. Your catches are already logged in the live tournament. Check your History Vault later for the final results.</p>
 
                 <div id="stewardControlsGroup" class="hidden space-y-4 pt-4 border-t border-slate-300">
                     <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Steward Desk</h3>
@@ -884,7 +934,8 @@
             endTime: null,
             graceEndTime: null,
             myCatches: [],
-            status: 'idle'
+            status: 'idle',
+            tides: null
         };
 
         let activeHistoryId = null;
@@ -949,6 +1000,91 @@
                     navigator.vibrate(50); 
                 }
             } catch(e) {}
+        }
+
+        function calculateGoldenHour() {
+            let allCatches = [];
+            if (globalMatchData && globalMatchData.anglers) {
+                Object.values(globalMatchData.anglers).forEach(a => {
+                    if (a.catches) {
+                        let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
+                        cList.forEach(c => allCatches.push(c));
+                    }
+                });
+            }
+            if(allCatches.length === 0) return;
+            
+            let maxHit = 0; let peakStr = "--:--";
+            allCatches.sort((a,b) => a.ts - b.ts);
+            
+            for(let i=0; i<allCatches.length; i++) {
+                let ts = allCatches[i].ts;
+                if(!ts) continue;
+                let end = ts + 3600000;
+                let count = allCatches.filter(c => c.ts >= ts && c.ts <= end).length;
+                if(count > maxHit) {
+                    maxHit = count;
+                    let st = new Date(ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+                    let et = new Date(end).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+                    peakStr = `${st} - ${et} (${maxHit} Fish)`;
+                }
+            }
+            
+            if (maxHit > 0) {
+                document.getElementById('goldenHourCard').classList.remove('hidden');
+                document.getElementById('stat-golden-hour').innerText = peakStr;
+            }
+        }
+
+        function renderTideCanvas() {
+            const cv = document.getElementById('tideGraphCanvas');
+            if(!cv || !state.tides) return;
+            const ctx = cv.getContext('2d');
+            const w = cv.parentElement.offsetWidth;
+            const h = 120;
+            cv.width = w; cv.height = h;
+            ctx.clearRect(0,0,w,h);
+
+            ctx.strokeStyle = '#cbd5e1'; ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+            ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 3; ctx.beginPath();
+            for(let x=0; x<=w; x++) {
+                let y = (h/2) + Math.cos((x/w)*Math.PI*2)*(h/3);
+                if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+            }
+            ctx.stroke();
+
+            let allCatches = [];
+            if (globalMatchData && globalMatchData.anglers) {
+                Object.values(globalMatchData.anglers).forEach(a => {
+                    if (a.catches) {
+                        let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
+                        cList.forEach(c => { if(c.ts) allCatches.push(c) });
+                    }
+                });
+            }
+            if (allCatches.length === 0) return;
+            
+            let parts = state.tides.high.split(':');
+            let refDate = new Date();
+            let htd = new Date(refDate.getFullYear(), refDate.getMonth(), refDate.getDate(), parseInt(parts[0]), parseInt(parts[1]));
+
+            let minTs = Math.min(...allCatches.map(c => c.ts));
+            let maxTs = Math.max(...allCatches.map(c => c.ts));
+            let tDur = maxTs - minTs;
+            if(tDur === 0) tDur = 3600000; 
+
+            minTs -= tDur * 0.1;
+            maxTs += tDur * 0.1;
+            tDur = maxTs - minTs;
+
+            allCatches.forEach(f => {
+                let x = ((f.ts - minTs)/tDur)*w;
+                let offH = (f.ts - htd.getTime())/3600000;
+                let ang = (offH/6.25)*Math.PI*2;
+                let y = (h/2) + Math.cos(ang)*(h/3);
+                ctx.fillStyle = '#ea580c'; ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fill();
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1; ctx.stroke();
+            });
         }
         
         function openOptionsDrawer() { haptic(); if(document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
@@ -1312,8 +1448,15 @@
             
             localStorage.removeItem('matchState');
             localStorage.removeItem('userRole');
-            state = { view: 'home', name: '', venue: 'Local Beach', isHost: false, isSteward: false, pin: '', format: 'length', endTime: null, graceEndTime: null, myCatches: [], status: 'idle' };
+            state = { view: 'home', name: '', venue: 'Local Beach', isHost: false, isSteward: false, pin: '', format: 'length', endTime: null, graceEndTime: null, myCatches: [], status: 'idle', tides: null };
             document.getElementById('playerName').value = '';
+
+            if(document.getElementById('hostHtH')) {
+                document.getElementById('hostHtH').value = '';
+                document.getElementById('hostHtM').value = '';
+                document.getElementById('hostLtH').value = '';
+                document.getElementById('hostLtM').value = '';
+            }
             
             clearInterval(clockInterval);
             clearInterval(hypeInterval);
@@ -1518,6 +1661,8 @@
         }
 
         function processCloudUpdate() {
+            state.tides = globalMatchData.tides || null;
+            
             if (state.view === 'waiting' && globalMatchData.anglers) {
                 const list = document.getElementById('attendanceList');
                 if (list) {
@@ -1580,6 +1725,17 @@
             state.format = document.getElementById('hostFormat').value; 
             state.pin = Math.floor(1000 + Math.random() * 9000).toString(); 
             
+            let htH = document.getElementById('hostHtH').value.trim();
+            let htM = document.getElementById('hostHtM').value.trim();
+            let ltH = document.getElementById('hostLtH').value.trim();
+            let ltM = document.getElementById('hostLtM').value.trim();
+            
+            let tideData = null;
+            if (htH && htM && ltH && ltM) {
+                tideData = { high: `${htH.padStart(2,'0')}:${htM.padStart(2,'0')}`, low: `${ltH.padStart(2,'0')}:${ltM.padStart(2,'0')}` };
+            }
+            state.tides = tideData;
+
             const btn = document.getElementById('btnInitMatch');
             const originalText = btn.innerText;
             btn.innerText = "Connecting to Engine...";
@@ -1588,6 +1744,7 @@
                 hostId: uid, 
                 format: state.format, 
                 status: 'waiting', 
+                tides: tideData,
                 anglers: { [uid]: { name: state.name, score: 0 } } 
             }).then(() => {
                 btn.innerText = originalText;
@@ -2309,6 +2466,12 @@
             document.getElementById('finalCount').innerText = state.myCatches.length; 
             document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; 
             if(state.isSteward) document.getElementById('resultsReportBtn').classList.remove('hidden');
+            
+            calculateGoldenHour();
+            if (state.tides) {
+                document.getElementById('tideGraphCard').classList.remove('hidden');
+                setTimeout(() => renderTideCanvas(), 300);
+            }
             navTo('results'); 
         }
         
@@ -2524,7 +2687,7 @@
                 
                 <div class="bg-slate-100 px-4 py-3 text-center border border-slate-200 flex flex-col items-center mt-3 rounded-t-xl">
                     <div class="text-sm font-black uppercase tracking-widest text-slate-900">
-                       <i class="fa-solid fa-trophy mr-1.5 text-orange-500"></i> Final Standings
+                        <i class="fa-solid fa-trophy mr-1.5 text-orange-500"></i> Final Standings
                     </div>
                     <div class="text-[10px] font-medium text-slate-500 leading-tight mt-1">
                         (Tap name for individual catch record)
