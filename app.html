@@ -193,6 +193,24 @@
         .delay-version { animation-delay: 0.4s; }
         
         .reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
+
+        /* v7.4.0 Specific Dynamic UI Components */
+        body.mode-personal .comp-only { display: none !important; }
+        body.mode-competition .personal-only { display: none !important; }
+        
+        .tide-explainer-box { background: rgba(2, 132, 199, 0.05); border: 1px dashed rgba(2, 132, 199, 0.3); border-radius: 12px; padding: 1.25rem; margin-top: 1rem; margin-bottom: 1rem; }
+        .tide-explainer-box p { font-size: 1.15rem; line-height: 1.6; font-weight: 500; color: #334155; }
+        
+        .weather-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+        .weather-opt { background: #f1f5f9; border: 2px solid var(--card-border); padding: 0.75rem; border-radius: 0.5rem; text-align: center; cursor: pointer; font-size: 1.25rem; transition: all 0.2s; }
+        .weather-opt.selected { border-color: var(--neon-blue); background: #e0f2fe; box-shadow: 0 0 10px rgba(2, 132, 199, 0.2); }
+        
+        #undo-snackbar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(150px); background: #16a34a; color: #ffffff; padding: 1rem 1.5rem; border-radius: 50px; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: 600; width: calc(100% - 32px); max-width: 400px; }
+        #undo-snackbar.show { transform: translateX(-50%) translateY(0); }
+        .undo-trigger { background: #000000; color: #39ff14; border: none; padding: 6px 16px; border-radius: 999px; font-weight: 900; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
+        
+        .canvas-container { width: 100%; background: #ffffff; border-radius: 8px; padding: 0.5rem; border: 1px solid var(--card-border); margin-top: 1rem; }
+        canvas { display: block; width: 100%; height: auto; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -396,9 +414,14 @@
         </div>
     </div>
 
+    <div id="undo-snackbar">
+        <div>Catch logged.</div>
+        <button class="undo-trigger" onclick="triggerUndoAction()">Undo</button>
+    </div>
+
     <div id="app-container">
 
-        <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative">
+        <div id="view-home" class="view-frame items-center p-5 space-y-4 relative overflow-y-auto">
 
             <button onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-slate-500 active:text-red-500 cursor-pointer flex flex-col items-center z-[50]">
                 <i class="fa-solid fa-power-off text-2xl mb-1"></i>
@@ -415,18 +438,21 @@
                 </div>
             </div>
             
-            <div class="w-full max-w-sm space-y-4 mt-6">
-                <div class="match-card p-6 space-y-4 text-center shadow-lg relative z-10">
-                    <div>
-                        <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center">Angler Profile</label>
-                        <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Your Name" class="pill-input w-full py-4 px-4 text-base font-bold text-center">
-                    </div>
-                    <button onclick="proceedToRoleSelection()" class="pill-btn w-full text-base py-4 mt-2 shadow-md border-2 border-blue-600">
-                        Continue
+            <div class="w-full max-w-sm space-y-4 mt-4">
+                <div class="grid grid-cols-1 gap-4 relative z-10">
+                    <button onclick="selectDoor('personal')" class="match-card p-6 text-left shadow-md flex flex-col active:scale-95 transition-transform border-2 border-transparent focus:border-blue-500">
+                        <span class="text-3xl mb-3">⚓</span>
+                        <span class="font-black text-xl text-slate-900 uppercase tracking-tight">Personal Diary</span>
+                        <span class="text-xs text-slate-500 font-medium mt-1 leading-relaxed">Log private sessions, baits, rigs, and unlock venue intelligence.</span>
+                    </button>
+                    <button onclick="selectDoor('competition')" class="match-card p-6 text-left shadow-md flex flex-col active:scale-95 transition-transform border-2 border-transparent focus:border-blue-500">
+                        <span class="text-3xl mb-3">🏆</span>
+                        <span class="font-black text-xl text-blue-600 uppercase tracking-tight">Competition Match</span>
+                        <span class="text-xs text-slate-500 font-medium mt-1 leading-relaxed">Join or host a live tournament with leaderboards and match rules.</span>
                     </button>
                 </div>
                 
-                <div class="w-full bg-white rounded-xl neon-border-glow border overflow-hidden domestic-action relative z-10 shadow-md">
+                <div class="w-full bg-white rounded-xl neon-border-glow border overflow-hidden domestic-action relative z-10 shadow-md mt-6">
                     <button onclick="navTo('history')" class="w-full p-5 flex flex-col items-center cursor-pointer">
                         <div class="text-[var(--text-header)] text-lg font-black uppercase tracking-tight">View Past <span class="neon-text-blue">Matches</span></div>
                     </button>
@@ -444,9 +470,48 @@
             </div>
         </div>
 
-        <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-slate-50">
+        <div id="view-setup" class="hidden view-frame p-5 space-y-4 bg-slate-50 overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
                 <button onclick="navTo('home')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 id="setup-title-text" class="text-base font-black uppercase tracking-tight text-slate-900">Session <span class="text-blue-600">Setup</span></h2>
+                <div class="w-6"></div>
+            </div>
+            
+            <div class="match-card p-5 space-y-4 mt-4 shadow-md max-w-sm mx-auto w-full">
+                <div>
+                    <label id="setup-name-label" class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-1 pl-2">Angler Profile Name</label>
+                    <input type="text" id="input-setup-name" autocomplete="off" oninput="this.value = this.value.replace(/\b\w/g, c => c.toUpperCase())" class="pill-input w-full p-3 text-base" placeholder="Your Name">
+                </div>
+                <div>
+                    <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-1 pl-2 mt-3">Target Venue / Mark</label>
+                    <input type="text" id="input-setup-venue" autocomplete="off" oninput="this.value = this.value.replace(/\b\w/g, c => c.toUpperCase())" class="pill-input w-full p-3 text-base" placeholder="E.g. Arbroath">
+                </div>
+
+                <div class="tide-explainer-box">
+                    <p>Entering tidal times is <strong>Optional (Recommended)</strong>. Providing High and Low water unlocks your localized <strong>Golden Hour</strong> calculation and post-session visual heat maps.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-1 pl-1">High Water</label>
+                        <input type="time" id="input-high-tide" class="pill-input w-full p-2.5 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-1 pl-1">Low Water</label>
+                        <input type="time" id="input-low-tide" class="pill-input w-full p-2.5 text-sm">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mt-6 pt-4 border-t border-slate-200">
+                    <button onclick="executeSetupSkip()" class="pill-btn bg-white !text-slate-600 border border-slate-300 shadow-sm py-4 text-xs">SKIP TIDES</button>
+                    <button onclick="executeSetupCommit()" class="pill-btn py-4 text-xs shadow-md">INITIALIZE</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-slate-50">
+            <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
+                <button onclick="navTo('setup')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Select <span class="text-blue-600">Role</span></h2>
                 <div class="w-6"></div>
             </div>
@@ -549,10 +614,12 @@
                     <div class="bg-white flex flex-col">
                         <div class="flex items-center justify-between h-[46px] px-4">
                             <div class="flex items-center space-x-2 truncate">
-                                <span id="island-rank-text" class="text-sm font-black text-slate-900">🏆 --</span>
-                                <span id="island-gap-text" class="hidden text-xs font-bold text-slate-500">🎯 --</span>
+                                <span id="island-rank-text" class="text-sm font-black text-slate-900 comp-only">🏆 --</span>
+                                <span id="island-gap-text" class="hidden text-xs font-bold text-slate-500 comp-only">🎯 --</span>
+                                <span class="text-sm font-black text-slate-900 personal-only">⚓ Diary Session</span>
                             </div>
                             <div class="flex items-center space-x-2 shrink-0">
+                                <span id="island-tide-state" class="text-xs font-black text-blue-600 ml-auto hidden mr-1">HW --</span>
                                 <span id="islandScore" class="text-xl font-black text-blue-600">0</span>
                                 <div class="w-1.5 h-1.5 bg-slate-300 rounded-full"></div>
                                 <div id="mainTimer" class="text-sm font-black text-slate-900">--:--</div>
@@ -560,7 +627,7 @@
                         </div>
                     </div>
 
-                    <div class="w-full bg-slate-900 h-8 flex items-center relative overflow-hidden mask-fade-edges text-white border-y border-slate-800">
+                    <div class="w-full bg-slate-900 h-8 flex items-center relative overflow-hidden mask-fade-edges text-white border-y border-slate-800 comp-only">
                         <div id="wallStreetTicker" class="ticker-track text-[11px] font-bold text-slate-300 tracking-wider">
                             AWAITING TELEMETRY...
                         </div>
@@ -629,25 +696,44 @@
                     </button>
                 </div>
                 
+                <div class="personal-only match-card p-4 mb-4 shadow-sm bg-white mt-2">
+                    <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center">Ambient Weather</label>
+                    <div class="weather-grid">
+                        <div class="weather-opt" data-weather="clear" onclick="setWeather('clear')">☀️</div>
+                        <div class="weather-opt" data-weather="cloudy" onclick="setWeather('cloudy')">⛅</div>
+                        <div class="weather-opt" data-weather="rain" onclick="setWeather('rain')">🌧️</div>
+                        <div class="weather-opt" data-weather="gale" onclick="setWeather('gale')">💨</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                        <input type="text" id="input-rig" class="pill-input w-full p-2 text-xs" placeholder="Rig (e.g. Pulley)">
+                        <input type="text" id="input-bait" class="pill-input w-full p-2 text-xs" placeholder="Bait (e.g. Lug/Squid)">
+                    </div>
+                    <div class="mt-2">
+                        <input type="text" id="input-notes" class="pill-input w-full p-2 text-xs" placeholder="Session observations...">
+                    </div>
+                    <button onclick="endPersonalSession()" class="pill-btn w-full mt-4 py-3 text-xs bg-slate-900 border-none shadow-md">🏁 FINISH SESSION</button>
+                </div>
+
                 <div class="flex-1 flex flex-col min-h-[50vh]">
                     <div id="localCatchList" class="space-y-2 flex-1"></div>
                 </div>
             </div>
 
-            <button onclick="openLeaderboard()" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
+            <button onclick="openLeaderboard()" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white comp-only">
                 CLICK FOR LIVE LEADERBOARD
             </button>
 
         </div>
 
-        <div id="view-results" class="hidden view-frame bg-slate-50 p-5 justify-center space-y-5 text-center pb-24">
-            <h1 class="text-3xl font-black uppercase text-slate-900 border-b-4 border-slate-300 pb-4 tracking-tighter w-full">Final <span class="text-blue-600">Result</span></h1>
-            <div class="match-card p-6 shadow-xl text-center">
+        <div id="view-results" class="hidden view-frame bg-slate-50 p-5 justify-center space-y-5 text-center pb-24 overflow-y-auto">
+            <h1 class="text-3xl font-black uppercase text-slate-900 border-b-4 border-slate-300 pb-4 tracking-tighter w-full mt-10">Final <span class="text-blue-600">Result</span></h1>
+            
+            <div class="match-card p-6 shadow-xl text-center max-w-sm mx-auto w-full">
                 <p class="text-slate-600 font-black uppercase tracking-[0.3em] text-xs mb-2">Tournament Total Score</p>
                 <p class="text-6xl font-black metric-white tracking-tighter" id="finalScore">0</p>
             </div>
             
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto w-full">
                 <div class="match-card p-4 flex flex-col items-center shadow-md">
                     <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest mb-1">Fish Count</span>
                     <span class="text-3xl font-black metric-white" id="finalCount">0</span>
@@ -658,25 +744,53 @@
                 </div>
             </div>
 
-            <button id="resultsReportBtn" onclick="generateOfficialMasterReport('results')" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
-            <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-lg shadow-sm">Return Home (Clear Match)</button>
+            <div class="w-full max-w-sm mx-auto space-y-4">
+                <div id="golden-hour-card" class="match-card p-4 flex flex-col items-center shadow-md">
+                    <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest mb-1">Golden Hour (Peak 60 Min)</span>
+                    <span class="text-xl font-black text-orange-600" id="stat-golden-hour">--:--</span>
+                </div>
+                <div id="tide-graph-card" class="match-card p-4 shadow-md text-left hidden">
+                    <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest">Tidal Curve Vector Map</span>
+                    <div class="canvas-container">
+                        <canvas id="tideGraphCanvas" height="150"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-sm mx-auto w-full">
+                <button id="resultsReportBtn" onclick="generateOfficialMasterReport('results')" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
+                <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-lg shadow-sm w-full">Return Home (Clear Match)</button>
+            </div>
         </div>
 
         <div id="view-history" class="hidden view-frame bg-slate-50">
             <div class="flex justify-between items-center pb-3 mb-2 px-5 mt-6 text-slate-900 border-b border-slate-300 shadow-sm">
                 <h2 class="text-xl font-black uppercase tracking-[0.1em] text-slate-900">History <span class="text-blue-600">Vault</span></h2>
             </div>
-            <div class="scrollable-area space-y-3 pb-24 px-5 text-center mt-2">
-                <div id="historyRecentList" class="space-y-3 px-1 text-center"></div>
-                <div id="archiveContainer" class="hidden px-1 text-center mt-4">
-                    <button onclick="toggleArchive()" class="pill-btn w-full p-4 text-xs text-slate-700 bg-white border border-slate-300 flex justify-between items-center shadow-sm rounded-xl">
-                        <span><i class="fa-solid fa-box-archive mr-2 text-blue-600 opacity-60 text-sm"></i> Older Storage</span>
-                        <i class="fa-solid fa-chevron-down" id="archiveChevron"></i>
-                    </button>
-                    <div id="historyArchiveList" class="hidden pt-3 space-y-3 text-center"></div>
+            
+            <div class="flex border-b border-slate-300 w-full bg-white text-[11px] font-black uppercase tracking-widest flex-none">
+                <button id="tab-btn-history" onclick="switchVaultTabMain('history')" class="flex-1 py-3 text-blue-600 border-b-2 border-blue-600 transition">Session Logs</button>
+                <button id="tab-btn-intel" onclick="switchVaultTabMain('intel')" class="flex-1 py-3 text-slate-500 border-b-2 border-transparent transition">Venue Intel</button>
+            </div>
+            
+            <div id="vault-view-history" class="block w-full h-full relative">
+                <div class="scrollable-area space-y-3 pb-24 px-5 text-center mt-2 h-full overflow-y-auto">
+                    <div id="historyRecentList" class="space-y-3 px-1 text-center"></div>
+                    <div id="archiveContainer" class="hidden px-1 text-center mt-4">
+                        <button onclick="toggleArchive()" class="pill-btn w-full p-4 text-xs text-slate-700 bg-white border border-slate-300 flex justify-between items-center shadow-sm rounded-xl">
+                            <span><i class="fa-solid fa-box-archive mr-2 text-blue-600 opacity-60 text-sm"></i> Older Storage</span>
+                            <i class="fa-solid fa-chevron-down" id="archiveChevron"></i>
+                        </button>
+                        <div id="historyArchiveList" class="hidden pt-3 space-y-3 text-center"></div>
+                    </div>
                 </div>
             </div>
-            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
+
+            <div id="vault-view-intel" class="hidden w-full h-full relative scrollable-area px-5 pb-24 mt-4">
+                <div id="vault-intel-container" class="space-y-4"></div>
+            </div>
+
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center absolute bottom-0 w-full">
                 <button onclick="navTo('home')" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO MAIN MENU</button>
             </div>
         </div>
@@ -817,14 +931,14 @@
         <div id="optionsDrawer" class="drawer-left fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[101] flex flex-col shadow-2xl justify-between hidden">
             <div class="flex-none p-5 text-center mt-4">
                 <h2 class="font-black text-xl text-slate-900 uppercase tracking-[0.2em] flex items-center justify-center"><i class="fa-solid fa-sliders mr-2 text-blue-600"></i> Match <span class="text-blue-600 ml-1.5">Options</span></h2>
-                <div class="mt-3"><span id="stewardPinDisplay" class="text-xs text-slate-600 font-black border border-slate-300 bg-white shadow-sm px-4 py-1.5 rounded-full tracking-widest">PIN: ----</span></div>
+                <div class="mt-3 comp-only"><span id="stewardPinDisplay" class="text-xs text-slate-600 font-black border border-slate-300 bg-white shadow-sm px-4 py-1.5 rounded-full tracking-widest">PIN: ----</span></div>
             </div>
             <div class="scrollable-area p-5 space-y-4 text-center max-w-sm mx-auto w-full">
                 
                 <button onclick="leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest shadow-sm">
-                    <i class="fa-solid fa-person-walking-arrow-right mr-2 text-white"></i> Leave Match Early
+                    <i class="fa-solid fa-person-walking-arrow-right mr-2 text-white"></i> End/Leave Session
                 </button>
-                <p class="text-xs font-bold text-slate-700 bg-slate-200/50 p-3 rounded-lg border border-slate-300 mt-3 mb-6 leading-relaxed px-3 text-center">Safe to leave. Your catches are already logged in the live tournament. Check your History Vault later for the final results.</p>
+                <p class="text-xs font-bold text-slate-700 bg-slate-200/50 p-3 rounded-lg border border-slate-300 mt-3 mb-6 leading-relaxed px-3 text-center">Safe to leave. Your catches are already logged. Check your History Vault later for the final results.</p>
 
                 <div id="stewardControlsGroup" class="hidden space-y-4 pt-4 border-t border-slate-300">
                     <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Steward Desk</h3>
@@ -888,8 +1002,15 @@
 
         let state = {
             view: 'home',
+            mode: 'competition',
             name: '',
             venue: 'Local Beach',
+            hasTides: false,
+            highTideTime: '',
+            lowTideTime: '',
+            weather: '',
+            rig: '',
+            bait: '',
             isHost: false,
             isSteward: localStorage.getItem('userRole') === 'steward',
             pin: '',
@@ -897,7 +1018,8 @@
             endTime: null,
             graceEndTime: null,
             myCatches: [],
-            status: 'idle'
+            status: 'idle',
+            startTime: null
         };
 
         let activeHistoryId = null;
@@ -924,6 +1046,11 @@
         
         let godTargetAnglerId = null;
         let godTargetAnglerName = "";
+
+        // V7.4.0 Specific variables
+        let antiDoubleTapLock = false;
+        let undoTimeoutId = null;
+        let lastLoggedCatchRef = null;
 
         let audioCtx; try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
 
@@ -1137,7 +1264,7 @@
             const rankTxt = document.getElementById('island-rank-text');
             const gapTxt = document.getElementById('island-gap-text');
             
-            if (rankTxt && gapTxt) {
+            if (rankTxt && gapTxt && state.mode === 'competition') {
                 rankTxt.classList.replace('opacity-100', 'opacity-0');
                 gapTxt.classList.replace('opacity-100', 'opacity-0');
                 
@@ -1177,8 +1304,10 @@
         }
 
         document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible' && state.pin) {
-                if (['playing', 'grace'].includes(state.status)) {
+            if (document.visibilityState === 'visible') {
+                if(state.mode === 'personal' && state.status === 'playing') {
+                    syncInputDeckToState(); 
+                } else if (state.pin && ['playing', 'grace'].includes(state.status)) {
                     syncInputDeckToState(); 
                     get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
                         if (snapshot.exists()) {
@@ -1209,7 +1338,7 @@
         }
 
         function checkAndFireTicker(force = false) {
-            if(!globalMatchData || !globalMatchData.anglers) return;
+            if(!globalMatchData || !globalMatchData.anglers || state.mode === 'personal') return;
             let allCatches = [];
             let totalFish = 0, biggestVal = 0, biggestStr = "No Captures";
             
@@ -1325,8 +1454,8 @@
             
             localStorage.removeItem('matchState');
             localStorage.removeItem('userRole');
-            state = { view: 'home', name: '', venue: 'Local Beach', isHost: false, isSteward: false, pin: '', format: 'length', endTime: null, graceEndTime: null, myCatches: [], status: 'idle' };
-            document.getElementById('playerName').value = '';
+            state = { view: 'home', mode: 'competition', name: '', venue: 'Local Beach', hasTides: false, highTideTime: '', lowTideTime: '', weather: '', rig: '', bait: '', isHost: false, isSteward: false, pin: '', format: 'length', endTime: null, graceEndTime: null, myCatches: [], status: 'idle', startTime: null };
+            document.getElementById('input-setup-name').value = '';
             
             clearInterval(clockInterval);
             clearInterval(hypeInterval);
@@ -1343,16 +1472,127 @@
             navTo('home');
         }
 
-        function proceedToRoleSelection() {
+        // ================= V7.4.0 TWO-DOOR AND SETUP LOGIC =================
+        window.selectDoor = function(mode) {
             haptic();
-            let pName = document.getElementById('playerName').value || "";
-            if (!pName) { alert("Please enter your Name to continue."); return; }
-            pName = pName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
-            document.getElementById('playerName').value = pName;
-            state.name = pName; 
-            state.venue = "Local Beach";
-            saveState();
-            navTo('role');
+            state.mode = mode;
+            document.body.className = `mode-${mode} bg-slate-50 text-slate-900`;
+            const titleEl = document.getElementById('setup-title-text');
+            const labelEl = document.getElementById('setup-name-label');
+            const inputName = document.getElementById('input-setup-name');
+
+            if (mode === 'personal') {
+                titleEl.innerHTML = `Personal <span class="text-blue-600">Diary</span>`;
+                labelEl.innerText = "Angler Profile Name (Sticky)";
+                inputName.value = localStorage.getItem('shorescore_sticky_name') || "";
+            } else {
+                titleEl.innerHTML = `Match <span class="text-blue-600">Setup</span>`;
+                labelEl.innerText = "Angler Competitive Name";
+                inputName.value = "";
+            }
+            navTo('setup');
+        }
+
+        window.executeSetupSkip = function() {
+            document.getElementById('input-high-tide').value = "";
+            document.getElementById('input-low-tide').value = "";
+            executeSetupCommit(false);
+        }
+
+        window.executeSetupCommit = function(hasTides = true) {
+            haptic();
+            let nameVal = document.getElementById('input-setup-name').value.trim();
+            let venueVal = document.getElementById('input-setup-venue').value.trim();
+            let ht = document.getElementById('input-high-tide').value;
+            let lt = document.getElementById('input-low-tide').value;
+
+            if (!nameVal || !venueVal) { alert("Name and Target Venue are mandatory."); return; }
+            if (hasTides && (!ht || !lt)) { hasTides = false; }
+
+            state.name = nameVal;
+            state.venue = venueVal;
+            state.hasTides = hasTides;
+            state.highTideTime = ht;
+            state.lowTideTime = lt;
+
+            if (state.mode === 'personal') {
+                localStorage.setItem('shorescore_sticky_name', nameVal);
+                state.isHost = false;
+                state.isSteward = false;
+                state.status = 'playing';
+                state.startTime = Date.now();
+                state.endTime = Date.now() + (24 * 60 * 60 * 1000); 
+                state.format = 'length';
+                beginPersonalSession();
+            } else {
+                navTo('role');
+            }
+        }
+
+        function beginPersonalSession() {
+            navTo('fishing');
+            syncInputDeckToState();
+            startPersonalClock();
+            renderCatchList();
+        }
+
+        function startPersonalClock() {
+            clearInterval(clockInterval);
+            clockInterval = setInterval(() => {
+                let now = Date.now();
+                let elapsed = now - state.startTime;
+                updateTimerDisplay(elapsed, true);
+                if(state.hasTides) updateTidePill();
+            }, 1000);
+        }
+
+        function updateTidePill() {
+            const tideEl = document.getElementById('island-tide-state');
+            if(!tideEl || !state.hasTides) return;
+            tideEl.classList.remove('hidden');
+            let now = Date.now();
+            let baseDate = new Date(now);
+            let parts = state.highTideTime.split(':');
+            let htDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), parseInt(parts[0]), parseInt(parts[1]));
+            let diffHours = (now - htDate.getTime()) / 3600000;
+            if(Math.abs(diffHours) < 0.3) { tideEl.innerText = "HW"; }
+            else if(diffHours > 0) { tideEl.innerText = `HW +${Math.abs(diffHours).toFixed(1)}h`; }
+            else { tideEl.innerText = `HW -${Math.abs(diffHours).toFixed(1)}h`; }
+        }
+
+        window.setWeather = function(w) {
+            haptic();
+            state.weather = w;
+            document.querySelectorAll('.weather-opt').forEach(el => {
+                el.classList.toggle('selected', el.dataset.weather === w);
+            });
+        }
+
+        window.endPersonalSession = function() {
+            haptic();
+            if(state.myCatches.length === 0 && !confirm("No catches logged. End anyway?")) return;
+            state.rig = document.getElementById('input-rig').value.trim();
+            state.bait = document.getElementById('input-bait').value.trim();
+            state.notes = document.getElementById('input-notes').value.trim();
+            lockdownMatch(false);
+        }
+        // ===================================================================
+
+        window.triggerUndoSnackbar = function() {
+            if(undoTimeoutId) clearTimeout(undoTimeoutId);
+            const sb = document.getElementById('undo-snackbar');
+            sb.classList.add('show');
+            undoTimeoutId = setTimeout(() => { sb.classList.remove('show'); lastLoggedCatchRef = null; }, 5000);
+        }
+        window.triggerUndoAction = function() {
+            haptic();
+            if(undoTimeoutId) clearTimeout(undoTimeoutId);
+            document.getElementById('undo-snackbar').classList.remove('show');
+            if(!lastLoggedCatchRef) return;
+            state.myCatches = state.myCatches.filter(c => c.id !== lastLoggedCatchRef.id);
+            lastLoggedCatchRef = null;
+            recalculateMyScores();
+            saveState(); renderCatchList(); pushMyScoreToCloud();
         }
 
         function exitApp() {
@@ -1470,9 +1710,7 @@
             updateTimeAtmDisplay();
         }
 
-        function timeAtmToggleAMPM() {
-            
-        }
+        function timeAtmToggleAMPM() {}
 
         function updateTimeAtmDisplay() {
             for (let i = 1; i <= 4; i++) {
@@ -1510,7 +1748,7 @@
         function closeTimeKeypad() { haptic(); document.getElementById('timeKeypadModal').classList.add('hidden'); }
 
         function listenToCloud() {
-            if(!state.pin) return;
+            if(!state.pin || state.mode === 'personal') return;
             onValue(ref(db, 'matches/' + state.pin), (snapshot) => {
                 if (snapshot.exists()) {
                     globalMatchData = snapshot.val();
@@ -1573,7 +1811,7 @@
         }
 
         function pushMyScoreToCloud() {
-            if(!state.pin) return; updateLiveTally();
+            if(!state.pin || state.mode === 'personal') { updateLiveTally(); return; }
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
             
             if (globalMatchData && globalMatchData.anglers && globalMatchData.anglers[uid]) {
@@ -1586,8 +1824,6 @@
 
         function createMatch() {
             haptic();
-            state.name = document.getElementById('playerName').value || "Steward";
-            state.venue = "Local Beach";
             state.isHost = true; state.isSteward = true; 
             localStorage.setItem('userRole', 'steward');
             state.format = document.getElementById('hostFormat').value; 
@@ -1618,8 +1854,6 @@
 
         function connectToMatch() {
             haptic();
-            state.name = document.getElementById('playerName').value || "Angler";
-            state.venue = "Local Beach";
             state.pin = atmPin; state.status = 'waiting';
             localStorage.setItem('userRole', 'competitor');
             state.isSteward = false;
@@ -1768,18 +2002,18 @@
                             }
                         }
                     } else { 
-                        updateTimerDisplay(remaining); 
+                        updateTimerDisplay(remaining, false); 
                     }
                 } else if (state.status === 'grace') {
                     if(!alertGracePlayed) { alertGracePlayed = true; }
                     let graceRem = state.graceEndTime - now;
                     if (graceRem <= 0) { if (state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } }
-                    else { updateTimerDisplay(graceRem); }
+                    else { updateTimerDisplay(graceRem, false); }
                 }
             }, 1000);
         }
 
-        function updateTimerDisplay(ms) {
+        function updateTimerDisplay(ms, isElapsed = false) {
             let totalSec = Math.max(0, Math.floor(ms / 1000));
             let hours = Math.floor(totalSec / 3600);
             let mins = Math.floor((totalSec % 3600) / 60);
@@ -1788,6 +2022,12 @@
             
             if (!el) return;
             
+            if (isElapsed) {
+                el.innerHTML = `${hours}h ${mins.toString().padStart(2,'0')}m <span class="text-[10px] opacity-75">${secs.toString().padStart(2,'0')}s</span>`;
+                el.className = "text-sm font-black tabular-nums tracking-tighter text-blue-600 leading-none";
+                return;
+            }
+
             if (state.status === 'grace') {
                 el.innerText = `${mins}:${secs.toString().padStart(2,'0')}`;
                 el.className = "text-lg font-black tabular-nums tracking-tight leading-none grace-pulse";
@@ -1828,7 +2068,7 @@
                 
                 if (format === 'speciesHunt') {
                     let existing = spCounts[c.species] || 0;
-                    pts = (existing === 0) ? 25 : (existing === 1) ? 35 : (existing === 2) ? 40 : 1;
+                    pts = (existing === 0) ? 25 : (existing === 1) ? 35 : 40; // Strict 25, 35, 40 points rule
                     spCounts[c.species] = existing + 1;
                 } else if (c.species === 'Mackerel') {
                     let existingMac = spCounts['Mackerel'] || 0;
@@ -1852,6 +2092,8 @@
 
         function recordCatch() {
             haptic();
+            if(antiDoubleTapLock) return; // v7.4.0 2000ms hardware lock
+            
             let selectEl = document.getElementById('inputSpecies');
             let species = selectEl.value;
             if(!species) { return alert("Select species first!"); }
@@ -1863,15 +2105,28 @@
             
             if (state.format !== 'speciesHunt' && (finalSize <= 0 || isNaN(finalSize))) { alert("MEASUREMENT REQUIRED."); return; }
             
-            state.myCatches.unshift({ id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: 0, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now(), edited: false }); 
+            antiDoubleTapLock = true;
+            document.getElementById('btnRecord').disabled = true;
+
+            let newCatch = { id: Date.now().toString(), species: species, size: finalSize, display: displaySize, points: 0, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}), ts: Date.now(), edited: false };
+            state.myCatches.unshift(newCatch); 
+            lastLoggedCatchRef = newCatch;
             
-            document.getElementById('inputSpecies').value = ""; document.getElementById('inputSize').value = ""; document.getElementById('inputLbs').value = ""; document.getElementById('inputOz').value = ""; document.getElementById('inputKg').value = ""; document.getElementById('inputGrammes').value = "";
+            // document.getElementById('inputSpecies').value = ""; // Removed to act as Sticky Species
+            if(document.getElementById('inputSize')) document.getElementById('inputSize').value = ""; 
+            if(document.getElementById('inputLbs')) document.getElementById('inputLbs').value = ""; 
+            if(document.getElementById('inputOz')) document.getElementById('inputOz').value = ""; 
+            if(document.getElementById('inputKg')) document.getElementById('inputKg').value = ""; 
+            if(document.getElementById('inputGrammes')) document.getElementById('inputGrammes').value = "";
             document.activeElement.blur(); 
             
             recalculateMyScores();
             playSuccessBeep();
             triggerConcentricAnimation();
             saveState(); renderCatchList(); pushMyScoreToCloud();
+            triggerUndoSnackbar();
+
+            setTimeout(() => { antiDoubleTapLock = false; document.getElementById('btnRecord').disabled = false; }, 2000);
         }
 
         function deleteCatch(id) {
@@ -1920,10 +2175,10 @@
             
             let myRank = arr.findIndex(a => a.name === state.name) + 1;
             const rankEl = document.getElementById('island-rank-text');
-            if (rankEl) rankEl.innerText = `🏆 ${myRank}${myRank === 1 ? 'ST' : myRank === 2 ? 'ND' : myRank === 3 ? 'RD' : 'TH'}`;
+            if (rankEl && state.mode === 'competition') rankEl.innerText = `🏆 ${myRank}${myRank === 1 ? 'ST' : myRank === 2 ? 'ND' : myRank === 3 ? 'RD' : 'TH'}`;
             
             const gapEl = document.getElementById('island-gap-text');
-            if (gapEl) {
+            if (gapEl && state.mode === 'competition') {
                 if(myRank === 1) gapEl.innerText = `🔥 IN THE LEAD`;
                 else if (myRank > 1) {
                     let diff = arr[myRank - 2].score - arr[myRank - 1].score;
@@ -2167,6 +2422,59 @@
             setTimeout(refreshStewardCatchList, 300);
         }
 
+        // ================= V7.4.0 ANALYTICS ENGINE =================
+        function calculateGoldenHour(catches) {
+            let el = document.getElementById('stat-golden-hour');
+            if(catches.length === 0) { el.innerText = "No Data"; return; }
+            let maxHit = 0; let peakStr = "--:--";
+            for(let i=0; i<catches.length; i++) {
+                let ts = catches[i].ts;
+                let end = ts + 3600000;
+                let count = catches.filter(c => c.ts >= ts && c.ts <= end).length;
+                if(count > maxHit) {
+                    maxHit = count;
+                    let st = new Date(ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+                    let et = new Date(end).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+                    peakStr = `${st} - ${et} (${maxHit})`;
+                }
+            }
+            el.innerText = peakStr;
+        }
+
+        function renderTideCanvas(sess) {
+            const cv = document.getElementById('tideGraphCanvas');
+            if(!cv) return;
+            const ctx = cv.getContext('2d');
+            const w = cv.parentElement.offsetWidth;
+            const h = 150;
+            cv.width = w; cv.height = h;
+            ctx.clearRect(0,0,w,h);
+
+            ctx.strokeStyle = '#cbd5e1'; ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+            ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 3; ctx.beginPath();
+            for(let x=0; x<=w; x++) {
+                let y = (h/2) + Math.cos((x/w)*Math.PI*2)*(h/3);
+                if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+            }
+            ctx.stroke();
+
+            let dur = sess.endTime - sess.startTime;
+            if(dur <= 0) return;
+            sess.myCatches.forEach(f => {
+                if(!f.ts) return;
+                let x = ((f.ts - sess.startTime)/dur)*w;
+                let bd = new Date(f.ts);
+                let parts = sess.highTideTime.split(':');
+                let htd = new Date(bd.getFullYear(), bd.getMonth(), bd.getDate(), parseInt(parts[0]), parseInt(parts[1]));
+                let offH = (f.ts - htd.getTime())/3600000;
+                let ang = (offH/6.25)*Math.PI*2;
+                let y = (h/2) + Math.cos(ang)*(h/3);
+                ctx.fillStyle = '#ea580c'; ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fill();
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1; ctx.stroke();
+            });
+        }
+        // ==========================================================
+
         function generateOfficialMasterReport(source) {
             haptic();
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
@@ -2315,20 +2623,29 @@
         
         function lockdownMatch(isHostPushing) { 
             clearInterval(clockInterval); 
-            if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
+            if(isHostPushing && state.isHost && state.mode !== 'personal') { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
             saveHistory(false); state.status = 'finished'; saveState(); 
             let totalPts = state.myCatches.reduce((s,c) => s + c.points, 0); 
             document.getElementById('finalScore').innerHTML = formatScoreDisplay(totalPts, state.format); 
             document.getElementById('finalCount').innerText = state.myCatches.length; 
             document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; 
             if(state.isSteward) document.getElementById('resultsReportBtn').classList.remove('hidden');
+            
+            calculateGoldenHour(state.myCatches);
+            if(state.hasTides && state.myCatches.length > 0) {
+                document.getElementById('tide-graph-card').classList.remove('hidden');
+                setTimeout(() => renderTideCanvas(state), 300);
+            } else {
+                document.getElementById('tide-graph-card').classList.add('hidden');
+            }
+
             navTo('results'); 
         }
         
         function saveHistory(isL) { 
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); 
             let matchTF = 0, matchBF = "None", bVal = 0, fullStandings = [];
-            if (globalMatchData && globalMatchData.anglers) {
+            if (globalMatchData && globalMatchData.anglers && state.mode !== 'personal') {
                 fullStandings = Object.entries(globalMatchData.anglers).map(([id, data]) => ({ id: id, name: data.name, score: data.score, catches: data.catches ? (Array.isArray(data.catches) ? data.catches : Object.values(data.catches)) : [] }));
                 Object.values(globalMatchData.anglers).forEach(angler => { 
                     if(angler.catches) { 
@@ -2337,8 +2654,10 @@
                         cList.forEach(fish => { if(fish.size > bVal) { bVal = fish.size; matchBF = `${angler.name} - ${fish.species} (${fish.display || fish.size})`; } }); 
                     } 
                 });
+            } else if (state.mode === 'personal') {
+                matchTF = state.myCatches.length;
             }
-            h.unshift({ id: 'match_' + Date.now(), pin: state.pin, venue: state.venue, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), format: state.format, score: state.myCatches.reduce((s,c) => s+c.points, 0), personalCatches: [...state.myCatches], standings: fullStandings.length > 0 ? fullStandings.sort((a,b) => b.score - a.score) : [], playerName: state.name, isLive: isL, isSteward: state.isSteward, endTime: state.endTime, graceEndTime: state.graceEndTime || (state.endTime ? state.endTime + 180000 : null), totalMatchFish: matchTF, matchBiggestFishDisplay: matchBF.replace(/<[^>]*>?/gm, '') }); 
+            h.unshift({ id: 'match_' + Date.now(), pin: state.pin, venue: state.venue, bait: state.bait, mode: state.mode, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), format: state.format, score: state.myCatches.reduce((s,c) => s+c.points, 0), personalCatches: [...state.myCatches], standings: fullStandings.length > 0 ? fullStandings.sort((a,b) => b.score - a.score) : [], playerName: state.name, isLive: isL, isSteward: state.isSteward, endTime: state.endTime, graceEndTime: state.graceEndTime || (state.endTime ? state.endTime + 180000 : null), totalMatchFish: matchTF, matchBiggestFishDisplay: matchBF.replace(/<[^>]*>?/gm, '') }); 
             localStorage.setItem('matchHistory', JSON.stringify(h)); 
         }
         
@@ -2351,19 +2670,23 @@
                 const showLive = !isMatchActuallyFinished;
                 
                 let matchTotalScore = m.standings ? m.standings.reduce((sum, s) => sum + s.score, 0) : 0;
+                if (m.mode === 'personal') matchTotalScore = m.score;
+
                 let bFishDisplay = m.matchBiggestFishDisplay || "N/A";
                 let bFishText = bFishDisplay.includes(" - ") ? bFishDisplay.split(" - ")[1] : bFishDisplay;
                 let bFishAngler = bFishDisplay.includes(" - ") ? bFishDisplay.split(" - ")[0] : "N/A";
 
-                let headerText = showLive ? "" : "<div class='text-[9px] font-black text-slate-400 mb-2 uppercase tracking-[0.4em]'>MATCH ENDED</div>"; 
+                let headerText = showLive ? "" : "<div class='text-[9px] font-black text-slate-400 mb-2 uppercase tracking-[0.4em]'>SESSION ENDED</div>"; 
                 let timerHtml = (showLive && m.endTime) ? `<div class="flex items-center space-x-2 mb-1"><div class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div><span class="history-timer text-xs font-black text-orange-600 tabular-nums" data-end="${m.graceEndTime || m.endTime + 180000}">00:00</span></div>` : "";
                 
+                let modeIcon = m.mode === 'personal' ? '⚓' : '🏆';
+
                 let cardHtml = `
                 ${headerText}
                 <div class="flex items-center justify-between">
                     <div class="text-slate-900 text-sm font-bold flex items-center">
-                        <i class="fa-solid fa-calendar-days mr-2 text-blue-600"></i>
-                        ${m.date}
+                        <span class="mr-2">${modeIcon}</span>
+                        ${m.venue || "Local Beach"} • ${m.date}
                     </div>
                     <div class="flex items-center gap-2">
                         ${showLive ? '<span class="text-[9px] bg-red-600 px-2 py-1 rounded-full text-white font-black animate-pulse">LIVE</span>' : ''}
@@ -2375,7 +2698,7 @@
                         <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-1">Your Total Pts</div>
                         <div class="text-3xl font-black text-blue-600">${formatScoreDisplay(m.score, m.format, true).replace(' pts', '<span class="text-sm font-medium text-slate-500 ml-1">Pts</span>')}</div>
                     </div>
-                    <div class="text-right">
+                    <div class="text-right ${m.mode === 'personal' ? 'hidden' : ''}">
                         <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-1">Match Total (Beach)</div>
                         <div class="text-3xl font-black text-slate-900">${formatScoreDisplay(matchTotalScore, m.format, true).replace(' pts', '<span class="text-sm font-medium text-slate-500 ml-1">Pts</span>')}</div>
                     </div>
@@ -2385,12 +2708,12 @@
                         <div class="text-[10px] font-black uppercase tracking-widest text-blue-600 mb-1">Your Catch</div>
                         <div class="text-2xl font-black text-slate-900">${m.personalCatches.length} <span class="text-sm font-medium text-slate-500">Fish</span></div>
                     </div>
-                    <div class="flex-1 text-center flex flex-col items-center pl-4">
+                    <div class="flex-1 text-center flex flex-col items-center pl-4 ${m.mode === 'personal' ? 'hidden' : ''}">
                         <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-1">Match Catch</div>
                         <div class="text-2xl font-black text-slate-600">${m.totalMatchFish || 0} <span class="text-sm font-medium text-slate-400">Fish</span></div>
                     </div>
                 </div>
-                <div class="bg-slate-100 border border-slate-200 p-4 rounded-xl flex flex-col space-y-3 mt-2">
+                <div class="bg-slate-100 border border-slate-200 p-4 rounded-xl flex flex-col space-y-3 mt-2 ${m.mode === 'personal' ? 'hidden' : ''}">
                     <div class="text-[10px] font-black uppercase tracking-widest text-blue-600 text-left">Match Biggest Fish</div>
                     <div class="flex items-center space-x-3 text-left">
                         <i class="fa-solid fa-fish-fins text-slate-400 text-3xl"></i>
@@ -2404,7 +2727,7 @@
                     </div>
                 </div>
                 <div class="mt-4 -mx-4 -mb-4 p-3 bg-blue-50 border-t border-blue-200 text-center flex items-center justify-center space-x-2 rounded-b-xl">
-                    <div class="text-xs font-bold text-blue-700 leading-snug">Tap anywhere to open match analysis hub</div>
+                    <div class="text-xs font-bold text-blue-700 leading-snug">Tap anywhere to open analysis hub</div>
                 </div>`;
 
                 let wrapper = document.createElement('div');
@@ -2415,6 +2738,60 @@
             });
             document.getElementById('archiveContainer').classList.toggle('hidden', h.length <= 8); 
         }
+
+        // ================= V7.4.0 VENUE INTEL TABS =================
+        window.switchVaultTabMain = function(tab) {
+            haptic();
+            document.getElementById('tab-btn-history').className = "flex-1 py-3 border-b-2 transition text-slate-500 border-transparent";
+            document.getElementById('tab-btn-intel').className = "flex-1 py-3 border-b-2 transition text-slate-500 border-transparent";
+            document.getElementById(`tab-btn-${tab}`).className = "flex-1 py-3 border-b-2 transition text-blue-600 border-blue-600";
+
+            document.getElementById('vault-view-history').classList.toggle('hidden', tab !== 'history');
+            document.getElementById('vault-view-intel').classList.toggle('hidden', tab !== 'intel');
+
+            if(tab === 'intel') renderVenueIntel();
+        }
+
+        function renderVenueIntel() {
+            const h = JSON.parse(localStorage.getItem('matchHistory') || '[]');
+            const cont = document.getElementById('vault-intel-container');
+            if(h.length === 0) { cont.innerHTML = "<p class='text-center text-slate-500 py-10 font-black uppercase text-xs'>No venue data</p>"; return; }
+
+            let vMap = {};
+            h.forEach(m => {
+                if(m.isLive) return; 
+                let vk = (m.venue || "Local Beach").toUpperCase();
+                if(!vMap[vk]) vMap[vk] = { name: m.venue || "Local Beach", sess: 0, fish: 0, baits: {}, maxF: 0, maxSp: '' };
+                vMap[vk].sess++;
+                if(m.personalCatches) {
+                    vMap[vk].fish += m.personalCatches.length;
+                    m.personalCatches.forEach(f => {
+                        if(f.size > vMap[vk].maxF) { vMap[vk].maxF = f.size; vMap[vk].maxSp = f.species; }
+                    });
+                }
+                if(m.bait) { 
+                    vMap[vk].baits[m.bait] = (vMap[vk].baits[m.bait] || 0) + 1;
+                }
+            });
+
+            let html = "";
+            Object.values(vMap).forEach(v => {
+                let topB = "N/A"; let bC = 0;
+                Object.entries(v.baits).forEach(([b,c]) => { if(c>bC){bC=c; topB=b;} });
+                html += `
+                <div class="match-card p-4 text-left shadow-sm">
+                    <h3 class="text-base font-black text-blue-600 uppercase border-b border-slate-200 pb-2 mb-2">📍 ${v.name}</h3>
+                    <div class="text-sm font-bold text-slate-700 space-y-1">
+                        <div>Sessions: <span class="text-slate-900">${v.sess}</span></div>
+                        <div>Total Catches: <span class="text-slate-900">${v.fish} Fish</span></div>
+                        <div>Best Bait: <span class="text-slate-900">${topB}</span></div>
+                        <div>Venue PB: <span class="text-orange-600">${v.maxSp} (${v.maxF}cm)</span></div>
+                    </div>
+                </div>`;
+            });
+            cont.innerHTML = html;
+        }
+        // ==========================================================
 
         function startHistoryClock() {
             stopHistoryClock();
@@ -2444,13 +2821,19 @@
             
             if(tab === 'standings') { 
                 let matchTotalScore = m.standings ? m.standings.reduce((sum, s) => sum + s.score, 0) : 0;
+                if(m.mode === 'personal') matchTotalScore = m.score;
+                
                 let allMatchCatches = [];
-                m.standings.forEach(a => {
-                    if (a.catches) {
-                        let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
-                        cList.forEach(c => allMatchCatches.push(c));
-                    }
-                });
+                if (m.mode === 'personal') {
+                    allMatchCatches = m.personalCatches || [];
+                } else {
+                    m.standings.forEach(a => {
+                        if (a.catches) {
+                            let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
+                            cList.forEach(c => allMatchCatches.push(c));
+                        }
+                    });
+                }
                 
                 let spCounts = {};
                 allMatchCatches.forEach(c => { spCounts[c.species] = (spCounts[c.species] || 0) + 1; });
@@ -2510,18 +2893,18 @@
                     <div class="text-slate-900 text-sm font-bold flex items-center shrink-0">
                         <i class="fa-solid fa-calendar-days mr-2 text-blue-600"></i> ${m.date}
                     </div>
-                    <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
+                    <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95 ${m.mode === 'personal' ? 'hidden' : ''}">
                         <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
                     </button>
                 </div>
 
                 <div class="bg-white p-5 text-center border-b border-slate-200 space-y-4 rounded-xl mt-3 shadow-sm border">
                     <div class="text-[11px] font-black uppercase tracking-widest text-blue-600 mb-2 text-left">
-                        <i class="fa-solid fa-brain mr-1.5 text-blue-400"></i> Match Analysis Hub
+                        <i class="fa-solid fa-brain mr-1.5 text-blue-400"></i> Analysis Hub
                     </div>
                     <div class="space-y-3">
                         <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col text-left">
-                            <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-2">Match Species Breakdown (% of Total)</div>
+                            <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-2">Species Breakdown (% of Total)</div>
                             <div class="space-y-2 divide-y divide-slate-200">
                                 ${spHtml || '<div class="text-xs text-slate-500">No catches recorded</div>'}
                             </div>
@@ -2535,9 +2918,9 @@
                     </div>
                 </div>
                 
-                <div class="bg-slate-100 px-4 py-3 text-center border border-slate-200 flex flex-col items-center mt-3 rounded-t-xl">
+                <div class="bg-slate-100 px-4 py-3 text-center border border-slate-200 flex flex-col items-center mt-3 rounded-t-xl ${m.mode === 'personal' ? 'hidden' : ''}">
                     <div class="text-sm font-black uppercase tracking-widest text-slate-900">
-                       <i class="fa-solid fa-trophy mr-1.5 text-orange-500"></i> Final Standings
+                        <i class="fa-solid fa-trophy mr-1.5 text-orange-500"></i> Final Standings
                     </div>
                     <div class="text-[10px] font-medium text-slate-500 leading-tight mt-1">
                         (Tap name for individual catch record)
@@ -2546,41 +2929,44 @@
                 `;
                 
                 const getOrd = (n) => { let s = ["th", "st", "nd", "rd"], v = n % 100; return (n < 20 && n > 10) ? n + "th" : n + (s[n % 10] || "th"); };
-                let tableHtml = `<div class="divide-y divide-slate-200 mt-0 bg-white rounded-b-xl border border-slate-200 border-t-0 shadow-sm">${m.standings.map((a, i) => {
-                    let catchCount = a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0;
-                    return `
-                    <div onclick="openPastCatchFeed('${a.id || a.name}')" class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} active:bg-slate-100 cursor-pointer transition-all duration-200">
-                        <div class="flex items-center space-x-3 flex-1 min-w-0">
-                            <div class="${i===0?'bg-blue-100 text-blue-700':'bg-slate-200 text-slate-600'} font-black p-3 rounded-full text-xs shrink-0">R${i+1}</div>
-                            <div class="flex flex-col min-w-0 text-left">
-                                <div class="text-sm font-black ${i===0?'text-slate-900':'text-slate-700'} flex items-center">
-                                    <span class="truncate">${a.name}</span> <i class="fa-solid fa-caret-right ml-2 text-slate-400 text-[10px]"></i>
+                let tableHtml = "";
+                if(m.mode !== 'personal') {
+                    tableHtml = `<div class="divide-y divide-slate-200 mt-0 bg-white rounded-b-xl border border-slate-200 border-t-0 shadow-sm">${m.standings.map((a, i) => {
+                        let catchCount = a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0;
+                        return `
+                        <div onclick="openPastCatchFeed('${a.id || a.name}')" class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} active:bg-slate-100 cursor-pointer transition-all duration-200">
+                            <div class="flex items-center space-x-3 flex-1 min-w-0">
+                                <div class="${i===0?'bg-blue-100 text-blue-700':'bg-slate-200 text-slate-600'} font-black p-3 rounded-full text-xs shrink-0">R${i+1}</div>
+                                <div class="flex flex-col min-w-0 text-left">
+                                    <div class="text-sm font-black ${i===0?'text-slate-900':'text-slate-700'} flex items-center">
+                                        <span class="truncate">${a.name}</span> <i class="fa-solid fa-caret-right ml-2 text-slate-400 text-[10px]"></i>
+                                    </div>
+                                    <div class="text-xs font-bold text-slate-500 pt-0.5">Caught: ${catchCount} Fish</div>
                                 </div>
-                                <div class="text-xs font-bold text-slate-500 pt-0.5">Caught: ${catchCount} Fish</div>
                             </div>
-                        </div>
-                        <div class="text-right flex flex-col items-end shrink-0 leading-tight pt-1">
-                            <div class="text-xl font-black ${i===0?'text-blue-600':'text-slate-900'} leading-tight">${formatScoreDisplay(a.score, m.format, true).replace(' pts', '<span class="text-xs text-slate-500 ml-1 leading-tight">Pts</span>')}</div>
-                          <div class="text-[10px] text-slate-500 font-medium">${i===0?'Winner':getOrd(i+1)}</div>
-                        </div>
-                    </div>`}).join('')}</div>`;
+                            <div class="text-right flex flex-col items-end shrink-0 leading-tight pt-1">
+                                <div class="text-xl font-black ${i===0?'text-blue-600':'text-slate-900'} leading-tight">${formatScoreDisplay(a.score, m.format, true).replace(' pts', '<span class="text-xs text-slate-500 ml-1 leading-tight">Pts</span>')}</div>
+                              <div class="text-[10px] text-slate-500 font-medium">${i===0?'Winner':getOrd(i+1)}</div>
+                            </div>
+                        </div>`}).join('')}</div>`;
+                } else {
+                    let listHtml = m.personalCatches.map(c => {
+                        const editMarker = c.edited ? `<i class="fa-solid fa-pen-to-square ml-1.5 text-orange-500 opacity-90" style="font-size: 0.9em;"></i>` : "";
+                        return `<div class="match-card p-3 flex justify-between items-center mb-1.5 border-slate-200">
+                            <div class="text-left">
+                                <b class="text-slate-900 text-xs uppercase">${c.species}${editMarker}</b><br>
+                                <span class="text-[10px] text-slate-500 font-black uppercase tracking-widest mt-1 inline-block">${c.time}</span>
+                            </div>
+                            <div class="text-right">
+                                <b class="text-slate-900 text-sm text-right">${c.display || c.size}</b><br>
+                                <span class="text-[10px] text-blue-600 font-black uppercase mt-1 inline-block">${m.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (m.format.includes('weight') ? 'Recorded' : c.points + ' Pts')}</span>
+                            </div>
+                        </div>`
+                    }).join('');
+                    tableHtml = `<h4 class="text-[10px] font-black uppercase text-slate-500 mb-3 text-center tracking-widest mt-6">Personal Diary View</h4><div class="space-y-2">${listHtml}</div>`; 
+                }
                     
                 document.getElementById('historyContent').innerHTML = hubHtml + tableHtml; 
-            } else { 
-                let listHtml = m.personalCatches.map(c => {
-                    const editMarker = c.edited ? `<i class="fa-solid fa-pen-to-square ml-1.5 text-orange-500 opacity-90" style="font-size: 0.9em;"></i>` : "";
-                    return `<div class="match-card p-3 flex justify-between items-center mb-1.5 border-slate-200">
-                        <div class="text-left">
-                            <b class="text-slate-900 text-xs uppercase">${c.species}${editMarker}</b><br>
-                            <span class="text-[10px] text-slate-500 font-black uppercase tracking-widest mt-1 inline-block">${c.time}</span>
-                        </div>
-                        <div class="text-right">
-                            <b class="text-slate-900 text-sm text-right">${c.display || c.size}</b><br>
-                            <span class="text-[10px] text-blue-600 font-black uppercase mt-1 inline-block">${m.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (m.format.includes('weight') ? 'Recorded' : c.points + ' Pts')}</span>
-                        </div>
-                    </div>`
-                }).join('');
-                document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-slate-500 mb-3 text-center tracking-widest mt-2">Catch Diary</h4><div class="space-y-2">${listHtml}</div>`; 
             }
         }
 
@@ -2639,7 +3025,9 @@
                     let oldState = JSON.parse(saved);
                     state.name = oldState.name || ""; 
                     state.venue = oldState.venue || "Local Beach";
-                    document.getElementById('playerName').value = state.name; 
+                    if(document.getElementById('input-setup-name')) {
+                        document.getElementById('input-setup-name').value = state.name; 
+                    }
                     
                     if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) {
                         state = oldState;
@@ -2658,7 +3046,6 @@
         window.addEventListener('popstate', () => {
             history.pushState(null, null, window.location.href);
             if (document.getElementById('leaderboardDrawer').classList.contains('open') || 
-                document.getElementById('stewardDrawer').classList.contains('open') || 
                 document.getElementById('guideDrawer').classList.contains('open') || 
                 document.getElementById('optionsDrawer').classList.contains('open') || 
                 document.getElementById('inMatchHelpDrawer').classList.contains('open') || 
@@ -2673,6 +3060,14 @@
         });
 
         // SAFE GLOBAL BINDINGS
+        window.executeSetupSkip = executeSetupSkip;
+        window.executeSetupCommit = executeSetupCommit;
+        window.selectDoor = selectDoor;
+        window.setWeather = setWeather;
+        window.endPersonalSession = endPersonalSession;
+        window.triggerUndoAction = triggerUndoAction;
+        window.switchVaultTabMain = switchVaultTabMain;
+
         window.proceedToRoleSelection = proceedToRoleSelection; 
         window.triggerHypeStart = triggerHypeStart; 
         window.navTo = navTo; 
