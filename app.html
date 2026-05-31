@@ -99,11 +99,11 @@
             box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
         }
 
-        /* V10.14.0: Sharper rounded rectangle inputs */
+        /* V10.14.1: Sharper rounded rectangle inputs */
         .pill-input {
             background-color: var(--input-bg) !important;
             border: 2px solid var(--card-border) !important;
-            border-radius: 0.5rem; /* Changed to more professional lg roundness */
+            border-radius: 0.5rem; 
             text-align: center;
             font-weight: 800;
             outline: none;
@@ -118,12 +118,12 @@
             border-width: 3px !important; 
         }
 
-        /* Kept primary action buttons fully rounded for clarity */
+        /* V10.14.1: Globally updated primary action buttons to match modern rounded rectangle style */
         .pill-btn {
             background-color: var(--neon-blue);
             border: none;
             color: #ffffff;
-            border-radius: 9999px;
+            border-radius: 0.5rem; /* Now sleek modern rectangles universally */
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -272,7 +272,7 @@
                 <span class="text-[10px] font-black uppercase text-blue-600 tracking-widest">Angler Profile</span>
                 <h3 id="feedAnglerName" class="text-xl font-black uppercase tracking-tight text-slate-900">Angler Name</h3>
             </div>
-            <button onclick="closeCatchFeed()" class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center font-black text-lg active:scale-95"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeCatchFeed()" class="w-10 h-10 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center font-black text-lg active:scale-95"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div id="feedContent" class="flex-1 overflow-y-auto p-4 space-y-2 scrollable-area bg-slate-50"></div>
         <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -345,7 +345,7 @@
                 <button onclick="openTimeKeypad()" class="pill-btn py-3.5 text-xs"><i class="fa-solid fa-keyboard mr-2"></i> ENTER FINISH TIME</button>
                 <button onclick="stewardSetNewEnd(0)" class="pill-btn btn-destructive py-3.5 text-[10px] leading-none flex flex-col">STRIKE NOW<span class="text-[9px] opacity-80 mt-1">(Activates 3 Min Grace)</span></button>
             </div>
-            <button onclick="closeCustomEndModal()" class="w-full text-slate-600 font-black uppercase text-[10px] tracking-[0.3em] pt-3 bg-slate-100 rounded-full py-3">Return</button>
+            <button onclick="closeCustomEndModal()" class="w-full text-slate-600 font-black uppercase text-[10px] tracking-[0.3em] pt-3 bg-slate-100 rounded-lg py-3">Return</button>
         </div>
     </div>
 
@@ -406,28 +406,23 @@
             </button>
 
             <div class="text-center mt-6 relative w-full mb-2">
-                <h1 class="animate-text delay-title text-5xl font-black tracking-tight mb-0.5 uppercase text-slate-900 mt-8">
+                <h1 class="animate-text delay-title text-4xl font-black tracking-normal text-center mb-0.5 uppercase text-slate-900 mt-8 w-full flex justify-center">
                     SHORE<span class="text-blue-600">SCORE</span>
                 </h1>
 
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display mt-2">
-                    V10.14.0
+                    V10.14.1
                 </div>
             </div>
             
             <div class="w-full max-w-sm space-y-4 mt-6">
                 <div class="match-card p-6 space-y-4 text-center shadow-lg relative z-10">
                     <div>
-                        <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 ml-3 text-left">Angler Profile</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class="fa-solid fa-user text-blue-600/50 text-lg"></i>
-                            </div>
-                            <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Your Name" class="pill-input w-full py-4 pl-12 pr-4 text-base font-bold">
-                        </div>
+                        <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center">Angler Profile</label>
+                        <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Your Name" class="pill-input w-full py-4 px-4 text-base font-bold text-center">
                     </div>
                     <button onclick="proceedToRoleSelection()" class="pill-btn w-full text-base py-4 mt-2 shadow-md border-2 border-blue-600">
-                        Continue <i class="fa-solid fa-arrow-right ml-2"></i>
+                        Continue
                     </button>
                 </div>
                 
@@ -457,13 +452,13 @@
             </div>
             
             <div class="flex-1 flex flex-col justify-center space-y-6 max-w-sm mx-auto w-full pb-20">
-                <button onclick="navTo('join')" class="w-full pill-btn font-black text-xl py-10 rounded-[2rem] shadow-xl border border-blue-600 flex flex-col items-center justify-center">
+                <button onclick="navTo('join')" class="w-full pill-btn font-black text-xl py-10 shadow-xl border border-blue-600 flex flex-col items-center justify-center">
                     <i class="fa-solid fa-user-tag text-4xl mb-3 text-white"></i>
                     Join as Competitor
                 </button>
                 
                 <div class="pt-6">
-                    <button onclick="navTo('host')" class="w-3/4 mx-auto pill-btn text-sm py-5 rounded-[1.5rem] shadow-md border border-blue-600 flex flex-col items-center justify-center opacity-90 bg-white !text-blue-600">
+                    <button onclick="navTo('host')" class="w-3/4 mx-auto pill-btn text-sm py-5 shadow-md border border-blue-600 flex flex-col items-center justify-center opacity-90 bg-white !text-blue-600">
                         <i class="fa-solid fa-crown text-xl mb-1.5"></i>
                         Host as Steward
                     </button>
@@ -518,7 +513,7 @@
                         <option value="speciesHunt">Species Hunt</option>
                     </select>
                 </div>
-                <button id="btnInitMatch" onclick="createMatch()" class="pill-btn w-full text-lg py-4 mt-4 border-blue-600 shadow-md">Initialize Match</button>
+                <button id="btnInitMatch" onclick="createMatch()" class="pill-btn w-full text-lg py-4 mt-4 border-blue-600 shadow-md">Continue</button>
             </div>
         </div>
 
@@ -531,7 +526,7 @@
                 <h3 class="text-xl font-black text-slate-900 uppercase tracking-tight">Angler <span class="text-blue-600">Lobby</span></h3>
                 <div id="attendanceList" class="w-full max-w-sm flex-1 bg-white rounded-[1.5rem] border border-slate-300 p-4 space-y-2 overflow-y-auto shadow-inner"></div>
                 <div id="hostControls" class="hidden w-full max-w-sm pb-5">
-                    <button onclick="triggerHypeStart()" class="pill-btn w-full font-black text-xl py-4 shadow-xl border-blue-600" style="animation: record-pulse 2s infinite;">🚀 START MATCH</button>
+                    <button onclick="triggerHypeStart()" class="pill-btn w-full font-black text-xl py-4 shadow-xl border-blue-600" style="animation: record-pulse 2s infinite;">START MATCH</button>
                 </div>
                 <div id="joinerWaitingText" class="w-full max-w-sm pb-5 text-center">
                     <p class="text-base font-bold text-slate-600 italic">Linked... Waiting for Steward.</p>
@@ -625,11 +620,11 @@
             </div>
 
             <div id="loggingArea" class="scrollable-area p-4 flex flex-col w-full max-w-md mx-auto">
-                <div class="flex justify-between items-center mb-2 w-full px-1">
-                    <button onclick="openInMatchHelp()" class="bg-white border border-slate-300 text-slate-700 font-black text-[10px] uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm active:scale-95 transition">
+                <div class="flex justify-between items-center mb-2 w-full px-1 space-x-2">
+                    <button onclick="openInMatchHelp()" class="pill-btn flex-1 text-[10px] py-2.5 shadow-sm">
                         📖 HELP
                     </button>
-                    <button onclick="openOptionsDrawer()" class="bg-white border border-slate-300 text-slate-700 font-black text-[10px] uppercase tracking-widest py-1.5 px-3 rounded-full shadow-sm active:scale-95 transition">
+                    <button onclick="openOptionsDrawer()" class="pill-btn flex-1 text-[10px] py-2.5 shadow-sm">
                         ⚙️ OPTIONS & EXIT
                     </button>
                 </div>
@@ -640,7 +635,7 @@
             </div>
 
             <button onclick="openLeaderboard()" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
-                <i class="fa-solid fa-trophy mr-2 text-base"></i> CLICK FOR LIVE LEADERBOARD
+                CLICK FOR LIVE LEADERBOARD
             </button>
 
         </div>
@@ -664,7 +659,7 @@
             </div>
 
             <button id="resultsReportBtn" onclick="generateOfficialMasterReport('results')" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
-            <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-full shadow-sm">Return Home (Clear Match)</button>
+            <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-lg shadow-sm">Return Home (Clear Match)</button>
         </div>
 
         <div id="view-history" class="hidden view-frame bg-slate-50">
@@ -727,7 +722,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.14.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.14.1</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -761,7 +756,7 @@
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">How do I check the scores?</h4>
-                        <p class="text-xs text-slate-700 leading-relaxed font-medium">The blue "Island" at the very top of your screen shows your current Rank and Points. To see everyone else, tap the floating <b>🏆 CLICK FOR LIVE LEADERBOARD</b> button at the bottom of your screen. <i>Hint: You can tap anyone's name on that leaderboard to peek at exactly what they are catching!</i></p>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium">The blue "Island" at the very top of your screen shows your current Rank and Points. To see everyone else, tap the floating <b>CLICK FOR LIVE LEADERBOARD</b> button at the bottom of your screen. <i>Hint: You can tap anyone's name on that leaderboard to peek at exactly what they are catching!</i></p>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">Will this drain my battery?</h4>
@@ -2065,7 +2060,7 @@
             let html = "";
             arr.forEach((c) => {
                 let feedBadge = state.format === 'speciesHunt' ? getSpeciesBadge(c.points) : (c.display || c.size);
-                html += `<div class="match-card p-3 flex justify-between items-center mb-2 shadow-sm border border-red-200"><div class="flex-1 text-left pl-1"><span class="font-black text-slate-900 text-sm uppercase tracking-tight">${c.species}</span><span class="text-base ml-3 text-blue-600 font-black">${feedBadge}</span><br><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none block mt-1">${c.time}</span></div><button onclick="stewardDeleteCatch('${godTargetAnglerId}', '${c.id}')" class="text-red-600 bg-red-50 p-3 rounded-xl active:scale-90 transition shadow-sm border border-red-200 flex items-center justify-center"><span class="text-[10px] font-black uppercase pointer-events-none">Del</span></button></div>`;
+                html += `<div class="match-card p-3 flex justify-between items-center mb-2 shadow-sm border border-red-200"><div class="flex-1 text-left pl-1"><span class="font-black text-slate-900 text-sm uppercase tracking-tight">${c.species}</span><span class="text-base ml-3 text-blue-600 font-black">${feedBadge}</span><br><span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none block mt-1">${c.time}</span></div><button onclick="stewardDeleteCatch('${godTargetAnglerId}', '${c.id}')" class="text-red-600 bg-red-50 p-3 rounded-lg active:scale-90 transition shadow-sm border border-red-200 flex items-center justify-center"><span class="text-[10px] font-black uppercase pointer-events-none">Del</span></button></div>`;
             });
             listEl.innerHTML = html;
         }
@@ -2270,7 +2265,7 @@
                 t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
             });
             
-            t += `\n_Generated by ShoreScore V10.14.0_`;
+            t += `\n_Generated by ShoreScore V10.14.1_`;
 
             if (navigator.share) { 
                 navigator.share({ title: 'Official Report', text: t }).catch(console.error); 
@@ -2607,7 +2602,7 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            const CURRENT_FALLBACK_VERSION = "10.14.0";
+            const CURRENT_FALLBACK_VERSION = "10.14.1";
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
             fetch('version.json?t=' + new Date().getTime())
