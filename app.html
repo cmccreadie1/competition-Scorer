@@ -421,6 +421,10 @@
                         <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center">Angler Profile</label>
                         <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Your Name" class="pill-input w-full py-4 px-4 text-base font-bold text-center">
                     </div>
+                    <div class="mt-4">
+                        <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center">Target Venue (Optional)</label>
+                        <input type="text" id="venueName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" oninput="this.value = this.value.replace(/\b\w/g, c => c.toUpperCase())" placeholder="e.g. Arbroath" class="pill-input w-full py-4 px-4 text-base font-bold text-center">
+                    </div>
                     <button onclick="proceedToRoleSelection()" class="pill-btn w-full text-base py-4 mt-2 shadow-md border-2 border-blue-600">
                         Continue
                     </button>
@@ -535,6 +539,7 @@
                         </div>
                     </div>
                 </div>
+
                 <button id="btnInitMatch" onclick="createMatch()" class="pill-btn w-full text-lg py-4 mt-4 border-blue-600 shadow-md">Continue</button>
             </div>
         </div>
@@ -663,8 +668,9 @@
         </div>
 
         <div id="view-results" class="hidden view-frame bg-slate-50 p-5 justify-center space-y-5 text-center pb-24 overflow-y-auto">
-            <h1 class="text-3xl font-black uppercase text-slate-900 border-b-4 border-slate-300 pb-4 tracking-tighter w-full mt-8">Final <span class="text-blue-600">Result</span></h1>
-            
+            <h1 class="text-3xl font-black uppercase text-slate-900 border-b-4 border-slate-300 pb-2 tracking-tighter w-full mt-8">Final <span class="text-blue-600">Result</span></h1>
+            <div class="text-slate-500 font-black text-xs uppercase tracking-widest mb-4" id="resultsVenueDisplay">Venue Name</div>
+
             <div class="match-card p-6 shadow-xl text-center max-w-sm mx-auto w-full">
                 <p class="text-slate-600 font-black uppercase tracking-[0.3em] text-xs mb-2">Tournament Total Score</p>
                 <p class="text-6xl font-black metric-white tracking-tighter" id="finalScore">0</p>
@@ -686,13 +692,21 @@
                     <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest mb-1">Golden Hour (Peak 60 Min)</span>
                     <span class="text-2xl font-black text-orange-600" id="stat-golden-hour">--:--</span>
                 </div>
+                
                 <div class="match-card p-4 shadow-md text-left hidden" id="tideGraphCard">
                     <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest text-center block mb-2">Tidal Curve Vector Map</span>
                     <div class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2">
-                        <canvas id="tideGraphCanvas" style="width: 100%; height: 120px;"></canvas>
+                        <canvas id="tideGraphCanvas" style="width: 100%; height: 160px;"></canvas>
+                    </div>
+                </div>
+
+                <div class="match-card p-4 shadow-md text-left hidden" id="extraDataCard">
+                    <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest text-center block mb-3">Match Performance Data</span>
+                    <div id="extraDataContent" class="space-y-2 divide-y divide-slate-100">
                     </div>
                 </div>
             </div>
+
             <div class="max-w-sm mx-auto w-full">
                 <button id="resultsReportBtn" onclick="generateOfficialMasterReport('results')" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
                 <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-lg shadow-sm w-full">Return Home (Clear Match)</button>
@@ -861,7 +875,7 @@
                 <button onclick="leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest shadow-sm">
                     <i class="fa-solid fa-person-walking-arrow-right mr-2 text-white"></i> Leave Match Early
                 </button>
-                <p class="text-xs font-bold text-slate-700 bg-slate-200/50 p-3 rounded-lg border border-slate-300 mt-3 mb-6 leading-relaxed px-3 text-center">Safe to leave. Your catches are already logged in the live tournament. Check your History Vault later for the final results.</p>
+                <p class="text-[10px] text-slate-500 italic mt-2 mb-6 leading-tight px-2">Don't worry! Your scores are safely saved to the live tournament. You can check the final standings later from your History Vault.</p>
 
                 <div id="stewardControlsGroup" class="hidden space-y-4 pt-4 border-t border-slate-300">
                     <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Steward Desk</h3>
@@ -1036,22 +1050,70 @@
             }
         }
 
+        function renderExtraDataPoints() {
+            let allCatches = [];
+            let totalPhysSize = 0;
+            let spCounts = {};
+            
+            if (globalMatchData && globalMatchData.anglers) {
+                Object.values(globalMatchData.anglers).forEach(a => {
+                    if (a.catches) {
+                        let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
+                        cList.forEach(c => { 
+                            allCatches.push(c);
+                            totalPhysSize += (parseFloat(c.size) || 0);
+                            spCounts[c.species] = (spCounts[c.species] || 0) + 1;
+                        });
+                    }
+                });
+            }
+
+            if(allCatches.length === 0) return;
+            document.getElementById('extraDataCard').classList.remove('hidden');
+            
+            let avgSize = (totalPhysSize / allCatches.length).toFixed(1);
+            let spArr = Object.entries(spCounts).sort((a,b) => b[1] - a[1]);
+            
+            let html = `
+                <div class="flex justify-between items-center pb-2">
+                    <span class="text-xs font-bold text-slate-500">Average Catch Size</span>
+                    <span class="text-sm font-black text-slate-900">${avgSize}${state.format.includes('weight') ? '' : 'cm'}</span>
+                </div>
+                <div class="pt-2">
+                    <span class="text-xs font-bold text-slate-500 block mb-2">Species Breakdown</span>
+                    ${spArr.map(sp => {
+                        let pct = Math.round((sp[1] / allCatches.length) * 100);
+                        return `
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <div class="text-[10px] font-black uppercase tracking-tight text-slate-700 w-20 truncate">${sp[0]}</div>
+                            <div class="h-1.5 flex-1 bg-slate-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500" style="width: ${pct}%"></div>
+                            </div>
+                            <div class="text-[9px] font-bold text-slate-500 w-8 text-right">${pct}%</div>
+                        </div>`;
+                    }).join('')}
+                </div>
+            `;
+            document.getElementById('extraDataContent').innerHTML = html;
+        }
+
         function renderTideCanvas() {
             const cv = document.getElementById('tideGraphCanvas');
             if(!cv || !state.tides) return;
             const ctx = cv.getContext('2d');
-            const w = cv.parentElement.offsetWidth;
-            const h = 120;
-            cv.width = w; cv.height = h;
-            ctx.clearRect(0,0,w,h);
+            
+            const dpr = window.devicePixelRatio || 1;
+            const rect = cv.parentElement.getBoundingClientRect();
+            const w = rect.width;
+            const h = 160; 
+            
+            cv.width = w * dpr;
+            cv.height = h * dpr;
+            ctx.scale(dpr, dpr);
+            cv.style.width = w + 'px';
+            cv.style.height = h + 'px';
 
-            ctx.strokeStyle = '#cbd5e1'; ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
-            ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 3; ctx.beginPath();
-            for(let x=0; x<=w; x++) {
-                let y = (h/2) + Math.cos((x/w)*Math.PI*2)*(h/3);
-                if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-            }
-            ctx.stroke();
+            ctx.clearRect(0,0,w,h);
 
             let allCatches = [];
             if (globalMatchData && globalMatchData.anglers) {
@@ -1064,29 +1126,77 @@
             }
             if (allCatches.length === 0) return;
             
-            let parts = state.tides.high.split(':');
-            let refDate = new Date();
-            let htd = new Date(refDate.getFullYear(), refDate.getMonth(), refDate.getDate(), parseInt(parts[0]), parseInt(parts[1]));
-
             let minTs = Math.min(...allCatches.map(c => c.ts));
             let maxTs = Math.max(...allCatches.map(c => c.ts));
             let tDur = maxTs - minTs;
             if(tDur === 0) tDur = 3600000; 
 
-            minTs -= tDur * 0.1;
-            maxTs += tDur * 0.1;
+            minTs -= tDur * 0.05;
+            maxTs += tDur * 0.05;
             tDur = maxTs - minTs;
+
+            ctx.strokeStyle = '#cbd5e1'; 
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+            ctx.setLineDash([]);
+
+            let parts = state.tides.high.split(':');
+            let refDate = new Date(maxTs);
+            let htd = new Date(refDate.getFullYear(), refDate.getMonth(), refDate.getDate(), parseInt(parts[0]), parseInt(parts[1]));
+
+            let maxHit = 0; let peakStart = 0;
+            allCatches.sort((a,b) => a.ts - b.ts);
+            for(let i=0; i<allCatches.length; i++) {
+                let ts = allCatches[i].ts;
+                let end = ts + 3600000;
+                let count = allCatches.filter(c => c.ts >= ts && c.ts <= end).length;
+                if(count > maxHit) { maxHit = count; peakStart = ts; }
+            }
+            if (maxHit > 0) {
+                let xStart = ((peakStart - minTs)/tDur)*w;
+                let xEnd = ((peakStart + 3600000 - minTs)/tDur)*w;
+                ctx.fillStyle = 'rgba(234, 88, 12, 0.1)'; 
+                ctx.fillRect(xStart, 0, xEnd - xStart, h);
+                
+                ctx.fillStyle = '#ea580c';
+                ctx.font = 'bold 9px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('PEAK', xStart + (xEnd-xStart)/2, h/2 - 40);
+            }
+
+            ctx.strokeStyle = '#0284c7'; 
+            ctx.lineWidth = 2.5; 
+            ctx.beginPath();
+            for(let x=0; x<=w; x++) {
+                let pointTs = minTs + (x/w)*tDur;
+                let offH = (pointTs - htd.getTime())/3600000;
+                let ang = (offH/6.25)*Math.PI*2; 
+                let y = (h/2) + Math.cos(ang)*(h/3);
+                if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+            }
+            ctx.stroke();
 
             allCatches.forEach(f => {
                 let x = ((f.ts - minTs)/tDur)*w;
                 let offH = (f.ts - htd.getTime())/3600000;
                 let ang = (offH/6.25)*Math.PI*2;
                 let y = (h/2) + Math.cos(ang)*(h/3);
-                ctx.fillStyle = '#ea580c'; ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fill();
-                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1; ctx.stroke();
+                
+                let r = Math.max(3, Math.min(7, (f.size || 20) / 10));
+                
+                ctx.fillStyle = '#ea580c'; 
+                ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5; ctx.stroke();
             });
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'bold 9px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(new Date(minTs).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), 5, h - 5);
+            ctx.textAlign = 'right';
+            ctx.fillText(new Date(maxTs).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), w - 5, h - 5);
         }
-        
+
         function openOptionsDrawer() { haptic(); if(document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
         function closeOptionsDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('hidden'), 300); }
         function openInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('open'), 10); }
@@ -1450,6 +1560,7 @@
             localStorage.removeItem('userRole');
             state = { view: 'home', name: '', venue: 'Local Beach', isHost: false, isSteward: false, pin: '', format: 'length', endTime: null, graceEndTime: null, myCatches: [], status: 'idle', tides: null };
             document.getElementById('playerName').value = '';
+            document.getElementById('venueName').value = '';
 
             if(document.getElementById('hostHtH')) {
                 document.getElementById('hostHtH').value = '';
@@ -1476,11 +1587,16 @@
         function proceedToRoleSelection() {
             haptic();
             let pName = document.getElementById('playerName').value || "";
+            let vName = document.getElementById('venueName').value || "Local Beach";
             if (!pName) { alert("Please enter your Name to continue."); return; }
+            
             pName = pName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+            vName = vName.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
+            
             document.getElementById('playerName').value = pName;
+            document.getElementById('venueName').value = vName;
             state.name = pName; 
-            state.venue = "Local Beach";
+            state.venue = vName;
             saveState();
             navTo('role');
         }
@@ -1718,8 +1834,6 @@
 
         function createMatch() {
             haptic();
-            state.name = document.getElementById('playerName').value || "Steward";
-            state.venue = "Local Beach";
             state.isHost = true; state.isSteward = true; 
             localStorage.setItem('userRole', 'steward');
             state.format = document.getElementById('hostFormat').value; 
@@ -1745,6 +1859,7 @@
                 format: state.format, 
                 status: 'waiting', 
                 tides: tideData,
+                venue: state.venue,
                 anglers: { [uid]: { name: state.name, score: 0 } } 
             }).then(() => {
                 btn.innerText = originalText;
@@ -1762,8 +1877,6 @@
 
         function connectToMatch() {
             haptic();
-            state.name = document.getElementById('playerName').value || "Angler";
-            state.venue = "Local Beach";
             state.pin = atmPin; state.status = 'waiting';
             localStorage.setItem('userRole', 'competitor');
             state.isSteward = false;
@@ -1775,7 +1888,12 @@
             get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
                 btn.innerText = originalText;
                 if (snapshot.exists()) {
-                    state.format = snapshot.val().format; listenToCloud(); update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name, score: 0 });
+                    state.format = snapshot.val().format;
+                    state.venue = snapshot.val().venue || state.venue;
+                    state.tides = snapshot.val().tides || null;
+
+                    listenToCloud(); 
+                    update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name, score: 0 });
                     if(snapshot.val().status === 'playing' || snapshot.val().status === 'grace') { state.endTime = snapshot.val().endTime; state.status = snapshot.val().status; beginFishing(false); }
                     else { navTo('waiting'); }
                 } else { alert("Invalid PIN."); atmPin = ""; updateAtm(); }
@@ -2344,6 +2462,9 @@
             let hourCounts = {}, allSpecies = new Set(), totalFish = 0;
             let matchTotalPhysicalSize = 0;
             let spCounts = {}; 
+            
+            let tideStr = state.tides ? `HW: ${state.tides.high} | LW: ${state.tides.low}` : "Not Recorded";
+            let peakStr = document.getElementById('stat-golden-hour') ? document.getElementById('stat-golden-hour').innerText : "--:--";
 
             arr.forEach(a => {
                 if(a.catches) {
@@ -2360,6 +2481,7 @@
             });
 
             let matchTotalRaw = arr.reduce((sum, a) => sum + (a.score || 0), 0);
+            let avgSize = totalFish > 0 ? (matchTotalPhysicalSize / totalFish).toFixed(1) : 0;
             
             let ruleStr = "";
             if(fmt === 'length') ruleStr = "Length Only (cm)";
@@ -2371,7 +2493,7 @@
 
             let numAnglers = arr.length;
 
-            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n📏 *Rules:* ${ruleStr}\n👥 *Anglers:* ${numAnglers}\n\n`;
+            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n🌊 *Tides:* ${tideStr}\n🔥 *Peak Window:* ${peakStr}\n📏 *Rules:* ${ruleStr}\n👥 *Anglers:* ${numAnglers}\n\n`;
             
             t += `👑 *PODIUM*\n`;
             t += `🥇 1st: ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n`;
@@ -2397,7 +2519,8 @@
             if (fmt === 'speciesHunt') {
                 t += `🎣 Match Total: ${totalFish} Fish\n\n`;
             } else if (fmt.startsWith('length')) {
-                t += `📏 Match Total Length: ${formatTotalLength(matchTotalPhysicalSize)} (${totalFish} Fish)\n\n`;
+                t += `📏 Match Total Length: ${formatTotalLength(matchTotalPhysicalSize)} (${totalFish} Fish)\n`;
+                t += `🎯 Average Size: ${avgSize}cm\n\n`;
             } else {
                 t += `⚖️ Match Total Weight: ${formatScoreDisplay(matchTotalRaw, fmt, true)} (${totalFish} Fish)\n\n`;
             }
@@ -2459,8 +2582,11 @@
         
         function lockdownMatch(isHostPushing) { 
             clearInterval(clockInterval); 
-            if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
+            if(isHostPushing && state.isHost && state.mode !== 'personal') { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
             saveHistory(false); state.status = 'finished'; saveState(); 
+            
+            document.getElementById('resultsVenueDisplay').innerText = state.venue;
+            
             let totalPts = state.myCatches.reduce((s,c) => s + c.points, 0); 
             document.getElementById('finalScore').innerHTML = formatScoreDisplay(totalPts, state.format); 
             document.getElementById('finalCount').innerText = state.myCatches.length; 
@@ -2468,10 +2594,14 @@
             if(state.isSteward) document.getElementById('resultsReportBtn').classList.remove('hidden');
             
             calculateGoldenHour();
-            if (state.tides) {
+            renderExtraDataPoints();
+            if(state.tides) {
                 document.getElementById('tideGraphCard').classList.remove('hidden');
                 setTimeout(() => renderTideCanvas(), 300);
+            } else {
+                document.getElementById('tideGraphCard').classList.add('hidden');
             }
+
             navTo('results'); 
         }
         
@@ -2520,6 +2650,7 @@
                         <button onclick="deleteHistoryItem('${m.id}'); event.stopPropagation();" class="text-slate-400 active:text-red-600 text-xl ml-2"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 </div>
+                <div class="text-slate-500 text-[11px] font-black uppercase tracking-widest mt-1 mb-2">${m.venue || 'Local Beach'}</div>
                 <div class="flex items-start justify-between gap-4 mt-2">
                     <div class="text-left">
                         <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-1">Your Total Pts</div>
@@ -2656,13 +2787,16 @@
                 }
 
                 let hubHtml = `
-                <div class="p-4 bg-slate-100 border border-slate-200 flex items-center justify-between rounded-xl">
-                    <div class="text-slate-900 text-sm font-bold flex items-center shrink-0">
-                        <i class="fa-solid fa-calendar-days mr-2 text-blue-600"></i> ${m.date}
+                <div class="p-4 bg-slate-100 border border-slate-200 flex flex-col justify-between rounded-xl">
+                    <div class="flex justify-between items-center w-full mb-3">
+                        <div class="text-slate-900 text-sm font-bold flex items-center shrink-0">
+                            <i class="fa-solid fa-calendar-days mr-2 text-blue-600"></i> ${m.date}
+                        </div>
+                        <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
+                            <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
+                        </button>
                     </div>
-                    <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
-                        <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
-                    </button>
+                    <div class="text-slate-500 text-[10px] font-black uppercase tracking-widest text-left w-full">${m.venue || 'Local Beach'}</div>
                 </div>
 
                 <div class="bg-white p-5 text-center border-b border-slate-200 space-y-4 rounded-xl mt-3 shadow-sm border">
@@ -2789,7 +2923,13 @@
                     let oldState = JSON.parse(saved);
                     state.name = oldState.name || ""; 
                     state.venue = oldState.venue || "Local Beach";
-                    document.getElementById('playerName').value = state.name; 
+                    
+                    if(document.getElementById('playerName')) {
+                        document.getElementById('playerName').value = state.name; 
+                    }
+                    if(document.getElementById('venueName')) {
+                        document.getElementById('venueName').value = state.venue === "Local Beach" ? "" : state.venue;
+                    }
                     
                     if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) {
                         state = oldState;
@@ -2808,7 +2948,6 @@
         window.addEventListener('popstate', () => {
             history.pushState(null, null, window.location.href);
             if (document.getElementById('leaderboardDrawer').classList.contains('open') || 
-                document.getElementById('stewardDrawer').classList.contains('open') || 
                 document.getElementById('guideDrawer').classList.contains('open') || 
                 document.getElementById('optionsDrawer').classList.contains('open') || 
                 document.getElementById('inMatchHelpDrawer').classList.contains('open') || 
