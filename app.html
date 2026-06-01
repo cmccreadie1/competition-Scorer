@@ -46,7 +46,7 @@
         @keyframes record-pulse { 0% { box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(2, 132, 199, 0); } 100% { box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); } }
         .telemetry-unit { font-size: 0.65em; opacity: 0.9; font-weight: 700; margin-left: 2px; text-transform: lowercase; color: var(--text-main); }
         @keyframes ticker-scroll { 0% { left: 100%; transform: translateX(0); } 100% { left: 0; transform: translateX(-100%); } }
-        .ticker-track { position: absolute; display: flex; align-items: center; height: 100%; white-space: nowrap; will-change: transform, left; left: 100%; }
+        .ticker-track { position: absolute; display: flex; align-items: center; height: 100%; white-space: nowrap; will-change: transform, left; left: 100%; pointer-events: none; }
         .scroll-active { animation: ticker-scroll 28s linear infinite; }
         .mask-fade-edges { -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
         @keyframes ripple-ring { 0% { transform: scale(0.8); opacity: 1; border-width: 4px; } 100% { transform: scale(2.5); opacity: 0; border-width: 0px; } }
@@ -54,7 +54,7 @@
         .flash-white { background-color: #22c55e !important; color: #ffffff !important; transition: all 0.1s; }
         @keyframes sync-pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.98); } 100% { opacity: 1; transform: scale(1); } }
         .grace-pulse { animation: sync-pulse 1s infinite ease-in-out; color: var(--neon-red) !important; }
-        .scrollable-area { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 20px !important; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+        .scrollable-area { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-y: contain; padding-bottom: 20px !important; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; pointer-events: auto; }
         .scrollable-area::-webkit-scrollbar { width: 4px; }
         .scrollable-area::-webkit-scrollbar-track { background: transparent; }
         .scrollable-area::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
@@ -66,13 +66,13 @@
         .atm-btn:active { background: #f1f5f9; border-color: var(--neon-blue); }
         #broadcastToast { transform: translateY(-150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #broadcastToast.show { transform: translateY(0); }
-        .drawer-right { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(100%); }
-        .drawer-right.open { transform: translateX(0); }
-        .drawer-left { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
-        .drawer-left.open { transform: translateX(0); }
+        .drawer-right { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(100%); pointer-events: none; }
+        .drawer-right.open { transform: translateX(0); pointer-events: auto; }
+        .drawer-left { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); pointer-events: none; }
+        .drawer-left.open { transform: translateX(0); pointer-events: auto; }
         .hidden { display: none !important; }
         .history-tab.active { background-color: var(--neon-blue); color: #ffffff; border-color: var(--neon-blue); }
-        #customEndModal, #installModal, #stewardGodModal, #editRecordModal { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(15px); }
+        #customEndModal, #installModal, #stewardGodModal, #editRecordModal { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(15px); pointer-events: auto; }
         .splash-text { font-size: 3rem; font-weight: 900; color: var(--neon-blue); text-align: center; text-transform: uppercase; letter-spacing: -0.05em; line-height: 1; }
         @keyframes text-reveal { 0% { opacity: 0; transform: translateY(20px); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
         .animate-icon { opacity: 0; animation: icon-assemble 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: 0.2s; }
@@ -93,6 +93,7 @@
         </div>
     </div>
 
+    <!-- EDIT RECORD MODAL -->
     <div id="editRecordModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-4 border border-blue-500 shadow-2xl relative">
             <div class="text-center border-b border-slate-200 pb-3 mb-2">
@@ -154,6 +155,7 @@
         </div>
     </div>
 
+    <!-- CATCH FEED MODAL -->
     <div id="catchFeedModal" class="fixed inset-0 z-[500] hidden flex flex-col bg-slate-50 transition-transform duration-300 transform translate-x-full">
         <div class="flex-none p-5 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between pt-6">
             <div class="flex flex-col text-left">
@@ -168,6 +170,7 @@
         </div>
     </div>
 
+    <!-- STEWARD GOD MODAL -->
     <div id="stewardGodModal" class="fixed inset-0 z-[400] hidden flex flex-col items-center justify-center p-4">
         <div class="match-card w-full max-w-sm p-5 space-y-4 border border-blue-500 relative shadow-2xl">
             <button onclick="closeStewardGodModal()" class="absolute top-3 right-4 text-slate-500 text-xl"><i class="fa-solid fa-xmark"></i></button>
@@ -219,6 +222,7 @@
         </div>
     </div>
 
+    <!-- CUSTOM END MODAL -->
     <div id="customEndModal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-5 border border-blue-500 shadow-2xl">
             <div class="text-center">
@@ -237,6 +241,7 @@
         </div>
     </div>
 
+    <!-- TIME KEYPAD MODAL -->
     <div id="timeKeypadModal" class="fixed inset-0 z-[400] hidden flex flex-col bg-slate-50 p-4">
         <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
             <button onclick="closeTimeKeypad()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -255,12 +260,13 @@
         <div class="flex-1 grid grid-cols-3 gap-3 p-3 max-w-sm mx-auto w-full content-center">
             <button class="atm-btn" onclick="timeAtmPress(1)">1</button><button class="atm-btn" onclick="timeAtmPress(2)">2</button><button class="atm-btn" onclick="timeAtmPress(3)">3</button>
             <button class="atm-btn" onclick="timeAtmPress(4)">4</button><button class="atm-btn" onclick="timeAtmPress(5)">5</button><button class="atm-btn" onclick="timeAtmPress(6)">6</button>
-            <button class="atm-btn" onclick="timeAtmPress(7)">7</button><button class="atm-btn" onclick="timeAtmPress(8)">8</button><button class="atm-btn" onclick="atmPress(9)">9</button>
+            <button class="atm-btn" onclick="timeAtmPress(7)">7</button><button class="atm-btn" onclick="timeAtmPress(8)">8</button><button class="atm-btn" onclick="timeAtmPress(9)">9</button>
             <button class="atm-btn text-red-600" onclick="closeTimeKeypad()"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="timeAtmPress(0)">0</button><button class="atm-btn text-amber-600" onclick="timeAtmDelete()"><i class="fa-solid fa-backspace"></i></button>
         </div>
         <button id="time-submit-btn" onclick="submitTimeAtm()" class="hidden pill-btn w-full max-w-sm mx-auto text-sm py-4 mb-8 shadow-lg">SET FINISH TIME</button>
     </div> 
     
+    <!-- INSTALL MODAL -->
     <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-5 border border-blue-500 shadow-2xl">
             <div class="text-center">
@@ -272,8 +278,10 @@
         </div>
     </div>
 
+    <!-- MAIN APP CONTAINER -->
     <div id="app-container">
 
+        <!-- HOME SCREEN -->
         <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative overflow-y-auto">
             <button onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-slate-500 active:text-red-500 cursor-pointer flex flex-col items-center z-[50]">
                 <i class="fa-solid fa-power-off text-2xl mb-1"></i>
@@ -285,7 +293,7 @@
                     SHORE<span class="text-blue-600">SCORE</span>
                 </h1>
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display mt-2">
-                    V15.4.0
+                    V15.5.0
                 </div>
             </div>
             
@@ -322,6 +330,7 @@
             </div>
         </div>
 
+        <!-- V15.5.0 REDESIGNED ROLE SELECTION -->
         <div id="view-role" class="hidden view-frame p-5 space-y-5 relative bg-slate-50 overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
                 <button onclick="navTo('home')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -335,9 +344,9 @@
                     <span class="text-[10px] normal-case tracking-normal block mt-1.5 opacity-90 font-medium font-bold">Host a live leaderboard and set the rules for multiple anglers.</span>
                 </button>
                 
-                <button onclick="navTo('join')" class="w-full pill-btn font-black text-xl py-6 shadow-md border-2 border-slate-400 bg-white !text-slate-800 flex flex-col items-center justify-center text-center px-4">
-                    <div class="flex items-center text-blue-600"><i class="fa-solid fa-user-tag mr-3"></i> JOIN MATCH</div>
-                    <span class="text-[10px] normal-case tracking-normal block mt-1.5 text-slate-500 font-medium font-bold">Enter a 4-digit Room PIN, provided by your host, to compete in a live match.</span>
+                <button onclick="navTo('join')" class="w-full pill-btn font-black text-xl py-6 shadow-md border-2 border-emerald-700 bg-emerald-600 !text-white flex flex-col items-center justify-center text-center px-4">
+                    <div class="flex items-center text-white"><i class="fa-solid fa-user-tag mr-3"></i> JOIN MATCH</div>
+                    <span class="text-[10px] normal-case tracking-normal block mt-1.5 text-emerald-100 font-medium font-bold">Enter a 4-digit Room PIN, provided by your host, to compete in a live match.</span>
                 </button>
 
                 <div class="border-t border-slate-200 w-3/4 mx-auto my-2"></div>
@@ -349,6 +358,7 @@
             </div>
         </div>
 
+        <!-- V15.5.0 SOLO SETUP SCREEN (ONE TIDE) -->
         <div id="view-solo-setup" class="hidden view-frame p-5 space-y-4 bg-slate-50 overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3">
                 <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -358,25 +368,15 @@
             <div class="match-card p-6 space-y-5 text-center mt-8 shadow-lg pb-8 border-orange-200">
                 <div class="tide-explainer-box text-left mb-4 bg-orange-50 border-orange-200">
                     <h4 class="font-black text-orange-700 text-[10px] uppercase tracking-widest mb-1.5"><i class="fa-solid fa-chart-line mr-1"></i> Venue Intelligence</h4>
-                    <p class="text-[10px] font-bold text-slate-600 leading-relaxed">Entering the tide times below unlocks the Live Tide Ticker, Heatmap Graphs, Flood/Ebb Bias Ratios, and Species Peak Windows for your personal session.</p>
+                    <p class="text-[10px] font-bold text-slate-600 leading-relaxed">To unlock Venue Intelligence, simply enter the next High Water time for today.</p>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 px-1">
-                    <div class="text-left">
-                        <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">High Water (Opt)</label>
-                        <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-orange-500 focus-within:bg-white transition-all p-1">
-                            <input type="text" id="soloHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('soloHtM').focus();">
-                            <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
-                            <input type="text" id="soloHtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
-                        </div>
-                    </div>
-                    <div class="text-left">
-                        <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">Low Water (Opt)</label>
-                        <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-orange-500 focus-within:bg-white transition-all p-1">
-                            <input type="text" id="soloLtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('soloLtM').focus();">
-                            <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
-                            <input type="text" id="soloLtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
-                        </div>
+                <div class="px-1 w-1/2 mx-auto">
+                    <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 text-center">High Water (Opt)</label>
+                    <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-orange-500 focus-within:bg-white transition-all p-1">
+                        <input type="text" id="soloHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('soloHtM').focus();">
+                        <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
+                        <input type="text" id="soloHtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
                     </div>
                 </div>
 
@@ -384,6 +384,7 @@
             </div>
         </div>
 
+        <!-- JOIN MATCH -->
         <div id="view-join" class="hidden view-frame p-4 bg-slate-50">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
                 <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -408,6 +409,7 @@
             <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto pill-btn text-base py-4 mb-8 shadow-xl">Validate</button>
         </div>
 
+        <!-- V15.5.0 HOST MATCH (ONE TIDE) -->
         <div id="view-host" class="hidden view-frame p-5 space-y-4 bg-slate-50 overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3">
                 <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -434,24 +436,14 @@
                 <div class="pt-4 border-t border-slate-200 mt-6 mb-2">
                     <div class="tide-explainer-box text-left mb-4">
                         <h4 class="font-black text-blue-700 text-[10px] uppercase tracking-widest mb-1.5"><i class="fa-solid fa-chart-line mr-1"></i> Venue Intelligence</h4>
-                        <p class="text-[10px] font-bold text-slate-600 leading-relaxed">Entering the tide times below unlocks the Live Tide Ticker, Heatmap Graphs, Flood/Ebb Bias Ratios, and Species Peak Windows.</p>
+                        <p class="text-[10px] font-bold text-slate-600 leading-relaxed">To unlock Venue Intelligence, simply enter the next High Water time for today.</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 px-1">
-                        <div class="text-left">
-                            <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">High Water (Opt)</label>
-                            <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-blue-600 focus-within:bg-white transition-all p-1">
-                                <input type="text" id="hostHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostHtM').focus();">
-                                <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
-                                <input type="text" id="hostHtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
-                            </div>
-                        </div>
-                        <div class="text-left">
-                            <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">Low Water (Opt)</label>
-                            <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-blue-600 focus-within:bg-white transition-all p-1">
-                                <input type="text" id="hostLtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostLtM').focus();">
-                                <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
-                                <input type="text" id="hostLtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
-                            </div>
+                    <div class="px-1 w-1/2 mx-auto">
+                        <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 text-center">High Water (Opt)</label>
+                        <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-blue-600 focus-within:bg-white transition-all p-1">
+                            <input type="text" id="hostHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostHtM').focus();">
+                            <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
+                            <input type="text" id="hostHtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
                         </div>
                     </div>
                 </div>
@@ -459,6 +451,7 @@
             </div>
         </div>
 
+        <!-- WAITING ROOM -->
         <div id="view-waiting" class="hidden view-frame p-5 space-y-4 bg-slate-50">
             <div class="flex justify-between items-center w-full pb-2 border-b border-slate-200">
                 <button onclick="exitWaitingRoom()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -476,6 +469,7 @@
             </div>
         </div>
 
+        <!-- HYPE SCREEN -->
         <div id="view-hype" class="hidden view-frame items-center justify-center bg-slate-50">
             <div id="hypeContainer" class="flex flex-col items-center justify-center text-center">
                 <div id="hypeCount" class="hype-number flex items-center justify-center w-48 h-48 metric-white bg-white shadow-2xl">5</div>
@@ -483,6 +477,7 @@
             </div>
         </div>
 
+        <!-- MAIN FISHING SCREEN -->
         <div id="view-fishing" class="hidden view-frame relative bg-slate-50">
             <div class="flex-none pt-2 px-3 pb-2 z-50 bg-slate-50/95 backdrop-blur-md shadow-[0_4px_10px_rgba(0,0,0,0.03)] border-b border-slate-200">
                 <div id="dynamic-island" class="w-full max-w-md mx-auto flex flex-col overflow-hidden drop-shadow-md rounded-xl border border-slate-300 bg-white">
@@ -549,8 +544,9 @@
                     </div>
                 </div>
 
+                <!-- Ticker Wrapper -->
                 <div class="w-full max-w-md mx-auto mt-2 bg-white border border-slate-300 shadow-sm rounded-full h-8 flex items-center relative overflow-hidden mask-fade-edges pointer-events-none">
-                    <div id="wallStreetTicker" class="ticker-track text-[11px] font-bold text-slate-700 tracking-wider">
+                    <div id="wallStreetTicker" class="ticker-track text-[11px] font-bold text-slate-700 tracking-wider pointer-events-none">
                         AWAITING TELEMETRY...
                     </div>
                 </div>
@@ -576,6 +572,7 @@
             </button>
         </div>
 
+        <!-- RESULTS SCREEN -->
         <div id="view-results" class="hidden view-frame bg-slate-50 p-5 justify-center space-y-5 text-center pb-24 overflow-y-auto">
             <h1 class="text-3xl font-black uppercase text-slate-900 border-b-4 border-slate-300 pb-2 tracking-tighter w-full mt-8">Final <span class="text-blue-600">Result</span></h1>
             <div class="text-slate-500 font-black text-xs uppercase tracking-widest mb-4" id="resultsVenueDisplay">Venue Name</div>
@@ -611,6 +608,7 @@
             </div>
         </div>
 
+        <!-- HISTORY VAULT -->
         <div id="view-history" class="hidden view-frame bg-slate-50">
             <div class="flex justify-between items-center pb-3 mb-2 px-5 mt-6 text-slate-900 border-b border-slate-300 shadow-sm">
                 <h2 class="text-xl font-black uppercase tracking-[0.1em] text-slate-900">History <span class="text-blue-600">Vault</span></h2>
@@ -630,6 +628,7 @@
             </div>
         </div>
 
+        <!-- KILL SCREEN -->
         <div id="view-kill" class="hidden view-frame items-center justify-center bg-slate-50 p-6 text-center">
             <i class="fa-solid fa-power-off text-red-600 text-6xl mb-6 animate-pulse rounded-full"></i>
             <h1 class="text-3xl font-black uppercase text-slate-900 tracking-widest mb-3">Session Cleared</h1>
@@ -641,6 +640,7 @@
             </div>
         </div>
 
+        <!-- DRAWERS -->
         <div id="guideDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50 z-[250] flex flex-col justify-between hidden">
             <div class="scrollable-area p-6 space-y-8 text-slate-900 text-left pt-8">
                 <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
@@ -677,7 +677,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V15.4.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V15.5.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -796,11 +796,7 @@
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
                 <button onclick="closeStewardLogDrawer()" class="pill-btn btn-destructive w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> CLOSE AUDIT</button>
             </div>
-        </div>
-
-    </div>
-
-    <script type="module">
+            <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, onValue, update, get, remove, off } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
@@ -905,7 +901,7 @@
         }
 
         // ==========================================================
-        // V15.4.0 TIDE MATH & LIVE TICKER ENGINE
+        // V15.5.0 TIDE MATH & LIVE TICKER ENGINE
         // ==========================================================
         
         function getLiveTideString(tidesObj) {
@@ -951,7 +947,7 @@
         }
 
         // ==========================================================
-        // V15.4.0 CANVAS ENGINE
+        // V15.5.0 CANVAS ENGINE
         // ==========================================================
         
         function renderTideCanvasEx(catchesArray, tideObj, canvasId) {
@@ -1411,9 +1407,9 @@
             }
 
             if (allCatches.length === 0) {
-                htmlBlock += `<span class="inline-block pointer-events-none" style="width: 300vw;"></span>`;
+                htmlBlock += `<span class="inline-block" style="width: 300vw;"></span>`;
             } else {
-                htmlBlock += `<span class="inline-block pointer-events-none" style="width: 50vw;"></span>`;
+                htmlBlock += `<span class="inline-block" style="width: 50vw;"></span>`;
             }
 
             const track = document.getElementById('wallStreetTicker');
@@ -1466,12 +1462,8 @@
             if(document.getElementById('hostHtH')) {
                 document.getElementById('hostHtH').value = '';
                 document.getElementById('hostHtM').value = '';
-                document.getElementById('hostLtH').value = '';
-                document.getElementById('hostLtM').value = '';
                 document.getElementById('soloHtH').value = '';
                 document.getElementById('soloHtM').value = '';
-                document.getElementById('soloLtH').value = '';
-                document.getElementById('soloLtM').value = '';
             }
             
             clearInterval(clockInterval);
@@ -1747,12 +1739,10 @@
             
             let htH = document.getElementById('soloHtH').value.trim();
             let htM = document.getElementById('soloHtM').value.trim();
-            let ltH = document.getElementById('soloLtH').value.trim();
-            let ltM = document.getElementById('soloLtM').value.trim();
             
             let tideData = null;
-            if (htH && htM && ltH && ltM) {
-                tideData = { high: `${htH.padStart(2,'0')}:${htM.padStart(2,'0')}`, low: `${ltH.padStart(2,'0')}:${ltM.padStart(2,'0')}` };
+            if (htH && htM) {
+                tideData = { high: `${htH.padStart(2,'0')}:${htM.padStart(2,'0')}` };
             }
             state.tides = tideData;
 
@@ -1773,12 +1763,10 @@
             
             let htH = document.getElementById('hostHtH').value.trim();
             let htM = document.getElementById('hostHtM').value.trim();
-            let ltH = document.getElementById('hostLtH').value.trim();
-            let ltM = document.getElementById('hostLtM').value.trim();
             
             let tideData = null;
-            if (htH && htM && ltH && ltM) {
-                tideData = { high: `${htH.padStart(2,'0')}:${htM.padStart(2,'0')}`, low: `${ltH.padStart(2,'0')}:${ltM.padStart(2,'0')}` };
+            if (htH && htM) {
+                tideData = { high: `${htH.padStart(2,'0')}:${htM.padStart(2,'0')}` };
             }
             state.tides = tideData;
 
@@ -2399,8 +2387,6 @@
             document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; 
             if(state.isSteward || state.isSolo) document.getElementById('resultsReportBtn').classList.remove('hidden');
             
-            calculateGoldenHour();
-            renderExtraDataPoints();
             if(state.tides) {
                 document.getElementById('tideGraphCard').classList.remove('hidden');
                 setTimeout(() => renderTideCanvasEx(state.myCatches, state.tides, 'tideGraphCanvas'), 300);
@@ -2490,10 +2476,10 @@
             }
             let biteVelocity = matchDurHours > 0 && numAnglers > 0 ? (totalFish / numAnglers / matchDurHours).toFixed(1) : "0.0";
 
-            let tideStr = matchTides ? `High Water ${matchTides.high} | Low Water ${matchTides.low}` : "Not Recorded";
-            let peakStr = document.getElementById('stat-golden-hour') ? document.getElementById('stat-golden-hour').innerText : "--:--";
+            let tideStr = matchTides ? `High Water ${matchTides.high}` : "Not Recorded";
+            let peakStr = "--:--";
             let floodCount = 0; let ebbCount = 0;
-            let slackCount = 0; let flowCount = 0; let turnCount = 0;
+            let turnCount = 0;
             
             if (matchTides && totalFish > 0) {
                 let parts = matchTides.high.split(':');
@@ -2511,9 +2497,6 @@
                         else floodCount++;
 
                         let absH = Math.abs(diffH);
-                        if (absH <= 0.5 || Math.abs(absH - 6.25) <= 0.5) slackCount++;
-                        else flowCount++;
-
                         if ((diffH > 0.5 && diffH <= 1.25) || (diffH > -5.75 && diffH <= -5.0)) turnCount++;
                     }
                 });
@@ -2651,7 +2634,7 @@
                 });
             }
 
-            t += `_Generated by ShoreScore V15.4.0_`;
+            t += `_Generated by ShoreScore V15.5.0_`;
 
             if (navigator.share) { 
                 navigator.share({ title: 'Official Report', text: t }).catch(console.error); 
@@ -2864,14 +2847,14 @@
                     }).join('');
                 }
 
-                let tideStr = m.tides ? `HW: ${m.tides.high} | LW: ${m.tides.low}` : "Not Recorded";
+                let tideStr = m.tides ? `High Water: ${m.tides.high}` : "Not Recorded";
 
                 let hubHtml = `
                 <div class="flex justify-between items-center w-full mb-3 mt-4">
                     <div class="text-slate-900 text-base font-bold flex items-center shrink-0">
                         <i class="fa-solid fa-location-dot mr-2 ${m.isSolo ? 'text-orange-600':'text-blue-600'}"></i> ${m.venue || 'Local Beach'}
                     </div>
-                    <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
+                    <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95 pointer-events-auto">
                         <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
                     </button>
                 </div>
@@ -2924,7 +2907,7 @@
                 `;
                 
                 const getOrd = (n) => { let s = ["th", "st", "nd", "rd"], v = n % 100; return (n < 20 && n > 10) ? n + "th" : n + (s[n % 10] || "th"); };
-                let tableHtml = `<div class="divide-y divide-slate-200 mt-0 bg-white rounded-b-xl border border-slate-200 border-t-0 shadow-sm mb-12">${m.standings.map((a, i) => {
+                let tableHtml = `<div class="divide-y divide-slate-200 mt-0 bg-white rounded-b-xl border border-slate-200 border-t-0 shadow-sm mb-12 pointer-events-auto">${m.standings.map((a, i) => {
                     let catchCount = a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0;
                     return `
                     <div ${!m.isSolo ? `onclick="openPastCatchFeed('${a.id || a.name}')"` : ''} class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} ${!m.isSolo ? 'active:bg-slate-100 cursor-pointer' : ''} transition-all duration-200">
@@ -2982,7 +2965,7 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            const CURRENT_FALLBACK_VERSION = "15.4.0";
+            const CURRENT_FALLBACK_VERSION = "15.5.0";
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
             fetch('version.json?t=' + new Date().getTime())
@@ -3124,3 +3107,6 @@
     </script>
 </body>
 </html>
+        </div>
+
+    </div>
