@@ -287,6 +287,7 @@
                 <h3 class="text-sm font-black uppercase tracking-tight text-slate-900">Steward <span class="text-blue-600">Override</span></h3>
                 <p id="godModeAnglerName" class="text-slate-900 text-base font-black mt-1">Angler Name</p>
             </div>
+            
             <div>
                 <select id="godInputSpecies" onchange="godCheckSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none">
                     <option value="" disabled selected>-- Select Fish Species --</option>
@@ -395,6 +396,7 @@
     <div id="app-container">
 
         <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative overflow-y-auto">
+
             <button onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-slate-500 active:text-red-500 cursor-pointer flex flex-col items-center z-[50]">
                 <i class="fa-solid fa-power-off text-2xl mb-1"></i>
                 <span class="text-[10px] font-black uppercase tracking-widest">Close</span>
@@ -577,6 +579,7 @@
                                 <span id="island-gap-text" class="hidden text-xs font-bold text-slate-500">🎯 --</span>
                             </div>
                             <div class="flex items-center space-x-2 shrink-0">
+                                <span id="island-tide-state" class="text-[10px] font-black text-blue-600 hidden mr-2 bg-blue-100 px-2 py-0.5 rounded">HW --</span>
                                 <span id="islandScore" class="text-xl font-black text-blue-600">0</span>
                                 <div class="w-1.5 h-1.5 bg-slate-300 rounded-full"></div>
                                 <div id="mainTimer" class="text-sm font-black text-slate-900">--:--</div>
@@ -810,6 +813,10 @@
                         <p class="text-xs text-slate-700 leading-relaxed font-medium">No. ShoreScore does not have a "sleep" button. When you are done logging a fish, just press your phone's physical power button to turn the screen off and drop it in your pocket. The exact second you wake your screen up, the app will instantly reconnect and download any new fish caught by the rest of the beach.</p>
                     </div>
                 </section>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
+        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">What if I need to leave early?</h4>
+        <p class="text-xs text-slate-700 leading-relaxed font-medium">If you need to pack up before the clock hits zero, open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from your History Vault.</p>
+    </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
                 <button onclick="closeInMatchHelp()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
@@ -997,6 +1004,24 @@
                     navigator.vibrate(50); 
                 }
             } catch(e) {}
+        }
+
+        function updateTidePill() {
+            const tideEl = document.getElementById('island-tide-state');
+            if(!tideEl || !state.tides) return;
+            tideEl.classList.remove('hidden');
+            let now = Date.now();
+            let baseDate = new Date(now);
+            let parts = state.tides.high.split(':');
+            let htDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), parseInt(parts[0]), parseInt(parts[1]));
+            let diffHours = (now - htDate.getTime()) / 3600000;
+            
+            while (diffHours > 6.25) diffHours -= 12.5;
+            while (diffHours < -6.25) diffHours += 12.5;
+
+            if(Math.abs(diffHours) < 0.3) { tideEl.innerText = "HW"; }
+            else if(diffHours > 0) { tideEl.innerText = `HW +${Math.abs(diffHours).toFixed(1)}h`; }
+            else { tideEl.innerText = `HW ${diffHours.toFixed(1)}h`; }
         }
 
         // ================= V15.0.0 ANALYTICS ENGINE =================
@@ -2039,6 +2064,12 @@
                     if (graceRem <= 0) { if (state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } }
                     else { updateTimerDisplay(graceRem); }
                 }
+
+                // Update HUD Tide Pill
+                if (state.tides) {
+                    updateTidePill();
+                }
+
             }, 1000);
         }
 
@@ -2639,6 +2670,7 @@
                 buttonRef.classList.remove('reporting');
             }
         }
+        // ==========================================================
 
         function shareUnifiedReport() { generateOfficialMasterReport('results'); }
         function endMatchEarly(grace) { haptic(); if(state.isSteward && state.pin) { if(grace) { closeOptionsDrawer(); document.getElementById('customEndModal').classList.remove('hidden'); } } }
