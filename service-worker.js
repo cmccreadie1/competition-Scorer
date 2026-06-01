@@ -1,7 +1,7 @@
 // ================================================================================
-// SHORESCORE v15.2.0 CORE OFFLINE SEAMLESS SERVICE WORKER INFRASTRUCTURE
+// SHORESCORE v16.0.0 CORE OFFLINE SEAMLESS SERVICE WORKER INFRASTRUCTURE
 // ================================================================================
-const CACHE_IDENTIFIER = 'shorescore-v15.2.0-matrix-cache';
+const CACHE_IDENTIFIER = 'shorescore-v16.0.0-matrix-cache';
 const STATIC_ASSET_MANIFEST = [
   './',
   './index.html',
@@ -9,7 +9,6 @@ const STATIC_ASSET_MANIFEST = [
   './icon-512.png'
 ];
 
-// Installation Runtime Hook Handler
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_IDENTIFIER)
@@ -20,7 +19,6 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Cache Eviction & Cleanup Operations Routing Loop Context Flags
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((allRegisteredCacheKeys) => {
@@ -35,9 +33,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Interception Logic Pipelines (Stale-While-Revalidate Structural Network Optimization Pattern)
 self.addEventListener('fetch', (event) => {
-  // Guard network requests handling to prioritize inner storage arrays components layers
   if (event.request.method !== 'GET') return;
 
   // STRICT BYPASS: Never cache the version file so the app always sees the Netlify update
@@ -55,7 +51,6 @@ self.addEventListener('fetch', (event) => {
           }
           return freshNetworkResponse;
         }).catch(() => {
-          // Silent catch to handle deep offline states elegantly
         });
 
         return cachedAssetResponse || backgroundFetchDeployment;
