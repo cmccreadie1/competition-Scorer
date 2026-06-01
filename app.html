@@ -121,7 +121,7 @@
             background-color: var(--neon-blue);
             border: none;
             color: #ffffff;
-            border-radius: 0.5rem;
+            border-radius: 0.5rem; 
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -287,7 +287,6 @@
                 <h3 class="text-sm font-black uppercase tracking-tight text-slate-900">Steward <span class="text-blue-600">Override</span></h3>
                 <p id="godModeAnglerName" class="text-slate-900 text-base font-black mt-1">Angler Name</p>
             </div>
-            
             <div>
                 <select id="godInputSpecies" onchange="godCheckSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none">
                     <option value="" disabled selected>-- Select Fish Species --</option>
@@ -407,7 +406,7 @@
                     SHORE<span class="text-blue-600">SCORE</span>
                 </h1>
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display mt-2">
-                    V15.0.0
+                    V15.1.0
                 </div>
             </div>
             
@@ -517,7 +516,7 @@
                 <div class="pt-4 border-t border-slate-200 mt-6 mb-2">
                     <div class="tide-explainer-box text-left mb-4">
                         <h4 class="font-black text-blue-700 text-[10px] uppercase tracking-widest mb-1.5"><i class="fa-solid fa-chart-line mr-1"></i> Venue Intelligence</h4>
-                        <p class="text-[10px] font-bold text-slate-600 leading-relaxed">Entering the tide times below unlocks the Tidal Wave Heatmap, Flood/Ebb Bias Ratios, and Species Peak Windows in the final Match Report.</p>
+                        <p class="text-[10px] font-bold text-slate-600 leading-relaxed">Entering the tide times below unlocks the Live Tide Ticker, Heatmap Graphs, Flood/Ebb Bias Ratios, and Species Peak Windows.</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 px-1">
@@ -579,7 +578,6 @@
                                 <span id="island-gap-text" class="hidden text-xs font-bold text-slate-500">🎯 --</span>
                             </div>
                             <div class="flex items-center space-x-2 shrink-0">
-                                <span id="island-tide-state" class="text-[10px] font-black text-blue-600 hidden mr-2 bg-blue-100 px-2 py-0.5 rounded">HW --</span>
                                 <span id="islandScore" class="text-xl font-black text-blue-600">0</span>
                                 <div class="w-1.5 h-1.5 bg-slate-300 rounded-full"></div>
                                 <div id="mainTimer" class="text-sm font-black text-slate-900">--:--</div>
@@ -660,6 +658,7 @@
             <button onclick="openLeaderboard()" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
                 CLICK FOR LIVE LEADERBOARD
             </button>
+
         </div>
 
         <div id="view-results" class="hidden view-frame bg-slate-50 p-5 justify-center space-y-5 text-center pb-24 overflow-y-auto">
@@ -687,12 +686,14 @@
                     <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest mb-1">Golden Hour (Peak 60 Min)</span>
                     <span class="text-2xl font-black text-orange-600" id="stat-golden-hour">--:--</span>
                 </div>
+                
                 <div class="match-card p-4 shadow-md text-left hidden" id="tideGraphCard">
                     <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest text-center block mb-2">Tidal Wave Heatmap</span>
                     <div class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2">
                         <canvas id="tideGraphCanvas" style="width: 100%; height: 160px;"></canvas>
                     </div>
                 </div>
+
                 <div class="match-card p-4 shadow-md text-left hidden" id="extraDataCard">
                     <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest text-center block mb-3">Match Performance Data</span>
                     <div id="extraDataContent" class="space-y-2 divide-y divide-slate-100">
@@ -772,7 +773,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V15.0.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V15.1.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -814,9 +815,9 @@
                     </div>
                 </section>
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
-        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">What if I need to leave early?</h4>
-        <p class="text-xs text-slate-700 leading-relaxed font-medium">If you need to pack up before the clock hits zero, open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from your History Vault.</p>
-    </div>
+                    <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">What if I need to leave early?</h4>
+                    <p class="text-xs text-slate-700 leading-relaxed font-medium">If you need to pack up before the clock hits zero, open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from your History Vault.</p>
+                </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
                 <button onclick="closeInMatchHelp()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
@@ -1006,27 +1007,163 @@
             } catch(e) {}
         }
 
-        function updateTidePill() {
-            const tideEl = document.getElementById('island-tide-state');
-            if(!tideEl || !state.tides) return;
-            tideEl.classList.remove('hidden');
+        // ==========================================================
+        // V15.1.0 TIDE MATH & LIVE TICKER ENGINE
+        // ==========================================================
+        
+        function getLiveTideString(tidesObj) {
+            if(!tidesObj || !tidesObj.high) return "";
             let now = Date.now();
-            let baseDate = new Date(now);
-            let parts = state.tides.high.split(':');
-            let htDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), parseInt(parts[0]), parseInt(parts[1]));
-            let diffHours = (now - htDate.getTime()) / 3600000;
+            let parts = tidesObj.high.split(':');
+            let htd = new Date(); htd.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
             
-            while (diffHours > 6.25) diffHours -= 12.5;
-            while (diffHours < -6.25) diffHours += 12.5;
-
-            if(Math.abs(diffHours) < 0.3) { tideEl.innerText = "HW"; }
-            else if(diffHours > 0) { tideEl.innerText = `HW +${Math.abs(diffHours).toFixed(1)}h`; }
-            else { tideEl.innerText = `HW ${diffHours.toFixed(1)}h`; }
+            let diffH = (now - htd.getTime()) / 3600000;
+            
+            // Normalize to a 12.5 hour tidal cycle (-6.25 to +6.25)
+            while (diffH > 6.25) diffH -= 12.5;
+            while (diffH < -6.25) diffH += 12.5;
+            
+            let absH = Math.abs(diffH);
+            let sign = Math.sign(diffH); // Positive = Ebbing, Negative = Flooding
+            
+            // 30 minute (0.5 hour) slack water rule
+            if (absH <= 0.5) {
+                let minsLeft = Math.round((0.5 - absH) * 60);
+                return `🌊 TIDE STATE: High Water Slack (Ebb begins in ${minsLeft}m) /// `;
+            } else if (absH >= 5.75) {
+                let minsLeft = Math.round((6.25 - absH) * 60);
+                return `🌊 TIDE STATE: Low Water Slack (Flood begins in ${minsLeft}m) /// `;
+            } else if (sign > 0) {
+                // Ebbing
+                let timeToLw = 6.25 - diffH;
+                let hrs = Math.floor(timeToLw);
+                let mins = Math.round((timeToLw - hrs) * 60);
+                return `🌊 TIDE STATE: Ebbing (${hrs}h ${mins.toString().padStart(2,'0')}m until Low Water) /// `;
+            } else {
+                // Flooding
+                let hrs = Math.floor(absH);
+                let mins = Math.round((absH - hrs) * 60);
+                return `🌊 TIDE STATE: Flooding (${hrs}h ${mins.toString().padStart(2,'0')}m until High Water) /// `;
+            }
         }
 
-        // ================= V15.0.0 ANALYTICS ENGINE =================
+        // ==========================================================
+        // V15.1.0 CANVAS ENGINE 
+        // ==========================================================
+        
+        function renderTideCanvasEx(catchesArray, tideObj, canvasId) {
+            const cv = document.getElementById(canvasId);
+            if(!cv || !tideObj || !tideObj.high || catchesArray.length === 0) return;
+            const ctx = cv.getContext('2d');
+            
+            const dpr = window.devicePixelRatio || 1;
+            const rect = cv.parentElement.getBoundingClientRect();
+            const w = rect.width;
+            const h = 160; 
+            
+            cv.width = w * dpr;
+            cv.height = h * dpr;
+            ctx.scale(dpr, dpr);
+            cv.style.width = w + 'px';
+            cv.style.height = h + 'px';
 
-        function calculateGoldenHour() {
+            ctx.clearRect(0,0,w,h);
+
+            let allCatches = catchesArray.filter(c => c.ts);
+            if (allCatches.length === 0) return;
+            
+            let minTs = Math.min(...allCatches.map(c => c.ts));
+            let maxTs = Math.max(...allCatches.map(c => c.ts));
+            let tDur = maxTs - minTs;
+            if(tDur === 0) tDur = 3600000; 
+
+            // Pad the graph slightly so dots aren't cut off at the edges
+            minTs -= tDur * 0.05;
+            maxTs += tDur * 0.05;
+            tDur = maxTs - minTs;
+
+            // Draw dotted center line
+            ctx.strokeStyle = '#cbd5e1'; 
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Establish HW Date Object based on match day
+            let parts = tideObj.high.split(':');
+            let refDate = new Date(maxTs);
+            let htd = new Date(refDate.getFullYear(), refDate.getMonth(), refDate.getDate(), parseInt(parts[0]), parseInt(parts[1]));
+
+            // Draw Golden Hour Shading
+            let maxHit = 0; let peakStart = 0;
+            allCatches.sort((a,b) => a.ts - b.ts);
+            for(let i=0; i<allCatches.length; i++) {
+                let ts = allCatches[i].ts;
+                let end = ts + 3600000;
+                let count = allCatches.filter(c => c.ts >= ts && c.ts <= end).length;
+                if(count > maxHit) { maxHit = count; peakStart = ts; }
+            }
+            if (maxHit > 0) {
+                let xStart = ((peakStart - minTs)/tDur)*w;
+                let xEnd = ((peakStart + 3600000 - minTs)/tDur)*w;
+                ctx.fillStyle = 'rgba(234, 88, 12, 0.1)'; 
+                ctx.fillRect(xStart, 0, xEnd - xStart, h);
+                
+                ctx.fillStyle = '#ea580c';
+                ctx.font = 'bold 9px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('PEAK', xStart + (xEnd-xStart)/2, h/2 - 40);
+            }
+
+            // Draw Sine Wave representing the 12.5hr tide cycle
+            ctx.strokeStyle = '#0284c7'; 
+            ctx.lineWidth = 2.5; 
+            ctx.beginPath();
+            for(let x=0; x<=w; x++) {
+                let pointTs = minTs + (x/w)*tDur;
+                let offH = (pointTs - htd.getTime())/3600000;
+                let ang = (offH/6.25)*Math.PI*2; 
+                let y = (h/2) + Math.cos(ang)*(h/3);
+                if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+            }
+            ctx.stroke();
+
+            // The Bubble Heatmap Data Prep (group into 15 min windows)
+            let buckets = {};
+            let bucketSizeMs = 900000; // 15 mins
+            allCatches.forEach(f => {
+                let bIdx = Math.floor(f.ts / bucketSizeMs);
+                if(!buckets[bIdx]) buckets[bIdx] = { ts: f.ts, count: 0 };
+                buckets[bIdx].count++;
+            });
+
+            let maxBucketCount = Math.max(...Object.values(buckets).map(b => b.count));
+            if (maxBucketCount === 0) maxBucketCount = 1;
+
+            // Plot the Bubbles
+            Object.values(buckets).forEach(b => {
+                let x = ((b.ts - minTs)/tDur)*w;
+                let offH = (b.ts - htd.getTime())/3600000;
+                let ang = (offH/6.25)*Math.PI*2;
+                let y = (h/2) + Math.cos(ang)*(h/3);
+                
+                let r = Math.max(3, (b.count / maxBucketCount) * 12);
+                
+                ctx.fillStyle = '#ea580c'; 
+                ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5; ctx.stroke();
+            });
+
+            // X-Axis Time Labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = 'bold 9px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(new Date(minTs).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), 5, h - 5);
+            ctx.textAlign = 'right';
+            ctx.fillText(new Date(maxTs).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), w - 5, h - 5);
+        }
+
+        // Helper wrappers
+        function calculateLiveGoldenHour() {
             let allCatches = [];
             if (globalMatchData && globalMatchData.anglers) {
                 Object.values(globalMatchData.anglers).forEach(a => {
@@ -1058,166 +1195,6 @@
                 document.getElementById('goldenHourCard').classList.remove('hidden');
                 document.getElementById('stat-golden-hour').innerText = peakStr;
             }
-        }
-
-        function renderExtraDataPoints() {
-            let allCatches = [];
-            let totalPhysSize = 0;
-            let spCounts = {};
-            
-            if (globalMatchData && globalMatchData.anglers) {
-                Object.values(globalMatchData.anglers).forEach(a => {
-                    if (a.catches) {
-                        let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
-                        cList.forEach(c => { 
-                            allCatches.push(c);
-                            totalPhysSize += (parseFloat(c.size) || 0);
-                            spCounts[c.species] = (spCounts[c.species] || 0) + 1;
-                        });
-                    }
-                });
-            }
-
-            if(allCatches.length === 0) return;
-            document.getElementById('extraDataCard').classList.remove('hidden');
-            
-            let avgSize = (totalPhysSize / allCatches.length).toFixed(1);
-            let spArr = Object.entries(spCounts).sort((a,b) => b[1] - a[1]);
-            
-            let html = `
-                <div class="flex justify-between items-center pb-2">
-                    <span class="text-xs font-bold text-slate-500">Average Catch Size</span>
-                    <span class="text-sm font-black text-slate-900">${avgSize}${state.format.includes('weight') ? '' : 'cm'}</span>
-                </div>
-                <div class="pt-2">
-                    <span class="text-xs font-bold text-slate-500 block mb-2">Species Breakdown</span>
-                    ${spArr.map(sp => {
-                        let pct = Math.round((sp[1] / allCatches.length) * 100);
-                        return `
-                        <div class="flex items-center gap-2 mb-1.5">
-                            <div class="text-[10px] font-black uppercase tracking-tight text-slate-700 w-20 truncate">${sp[0]}</div>
-                            <div class="h-1.5 flex-1 bg-slate-200 rounded-full overflow-hidden">
-                                <div class="h-full bg-blue-500" style="width: ${pct}%"></div>
-                            </div>
-                            <div class="text-[9px] font-bold text-slate-500 w-8 text-right">${pct}%</div>
-                        </div>`;
-                    }).join('')}
-                </div>
-            `;
-            document.getElementById('extraDataContent').innerHTML = html;
-        }
-
-        function renderTideCanvas() {
-            const cv = document.getElementById('tideGraphCanvas');
-            if(!cv || !state.tides) return;
-            const ctx = cv.getContext('2d');
-            
-            const dpr = window.devicePixelRatio || 1;
-            const rect = cv.parentElement.getBoundingClientRect();
-            const w = rect.width;
-            const h = 160; 
-            
-            cv.width = w * dpr;
-            cv.height = h * dpr;
-            ctx.scale(dpr, dpr);
-            cv.style.width = w + 'px';
-            cv.style.height = h + 'px';
-
-            ctx.clearRect(0,0,w,h);
-
-            let allCatches = [];
-            if (globalMatchData && globalMatchData.anglers) {
-                Object.values(globalMatchData.anglers).forEach(a => {
-                    if (a.catches) {
-                        let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
-                        cList.forEach(c => { if(c.ts) allCatches.push(c) });
-                    }
-                });
-            }
-            if (allCatches.length === 0) return;
-            
-            let minTs = Math.min(...allCatches.map(c => c.ts));
-            let maxTs = Math.max(...allCatches.map(c => c.ts));
-            let tDur = maxTs - minTs;
-            if(tDur === 0) tDur = 3600000; 
-
-            minTs -= tDur * 0.05;
-            maxTs += tDur * 0.05;
-            tDur = maxTs - minTs;
-
-            ctx.strokeStyle = '#cbd5e1'; 
-            ctx.setLineDash([4, 4]);
-            ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
-            ctx.setLineDash([]);
-
-            let parts = state.tides.high.split(':');
-            let refDate = new Date(maxTs);
-            let htd = new Date(refDate.getFullYear(), refDate.getMonth(), refDate.getDate(), parseInt(parts[0]), parseInt(parts[1]));
-
-            let maxHit = 0; let peakStart = 0;
-            allCatches.sort((a,b) => a.ts - b.ts);
-            for(let i=0; i<allCatches.length; i++) {
-                let ts = allCatches[i].ts;
-                let end = ts + 3600000;
-                let count = allCatches.filter(c => c.ts >= ts && c.ts <= end).length;
-                if(count > maxHit) { maxHit = count; peakStart = ts; }
-            }
-            if (maxHit > 0) {
-                let xStart = ((peakStart - minTs)/tDur)*w;
-                let xEnd = ((peakStart + 3600000 - minTs)/tDur)*w;
-                ctx.fillStyle = 'rgba(234, 88, 12, 0.1)'; 
-                ctx.fillRect(xStart, 0, xEnd - xStart, h);
-                
-                ctx.fillStyle = '#ea580c';
-                ctx.font = 'bold 9px Inter';
-                ctx.textAlign = 'center';
-                ctx.fillText('PEAK', xStart + (xEnd-xStart)/2, h/2 - 40);
-            }
-
-            ctx.strokeStyle = '#0284c7'; 
-            ctx.lineWidth = 2.5; 
-            ctx.beginPath();
-            for(let x=0; x<=w; x++) {
-                let pointTs = minTs + (x/w)*tDur;
-                let offH = (pointTs - htd.getTime())/3600000;
-                let ang = (offH/6.25)*Math.PI*2; 
-                let y = (h/2) + Math.cos(ang)*(h/3);
-                if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-            }
-            ctx.stroke();
-
-            // Bucket catches into 15 min blocks to create the "Bubble Heatmap"
-            let buckets = {};
-            let bucketSizeMs = 900000; // 15 mins
-            allCatches.forEach(f => {
-                let bIdx = Math.floor(f.ts / bucketSizeMs);
-                if(!buckets[bIdx]) buckets[bIdx] = { ts: f.ts, count: 0 };
-                buckets[bIdx].count++;
-            });
-
-            let maxBucketCount = Math.max(...Object.values(buckets).map(b => b.count));
-            if (maxBucketCount === 0) maxBucketCount = 1;
-
-            Object.values(buckets).forEach(b => {
-                let x = ((b.ts - minTs)/tDur)*w;
-                let offH = (b.ts - htd.getTime())/3600000;
-                let ang = (offH/6.25)*Math.PI*2;
-                let y = (h/2) + Math.cos(ang)*(h/3);
-                
-                // Scale radius based on volume (bubble map)
-                let r = Math.max(3, (b.count / maxBucketCount) * 12);
-                
-                ctx.fillStyle = '#ea580c'; 
-                ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
-                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.5; ctx.stroke();
-            });
-
-            ctx.fillStyle = '#64748b';
-            ctx.font = 'bold 9px Inter';
-            ctx.textAlign = 'left';
-            ctx.fillText(new Date(minTs).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), 5, h - 5);
-            ctx.textAlign = 'right';
-            ctx.fillText(new Date(maxTs).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}), w - 5, h - 5);
         }
 
         // ==========================================================
@@ -1509,6 +1486,10 @@
             });
 
             let htmlBlock = '';
+            
+            // TIDE INJECTION
+            let tideInfo = getLiveTideString(state.tides);
+            htmlBlock += tideInfo;
             
             function getCatchDisplay(c) { return `${c.species} ${getUniversalBadge(c)}`; }
             if (mostRecent) {
@@ -2064,12 +2045,6 @@
                     if (graceRem <= 0) { if (state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } }
                     else { updateTimerDisplay(graceRem); }
                 }
-
-                // Update HUD Tide Pill
-                if (state.tides) {
-                    updateTidePill();
-                }
-
             }, 1000);
         }
 
@@ -2478,7 +2453,7 @@
             renderExtraDataPoints();
             if(state.tides) {
                 document.getElementById('tideGraphCard').classList.remove('hidden');
-                setTimeout(() => renderTideCanvas(), 300);
+                setTimeout(() => renderTideCanvasEx(state.myCatches, state.tides, 'tideGraphCanvas'), 300);
             } else {
                 document.getElementById('tideGraphCard').classList.add('hidden');
             }
@@ -2499,7 +2474,7 @@
             
             if(targetBtn) { targetBtn.innerText = "GENERATING REPORT..."; targetBtn.classList.add('reporting'); }
             let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn);
+            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn, globalMatchData.tides);
         }
 
         function generateHistoricReport() {
@@ -2509,10 +2484,10 @@
             
             const btn = document.querySelector(`button[onclick="generateHistoricReport()"]`);
             if(btn) { btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin mr-2'></i> GENERATING..."; btn.classList.add('reporting'); }
-            buildAndShareReport(h.standings, h.venue, h.date, h.format, btn);
+            buildAndShareReport(h.standings, h.venue, h.date, h.format, btn, h.tides);
         }
 
-        function buildAndShareReport(arr, venueName, matchDate, matchFormat, buttonRef) {
+        function buildAndShareReport(arr, venueName, matchDate, matchFormat, buttonRef, matchTides) {
             const fmt = matchFormat || state.format; 
             let podium = arr.slice(0, 3);
             let biggestVal = 0, biggestStr = "N/A";
@@ -2549,12 +2524,13 @@
             }
             let biteVelocity = matchDurHours > 0 && numAnglers > 0 ? (totalFish / numAnglers / matchDurHours).toFixed(1) : "0.0";
 
-            let tideStr = state.tides ? `HW: ${state.tides.high} | LW: ${state.tides.low}` : "Not Recorded";
-            let peakStr = document.getElementById('stat-golden-hour') ? document.getElementById('stat-golden-hour').innerText : "--:--";
+            let tideStr = matchTides ? `HW: ${matchTides.high} | LW: ${matchTides.low}` : "Not Recorded";
+            let peakStr = "--:--";
             let floodCount = 0; let ebbCount = 0;
+            let slackCount = 0; let flowCount = 0; let turnCount = 0;
             
-            if (state.tides && totalFish > 0) {
-                let parts = state.tides.high.split(':');
+            if (matchTides && totalFish > 0) {
+                let parts = matchTides.high.split(':');
                 let htd = new Date();
                 htd.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
                 let hwMs = htd.getTime();
@@ -2567,11 +2543,44 @@
                         
                         if (diffH >= 0 && diffH <= 6.25) ebbCount++;
                         else floodCount++;
+
+                        let absH = Math.abs(diffH);
+                        // Slack Water (HW +/- 0.5h, or LW +/- 0.5h)
+                        if (absH <= 0.5 || Math.abs(absH - 6.25) <= 0.5) {
+                            slackCount++;
+                        } else {
+                            flowCount++;
+                        }
+
+                        // Turn Trigger (Fish caught within 45m of slack ending)
+                        // Slack ends at +0.5h. Turn is +0.5h to +1.25h. Or Slack ends at -5.75h, Turn is -5.75h to -5.0h
+                        if ((diffH > 0.5 && diffH <= 1.25) || (diffH > -5.75 && diffH <= -5.0)) {
+                            turnCount++;
+                        }
                     }
                 });
+
+                // Calculate Golden Hour manually for report
+                let maxHit = 0; 
+                allCatches.sort((a,b) => a.ts - b.ts);
+                for(let i=0; i<allCatches.length; i++) {
+                    let ts = allCatches[i].ts;
+                    let end = ts + 3600000;
+                    let count = allCatches.filter(c => c.ts >= ts && c.ts <= end).length;
+                    if(count > maxHit) {
+                        maxHit = count;
+                        let st = new Date(ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+                        let et = new Date(end).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+                        peakStr = `${st} - ${et} (${maxHit} Fish)`;
+                    }
+                }
             }
+
             let floodPct = totalFish > 0 ? Math.round((floodCount/totalFish)*100) : 0;
             let ebbPct = totalFish > 0 ? Math.round((ebbCount/totalFish)*100) : 0;
+            let flowPct = totalFish > 0 ? Math.round((flowCount/totalFish)*100) : 0;
+            let slackPct = totalFish > 0 ? Math.round((slackCount/totalFish)*100) : 0;
+            let turnPct = totalFish > 0 ? Math.round((turnCount/totalFish)*100) : 0;
 
             let spMap = {};
             allCatches.forEach(c => {
@@ -2601,10 +2610,12 @@
             t += `👥 Angler Success: ${successRate}% Caught (${numAnglers} Anglers Total)\n`;
             t += `⚡ Bite Velocity: ${biteVelocity} Fish/Angler/Hr\n`;
             
-            if (state.tides) {
+            if (matchTides) {
                 t += `🌊 Tides: ${tideStr}\n`;
                 t += `⚖️ Tidal Bias: ${floodPct}% Flood / ${ebbPct}% Ebb\n`;
-                t += `🔥 Golden Hour: ${peakStr.replace(' Fish)', '')} Fish)\n`;
+                t += `🌊 Flow Rate: ${flowPct}% Peak Flow / ${slackPct}% Slack Water\n`;
+                t += `💥 Turn Trigger: ${turnPct}% caught right after slack water\n`;
+                t += `🔥 Golden Hour: ${peakStr}\n`;
             } else {
                 t += `🌊 Tides: Not Recorded\n`;
             }
@@ -2622,8 +2633,8 @@
                     let avgSz = (data.totalSize / data.count).toFixed(1);
                     
                     let peakSpTime = "N/A";
-                    if (state.tides && data.timestamps.length > 0) {
-                        let parts = state.tides.high.split(':');
+                    if (matchTides && data.timestamps.length > 0) {
+                        let parts = matchTides.high.split(':');
                         let htd = new Date(); htd.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
                         let hwMs = htd.getTime();
                         
@@ -2635,14 +2646,15 @@
                             totalOffset += diffH;
                         });
                         let avgOffset = totalOffset / data.timestamps.length;
-                        if (Math.abs(avgOffset) < 0.5) peakSpTime = "HW";
+                        if (Math.abs(avgOffset) < 0.5) peakSpTime = "High Water Slack";
+                        else if (Math.abs(avgOffset - 6.25) < 0.5 || Math.abs(avgOffset + 6.25) < 0.5) peakSpTime = "Low Water Slack";
                         else if (avgOffset > 0) peakSpTime = `HW +${avgOffset.toFixed(1)}h`;
                         else peakSpTime = `HW ${avgOffset.toFixed(1)}h`;
                     }
 
                     t += `▪️ *${name}* (${pct}% of catch)\n`;
                     if(!fmt.includes('speciesHunt')) t += `   Avg Size: ${avgSz}cm\n`;
-                    if(state.tides) t += `   Peak Feeding: ${peakSpTime}\n`;
+                    if(matchTides) t += `   Peak Feeding: ${peakSpTime}\n`;
                 });
                 t += `\n`;
             }
@@ -2652,7 +2664,7 @@
                 t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
             });
             
-            t += `\n_Generated by ShoreScore V15.0.0_`;
+            t += `\n_Generated by ShoreScore V15.1.0_`;
 
             if (navigator.share) { 
                 navigator.share({ title: 'Official Report', text: t }).catch(console.error); 
@@ -2670,7 +2682,6 @@
                 buttonRef.classList.remove('reporting');
             }
         }
-        // ==========================================================
 
         function shareUnifiedReport() { generateOfficialMasterReport('results'); }
         function endMatchEarly(grace) { haptic(); if(state.isSteward && state.pin) { if(grace) { closeOptionsDrawer(); document.getElementById('customEndModal').classList.remove('hidden'); } } }
@@ -2701,7 +2712,25 @@
                     } 
                 });
             }
-            h.unshift({ id: 'match_' + Date.now(), pin: state.pin, venue: state.venue, date: new Date().toLocaleDateString(), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), format: state.format, score: state.myCatches.reduce((s,c) => s+c.points, 0), personalCatches: [...state.myCatches], standings: fullStandings.length > 0 ? fullStandings.sort((a,b) => b.score - a.score) : [], playerName: state.name, isLive: isL, isSteward: state.isSteward, endTime: state.endTime, graceEndTime: state.graceEndTime || (state.endTime ? state.endTime + 180000 : null), totalMatchFish: matchTF, matchBiggestFishDisplay: matchBF.replace(/<[^>]*>?/gm, '') }); 
+            h.unshift({ 
+                id: 'match_' + Date.now(), 
+                pin: state.pin, 
+                venue: state.venue, 
+                date: new Date().toLocaleDateString(), 
+                time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), 
+                format: state.format, 
+                tides: state.tides || (globalMatchData ? globalMatchData.tides : null),
+                score: state.myCatches.reduce((s,c) => s+c.points, 0), 
+                personalCatches: [...state.myCatches], 
+                standings: fullStandings.length > 0 ? fullStandings.sort((a,b) => b.score - a.score) : [], 
+                playerName: state.name, 
+                isLive: isL, 
+                isSteward: state.isSteward, 
+                endTime: state.endTime, 
+                graceEndTime: state.graceEndTime || (state.endTime ? state.endTime + 180000 : null), 
+                totalMatchFish: matchTF, 
+                matchBiggestFishDisplay: matchBF.replace(/<[^>]*>?/gm, '') 
+            }); 
             localStorage.setItem('matchHistory', JSON.stringify(h)); 
         }
         
@@ -2910,6 +2939,13 @@
                                 ${timelineHtml}
                             </div>
                         </div>
+                        ${m.tides ? `
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col text-left mt-2">
+                            <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-2 text-center">Tidal Wave Heatmap</div>
+                            <div class="w-full bg-white border border-slate-200 rounded-lg p-2">
+                                <canvas id="historicTideCanvas" style="width: 100%; height: 160px;"></canvas>
+                            </div>
+                        </div>` : ''}
                     </div>
                 </div>
                 
@@ -2944,6 +2980,10 @@
                     </div>`}).join('')}</div>`;
                     
                 document.getElementById('historyContent').innerHTML = hubHtml + tableHtml; 
+                
+                if (m.tides) {
+                    setTimeout(() => renderTideCanvasEx(allMatchCatches, m.tides, 'historicTideCanvas'), 300);
+                }
             } else { 
                 let listHtml = m.personalCatches.map(c => {
                     const editMarker = c.edited ? `<i class="fa-solid fa-pen-to-square ml-1.5 text-orange-500 opacity-90" style="font-size: 0.9em;"></i>` : "";
@@ -2993,7 +3033,7 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            const CURRENT_FALLBACK_VERSION = "15.0.0";
+            const CURRENT_FALLBACK_VERSION = "15.1.0";
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
             fetch('version.json?t=' + new Date().getTime())
