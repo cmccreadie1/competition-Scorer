@@ -211,12 +211,28 @@
             <div class="text-center border-b border-slate-200 pb-3 mb-2">
                 <h3 class="text-base font-black uppercase tracking-tight text-slate-900">Edit <span class="text-blue-600">Record</span></h3>
             </div>
+            
             <div class="space-y-3 text-left">
                 <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest pl-2">Species</label>
                 <select id="editInputSpecies" onchange="editCheckSpeciesSelection()" class="pill-input w-full p-3 text-sm appearance-none border-slate-300 bg-white">
                     <option value="" disabled selected>-- Select Fish Species --</option>
                     <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
                         <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
+                    </optgroup>
+                    <optgroup label="ROUNDFISH">
+                        <option value="Blue Whiting">Blue Whiting</option><option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option><option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option><option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option><option value="Gurnard (Grey)">Gurnard (Grey)</option><option value="Gurnard (Red)">Gurnard (Red)</option><option value="Gurnard (Tub)">Gurnard (Red)</option><option value="Haddock">Haddock</option><option value="Herring">Herring</option><option value="John Dory">John Dory</option><option value="Poor Cod">Poor Cod</option><option value="Red Mullet">Red Mullet</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
+                    </optgroup>
+                    <optgroup label="FLATFISH">
+                        <option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Halibut">Halibut</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
+                    </optgroup>
+                    <optgroup label="RAYS & SHARKS">
+                        <option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Blonde Ray">Blonde Ray</option><option value="Blue Shark">Blue Shark</option><option value="Common Skate">Common Skate</option><option value="Cuckoo Ray">Cuckoo Ray</option><option value="Porbeagle Shark">Porbeagle Shark</option><option value="Small-eyed Ray">Small-eyed Ray</option><option value="Smooth-hound">Smooth-hound</option><option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option><option value="Spotted Ray">Spotted Ray</option><option value="Stingray">Stingray</option><option value="Tope">Tope</option><option value="Undulate Ray">Undulate Ray</option>
+                    </optgroup>
+                    <optgroup label="WRASSE">
+                        <option value="Baillon's Wrasse">Baillon's Wrasse</option><option value="Ballan Wrasse">Ballan Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option>
+                    </optgroup>
+                    <optgroup label="MINI SPECIES">
+                        <option value="Black Goby">Black Goby</option><option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Common Dragonet">Common Dragonet</option><option value="Eelpout (Viviparous Blenny)">Eelpout (Viviparous Blenny)</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option><option value="Leopard-spotted Goby">Leopard-spotted Goby</option><option value="Lesser Weever">Lesser Weever</option><option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Northern Rockling">Northern Rockling</option><option value="Painted Goby">Painted Goby</option><option value="Pogge (Armed Bullhead)">Pogge (Armed Bullhead)</option><option value="Rock Goby">Rock Goby</option><option value="Shore Rockling">Shore Rockling</option><option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Topknot">Topknot</option><option value="Yarrell's Blenny">Yarrell's Blenny</option>
                     </optgroup>
                     <optgroup label="UNLISTED / CUSTOM" id="editCustomSpeciesGroup">
                         <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
@@ -272,11 +288,27 @@
                 <h3 class="text-sm font-black uppercase tracking-tight text-slate-900">Steward <span class="text-blue-600">Override</span></h3>
                 <p id="godModeAnglerName" class="text-slate-900 text-base font-black mt-1">Angler Name</p>
             </div>
+            
             <div>
                 <select id="godInputSpecies" onchange="godCheckSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none">
                     <option value="" disabled selected>-- Select Fish Species --</option>
                     <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
                         <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
+                    </optgroup>
+                    <optgroup label="ROUNDFISH">
+                        <option value="Blue Whiting">Blue Whiting</option><option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option><option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option><option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option><option value="Gurnard (Grey)">Gurnard (Grey)</option><option value="Gurnard (Red)">Gurnard (Red)</option><option value="Gurnard (Tub)">Gurnard (Red)</option><option value="Haddock">Haddock</option><option value="Herring">Herring</option><option value="John Dory">John Dory</option><option value="Poor Cod">Poor Cod</option><option value="Red Mullet">Red Mullet</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
+                    </optgroup>
+                    <optgroup label="FLATFISH">
+                        <option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Halibut">Halibut</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
+                    </optgroup>
+                    <optgroup label="RAYS & SHARKS">
+                        <option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Blonde Ray">Blonde Ray</option><option value="Blue Shark">Blue Shark</option><option value="Common Skate">Common Skate</option><option value="Cuckoo Ray">Cuckoo Ray</option><option value="Porbeagle Shark">Porbeagle Shark</option><option value="Small-eyed Ray">Small-eyed Ray</option><option value="Smooth-hound">Smooth-hound</option><option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option><option value="Spotted Ray">Spotted Ray</option><option value="Stingray">Stingray</option><option value="Tope">Tope</option><option value="Undulate Ray">Undulate Ray</option>
+                    </optgroup>
+                    <optgroup label="WRASSE">
+                        <option value="Baillon's Wrasse">Baillon's Wrasse</option><option value="Ballan Wrasse">Ballan Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option>
+                    </optgroup>
+                    <optgroup label="MINI SPECIES">
+                        <option value="Black Goby">Black Goby</option><option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Common Dragonet">Common Dragonet</option><option value="Eelpout (Viviparous Blenny)">Eelpout (Viviparous Blenny)</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option><option value="Leopard-spotted Goby">Leopard-spotted Goby</option><option value="Lesser Weever">Lesser Weever</option><option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Northern Rockling">Northern Rockling</option><option value="Painted Goby">Painted Goby</option><option value="Pogge (Armed Bullhead)">Pogge (Armed Bullhead)</option><option value="Rock Goby">Rock Goby</option><option value="Shore Rockling">Shore Rockling</option><option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Topknot">Topknot</option><option value="Yarrell's Blenny">Yarrell's Blenny</option>
                     </optgroup>
                     <optgroup label="UNLISTED / CUSTOM" id="godCustomSpeciesGroup">
                         <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
@@ -286,6 +318,14 @@
             <div id="godDeckSizeInputs">
                 <div id="godDeckLength">
                     <input type="number" id="godInputSize" inputmode="decimal" pattern="\d*" class="pill-input w-full p-2.5 text-base metric-white" placeholder="Measurement (cm)">
+                </div>
+                <div id="godDeckWeightLb" class="hidden flex space-x-2">
+                    <div class="flex-1"><input type="number" id="godInputLbs" inputmode="numeric" pattern="\d*" placeholder="Lbs" class="pill-input w-full p-2.5 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputOz" inputmode="numeric" pattern="\d*" placeholder="Oz" class="pill-input w-full p-2.5 text-base metric-white"></div>
+                </div>
+                <div id="godDeckWeightKg" class="hidden flex space-x-2">
+                    <div class="flex-1"><input type="number" id="godInputKg" inputmode="numeric" pattern="\d*" placeholder="Kg" class="pill-input w-full p-2.5 text-base metric-white"></div>
+                    <div class="flex-1"><input type="number" id="godInputGrammes" inputmode="numeric" pattern="\d*" step="25" placeholder="Grams" class="pill-input w-full p-2.5 text-base metric-white"></div>
                 </div>
             </div>
             <button onclick="submitGodModeCatch()" class="pill-btn w-full py-3.5 shadow-lg mt-2 text-base text-white">Force Save Record</button>
@@ -297,6 +337,7 @@
             <div class="text-center">
                 <i class="fa-solid fa-clock-rotate-left text-blue-600 text-3xl mb-2"></i>
                 <h3 class="text-base font-black uppercase tracking-tight text-slate-900">Adjust <span class="text-blue-600">Clock</span></h3>
+                <p class="text-slate-600 text-xs mt-1 leading-relaxed">Broadcast a timing change to all connected devices.</p>
             </div>
             <div class="grid grid-cols-1 gap-2.5">
                 <button onclick="stewardSetNewEnd(15)" class="pill-btn py-3.5 text-xs">15 MINUTES REMAINING</button>
@@ -456,7 +497,7 @@
                 <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Match <span class="text-blue-600">Creator</span></h2>
                 <div class="w-6"></div>
             </div>
-            <div class="match-card p-6 space-y-5 text-center mt-4 shadow-lg pb-8">
+            <div class="match-card p-6 space-y-5 text-center mt-8 shadow-lg pb-8">
                 <div>
                     <label class="block text-slate-600 font-black text-[10px] uppercase tracking-[0.2em] mb-2 text-left ml-3">Tournament Duration</label>
                     <select id="hostDuration" class="pill-input w-full p-3 text-base appearance-none">
@@ -558,6 +599,21 @@
                                 <option value="" disabled selected>-- Select Fish Species --</option>
                                 <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
                                     <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
+                                </optgroup>
+                                <optgroup label="ROUNDFISH">
+                                    <option value="Blue Whiting">Blue Whiting</option><option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option><option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option><option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option><option value="Gurnard (Grey)">Gurnard (Grey)</option><option value="Gurnard (Red)">Gurnard (Red)</option><option value="Gurnard (Tub)">Gurnard (Red)</option><option value="Haddock">Haddock</option><option value="Herring">Herring</option><option value="John Dory">John Dory</option><option value="Poor Cod">Poor Cod</option><option value="Red Mullet">Red Mullet</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
+                                </optgroup>
+                                <optgroup label="FLATFISH">
+                                    <option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Halibut">Halibut</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
+                                </optgroup>
+                                <optgroup label="RAYS & SHARKS">
+                                    <option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Blonde Ray">Blonde Ray</option><option value="Blue Shark">Blue Shark</option><option value="Common Skate">Common Skate</option><option value="Cuckoo Ray">Cuckoo Ray</option><option value="Porbeagle Shark">Porbeagle Shark</option><option value="Small-eyed Ray">Small-eyed Ray</option><option value="Smooth-hound">Smooth-hound</option><option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option><option value="Spotted Ray">Spotted Ray</option><option value="Stingray">Stingray</option><option value="Tope">Tope</option><option value="Undulate Ray">Undulate Ray</option>
+                                </optgroup>
+                                <optgroup label="WRASSE">
+                                    <option value="Baillon's Wrasse">Baillon's Wrasse</option><option value="Ballan Wrasse">Ballan Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option>
+                                </optgroup>
+                                <optgroup label="MINI SPECIES">
+                                    <option value="Black Goby">Black Goby</option><option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Common Dragonet">Common Dragonet</option><option value="Eelpout (Viviparous Blenny)">Eelpout (Viviparous Blenny)</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option><option value="Leopard-spotted Goby">Leopard-spotted Goby</option><option value="Lesser Weever">Lesser Weever</option><option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Northern Rockling">Northern Rockling</option><option value="Painted Goby">Painted Goby</option><option value="Pogge (Armed Bullhead)">Pogge (Armed Bullhead)</option><option value="Rock Goby">Rock Goby</option><option value="Shore Rockling">Shore Rockling</option><option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Topknot">Topknot</option><option value="Yarrell's Blenny">Yarrell's Blenny</option>
                                 </optgroup>
                                 <optgroup label="UNLISTED / CUSTOM" id="customSpeciesGroup">
                                     <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
@@ -696,6 +752,30 @@
                         <p><b class="text-slate-900">Stewards:</b> Host a match, set the rules, and manage the tournament from your own device.</p>
                     </div>
                 </section>
+                <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h4 class="text-blue-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">HOW TO START OR JOIN</h4>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
+                        <p>Every tournament revolves around a <b>4-Digit Room PIN</b>. The Steward creates the match and receives the PIN. They shout this PIN down the beach or post it in your WhatsApp group.</p>
+                        <p>Competitors tap "Join as Competitor" and enter that exact PIN to link their phones to the tournament.</p>
+                    </div>
+                </section>
+                <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+    <h4 class="text-blue-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">LEAVING EARLY</h4>
+    <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
+        <p>If you need to pack up before the clock hits zero, just open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from the <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
+        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">What if I need to leave early?</h4>
+        <p class="text-xs text-slate-700 leading-relaxed font-medium">If you need to pack up before the clock hits zero, open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later the View Past Matches button on the home screen.</p>
+    </div>.</p>
+    </div>
+</section>
+                <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h4 class="text-orange-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">👑 FULL STEWARD'S MANUAL</h4>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
+                        <p><b class="text-slate-900">1. The Command Bridge:</b><br>During a match, tap the <b class="text-slate-900">[ ⚙️ OPTIONS & EXIT ]</b> button at the top of your screen. From here, you can adjust the match clock, trigger a 3-minute "lines up" grace period, or hand over Steward control to someone else if your battery is dying.</p>
+                        <p><b class="text-slate-900">2. God Mode Audits:</b><br>Need to fix an angler's mistake? From the Options menu, tap <b>Review Angler Logs</b>. Select any angler to view their diary. You have the power to <b>Log a Catch</b> directly onto their scorecard, or permanently <b>Delete</b> a bogus fish from the global leaderboard.</p>
+                        <p><b class="text-slate-900">3. The Official Report:</b><br>When the clock hits zero, tap <b>Share Official Report</b>. The app generates a plain-text summary of the final podium and match stats that you can send straight to WhatsApp.</p>
+                    </div>
+                </section>
                 <section class="pt-4 text-center pb-8">
                     <button onclick="forceUpdateApp()" class="pill-btn w-full py-4 transition shadow-md bg-slate-900">
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
@@ -724,7 +804,28 @@
                             <li>Hit the bold blue <b>ADD</b> button. Your phone will vibrate to confirm the fish is saved and synced.</li>
                         </ol>
                     </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">I made a mistake. Can I fix it?</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium">Yes. Look at your Match Journal below. Next to every fish you log, there is an <b>Edit / Delete</b> button.</p>
+                        <ul class="list-disc pl-4 text-xs text-slate-700 space-y-1 mt-2 font-medium">
+                            <li>Tap <b>Edit / Delete</b> to open the manage menu.</li>
+                            <li>Update the fish size or species and tap <b>SAVE CHANGES</b>.</li>
+                            <li>Tap <b>Delete Fish</b> to remove it entirely.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">How do I check the scores?</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium">The blue "Island" at the very top of your screen shows your current Rank and Points. To see everyone else, tap the floating <b>CLICK FOR LIVE LEADERBOARD</b> button at the bottom of your screen. <i>Hint: You can tap anyone's name on that leaderboard to peek at exactly what they are catching!</i></p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">Will this drain my battery?</h4>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium">No. ShoreScore does not have a "sleep" button. When you are done logging a fish, just press your phone's physical power button to turn the screen off and drop it in your pocket. The exact second you wake your screen up, the app will instantly reconnect and download any new fish caught by the rest of the beach.</p>
+                    </div>
                 </section>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
+        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">What if I need to leave early?</h4>
+        <p class="text-xs text-slate-700 leading-relaxed font-medium">If you need to pack up before the clock hits zero, open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from your History Vault.</p>
+    </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
                 <button onclick="closeInMatchHelp()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
@@ -1076,13 +1177,26 @@
             }
             ctx.stroke();
 
+            // Bucket catches into 15 min blocks to create the "Bubble Heatmap"
+            let buckets = {};
+            let bucketSizeMs = 900000; // 15 mins
             allCatches.forEach(f => {
-                let x = ((f.ts - minTs)/tDur)*w;
-                let offH = (f.ts - htd.getTime())/3600000;
+                let bIdx = Math.floor(f.ts / bucketSizeMs);
+                if(!buckets[bIdx]) buckets[bIdx] = { ts: f.ts, count: 0 };
+                buckets[bIdx].count++;
+            });
+
+            let maxBucketCount = Math.max(...Object.values(buckets).map(b => b.count));
+            if (maxBucketCount === 0) maxBucketCount = 1;
+
+            Object.values(buckets).forEach(b => {
+                let x = ((b.ts - minTs)/tDur)*w;
+                let offH = (b.ts - htd.getTime())/3600000;
                 let ang = (offH/6.25)*Math.PI*2;
                 let y = (h/2) + Math.cos(ang)*(h/3);
                 
-                let r = Math.max(3, Math.min(7, (f.size || 20) / 10));
+                // Scale radius based on volume (bubble map)
+                let r = Math.max(3, (b.count / maxBucketCount) * 12);
                 
                 ctx.fillStyle = '#ea580c'; 
                 ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
@@ -1098,7 +1212,201 @@
         }
 
         // ==========================================================
-        
+        // V7.4.0 DEEP ANALYTICS REPORT ENGINE
+        // ==========================================================
+        function generateOfficialMasterReport(source) {
+            haptic();
+            if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
+            
+            let targetBtn = null;
+            if (source === 'drawer') {
+                targetBtn = document.getElementById('drawerReportBtn');
+            } else {
+                targetBtn = document.getElementById('resultsReportBtn');
+            }
+            
+            if(targetBtn) { targetBtn.innerText = "GENERATING REPORT..."; targetBtn.classList.add('reporting'); }
+            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
+            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn);
+        }
+
+        function generateHistoricReport() {
+            haptic();
+            const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
+            if(!h || !h.standings) return alert("No leaderboard data available.");
+            
+            const btn = document.querySelector(`button[onclick="generateHistoricReport()"]`);
+            if(btn) { btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin mr-2'></i> GENERATING..."; btn.classList.add('reporting'); }
+            buildAndShareReport(h.standings, h.venue, h.date, h.format, btn);
+        }
+
+        function buildAndShareReport(arr, venueName, matchDate, matchFormat, buttonRef) {
+            const fmt = matchFormat || state.format; 
+            let podium = arr.slice(0, 3);
+            let biggestVal = 0, biggestStr = "N/A";
+            
+            let allCatches = [];
+            let anglersWithFish = 0;
+            let matchTotalPhysicalSize = 0;
+            let matchTotalRaw = arr.reduce((sum, a) => sum + (a.score || 0), 0);
+            let numAnglers = arr.length;
+
+            arr.forEach(a => {
+                if(a.catches) {
+                    let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
+                    if (cList.length > 0) anglersWithFish++;
+                    cList.forEach(f => {
+                        allCatches.push(f);
+                        matchTotalPhysicalSize += (parseFloat(f.size) || 0);
+                        if(f.size > biggestVal) { 
+                            biggestVal = f.size; 
+                            biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; 
+                        }
+                    });
+                }
+            });
+
+            let totalFish = allCatches.length;
+            let successRate = numAnglers > 0 ? Math.round((anglersWithFish / numAnglers) * 100) : 0;
+            
+            // Match Duration Calculation (Fallback 4 if not easily determinable)
+            let matchDurHours = 4; 
+            if (globalMatchData && globalMatchData.endTime && allCatches.length > 0) {
+                let minTs = Math.min(...allCatches.map(c => c.ts));
+                let calculatedHours = (globalMatchData.endTime - minTs) / 3600000;
+                if (calculatedHours > 0 && calculatedHours < 12) matchDurHours = calculatedHours;
+            }
+            let biteVelocity = matchDurHours > 0 && numAnglers > 0 ? (totalFish / numAnglers / matchDurHours).toFixed(1) : "0.0";
+
+            // Tide Math
+            let tideStr = state.tides ? `HW: ${state.tides.high} | LW: ${state.tides.low}` : "Not Recorded";
+            let peakStr = document.getElementById('stat-golden-hour') ? document.getElementById('stat-golden-hour').innerText : "--:--";
+            let floodCount = 0; let ebbCount = 0;
+            
+            if (state.tides && totalFish > 0) {
+                let parts = state.tides.high.split(':');
+                let htd = new Date();
+                htd.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+                let hwMs = htd.getTime();
+
+                allCatches.forEach(c => {
+                    if (c.ts) {
+                        let diffH = (c.ts - hwMs) / 3600000;
+                        while (diffH > 6.25) diffH -= 12.5;
+                        while (diffH < -6.25) diffH += 12.5;
+                        
+                        if (diffH >= 0 && diffH <= 6.25) ebbCount++;
+                        else floodCount++;
+                    }
+                });
+            }
+            let floodPct = totalFish > 0 ? Math.round((floodCount/totalFish)*100) : 0;
+            let ebbPct = totalFish > 0 ? Math.round((ebbCount/totalFish)*100) : 0;
+
+            // Species Analysis (Top 3)
+            let spMap = {};
+            allCatches.forEach(c => {
+                if(!spMap[c.species]) spMap[c.species] = { count: 0, totalSize: 0, timestamps: [] };
+                spMap[c.species].count++;
+                spMap[c.species].totalSize += (parseFloat(c.size) || 0);
+                if(c.ts) spMap[c.species].timestamps.push(c.ts);
+            });
+            let topSpecies = Object.entries(spMap).sort((a,b) => b[1].count - a[1].count).slice(0, 3);
+
+            let ruleStr = "";
+            if(fmt === 'length') ruleStr = "Length Only (cm)";
+            else if(fmt === 'length10') ruleStr = "Length + 10 Pts";
+            else if(fmt === 'weightLb') ruleStr = "Weight (Lbs & Oz)";
+            else if(fmt === 'weightKg') ruleStr = "Weight (Kg & g)";
+            else if(fmt === 'speciesHunt') ruleStr = "Species Hunt";
+            else ruleStr = fmt;
+
+            // Build Report String
+            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n📏 *Rules:* ${ruleStr}\n\n`;
+            
+            t += `👑 *PODIUM*\n`;
+            t += `🥇 1st: ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n`;
+            t += `🥈 2nd: ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}\n`;
+            t += `🥉 3rd: ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n`;
+
+            t += `📈 *VENUE INTELLIGENCE*\n`;
+            t += `👥 Angler Success: ${successRate}% Caught (${numAnglers} Anglers Total)\n`;
+            t += `⚡ Bite Velocity: ${biteVelocity} Fish/Angler/Hr\n`;
+            
+            if (state.tides) {
+                t += `🌊 Tides: ${tideStr}\n`;
+                t += `⚖️ Tidal Bias: ${floodPct}% Flood / ${ebbPct}% Ebb\n`;
+                t += `🔥 Golden Hour: ${peakStr.replace(' Fish)', '')} Fish)\n`;
+            } else {
+                t += `🌊 Tides: Not Recorded\n`;
+            }
+            if (fmt !== 'speciesHunt') {
+                t += `🐋 Match Biggest: ${biggestStr.replace(/<[^>]*>?/gm, '')}\n`;
+            }
+            t += `\n`;
+
+            if (totalFish > 0) {
+                t += `📊 *TOP 3 SPECIES PROFILES*\n`;
+                topSpecies.forEach(sp => {
+                    let name = sp[0];
+                    let data = sp[1];
+                    let pct = Math.round((data.count / totalFish) * 100);
+                    let avgSz = (data.totalSize / data.count).toFixed(1);
+                    
+                    let peakSpTime = "N/A";
+                    if (state.tides && data.timestamps.length > 0) {
+                        let parts = state.tides.high.split(':');
+                        let htd = new Date(); htd.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+                        let hwMs = htd.getTime();
+                        
+                        let totalOffset = 0;
+                        data.timestamps.forEach(ts => {
+                            let diffH = (ts - hwMs) / 3600000;
+                            while (diffH > 6.25) diffH -= 12.5;
+                            while (diffH < -6.25) diffH += 12.5;
+                            totalOffset += diffH;
+                        });
+                        let avgOffset = totalOffset / data.timestamps.length;
+                        if (Math.abs(avgOffset) < 0.5) peakSpTime = "HW";
+                        else if (avgOffset > 0) peakSpTime = `HW +${avgOffset.toFixed(1)}h`;
+                        else peakSpTime = `HW ${avgOffset.toFixed(1)}h`;
+                    }
+
+                    t += `▪️ *${name}* (${pct}% of catch)\n`;
+                    if(!fmt.includes('speciesHunt')) t += `   Avg Size: ${avgSz}cm\n`;
+                    if(state.tides) t += `   Peak Feeding: ${peakSpTime}\n`;
+                });
+                t += `\n`;
+            }
+
+            t += `🏆 *FULL STANDINGS*\n`;
+            arr.forEach((a, i) => { 
+                t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
+            });
+            
+            t += `\n_Generated by ShoreScore V10.14.1_`;
+
+            if (navigator.share) { 
+                navigator.share({ title: 'Official Report', text: t }).catch(console.error); 
+            }
+            else { 
+                window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); 
+            }
+            
+            if(buttonRef) {
+                if(buttonRef.id === 'drawerReportBtn' || buttonRef.id === 'resultsReportBtn') {
+                    buttonRef.innerHTML = "<i class='fa-solid fa-file-export mr-3 text-base text-blue-600'></i> Share Official Report";
+                } else {
+                    buttonRef.innerHTML = "<i class='fa-solid fa-share-nodes mr-2'></i> SHARE CARD";
+                }
+                buttonRef.classList.remove('reporting');
+            }
+        }
+
+        // ==========================================================
+        // END V7.4.0 DEEP ANALYTICS REPORT ENGINE
+        // ==========================================================
+
         function openOptionsDrawer() { haptic(); if(document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
         function closeOptionsDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('hidden'), 300); }
         function openInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('open'), 10); }
@@ -2335,6 +2643,31 @@
         // ==========================================================
         // V7.4.0 DEEP ANALYTICS REPORT ENGINE
         // ==========================================================
+        function lockdownMatch(isHostPushing) { 
+            clearInterval(clockInterval); 
+            if(isHostPushing && state.isHost && state.mode !== 'personal') { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
+            saveHistory(false); state.status = 'finished'; saveState(); 
+            
+            document.getElementById('resultsVenueDisplay').innerText = state.venue;
+            
+            let totalPts = state.myCatches.reduce((s,c) => s + c.points, 0); 
+            document.getElementById('finalScore').innerHTML = formatScoreDisplay(totalPts, state.format); 
+            document.getElementById('finalCount').innerText = state.myCatches.length; 
+            document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; 
+            if(state.isSteward) document.getElementById('resultsReportBtn').classList.remove('hidden');
+            
+            calculateGoldenHour();
+            renderExtraDataPoints();
+            if(state.tides) {
+                document.getElementById('tideGraphCard').classList.remove('hidden');
+                setTimeout(() => renderTideCanvas(), 300);
+            } else {
+                document.getElementById('tideGraphCard').classList.add('hidden');
+            }
+
+            navTo('results'); 
+        }
+
         function generateOfficialMasterReport(source) {
             haptic();
             if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
@@ -2390,15 +2723,14 @@
             let totalFish = allCatches.length;
             let successRate = numAnglers > 0 ? Math.round((anglersWithFish / numAnglers) * 100) : 0;
             
-            // Match Duration
-            let matchDurHours = 4; // fallback
-            if (globalMatchData && globalMatchData.endTime) {
-                // Approximate from current time or known start time.
-                // Assuming standard 4 hours if we don't have absolute start.
+            let matchDurHours = 4; 
+            if (globalMatchData && globalMatchData.endTime && allCatches.length > 0) {
+                let minTs = Math.min(...allCatches.map(c => c.ts));
+                let calculatedHours = (globalMatchData.endTime - minTs) / 3600000;
+                if (calculatedHours > 0 && calculatedHours < 12) matchDurHours = calculatedHours;
             }
             let biteVelocity = matchDurHours > 0 && numAnglers > 0 ? (totalFish / numAnglers / matchDurHours).toFixed(1) : "0.0";
 
-            // Tide Math
             let tideStr = state.tides ? `HW: ${state.tides.high} | LW: ${state.tides.low}` : "Not Recorded";
             let peakStr = document.getElementById('stat-golden-hour') ? document.getElementById('stat-golden-hour').innerText : "--:--";
             let floodCount = 0; let ebbCount = 0;
@@ -2412,9 +2744,6 @@
                 allCatches.forEach(c => {
                     if (c.ts) {
                         let diffH = (c.ts - hwMs) / 3600000;
-                        // Cycle is 12.5h. 
-                        // Ebb is roughly HW to HW+6.25. Flood is HW-6.25 to HW.
-                        // Normalize diffH to -6.25 to +6.25
                         while (diffH > 6.25) diffH -= 12.5;
                         while (diffH < -6.25) diffH += 12.5;
                         
@@ -2426,7 +2755,6 @@
             let floodPct = totalFish > 0 ? Math.round((floodCount/totalFish)*100) : 0;
             let ebbPct = totalFish > 0 ? Math.round((ebbCount/totalFish)*100) : 0;
 
-            // Species Analysis (Top 3)
             let spMap = {};
             allCatches.forEach(c => {
                 if(!spMap[c.species]) spMap[c.species] = { count: 0, totalSize: 0, timestamps: [] };
@@ -2444,7 +2772,6 @@
             else if(fmt === 'speciesHunt') ruleStr = "Species Hunt";
             else ruleStr = fmt;
 
-            // Build Report String
             let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n📏 *Rules:* ${ruleStr}\n\n`;
             
             t += `👑 *PODIUM*\n`;
@@ -2525,9 +2852,6 @@
                 buttonRef.classList.remove('reporting');
             }
         }
-
-        // ==========================================================
-        // END V7.4.0 DEEP ANALYTICS REPORT ENGINE
         // ==========================================================
 
         function shareUnifiedReport() { generateOfficialMasterReport('results'); }
@@ -2544,31 +2868,6 @@
                 saveHistory(true); 
                 closeAndWipeSession(); 
             } 
-        }
-        
-        function lockdownMatch(isHostPushing) { 
-            clearInterval(clockInterval); 
-            if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
-            saveHistory(false); state.status = 'finished'; saveState(); 
-            
-            document.getElementById('resultsVenueDisplay').innerText = state.venue;
-            
-            let totalPts = state.myCatches.reduce((s,c) => s + c.points, 0); 
-            document.getElementById('finalScore').innerHTML = formatScoreDisplay(totalPts, state.format); 
-            document.getElementById('finalCount').innerText = state.myCatches.length; 
-            document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; 
-            if(state.isSteward) document.getElementById('resultsReportBtn').classList.remove('hidden');
-            
-            calculateGoldenHour();
-            renderExtraDataPoints();
-            if(state.tides) {
-                document.getElementById('tideGraphCard').classList.remove('hidden');
-                setTimeout(() => renderTideCanvas(), 300);
-            } else {
-                document.getElementById('tideGraphCard').classList.add('hidden');
-            }
-
-            navTo('results'); 
         }
         
         function saveHistory(isL) { 
