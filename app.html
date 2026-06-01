@@ -48,7 +48,7 @@
         @keyframes ticker-scroll { 0% { left: 100%; transform: translateX(0); } 100% { left: 0; transform: translateX(-100%); } }
         .ticker-track { position: absolute; display: flex; align-items: center; height: 100%; white-space: nowrap; will-change: transform, left; left: 100%; pointer-events: none; }
         .scroll-active { animation: ticker-scroll 28s linear infinite; }
-        .mask-fade-edges { -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
+        .mask-fade-edges { -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); pointer-events: none; }
         @keyframes ripple-ring { 0% { transform: scale(0.8); opacity: 1; border-width: 4px; } 100% { transform: scale(2.5); opacity: 0; border-width: 0px; } }
         .btn-ripple::after { content: ''; position: absolute; top: 50%; left: 50%; width: 100px; height: 100px; background: transparent; border: solid #ffffff; border-radius: 50%; transform: translate(-50%, -50%) scale(0); animation: ripple-ring 0.6s ease-out; pointer-events: none; }
         .flash-white { background-color: #22c55e !important; color: #ffffff !important; transition: all 0.1s; }
@@ -93,7 +93,6 @@
         </div>
     </div>
 
-    <!-- EDIT RECORD MODAL -->
     <div id="editRecordModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-4 border border-blue-500 shadow-2xl relative">
             <div class="text-center border-b border-slate-200 pb-3 mb-2">
@@ -155,7 +154,6 @@
         </div>
     </div>
 
-    <!-- CATCH FEED MODAL -->
     <div id="catchFeedModal" class="fixed inset-0 z-[500] hidden flex flex-col bg-slate-50 transition-transform duration-300 transform translate-x-full">
         <div class="flex-none p-5 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between pt-6">
             <div class="flex flex-col text-left">
@@ -170,7 +168,6 @@
         </div>
     </div>
 
-    <!-- STEWARD GOD MODAL -->
     <div id="stewardGodModal" class="fixed inset-0 z-[400] hidden flex flex-col items-center justify-center p-4">
         <div class="match-card w-full max-w-sm p-5 space-y-4 border border-blue-500 relative shadow-2xl">
             <button onclick="closeStewardGodModal()" class="absolute top-3 right-4 text-slate-500 text-xl"><i class="fa-solid fa-xmark"></i></button>
@@ -222,7 +219,6 @@
         </div>
     </div>
 
-    <!-- CUSTOM END MODAL -->
     <div id="customEndModal" class="fixed inset-0 z-[300] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-5 border border-blue-500 shadow-2xl">
             <div class="text-center">
@@ -241,7 +237,6 @@
         </div>
     </div>
 
-    <!-- TIME KEYPAD MODAL -->
     <div id="timeKeypadModal" class="fixed inset-0 z-[400] hidden flex flex-col bg-slate-50 p-4">
         <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
             <button onclick="closeTimeKeypad()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -266,7 +261,6 @@
         <button id="time-submit-btn" onclick="submitTimeAtm()" class="hidden pill-btn w-full max-w-sm mx-auto text-sm py-4 mb-8 shadow-lg">SET FINISH TIME</button>
     </div> 
     
-    <!-- INSTALL MODAL -->
     <div id="installModal" class="fixed inset-0 z-[400] hidden flex items-center justify-center p-6 text-center">
         <div class="match-card w-full max-w-sm p-6 space-y-5 border border-blue-500 shadow-2xl">
             <div class="text-center">
@@ -278,10 +272,8 @@
         </div>
     </div>
 
-    <!-- MAIN APP CONTAINER -->
     <div id="app-container">
 
-        <!-- HOME SCREEN -->
         <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative overflow-y-auto">
             <button onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-slate-500 active:text-red-500 cursor-pointer flex flex-col items-center z-[50]">
                 <i class="fa-solid fa-power-off text-2xl mb-1"></i>
@@ -330,7 +322,6 @@
             </div>
         </div>
 
-        <!-- V15.5.0 REDESIGNED ROLE SELECTION -->
         <div id="view-role" class="hidden view-frame p-5 space-y-5 relative bg-slate-50 overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
                 <button onclick="navTo('home')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -358,7 +349,6 @@
             </div>
         </div>
 
-        <!-- V15.5.0 SOLO SETUP SCREEN (ONE TIDE) -->
         <div id="view-solo-setup" class="hidden view-frame p-5 space-y-4 bg-slate-50 overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3">
                 <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -371,8 +361,8 @@
                     <p class="text-[10px] font-bold text-slate-600 leading-relaxed">To unlock Venue Intelligence, simply enter the next High Water time for today.</p>
                 </div>
 
-                <div class="px-1 w-1/2 mx-auto">
-                    <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 text-center">High Water (Opt)</label>
+                <div class="px-1 w-2/3 mx-auto">
+                    <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 text-center">Next High Water Time (Opt)</label>
                     <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-orange-500 focus-within:bg-white transition-all p-1">
                         <input type="text" id="soloHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('soloHtM').focus();">
                         <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
@@ -384,7 +374,6 @@
             </div>
         </div>
 
-        <!-- JOIN MATCH -->
         <div id="view-join" class="hidden view-frame p-4 bg-slate-50">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
                 <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -409,7 +398,6 @@
             <button id="btn-connect" onclick="connectToMatch()" class="hidden w-full max-w-sm mx-auto pill-btn text-base py-4 mb-8 shadow-xl">Validate</button>
         </div>
 
-        <!-- V15.5.0 HOST MATCH (ONE TIDE) -->
         <div id="view-host" class="hidden view-frame p-5 space-y-4 bg-slate-50 overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3">
                 <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -438,8 +426,8 @@
                         <h4 class="font-black text-blue-700 text-[10px] uppercase tracking-widest mb-1.5"><i class="fa-solid fa-chart-line mr-1"></i> Venue Intelligence</h4>
                         <p class="text-[10px] font-bold text-slate-600 leading-relaxed">To unlock Venue Intelligence, simply enter the next High Water time for today.</p>
                     </div>
-                    <div class="px-1 w-1/2 mx-auto">
-                        <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 text-center">High Water (Opt)</label>
+                    <div class="px-1 w-2/3 mx-auto">
+                        <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 text-center">Next High Water Time (Opt)</label>
                         <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-blue-600 focus-within:bg-white transition-all p-1">
                             <input type="text" id="hostHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostHtM').focus();">
                             <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
@@ -451,7 +439,6 @@
             </div>
         </div>
 
-        <!-- WAITING ROOM -->
         <div id="view-waiting" class="hidden view-frame p-5 space-y-4 bg-slate-50">
             <div class="flex justify-between items-center w-full pb-2 border-b border-slate-200">
                 <button onclick="exitWaitingRoom()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -469,7 +456,6 @@
             </div>
         </div>
 
-        <!-- HYPE SCREEN -->
         <div id="view-hype" class="hidden view-frame items-center justify-center bg-slate-50">
             <div id="hypeContainer" class="flex flex-col items-center justify-center text-center">
                 <div id="hypeCount" class="hype-number flex items-center justify-center w-48 h-48 metric-white bg-white shadow-2xl">5</div>
@@ -477,7 +463,6 @@
             </div>
         </div>
 
-        <!-- MAIN FISHING SCREEN -->
         <div id="view-fishing" class="hidden view-frame relative bg-slate-50">
             <div class="flex-none pt-2 px-3 pb-2 z-50 bg-slate-50/95 backdrop-blur-md shadow-[0_4px_10px_rgba(0,0,0,0.03)] border-b border-slate-200">
                 <div id="dynamic-island" class="w-full max-w-md mx-auto flex flex-col overflow-hidden drop-shadow-md rounded-xl border border-slate-300 bg-white">
@@ -544,7 +529,6 @@
                     </div>
                 </div>
 
-                <!-- Ticker Wrapper -->
                 <div class="w-full max-w-md mx-auto mt-2 bg-white border border-slate-300 shadow-sm rounded-full h-8 flex items-center relative overflow-hidden mask-fade-edges pointer-events-none">
                     <div id="wallStreetTicker" class="ticker-track text-[11px] font-bold text-slate-700 tracking-wider pointer-events-none">
                         AWAITING TELEMETRY...
@@ -553,7 +537,7 @@
 
             </div>
 
-            <div id="loggingArea" class="scrollable-area p-4 flex flex-col w-full max-w-md mx-auto">
+            <div id="loggingArea" class="scrollable-area p-4 flex flex-col w-full max-w-md mx-auto relative z-40">
                 <div class="flex justify-between items-center mb-2 w-full px-1 space-x-2">
                     <button onclick="openInMatchHelp()" class="pill-btn flex-1 text-[10px] py-2.5 shadow-sm">
                         📖 HELP
@@ -572,7 +556,6 @@
             </button>
         </div>
 
-        <!-- RESULTS SCREEN -->
         <div id="view-results" class="hidden view-frame bg-slate-50 p-5 justify-center space-y-5 text-center pb-24 overflow-y-auto">
             <h1 class="text-3xl font-black uppercase text-slate-900 border-b-4 border-slate-300 pb-2 tracking-tighter w-full mt-8">Final <span class="text-blue-600">Result</span></h1>
             <div class="text-slate-500 font-black text-xs uppercase tracking-widest mb-4" id="resultsVenueDisplay">Venue Name</div>
@@ -608,7 +591,6 @@
             </div>
         </div>
 
-        <!-- HISTORY VAULT -->
         <div id="view-history" class="hidden view-frame bg-slate-50">
             <div class="flex justify-between items-center pb-3 mb-2 px-5 mt-6 text-slate-900 border-b border-slate-300 shadow-sm">
                 <h2 class="text-xl font-black uppercase tracking-[0.1em] text-slate-900">History <span class="text-blue-600">Vault</span></h2>
@@ -628,7 +610,6 @@
             </div>
         </div>
 
-        <!-- KILL SCREEN -->
         <div id="view-kill" class="hidden view-frame items-center justify-center bg-slate-50 p-6 text-center">
             <i class="fa-solid fa-power-off text-red-600 text-6xl mb-6 animate-pulse rounded-full"></i>
             <h1 class="text-3xl font-black uppercase text-slate-900 tracking-widest mb-3">Session Cleared</h1>
@@ -640,7 +621,6 @@
             </div>
         </div>
 
-        <!-- DRAWERS -->
         <div id="guideDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50 z-[250] flex flex-col justify-between hidden">
             <div class="scrollable-area p-6 space-y-8 text-slate-900 text-left pt-8">
                 <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
@@ -680,7 +660,7 @@
                     <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V15.5.0</p>
                 </section>
             </div>
-            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center pointer-events-auto">
                 <button onclick="closeGuide()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN</button>
             </div>
         </div>
@@ -715,7 +695,7 @@
                     </div>
                 </section>
             </div>
-            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center pointer-events-auto">
                 <button onclick="closeInMatchHelp()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
             </div>
         </div>
@@ -723,7 +703,7 @@
         <div id="historyDetailDrawer" class="drawer-right fixed inset-0 w-full bg-slate-50 z-[150] flex flex-col hidden justify-between">
            <div class="hidden"><button id="tab-standings"></button><button id="tab-record"></button></div>
             <div id="historyContent" class="scrollable-area p-4 text-center"></div>
-            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center pointer-events-auto">
                 <button onclick="closeHistoryDetail()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO MATCH LIST</button>
             </div>
         </div>
@@ -747,7 +727,7 @@
 
             <div id="leaderboardList" class="scrollable-area p-4 space-y-2 text-center mt-1"></div>
             
-            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center pointer-events-auto">
                 <button onclick="closeLeaderboard()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
             </div>
         </div>
@@ -772,7 +752,7 @@
                     <button id="drawerReportBtn" onclick="generateOfficialMasterReport('drawer')" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md mt-4"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
                 </div>
             </div>
-            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center pointer-events-auto">
                 <button onclick="closeOptionsDrawer()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
             </div>
         </div>
@@ -782,7 +762,7 @@
                 <h2 class="font-black text-base text-slate-900 uppercase tracking-widest"><i class="fa-solid fa-gavel mr-2 text-blue-600"></i> Select <span class="text-blue-600">Angler</span></h2>
             </div>
             <div id="stewardRosterList" class="scrollable-area p-4 space-y-2 text-center"></div>
-            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center pointer-events-auto">
                 <button onclick="stewardCloseLogs()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> BACK TO OPTIONS</button>
             </div>
         </div>
@@ -793,10 +773,13 @@
                 <button onclick="openStewardGodModal()" id="godModeAddBtn" class="pill-btn w-full text-[11px] tracking-widest py-4 mt-4 shadow-md"><i class="fa-solid fa-plus mr-2"></i> LOG CATCH FOR ANGLER</button>
             </div>
             <div id="stewardCatchList" class="scrollable-area p-4 space-y-2 text-center mt-1"></div>
-            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
+            <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center pointer-events-auto">
                 <button onclick="closeStewardLogDrawer()" class="pill-btn btn-destructive w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> CLOSE AUDIT</button>
             </div>
-            <script type="module">
+        </div>
+
+    </div>
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, onValue, update, get, remove, off } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
@@ -1407,9 +1390,9 @@
             }
 
             if (allCatches.length === 0) {
-                htmlBlock += `<span class="inline-block" style="width: 300vw;"></span>`;
+                htmlBlock += `<span class="inline-block pointer-events-none" style="width: 300vw;"></span>`;
             } else {
-                htmlBlock += `<span class="inline-block" style="width: 50vw;"></span>`;
+                htmlBlock += `<span class="inline-block pointer-events-none" style="width: 50vw;"></span>`;
             }
 
             const track = document.getElementById('wallStreetTicker');
@@ -2656,7 +2639,23 @@
         function shareUnifiedReport() { generateOfficialMasterReport('results'); }
         function endMatchEarly(grace) { haptic(); if(state.isSteward && state.pin) { if(grace) { closeOptionsDrawer(); document.getElementById('customEndModal').classList.remove('hidden'); } } }
         function stewardSetNewEnd(mins) { haptic(); closeCustomEndModal(); closeOptionsDrawer(); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
-        function transferSteward() { haptic(); if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { if(confirm(`Transfer Steward control?`)) { update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); closeOptionsDrawer(); } } }
+        function transferSteward() { haptic(); if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0
+function transferSteward() { 
+            haptic(); 
+            if(!globalMatchData || !globalMatchData.anglers) return; 
+            let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); 
+            if(options.length === 0) { alert("No other competitors linked."); return; } 
+            let message = "Select Angler Number:\n\n"; 
+            options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); 
+            let choice = prompt(message); 
+            let selectedIndex = parseInt(choice) - 1; 
+            if (!isNaN(selectedIndex) && selectedIndex >= 0 && selectedIndex < options.length) { 
+                if(confirm(`Transfer Steward control?`)) { 
+                    update(ref(db, 'matches/' + state.pin), { hostId: options[selectedIndex].id }); 
+                    closeOptionsDrawer(); 
+                } 
+            } 
+        }
         
         function leaveMatchEarly() { 
             haptic(); 
@@ -2847,7 +2846,7 @@
                     }).join('');
                 }
 
-                let tideStr = m.tides ? `High Water: ${m.tides.high}` : "Not Recorded";
+                let tideStr = m.tides ? `HW: ${m.tides.high}` : "Not Recorded";
 
                 let hubHtml = `
                 <div class="flex justify-between items-center w-full mb-3 mt-4">
