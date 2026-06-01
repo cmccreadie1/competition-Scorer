@@ -192,7 +192,6 @@
         
         .reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
         
-        /* New venue intel explainer box */
         .tide-explainer-box { background: rgba(2, 132, 199, 0.05); border: 1px dashed rgba(2, 132, 199, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; margin-bottom: 0.5rem; }
     </style>
 </head>
@@ -288,7 +287,6 @@
                 <h3 class="text-sm font-black uppercase tracking-tight text-slate-900">Steward <span class="text-blue-600">Override</span></h3>
                 <p id="godModeAnglerName" class="text-slate-900 text-base font-black mt-1">Angler Name</p>
             </div>
-            
             <div>
                 <select id="godInputSpecies" onchange="godCheckSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none">
                     <option value="" disabled selected>-- Select Fish Species --</option>
@@ -397,7 +395,6 @@
     <div id="app-container">
 
         <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative overflow-y-auto">
-
             <button onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-slate-500 active:text-red-500 cursor-pointer flex flex-col items-center z-[50]">
                 <i class="fa-solid fa-power-off text-2xl mb-1"></i>
                 <span class="text-[10px] font-black uppercase tracking-widest">Close</span>
@@ -408,7 +405,7 @@
                     SHORE<span class="text-blue-600">SCORE</span>
                 </h1>
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display mt-2">
-                    V10.14.1
+                    V15.0.0
                 </div>
             </div>
             
@@ -540,6 +537,7 @@
                         </div>
                     </div>
                 </div>
+
                 <button id="btnInitMatch" onclick="createMatch()" class="pill-btn w-full text-lg py-4 mt-6 border-blue-600 shadow-md">Continue</button>
             </div>
         </div>
@@ -572,7 +570,6 @@
             
             <div class="flex-none pt-2 px-3 pb-1 z-50 bg-slate-50/95 backdrop-blur-md shadow-[0_4px_10px_rgba(0,0,0,0.03)] border-b border-slate-200">
                 <div id="dynamic-island" class="w-full max-w-md mx-auto flex flex-col overflow-hidden drop-shadow-md rounded-xl border border-slate-300">
-                    
                     <div class="bg-white flex flex-col">
                         <div class="flex items-center justify-between h-[46px] px-4">
                             <div class="flex items-center space-x-2 truncate">
@@ -586,13 +583,11 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="w-full bg-slate-900 h-8 flex items-center relative overflow-hidden mask-fade-edges text-white border-y border-slate-800">
                         <div id="wallStreetTicker" class="ticker-track text-[11px] font-bold text-slate-300 tracking-wider">
                             AWAITING TELEMETRY...
                         </div>
                     </div>
-
                     <div class="bg-slate-100 p-2.5 pb-3">
                         <div class="flex flex-col space-y-2">
                             <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none border-slate-300 bg-white">
@@ -619,7 +614,6 @@
                                     <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
                                 </optgroup>
                             </select>
-                            
                             <div>
                                 <label id="labelSize" class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1 text-left pl-2">Measurement (cm)</label>
                                 <div class="flex space-x-2">
@@ -655,7 +649,6 @@
                         ⚙️ OPTIONS & EXIT
                     </button>
                 </div>
-                
                 <div class="flex-1 flex flex-col min-h-[50vh]">
                     <div id="localCatchList" class="space-y-2 flex-1"></div>
                 </div>
@@ -664,7 +657,6 @@
             <button onclick="openLeaderboard()" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
                 CLICK FOR LIVE LEADERBOARD
             </button>
-
         </div>
 
         <div id="view-results" class="hidden view-frame bg-slate-50 p-5 justify-center space-y-5 text-center pb-24 overflow-y-auto">
@@ -690,22 +682,21 @@
             <div class="max-w-sm mx-auto w-full space-y-4" id="analyticsContainer">
                 <div class="match-card p-4 flex flex-col items-center shadow-md hidden" id="goldenHourCard">
                     <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest mb-1">Golden Hour (Peak 60 Min)</span>
-                    <span class="text-xl font-black text-orange-600" id="stat-golden-hour">--:--</span>
+                    <span class="text-2xl font-black text-orange-600" id="stat-golden-hour">--:--</span>
                 </div>
-                
                 <div class="match-card p-4 shadow-md text-left hidden" id="tideGraphCard">
                     <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest text-center block mb-2">Tidal Wave Heatmap</span>
                     <div class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2">
                         <canvas id="tideGraphCanvas" style="width: 100%; height: 160px;"></canvas>
                     </div>
                 </div>
-
                 <div class="match-card p-4 shadow-md text-left hidden" id="extraDataCard">
                     <span class="text-[11px] font-black uppercase text-slate-600 tracking-widest text-center block mb-3">Match Performance Data</span>
                     <div id="extraDataContent" class="space-y-2 divide-y divide-slate-100">
-                        </div>
+                    </div>
                 </div>
             </div>
+
             <div class="max-w-sm mx-auto w-full">
                 <button id="resultsReportBtn" onclick="generateOfficialMasterReport('results')" class="hidden pill-btn w-full text-base py-4 mt-6 shadow-lg">Share Official Match Report</button>
                 <button onclick="closeAndWipeSession()" class="text-slate-600 font-black mt-8 active:text-slate-900 uppercase text-xs tracking-[0.5em] bg-white border border-slate-200 px-6 py-4 rounded-lg shadow-sm w-full">Return Home (Clear Match)</button>
@@ -760,14 +751,11 @@
                     </div>
                 </section>
                 <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-    <h4 class="text-blue-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">LEAVING EARLY</h4>
-    <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
-        <p>If you need to pack up before the clock hits zero, just open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from the <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
-        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">What if I need to leave early?</h4>
-        <p class="text-xs text-slate-700 leading-relaxed font-medium">If you need to pack up before the clock hits zero, open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later the View Past Matches button on the home screen.</p>
-    </div>.</p>
-    </div>
-</section>
+                    <h4 class="text-blue-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">LEAVING EARLY</h4>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
+                        <p>If you need to pack up before the clock hits zero, just open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from the View Past Matches button on the home screen.</p>
+                    </div>
+                </section>
                 <section class="space-y-5 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <h4 class="text-orange-600 font-black text-xl uppercase tracking-widest border-b border-slate-200 pb-3">👑 FULL STEWARD'S MANUAL</h4>
                     <div class="space-y-4 text-sm leading-relaxed text-slate-700 font-medium">
@@ -781,7 +769,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V10.14.1</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V15.0.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -822,10 +810,6 @@
                         <p class="text-xs text-slate-700 leading-relaxed font-medium">No. ShoreScore does not have a "sleep" button. When you are done logging a fish, just press your phone's physical power button to turn the screen off and drop it in your pocket. The exact second you wake your screen up, the app will instantly reconnect and download any new fish caught by the rest of the beach.</p>
                     </div>
                 </section>
-                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
-        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">What if I need to leave early?</h4>
-        <p class="text-xs text-slate-700 leading-relaxed font-medium">If you need to pack up before the clock hits zero, open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from your History Vault.</p>
-    </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
                 <button onclick="closeInMatchHelp()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
@@ -1015,7 +999,7 @@
             } catch(e) {}
         }
 
-        // ================= V7.4.0 ANALYTICS ENGINE =================
+        // ================= V15.0.0 ANALYTICS ENGINE =================
 
         function calculateGoldenHour() {
             let allCatches = [];
@@ -1212,201 +1196,7 @@
         }
 
         // ==========================================================
-        // V7.4.0 DEEP ANALYTICS REPORT ENGINE
-        // ==========================================================
-        function generateOfficialMasterReport(source) {
-            haptic();
-            if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
-            
-            let targetBtn = null;
-            if (source === 'drawer') {
-                targetBtn = document.getElementById('drawerReportBtn');
-            } else {
-                targetBtn = document.getElementById('resultsReportBtn');
-            }
-            
-            if(targetBtn) { targetBtn.innerText = "GENERATING REPORT..."; targetBtn.classList.add('reporting'); }
-            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn);
-        }
-
-        function generateHistoricReport() {
-            haptic();
-            const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
-            if(!h || !h.standings) return alert("No leaderboard data available.");
-            
-            const btn = document.querySelector(`button[onclick="generateHistoricReport()"]`);
-            if(btn) { btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin mr-2'></i> GENERATING..."; btn.classList.add('reporting'); }
-            buildAndShareReport(h.standings, h.venue, h.date, h.format, btn);
-        }
-
-        function buildAndShareReport(arr, venueName, matchDate, matchFormat, buttonRef) {
-            const fmt = matchFormat || state.format; 
-            let podium = arr.slice(0, 3);
-            let biggestVal = 0, biggestStr = "N/A";
-            
-            let allCatches = [];
-            let anglersWithFish = 0;
-            let matchTotalPhysicalSize = 0;
-            let matchTotalRaw = arr.reduce((sum, a) => sum + (a.score || 0), 0);
-            let numAnglers = arr.length;
-
-            arr.forEach(a => {
-                if(a.catches) {
-                    let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
-                    if (cList.length > 0) anglersWithFish++;
-                    cList.forEach(f => {
-                        allCatches.push(f);
-                        matchTotalPhysicalSize += (parseFloat(f.size) || 0);
-                        if(f.size > biggestVal) { 
-                            biggestVal = f.size; 
-                            biggestStr = `${f.species} (${f.display || f.size}) — ${a.name}`; 
-                        }
-                    });
-                }
-            });
-
-            let totalFish = allCatches.length;
-            let successRate = numAnglers > 0 ? Math.round((anglersWithFish / numAnglers) * 100) : 0;
-            
-            // Match Duration Calculation (Fallback 4 if not easily determinable)
-            let matchDurHours = 4; 
-            if (globalMatchData && globalMatchData.endTime && allCatches.length > 0) {
-                let minTs = Math.min(...allCatches.map(c => c.ts));
-                let calculatedHours = (globalMatchData.endTime - minTs) / 3600000;
-                if (calculatedHours > 0 && calculatedHours < 12) matchDurHours = calculatedHours;
-            }
-            let biteVelocity = matchDurHours > 0 && numAnglers > 0 ? (totalFish / numAnglers / matchDurHours).toFixed(1) : "0.0";
-
-            // Tide Math
-            let tideStr = state.tides ? `HW: ${state.tides.high} | LW: ${state.tides.low}` : "Not Recorded";
-            let peakStr = document.getElementById('stat-golden-hour') ? document.getElementById('stat-golden-hour').innerText : "--:--";
-            let floodCount = 0; let ebbCount = 0;
-            
-            if (state.tides && totalFish > 0) {
-                let parts = state.tides.high.split(':');
-                let htd = new Date();
-                htd.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
-                let hwMs = htd.getTime();
-
-                allCatches.forEach(c => {
-                    if (c.ts) {
-                        let diffH = (c.ts - hwMs) / 3600000;
-                        while (diffH > 6.25) diffH -= 12.5;
-                        while (diffH < -6.25) diffH += 12.5;
-                        
-                        if (diffH >= 0 && diffH <= 6.25) ebbCount++;
-                        else floodCount++;
-                    }
-                });
-            }
-            let floodPct = totalFish > 0 ? Math.round((floodCount/totalFish)*100) : 0;
-            let ebbPct = totalFish > 0 ? Math.round((ebbCount/totalFish)*100) : 0;
-
-            // Species Analysis (Top 3)
-            let spMap = {};
-            allCatches.forEach(c => {
-                if(!spMap[c.species]) spMap[c.species] = { count: 0, totalSize: 0, timestamps: [] };
-                spMap[c.species].count++;
-                spMap[c.species].totalSize += (parseFloat(c.size) || 0);
-                if(c.ts) spMap[c.species].timestamps.push(c.ts);
-            });
-            let topSpecies = Object.entries(spMap).sort((a,b) => b[1].count - a[1].count).slice(0, 3);
-
-            let ruleStr = "";
-            if(fmt === 'length') ruleStr = "Length Only (cm)";
-            else if(fmt === 'length10') ruleStr = "Length + 10 Pts";
-            else if(fmt === 'weightLb') ruleStr = "Weight (Lbs & Oz)";
-            else if(fmt === 'weightKg') ruleStr = "Weight (Kg & g)";
-            else if(fmt === 'speciesHunt') ruleStr = "Species Hunt";
-            else ruleStr = fmt;
-
-            // Build Report String
-            let t = `🏆 *SHORESCORE OFFICIAL REPORT*\n📍 *Venue:* ${venueName}\n📅 *Date:* ${matchDate}\n📏 *Rules:* ${ruleStr}\n\n`;
-            
-            t += `👑 *PODIUM*\n`;
-            t += `🥇 1st: ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true)}\n`;
-            t += `🥈 2nd: ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true)}\n`;
-            t += `🥉 3rd: ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true)}\n\n`;
-
-            t += `📈 *VENUE INTELLIGENCE*\n`;
-            t += `👥 Angler Success: ${successRate}% Caught (${numAnglers} Anglers Total)\n`;
-            t += `⚡ Bite Velocity: ${biteVelocity} Fish/Angler/Hr\n`;
-            
-            if (state.tides) {
-                t += `🌊 Tides: ${tideStr}\n`;
-                t += `⚖️ Tidal Bias: ${floodPct}% Flood / ${ebbPct}% Ebb\n`;
-                t += `🔥 Golden Hour: ${peakStr.replace(' Fish)', '')} Fish)\n`;
-            } else {
-                t += `🌊 Tides: Not Recorded\n`;
-            }
-            if (fmt !== 'speciesHunt') {
-                t += `🐋 Match Biggest: ${biggestStr.replace(/<[^>]*>?/gm, '')}\n`;
-            }
-            t += `\n`;
-
-            if (totalFish > 0) {
-                t += `📊 *TOP 3 SPECIES PROFILES*\n`;
-                topSpecies.forEach(sp => {
-                    let name = sp[0];
-                    let data = sp[1];
-                    let pct = Math.round((data.count / totalFish) * 100);
-                    let avgSz = (data.totalSize / data.count).toFixed(1);
-                    
-                    let peakSpTime = "N/A";
-                    if (state.tides && data.timestamps.length > 0) {
-                        let parts = state.tides.high.split(':');
-                        let htd = new Date(); htd.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
-                        let hwMs = htd.getTime();
-                        
-                        let totalOffset = 0;
-                        data.timestamps.forEach(ts => {
-                            let diffH = (ts - hwMs) / 3600000;
-                            while (diffH > 6.25) diffH -= 12.5;
-                            while (diffH < -6.25) diffH += 12.5;
-                            totalOffset += diffH;
-                        });
-                        let avgOffset = totalOffset / data.timestamps.length;
-                        if (Math.abs(avgOffset) < 0.5) peakSpTime = "HW";
-                        else if (avgOffset > 0) peakSpTime = `HW +${avgOffset.toFixed(1)}h`;
-                        else peakSpTime = `HW ${avgOffset.toFixed(1)}h`;
-                    }
-
-                    t += `▪️ *${name}* (${pct}% of catch)\n`;
-                    if(!fmt.includes('speciesHunt')) t += `   Avg Size: ${avgSz}cm\n`;
-                    if(state.tides) t += `   Peak Feeding: ${peakSpTime}\n`;
-                });
-                t += `\n`;
-            }
-
-            t += `🏆 *FULL STANDINGS*\n`;
-            arr.forEach((a, i) => { 
-                t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
-            });
-            
-            t += `\n_Generated by ShoreScore V10.14.1_`;
-
-            if (navigator.share) { 
-                navigator.share({ title: 'Official Report', text: t }).catch(console.error); 
-            }
-            else { 
-                window.open(`https://wa.me/?text=${encodeURIComponent(t)}`); 
-            }
-            
-            if(buttonRef) {
-                if(buttonRef.id === 'drawerReportBtn' || buttonRef.id === 'resultsReportBtn') {
-                    buttonRef.innerHTML = "<i class='fa-solid fa-file-export mr-3 text-base text-blue-600'></i> Share Official Report";
-                } else {
-                    buttonRef.innerHTML = "<i class='fa-solid fa-share-nodes mr-2'></i> SHARE CARD";
-                }
-                buttonRef.classList.remove('reporting');
-            }
-        }
-
-        // ==========================================================
-        // END V7.4.0 DEEP ANALYTICS REPORT ENGINE
-        // ==========================================================
-
+        
         function openOptionsDrawer() { haptic(); if(document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
         function closeOptionsDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('hidden'), 300); }
         function openInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('open'), 10); }
@@ -2640,12 +2430,9 @@
             setTimeout(refreshStewardCatchList, 300);
         }
 
-        // ==========================================================
-        // V7.4.0 DEEP ANALYTICS REPORT ENGINE
-        // ==========================================================
         function lockdownMatch(isHostPushing) { 
             clearInterval(clockInterval); 
-            if(isHostPushing && state.isHost && state.mode !== 'personal') { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
+            if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
             saveHistory(false); state.status = 'finished'; saveState(); 
             
             document.getElementById('resultsVenueDisplay').innerText = state.venue;
@@ -2834,7 +2621,7 @@
                 t += `\`\`\`${(i+1).toString().padStart(2, ' ')}.\`\`\` ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true)}\n`; 
             });
             
-            t += `\n_Generated by ShoreScore V10.14.1_`;
+            t += `\n_Generated by ShoreScore V15.0.0_`;
 
             if (navigator.share) { 
                 navigator.share({ title: 'Official Report', text: t }).catch(console.error); 
@@ -2852,7 +2639,6 @@
                 buttonRef.classList.remove('reporting');
             }
         }
-        // ==========================================================
 
         function shareUnifiedReport() { generateOfficialMasterReport('results'); }
         function endMatchEarly(grace) { haptic(); if(state.isSteward && state.pin) { if(grace) { closeOptionsDrawer(); document.getElementById('customEndModal').classList.remove('hidden'); } } }
@@ -2981,12 +2767,23 @@
         function stopHistoryClock() { if (historyTick) clearInterval(historyTick); }
         function deleteHistoryItem(id) { haptic(); if(confirm("Wipe record?")) { let h = JSON.parse(localStorage.getItem('matchHistory') || '[]').filter(m => m.id !== id); localStorage.setItem('matchHistory', JSON.stringify(h)); renderHistory(); } }
         function toggleArchive() { haptic(); isArchiveOpen = !isArchiveOpen; document.getElementById('historyArchiveList').classList.toggle('hidden', !isArchiveOpen); document.getElementById('archiveChevron').style.transform = isArchiveOpen ? 'rotate(180deg)' : 'rotate(0deg)'; }
-        function viewPastRecord(id) { haptic(); activeHistoryId = id; const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId); if(m) { document.getElementById('historyDetailDrawer').classList.remove('hidden'); document.getElementById('historyDetailDrawer').classList.add('open'); switchHistoryTab('standings'); } }
+        
+        function viewPastRecord(id) { 
+            haptic(); 
+            activeHistoryId = id; 
+            const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId); 
+            if(m) { 
+                document.getElementById('historyDetailDrawer').classList.remove('hidden'); 
+                document.getElementById('historyDetailDrawer').classList.add('open'); 
+                switchHistoryTab('standings'); 
+            } 
+        }
         
         function switchHistoryTab(tab) {
             haptic();
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
-            document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active'); }); document.getElementById(`tab-${tab}`).classList.add('active');
+            document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active'); }); 
+            if (document.getElementById(`tab-${tab}`)) document.getElementById(`tab-${tab}`).classList.add('active');
             
             if(tab === 'standings') { 
                 let matchTotalScore = m.standings ? m.standings.reduce((sum, s) => sum + s.score, 0) : 0;
@@ -3164,7 +2961,7 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            const CURRENT_FALLBACK_VERSION = "10.14.1";
+            const CURRENT_FALLBACK_VERSION = "15.0.0";
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
             fetch('version.json?t=' + new Date().getTime())
