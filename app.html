@@ -98,6 +98,7 @@
             <div class="text-center border-b border-slate-200 pb-3 mb-2">
                 <h3 class="text-base font-black uppercase tracking-tight text-slate-900">Edit <span class="text-blue-600">Record</span></h3>
             </div>
+            
             <div class="space-y-3 text-left">
                 <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest pl-2">Species</label>
                 <select id="editInputSpecies" onchange="editCheckSpeciesSelection()" class="pill-input w-full p-3 text-sm appearance-none border-slate-300 bg-white">
@@ -254,7 +255,7 @@
         <div class="flex-1 grid grid-cols-3 gap-3 p-3 max-w-sm mx-auto w-full content-center">
             <button class="atm-btn" onclick="timeAtmPress(1)">1</button><button class="atm-btn" onclick="timeAtmPress(2)">2</button><button class="atm-btn" onclick="timeAtmPress(3)">3</button>
             <button class="atm-btn" onclick="timeAtmPress(4)">4</button><button class="atm-btn" onclick="timeAtmPress(5)">5</button><button class="atm-btn" onclick="timeAtmPress(6)">6</button>
-            <button class="atm-btn" onclick="timeAtmPress(7)">7</button><button class="atm-btn" onclick="timeAtmPress(8)">8</button><button class="atm-btn" onclick="timeAtmPress(9)">9</button>
+            <button class="atm-btn" onclick="timeAtmPress(7)">7</button><button class="atm-btn" onclick="timeAtmPress(8)">8</button><button class="atm-btn" onclick="atmPress(9)">9</button>
             <button class="atm-btn text-red-600" onclick="closeTimeKeypad()"><i class="fa-solid fa-xmark"></i></button><button class="atm-btn" onclick="timeAtmPress(0)">0</button><button class="atm-btn text-amber-600" onclick="timeAtmDelete()"><i class="fa-solid fa-backspace"></i></button>
         </div>
         <button id="time-submit-btn" onclick="submitTimeAtm()" class="hidden pill-btn w-full max-w-sm mx-auto text-sm py-4 mb-8 shadow-lg">SET FINISH TIME</button>
@@ -278,14 +279,16 @@
                 <i class="fa-solid fa-power-off text-2xl mb-1"></i>
                 <span class="text-[10px] font-black uppercase tracking-widest">Close</span>
             </button>
+
             <div class="text-center mt-6 relative w-full mb-2">
                 <h1 class="animate-text delay-title text-4xl font-black tracking-normal text-center mb-0.5 uppercase text-slate-900 mt-8 w-full flex justify-center">
                     SHORE<span class="text-blue-600">SCORE</span>
                 </h1>
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display mt-2">
-                    V15.3.0
+                    V15.4.0
                 </div>
             </div>
+            
             <div class="w-full max-w-sm space-y-4 mt-6 pb-10">
                 <div class="match-card p-6 space-y-4 text-center shadow-lg relative z-10">
                     <div>
@@ -300,39 +303,84 @@
                         Continue
                     </button>
                 </div>
+                
                 <div class="w-full bg-white rounded-xl neon-border-glow border overflow-hidden domestic-action relative z-10 shadow-md">
                     <button onclick="navTo('history')" class="w-full p-5 flex flex-col items-center cursor-pointer">
                         <div class="text-[var(--text-header)] text-lg font-black uppercase tracking-tight">View Past <span class="neon-text-blue">Matches</span></div>
                     </button>
                 </div>
+
                 <div class="w-full bg-white rounded-xl neon-border-glow border overflow-hidden domestic-action relative z-10 shadow-md">
                     <button onclick="openGuide()" class="w-full p-5 flex flex-col items-center cursor-pointer">
                         <div class="text-[var(--text-header)] text-lg font-black uppercase tracking-tight">App <span class="neon-text-blue">Guide</span></div>
                     </button>
                 </div>
+
                 <button id="btnInstallGuide" onclick="showInstallGuide()" class="hidden pill-btn w-full py-3 text-[10px] mt-2 relative z-10">
                     <i class="fa-solid fa-mobile-screen mr-1.5 neon-text-blue"></i> Install App
                 </button>
             </div>
         </div>
 
-        <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-slate-50">
+        <div id="view-role" class="hidden view-frame p-5 space-y-5 relative bg-slate-50 overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
                 <button onclick="navTo('home')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
-                <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Select <span class="text-blue-600">Role</span></h2>
+                <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Select <span class="text-blue-600">Mode</span></h2>
                 <div class="w-6"></div>
             </div>
-            <div class="flex-1 flex flex-col justify-center space-y-6 max-w-sm mx-auto w-full pb-20">
-                <button onclick="navTo('join')" class="w-full pill-btn font-black text-xl py-10 shadow-xl border border-blue-600 flex flex-col items-center justify-center">
-                    <i class="fa-solid fa-user-tag text-4xl mb-3 text-white"></i>
-                    Join as Competitor
+            
+            <div class="flex-1 flex flex-col justify-center space-y-4 max-w-sm mx-auto w-full pb-10">
+                <button onclick="navTo('host')" class="w-full pill-btn font-black text-xl py-6 shadow-md border-2 border-blue-600 flex flex-col items-center justify-center text-center px-4">
+                    <div class="flex items-center"><i class="fa-solid fa-crown mr-3"></i> CREATE MATCH</div>
+                    <span class="text-[10px] normal-case tracking-normal block mt-1.5 opacity-90 font-medium font-bold">Host a live leaderboard and set the rules for multiple anglers.</span>
                 </button>
-                <div class="pt-6">
-                    <button onclick="navTo('host')" class="w-3/4 mx-auto pill-btn text-sm py-5 shadow-md border border-blue-600 flex flex-col items-center justify-center opacity-90 bg-white !text-blue-600">
-                        <i class="fa-solid fa-crown text-xl mb-1.5"></i>
-                        Host as Steward
-                    </button>
+                
+                <button onclick="navTo('join')" class="w-full pill-btn font-black text-xl py-6 shadow-md border-2 border-slate-400 bg-white !text-slate-800 flex flex-col items-center justify-center text-center px-4">
+                    <div class="flex items-center text-blue-600"><i class="fa-solid fa-user-tag mr-3"></i> JOIN MATCH</div>
+                    <span class="text-[10px] normal-case tracking-normal block mt-1.5 text-slate-500 font-medium font-bold">Enter a 4-digit Room PIN, provided by your host, to compete in a live match.</span>
+                </button>
+
+                <div class="border-t border-slate-200 w-3/4 mx-auto my-2"></div>
+
+                <button onclick="navTo('solo-setup')" class="w-full pill-btn font-black text-xl py-6 shadow-md border-2 border-slate-400 bg-slate-800 !text-white flex flex-col items-center justify-center text-center px-4">
+                    <div class="flex items-center text-orange-400"><i class="fa-solid fa-book-open mr-3"></i> SESSION DIARY</div>
+                    <span class="text-[10px] normal-case tracking-normal block mt-1.5 text-slate-300 font-medium font-bold">Fish solo. Track your personal catches, tide data, and venue stats.</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="view-solo-setup" class="hidden view-frame p-5 space-y-4 bg-slate-50 overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-300 pb-3">
+                <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Session <span class="text-orange-600">Diary</span></h2>
+                <div class="w-6"></div>
+            </div>
+            <div class="match-card p-6 space-y-5 text-center mt-8 shadow-lg pb-8 border-orange-200">
+                <div class="tide-explainer-box text-left mb-4 bg-orange-50 border-orange-200">
+                    <h4 class="font-black text-orange-700 text-[10px] uppercase tracking-widest mb-1.5"><i class="fa-solid fa-chart-line mr-1"></i> Venue Intelligence</h4>
+                    <p class="text-[10px] font-bold text-slate-600 leading-relaxed">Entering the tide times below unlocks the Live Tide Ticker, Heatmap Graphs, Flood/Ebb Bias Ratios, and Species Peak Windows for your personal session.</p>
                 </div>
+
+                <div class="grid grid-cols-2 gap-4 px-1">
+                    <div class="text-left">
+                        <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">High Water (Opt)</label>
+                        <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-orange-500 focus-within:bg-white transition-all p-1">
+                            <input type="text" id="soloHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('soloHtM').focus();">
+                            <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
+                            <input type="text" id="soloHtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">Low Water (Opt)</label>
+                        <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-orange-500 focus-within:bg-white transition-all p-1">
+                            <input type="text" id="soloLtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('soloLtM').focus();">
+                            <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
+                            <input type="text" id="soloLtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="startSoloSession()" class="pill-btn w-full text-lg py-4 mt-6 !bg-orange-600 shadow-md"><i class="fa-solid fa-play mr-2"></i> Start Diary</button>
             </div>
         </div>
 
@@ -436,28 +484,21 @@
         </div>
 
         <div id="view-fishing" class="hidden view-frame relative bg-slate-50">
-            <div class="flex-none pt-2 px-3 pb-1 z-50 bg-slate-50/95 backdrop-blur-md shadow-[0_4px_10px_rgba(0,0,0,0.03)] border-b border-slate-200">
-                <div id="dynamic-island" class="w-full max-w-md mx-auto flex flex-col overflow-hidden drop-shadow-md rounded-xl border border-slate-300">
-                    <div class="bg-white flex flex-col">
-                        <div class="flex items-center justify-between h-[46px] px-4">
-                            <div class="flex items-center space-x-2 truncate">
-                                <span id="island-rank-text" class="text-sm font-black text-slate-900">🏆 --</span>
-                                <span id="island-gap-text" class="hidden text-xs font-bold text-slate-500">🎯 --</span>
-                            </div>
-                            <div class="flex items-center space-x-2 shrink-0">
-                                <span id="island-tide-state" class="text-[10px] font-black text-blue-600 hidden mr-2 bg-blue-100 px-2 py-0.5 rounded">HW --</span>
-                                <span id="islandScore" class="text-xl font-black text-blue-600">0</span>
-                                <div class="w-1.5 h-1.5 bg-slate-300 rounded-full"></div>
-                                <div id="mainTimer" class="text-sm font-black text-slate-900">--:--</div>
-                            </div>
+            <div class="flex-none pt-2 px-3 pb-2 z-50 bg-slate-50/95 backdrop-blur-md shadow-[0_4px_10px_rgba(0,0,0,0.03)] border-b border-slate-200">
+                <div id="dynamic-island" class="w-full max-w-md mx-auto flex flex-col overflow-hidden drop-shadow-md rounded-xl border border-slate-300 bg-white">
+                    <div class="flex items-center justify-between h-[46px] px-4">
+                        <div class="flex items-center space-x-2 truncate">
+                            <span id="island-rank-text" class="text-sm font-black text-slate-900">🏆 --</span>
+                            <span id="island-gap-text" class="hidden text-xs font-bold text-slate-500">🎯 --</span>
+                        </div>
+                        <div class="flex items-center space-x-2 shrink-0">
+                            <span id="islandScore" class="text-xl font-black text-blue-600">0</span>
+                            <div class="w-1.5 h-1.5 bg-slate-300 rounded-full"></div>
+                            <div id="mainTimer" class="text-sm font-black text-slate-900">--:--</div>
                         </div>
                     </div>
-                    <div class="w-full bg-slate-900 h-8 flex items-center relative overflow-hidden mask-fade-edges text-white border-y border-slate-800">
-                        <div id="wallStreetTicker" class="ticker-track text-[11px] font-bold text-slate-300 tracking-wider">
-                            AWAITING TELEMETRY...
-                        </div>
-                    </div>
-                    <div class="bg-slate-100 p-2.5 pb-3">
+                    
+                    <div class="bg-slate-100 p-2.5 pb-3 border-t border-slate-200">
                         <div class="flex flex-col space-y-2">
                             <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none border-slate-300 bg-white">
                                 <option value="" disabled selected>-- Select Fish Species --</option>
@@ -507,6 +548,13 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="w-full max-w-md mx-auto mt-2 bg-white border border-slate-300 shadow-sm rounded-full h-8 flex items-center relative overflow-hidden mask-fade-edges pointer-events-none">
+                    <div id="wallStreetTicker" class="ticker-track text-[11px] font-bold text-slate-700 tracking-wider">
+                        AWAITING TELEMETRY...
+                    </div>
+                </div>
+
             </div>
 
             <div id="loggingArea" class="scrollable-area p-4 flex flex-col w-full max-w-md mx-auto">
@@ -523,7 +571,7 @@
                 </div>
             </div>
 
-            <button onclick="openLeaderboard()" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
+            <button id="btnLiveLeaderboard" onclick="openLeaderboard()" class="fixed bottom-6 right-4 pill-btn px-5 py-3 shadow-[0_8px_15px_-3px_rgba(2,132,199,0.5)] z-[100] text-[11px] flex items-center justify-center border-2 border-white">
                 CLICK FOR LIVE LEADERBOARD
             </button>
         </div>
@@ -629,7 +677,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V15.3.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V15.4.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -665,15 +713,7 @@
                         <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">How do I check the scores?</h4>
                         <p class="text-xs text-slate-700 leading-relaxed font-medium">The blue "Island" at the very top of your screen shows your current Rank and Points. To see everyone else, tap the floating <b>CLICK FOR LIVE LEADERBOARD</b> button at the bottom of your screen. <i>Hint: You can tap anyone's name on that leaderboard to peek at exactly what they are catching!</i></p>
                     </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                        <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">Will this drain my battery?</h4>
-                        <p class="text-xs text-slate-700 leading-relaxed font-medium">No. ShoreScore does not have a "sleep" button. When you are done logging a fish, just press your phone's physical power button to turn the screen off and drop it in your pocket. The exact second you wake your screen up, the app will instantly reconnect and download any new fish caught by the rest of the beach.</p>
-                    </div>
                 </section>
-                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
-                    <h4 class="font-black text-blue-600 text-xs uppercase tracking-widest mb-2">What if I need to leave early?</h4>
-                    <p class="text-xs text-slate-700 leading-relaxed font-medium">If you need to pack up before the clock hits zero, open the Options menu and tap <b>Leave Match Early</b>. It is completely safe. All of your logged fish are permanently saved to the Steward's master scorecard, and you can check the final tournament results later from your History Vault.</p>
-                </div>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
                 <button onclick="closeInMatchHelp()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md bg-white !text-slate-900 border border-slate-300"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
@@ -714,15 +754,15 @@
 
         <div id="optionsDrawer" class="drawer-left fixed inset-0 w-full bg-slate-50/95 backdrop-blur-xl z-[101] flex flex-col shadow-2xl justify-between hidden">
             <div class="flex-none p-5 text-center mt-4">
-                <h2 class="font-black text-xl text-slate-900 uppercase tracking-[0.2em] flex items-center justify-center"><i class="fa-solid fa-sliders mr-2 text-blue-600"></i> Match <span class="text-blue-600 ml-1.5">Options</span></h2>
+                <h2 class="font-black text-xl text-slate-900 uppercase tracking-[0.2em] flex items-center justify-center"><i class="fa-solid fa-sliders mr-2 text-blue-600"></i> Session <span class="text-blue-600 ml-1.5">Options</span></h2>
                 <div class="mt-3"><span id="stewardPinDisplay" class="text-xs text-slate-600 font-black border border-slate-300 bg-white shadow-sm px-4 py-1.5 rounded-full tracking-widest">PIN: ----</span></div>
             </div>
             <div class="scrollable-area p-5 space-y-4 text-center max-w-sm mx-auto w-full">
                 
-                <button onclick="leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest shadow-sm">
+                <button id="btnLeaveMatch" onclick="leaveMatchEarly()" class="pill-btn btn-destructive w-full py-4 text-xs tracking-widest shadow-sm">
                     <i class="fa-solid fa-person-walking-arrow-right mr-2 text-white"></i> Leave Match Early
                 </button>
-                <p class="text-[10px] text-slate-500 italic mt-2 mb-6 leading-tight px-2">Don't worry! Your scores are safely saved to the live tournament. You can check the final standings later from your History Vault.</p>
+                <p class="text-[10px] text-slate-500 italic mt-2 mb-6 leading-tight px-2">Don't worry! Your scores are safely saved. You can check the final standings later from your History Vault.</p>
 
                 <div id="stewardControlsGroup" class="hidden space-y-4 pt-4 border-t border-slate-300">
                     <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Steward Desk</h3>
@@ -731,7 +771,6 @@
                     <button onclick="endMatchEarly(true)" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-blue-700 border border-slate-300 shadow-sm"><i class="fa-solid fa-clock mr-2 text-base"></i> Adjust Match Clock</button>
                     <button id="drawerReportBtn" onclick="generateOfficialMasterReport('drawer')" class="pill-btn w-full py-4 text-xs tracking-widest bg-white !text-slate-900 border-2 border-slate-300 shadow-md mt-4"><i class="fa-solid fa-file-export mr-3 text-base text-blue-600"></i> Share Official Report</button>
                 </div>
-                
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
                 <button onclick="closeOptionsDrawer()" class="pill-btn w-full max-w-sm py-4 text-xs tracking-widest shadow-md"><i class="fa-solid fa-arrow-left mr-3"></i> RETURN TO FISH LOG</button>
@@ -790,6 +829,8 @@
             venue: 'Local Beach',
             isHost: false,
             isSteward: localStorage.getItem('userRole') === 'steward',
+            isSolo: false,
+            startTime: null,
             pin: '',
             format: 'length',
             endTime: null,
@@ -863,26 +904,8 @@
             } catch(e) {}
         }
 
-        function updateTidePill() {
-            const tideEl = document.getElementById('island-tide-state');
-            if(!tideEl || !state.tides) return;
-            tideEl.classList.remove('hidden');
-            let now = Date.now();
-            let baseDate = new Date(now);
-            let parts = state.tides.high.split(':');
-            let htDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), parseInt(parts[0]), parseInt(parts[1]));
-            let diffHours = (now - htDate.getTime()) / 3600000;
-            
-            while (diffHours > 6.25) diffHours -= 12.5;
-            while (diffHours < -6.25) diffHours += 12.5;
-
-            if(Math.abs(diffHours) < 0.3) { tideEl.innerText = "HW"; }
-            else if(diffHours > 0) { tideEl.innerText = `HW +${Math.abs(diffHours).toFixed(1)}h`; }
-            else { tideEl.innerText = `HW ${diffHours.toFixed(1)}h`; }
-        }
-
         // ==========================================================
-        // V15.3.0 TIDE MATH & LIVE TICKER ENGINE
+        // V15.4.0 TIDE MATH & LIVE TICKER ENGINE
         // ==========================================================
         
         function getLiveTideString(tidesObj) {
@@ -917,8 +940,7 @@
                 txt = `🌊 TIDE STATE: Flooding (${hrs}h ${mins.toString().padStart(2,'0')}m until High Water)`;
             }
             
-            // V15.3.0: Add visual gap between tide info and catch feed
-            return `<span class="mr-12">${txt}</span> <span class="text-slate-500 mr-8">///</span> `;
+            return `<span class="mr-12 text-blue-700">${txt}</span> <span class="text-slate-400 mr-8">///</span> `;
         }
 
         function getTideEnglish(avgOffset) {
@@ -929,7 +951,7 @@
         }
 
         // ==========================================================
-        // V15.3.0 CANVAS ENGINE
+        // V15.4.0 CANVAS ENGINE
         // ==========================================================
         
         function renderTideCanvasEx(catchesArray, tideObj, canvasId) {
@@ -1023,7 +1045,23 @@
 
         // ==========================================================
         
-        function openOptionsDrawer() { haptic(); if(document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
+        function openOptionsDrawer() { 
+            haptic(); 
+            if(document.getElementById('stewardPinDisplay')) {
+                if(state.isSolo) {
+                    document.getElementById('stewardPinDisplay').innerText = "MODE: SOLO";
+                } else {
+                    document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); 
+                }
+            }
+            if(state.isSolo) {
+                document.getElementById('btnLeaveMatch').innerHTML = '<i class="fa-solid fa-flag-checkered mr-2 text-white"></i> Finish & Save Session';
+            } else {
+                document.getElementById('btnLeaveMatch').innerHTML = '<i class="fa-solid fa-person-walking-arrow-right mr-2 text-white"></i> Leave Match Early';
+            }
+            document.getElementById('optionsDrawer').classList.remove('hidden'); 
+            setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); 
+        }
         function closeOptionsDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('hidden'), 300); }
         function openInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('open'), 10); }
         function closeInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('hidden'), 300); }
@@ -1201,7 +1239,11 @@
                 gapTxt.classList.replace('opacity-100', 'opacity-0');
                 
                 hudState = (hudState + 1) % 2;
-                
+                if(state.isSolo) {
+                    rankTxt.innerText = "SOLO";
+                    rankTxt.classList.replace('opacity-0', 'opacity-100');
+                    return;
+                }
                 if (hudState === 0) rankTxt.classList.replace('opacity-0', 'opacity-100');
                 else if (hudState === 1) gapTxt.classList.replace('opacity-0', 'opacity-100');
             }
@@ -1231,21 +1273,24 @@
                     if(label) label.innerText = "MEASUREMENT (CM)";
                 }
             }
-            if (document.getElementById('bountyContainer')) { document.getElementById('bountyContainer').classList.toggle('hidden', state.format === 'speciesHunt'); }
-            if (document.getElementById('stewardControlsGroup')) { document.getElementById('stewardControlsGroup').classList.toggle('hidden', !state.isSteward); }
+            if (document.getElementById('stewardControlsGroup')) { document.getElementById('stewardControlsGroup').classList.toggle('hidden', (!state.isSteward || state.isSolo)); }
         }
 
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible' && state.pin) {
                 if (['playing', 'grace'].includes(state.status)) {
                     syncInputDeckToState(); 
-                    get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
-                        if (snapshot.exists()) {
-                            globalMatchData = snapshot.val();
-                            processCloudUpdate();
-                            checkAndFireTicker();
-                        }
-                    });
+                    if (!state.isSolo) {
+                        get(ref(db, 'matches/' + state.pin)).then((snapshot) => {
+                            if (snapshot.exists()) {
+                                globalMatchData = snapshot.val();
+                                processCloudUpdate();
+                                checkAndFireTicker();
+                            }
+                        });
+                    } else {
+                        checkAndFireTicker();
+                    }
                 }
             }
         });
@@ -1268,20 +1313,28 @@
         }
 
         function checkAndFireTicker(force = false) {
-            if(!globalMatchData || !globalMatchData.anglers) return;
             let allCatches = [];
             let totalFish = 0, biggestVal = 0, biggestStr = "No Captures";
             
-            Object.values(globalMatchData.anglers).forEach(angler => {
-                if (angler.catches) {
-                    let cList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches);
-                    totalFish += cList.length;
-                    cList.forEach(c => {
-                        allCatches.push({...c, anglerName: angler.name});
-                        if (c.size > biggestVal) { biggestVal = c.size; biggestStr = `${angler.name} - ${c.species} (${c.display || c.size})`; }
-                    });
-                }
-            });
+            if (state.isSolo) {
+                totalFish = state.myCatches.length;
+                state.myCatches.forEach(c => {
+                    allCatches.push({...c, anglerName: state.name});
+                    if (c.size > biggestVal) { biggestVal = c.size; biggestStr = `${state.name} - ${c.species} (${c.display || c.size})`; }
+                });
+            } else {
+                if(!globalMatchData || !globalMatchData.anglers) return;
+                Object.values(globalMatchData.anglers).forEach(angler => {
+                    if (angler.catches) {
+                        let cList = Array.isArray(angler.catches) ? angler.catches : Object.values(angler.catches);
+                        totalFish += cList.length;
+                        cList.forEach(c => {
+                            allCatches.push({...c, anglerName: angler.name});
+                            if (c.size > biggestVal) { biggestVal = c.size; biggestStr = `${angler.name} - ${c.species} (${c.display || c.size})`; }
+                        });
+                    }
+                });
+            }
             
             if (allCatches.length !== lastSyncCount || force || allCatches.length === 0) {
                 renderTickerHTML(allCatches, totalFish, biggestStr, force);
@@ -1298,16 +1351,24 @@
             let matchPhysicalSize = 0;
             let speciesSet = new Set();
             
-            Object.values(globalMatchData.anglers).forEach(a => {
-                matchScore += a.score || 0;
-                if(a.catches) {
-                    let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
-                    cList.forEach(f => {
-                        speciesSet.add(f.species);
-                        matchPhysicalSize += (parseFloat(f.size) || 0);
-                    });
-                }
-            });
+            if (state.isSolo) {
+                matchScore = state.myCatches.reduce((sum, c) => sum + c.points, 0);
+                state.myCatches.forEach(f => {
+                    speciesSet.add(f.species);
+                    matchPhysicalSize += (parseFloat(f.size) || 0);
+                });
+            } else {
+                Object.values(globalMatchData.anglers).forEach(a => {
+                    matchScore += a.score || 0;
+                    if(a.catches) {
+                        let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
+                        cList.forEach(f => {
+                            speciesSet.add(f.species);
+                            matchPhysicalSize += (parseFloat(f.size) || 0);
+                        });
+                    }
+                });
+            }
 
             let htmlBlock = '';
             let tideInfo = getLiveTideString(state.tides);
@@ -1316,26 +1377,26 @@
             function getCatchDisplay(c) { return `${c.species} ${getUniversalBadge(c)}`; }
             
             if (allCatches.length === 0) {
-                htmlBlock += `<span class="text-slate-400 font-bold tracking-widest">AWAITING FIRST MATCH CATCH...</span>`;
+                htmlBlock += `<span class="text-slate-500 font-bold tracking-widest">AWAITING FIRST CATCH...</span>`;
             } else {
                 if (mostRecent) {
                     let catchDisplay = getCatchDisplay(mostRecent);
-                    htmlBlock += `<span class="text-blue-300 font-black tracking-widest">MOST RECENT:</span> <span class="text-white font-bold ml-2">${catchDisplay} <span class="text-orange-400">${mostRecent.anglerName}</span> • <span class="text-blue-200">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-500 mx-6">///</span> `;
+                    htmlBlock += `<span class="text-blue-700 font-black tracking-widest">MOST RECENT:</span> <span class="text-slate-900 font-bold ml-2">${catchDisplay} <span class="text-orange-600">${mostRecent.anglerName}</span> • <span class="text-blue-500">${formatCatchTime(mostRecent)}</span></span> <span class="text-slate-400 mx-6">///</span> `;
                 }
                 
                 if (last5.length > 0) {
-                    htmlBlock += `<span class="text-slate-300 font-black tracking-widest">LAST 5 FISH:</span> <span class="ml-2">`;
+                    htmlBlock += `<span class="text-slate-500 font-black tracking-widest">LAST 5 FISH:</span> <span class="ml-2">`;
                     last5.forEach((c, i) => {
                         let display = getCatchDisplay(c);
-                        htmlBlock += `<span class="text-slate-100">${display} <span class="text-orange-400">${c.anglerName}</span> <span class="text-slate-400 text-[10px] opacity-80 ml-1">• ${formatCatchTime(c)}</span></span>`;
-                        if (i < last5.length - 1) htmlBlock += `<span class="text-slate-500 mx-2">|</span>`;
+                        htmlBlock += `<span class="text-slate-700">${display} <span class="text-orange-600">${c.anglerName}</span> <span class="text-slate-500 text-[10px] opacity-80 ml-1">• ${formatCatchTime(c)}</span></span>`;
+                        if (i < last5.length - 1) htmlBlock += `<span class="text-slate-300 mx-2">|</span>`;
                     });
-                    htmlBlock += `</span> <span class="text-slate-500 mx-6">///</span> `;
+                    htmlBlock += `</span> <span class="text-slate-400 mx-6">///</span> `;
                 }
                 
                 if (state.format !== 'speciesHunt' && biggestStr !== "No Captures") {
                     let cleanBiggest = biggestStr.replace(/<span class="telemetry-unit">/g, ' ').replace(/<[^>]*>?/gm, '');
-                  htmlBlock += `<span class="text-blue-300 font-black tracking-widest uppercase">MATCH BIGGEST:</span> <span class="text-white font-bold ml-2">${biggestStr.split('(')[0]}</span> <span class="pts-badge pts-std">${(biggestStr.match(/\(([^)]+)\)/) || [])[1] || biggestVal}</span> <span class="text-slate-500 mx-6">///</span> `;
+                  htmlBlock += `<span class="text-blue-700 font-black tracking-widest uppercase">${state.isSolo ? 'SESSION' : 'MATCH'} BIGGEST:</span> <span class="text-slate-900 font-bold ml-2">${biggestStr.split('(')[0]}</span> <span class="pts-badge pts-std">${(biggestStr.match(/\(([^)]+)\)/) || [])[1] || biggestVal}</span> <span class="text-slate-400 mx-6">///</span> `;
                 }
 
                 let totalStr = "";
@@ -1346,13 +1407,13 @@
                 } else {
                     totalStr = `${totalFish} FISH • ${speciesSet.size} SPECIES • ${formatScoreDisplay(matchScore, state.format, true)}`;
                 }
-                htmlBlock += `<span class="text-white font-black tracking-widest uppercase">MATCH TOTAL:</span> <span class="pts-badge pts-std ml-2">${totalStr}</span>`;            
+                htmlBlock += `<span class="text-slate-900 font-black tracking-widest uppercase">${state.isSolo ? 'SESSION' : 'MATCH'} TOTAL:</span> <span class="pts-badge pts-std ml-2">${totalStr}</span>`;            
             }
 
             if (allCatches.length === 0) {
-                htmlBlock += `<span class="inline-block" style="width: 300vw;"></span>`;
+                htmlBlock += `<span class="inline-block pointer-events-none" style="width: 300vw;"></span>`;
             } else {
-                htmlBlock += `<span class="inline-block" style="width: 50vw;"></span>`;
+                htmlBlock += `<span class="inline-block pointer-events-none" style="width: 50vw;"></span>`;
             }
 
             const track = document.getElementById('wallStreetTicker');
@@ -1388,7 +1449,7 @@
 
         function closeAndWipeSession() {
             haptic();
-            if (state.pin && db) {
+            if (state.pin && db && !state.isSolo) {
                 try { off(ref(db, 'matches/' + state.pin)); } catch(e) {}
             }
             closeOptionsDrawer();
@@ -1397,7 +1458,7 @@
             
             localStorage.removeItem('matchState');
             localStorage.removeItem('userRole');
-            state = { view: 'home', name: '', venue: 'Local Beach', isHost: false, isSteward: false, pin: '', format: 'length', endTime: null, graceEndTime: null, myCatches: [], status: 'idle', tides: null };
+            state = { view: 'home', name: '', venue: 'Local Beach', isHost: false, isSteward: false, isSolo: false, startTime: null, pin: '', format: 'length', endTime: null, graceEndTime: null, myCatches: [], status: 'idle', tides: null };
             
             if(document.getElementById('playerName')) document.getElementById('playerName').value = '';
             if(document.getElementById('venueName')) document.getElementById('venueName').value = '';
@@ -1407,6 +1468,10 @@
                 document.getElementById('hostHtM').value = '';
                 document.getElementById('hostLtH').value = '';
                 document.getElementById('hostLtM').value = '';
+                document.getElementById('soloHtH').value = '';
+                document.getElementById('soloHtM').value = '';
+                document.getElementById('soloLtH').value = '';
+                document.getElementById('soloLtM').value = '';
             }
             
             clearInterval(clockInterval);
@@ -1417,6 +1482,7 @@
             if (document.getElementById('localCatchList')) document.getElementById('localCatchList').innerHTML = '';
             if (document.getElementById('islandScore')) document.getElementById('islandScore').innerText = '0';
             if (document.getElementById('island-rank-text')) document.getElementById('island-rank-text').innerText = '🏆 --';
+            if (document.getElementById('btnLiveLeaderboard')) document.getElementById('btnLiveLeaderboard').classList.remove('hidden');
             
             document.getElementById('app-container').classList.remove('grace-active');
             document.getElementById('mainTimer').classList.remove('grace-pulse');
@@ -1592,7 +1658,7 @@
         function closeTimeKeypad() { haptic(); document.getElementById('timeKeypadModal').classList.add('hidden'); }
 
         function listenToCloud() {
-            if(!state.pin) return;
+            if(!state.pin || state.isSolo) return;
             onValue(ref(db, 'matches/' + state.pin), (snapshot) => {
                 if (snapshot.exists()) {
                     globalMatchData = snapshot.val();
@@ -1613,6 +1679,7 @@
         }
 
         function processCloudUpdate() {
+            if (state.isSolo) return;
             state.tides = globalMatchData.tides || null;
             
             if (state.view === 'waiting' && globalMatchData.anglers) {
@@ -1657,7 +1724,7 @@
         }
 
         function pushMyScoreToCloud() {
-            if(!state.pin) return; updateLiveTally();
+            if(!state.pin || state.isSolo) return; updateLiveTally();
             let total = state.myCatches.reduce((sum, c) => sum + c.points, 0);
             
             if (globalMatchData && globalMatchData.anglers && globalMatchData.anglers[uid]) {
@@ -1668,9 +1735,38 @@
             update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name || "Angler", score: total, catches: state.myCatches });
         }
 
+        function startSoloSession() {
+            haptic();
+            state.isSolo = true;
+            state.isHost = false;
+            state.isSteward = false;
+            localStorage.setItem('userRole', 'solo');
+            state.format = 'length';
+            state.pin = 'SOLO';
+            state.startTime = Date.now();
+            
+            let htH = document.getElementById('soloHtH').value.trim();
+            let htM = document.getElementById('soloHtM').value.trim();
+            let ltH = document.getElementById('soloLtH').value.trim();
+            let ltM = document.getElementById('soloLtM').value.trim();
+            
+            let tideData = null;
+            if (htH && htM && ltH && ltM) {
+                tideData = { high: `${htH.padStart(2,'0')}:${htM.padStart(2,'0')}`, low: `${ltH.padStart(2,'0')}:${ltM.padStart(2,'0')}` };
+            }
+            state.tides = tideData;
+
+            if (document.getElementById('btnLiveLeaderboard')) {
+                document.getElementById('btnLiveLeaderboard').classList.add('hidden');
+            }
+
+            beginFishing(false);
+        }
+
         function createMatch() {
             haptic();
             state.isHost = true; state.isSteward = true; 
+            state.isSolo = false;
             localStorage.setItem('userRole', 'steward');
             state.format = document.getElementById('hostFormat').value; 
             state.pin = Math.floor(1000 + Math.random() * 9000).toString(); 
@@ -1685,6 +1781,10 @@
                 tideData = { high: `${htH.padStart(2,'0')}:${htM.padStart(2,'0')}`, low: `${ltH.padStart(2,'0')}:${ltM.padStart(2,'0')}` };
             }
             state.tides = tideData;
+
+            if (document.getElementById('btnLiveLeaderboard')) {
+                document.getElementById('btnLiveLeaderboard').classList.remove('hidden');
+            }
 
             const btn = document.getElementById('btnInitMatch');
             const originalText = btn.innerText;
@@ -1714,9 +1814,14 @@
         function connectToMatch() {
             haptic();
             state.pin = atmPin; state.status = 'waiting';
+            state.isSolo = false;
             localStorage.setItem('userRole', 'competitor');
             state.isSteward = false;
             
+            if (document.getElementById('btnLiveLeaderboard')) {
+                document.getElementById('btnLiveLeaderboard').classList.remove('hidden');
+            }
+
             const btn = document.getElementById('btn-connect');
             const originalText = btn.innerText;
             btn.innerText = "Checking PIN...";
@@ -1739,11 +1844,11 @@
             });
         }
 
-        function exitWaitingRoom() { haptic(); if (confirm("Cancel session?")) { if (state.isHost) { remove(ref(db, 'matches/' + state.pin)); } closeAndWipeSession(); } }
+        function exitWaitingRoom() { haptic(); if (confirm("Cancel session?")) { if (state.isHost && !state.isSolo) { remove(ref(db, 'matches/' + state.pin)); } closeAndWipeSession(); } }
 
         function triggerHypeStart() {
             haptic();
-            if(!state.isHost) return;
+            if(!state.isHost || state.isSolo) return;
             const matchDuration = parseFloat(document.getElementById('hostDuration').value);
             update(ref(db, 'matches/' + state.pin), { status: 'hype', endTime: Date.now() + (matchDuration * 3600000) + 6000 });
         }
@@ -1764,7 +1869,7 @@
         function triggerSplashSequence() {
             document.getElementById('hypeCount').classList.add('hidden'); document.getElementById('hypeSplash').classList.remove('hidden');
             playHorn();
-            setTimeout(() => { countdownActive = false; if(state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'playing' }); } beginFishing(false); }, 1500);
+            setTimeout(() => { countdownActive = false; if(state.isHost && !state.isSolo) { update(ref(db, 'matches/' + state.pin), { status: 'playing' }); } beginFishing(false); }, 1500);
         }
 
         function focusMeasurement() {
@@ -1818,7 +1923,7 @@
         function beginFishing(isPushing) {
             state.status = 'playing'; navTo('fishing');
             
-            if (document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
+            if (document.getElementById('stewardPinDisplay') && !state.isSolo) document.getElementById('stewardPinDisplay').innerText = `PIN: ${state.pin}`;
 
             pushMyScoreToCloud();
             
@@ -1826,9 +1931,7 @@
             
             startClock();
             
-            if (globalMatchData) {
-                checkAndFireTicker();
-            }
+            checkAndFireTicker();
             
             renderCatchList();
         }
@@ -1840,46 +1943,57 @@
             clockInterval = setInterval(() => {
                 clockTickCount++;
                 if (clockTickCount % 60 === 0) {
-                    if (globalMatchData) checkAndFireTicker(true);
+                    checkAndFireTicker(true);
                 }
                 
                 let now = Date.now();
-                if (state.status === 'playing') {
-                    let remaining = state.endTime - now;
-                    
-                    if (remaining <= 1800000 && remaining > 1798000 && !alert30Played) { 
-                        alert30Played = true; 
-                        try { navigator.vibrate([100, 50, 100]); } catch(e){} 
-                        playAlert(); 
-                        showNotification("⚠️ 30 MINUTE TACTICAL WINDOW!"); 
-                    }
-                    
-                    if (remaining <= 0) { 
-                        try { navigator.vibrate([100, 50, 100, 50, 100]); } catch(e){}
-                        playHorn(); 
-                        if (state.isHost) {
-                            let absoluteGraceEnd = state.endTime + 180000;
-                            if (now >= absoluteGraceEnd) {
-                                update(ref(db, 'matches/' + state.pin), { status: 'finished' });
-                            } else {
-                                update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: absoluteGraceEnd });
-                            }
+                if (state.isSolo) {
+                    updateTimerDisplaySolo(now - state.startTime);
+                } else {
+                    if (state.status === 'playing') {
+                        let remaining = state.endTime - now;
+                        
+                        if (remaining <= 1800000 && remaining > 1798000 && !alert30Played) { 
+                            alert30Played = true; 
+                            try { navigator.vibrate([100, 50, 100]); } catch(e){} 
+                            playAlert(); 
+                            showNotification("⚠️ 30 MINUTE TACTICAL WINDOW!"); 
                         }
-                    } else { 
-                        updateTimerDisplay(remaining); 
+                        
+                        if (remaining <= 0) { 
+                            try { navigator.vibrate([100, 50, 100, 50, 100]); } catch(e){}
+                            playHorn(); 
+                            if (state.isHost) {
+                                let absoluteGraceEnd = state.endTime + 180000;
+                                if (now >= absoluteGraceEnd) {
+                                    update(ref(db, 'matches/' + state.pin), { status: 'finished' });
+                                } else {
+                                    update(ref(db, 'matches/' + state.pin), { status: 'grace', graceEndTime: absoluteGraceEnd });
+                                }
+                            }
+                        } else { 
+                            updateTimerDisplay(remaining); 
+                        }
+                    } else if (state.status === 'grace') {
+                        if(!alertGracePlayed) { alertGracePlayed = true; }
+                        let graceRem = state.graceEndTime - now;
+                        if (graceRem <= 0) { if (state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } }
+                        else { updateTimerDisplay(graceRem); }
                     }
-                } else if (state.status === 'grace') {
-                    if(!alertGracePlayed) { alertGracePlayed = true; }
-                    let graceRem = state.graceEndTime - now;
-                    if (graceRem <= 0) { if (state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } }
-                    else { updateTimerDisplay(graceRem); }
-                }
-
-                if (state.tides) {
-                    updateTidePill();
                 }
 
             }, 1000);
+        }
+
+        function updateTimerDisplaySolo(elapsedMs) {
+            let totalSec = Math.max(0, Math.floor(elapsedMs / 1000));
+            let hours = Math.floor(totalSec / 3600);
+            let mins = Math.floor((totalSec % 3600) / 60);
+            let secs = totalSec % 60;
+            let el = document.getElementById('mainTimer');
+            if(!el) return;
+            el.innerHTML = `${hours}h ${mins.toString().padStart(2,'0')}m <span class="text-[10px] opacity-75">${secs.toString().padStart(2,'0')}s</span>`;
+            el.className = "text-sm font-black tabular-nums tracking-tighter metric-white opacity-80 leading-none";
         }
 
         function updateTimerDisplay(ms) {
@@ -1975,6 +2089,7 @@
             playSuccessBeep();
             triggerConcentricAnimation();
             saveState(); renderCatchList(); pushMyScoreToCloud();
+            if(state.isSolo) updateLiveTally();
         }
 
         function deleteCatch(id) {
@@ -1983,6 +2098,7 @@
             state.myCatches = state.myCatches.filter(x => x.id !== id);
             recalculateMyScores();
             saveState(); renderCatchList(); pushMyScoreToCloud();
+            if(state.isSolo) updateLiveTally();
         }
 
         function renderCatchList() {
@@ -2023,10 +2139,10 @@
             
             let myRank = arr.findIndex(a => a.name === state.name) + 1;
             const rankEl = document.getElementById('island-rank-text');
-            if (rankEl) rankEl.innerText = `🏆 ${myRank}${myRank === 1 ? 'ST' : myRank === 2 ? 'ND' : myRank === 3 ? 'RD' : 'TH'}`;
+            if (rankEl && !state.isSolo) rankEl.innerText = `🏆 ${myRank}${myRank === 1 ? 'ST' : myRank === 2 ? 'ND' : myRank === 3 ? 'RD' : 'TH'}`;
             
             const gapEl = document.getElementById('island-gap-text');
-            if (gapEl) {
+            if (gapEl && !state.isSolo) {
                 if(myRank === 1) gapEl.innerText = `🔥 IN THE LEAD`;
                 else if (myRank > 1) {
                     let diff = arr[myRank - 2].score - arr[myRank - 1].score;
@@ -2272,7 +2388,7 @@
 
         function lockdownMatch(isHostPushing) { 
             clearInterval(clockInterval); 
-            if(isHostPushing && state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
+            if(isHostPushing && state.isHost && !state.isSolo) { update(ref(db, 'matches/' + state.pin), { status: 'finished' }); } 
             saveHistory(false); state.status = 'finished'; saveState(); 
             
             document.getElementById('resultsVenueDisplay').innerText = state.venue;
@@ -2281,7 +2397,7 @@
             document.getElementById('finalScore').innerHTML = formatScoreDisplay(totalPts, state.format); 
             document.getElementById('finalCount').innerText = state.myCatches.length; 
             document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; 
-            if(state.isSteward) document.getElementById('resultsReportBtn').classList.remove('hidden');
+            if(state.isSteward || state.isSolo) document.getElementById('resultsReportBtn').classList.remove('hidden');
             
             calculateGoldenHour();
             renderExtraDataPoints();
@@ -2297,7 +2413,7 @@
 
         function generateOfficialMasterReport(source) {
             haptic();
-            if(!globalMatchData || !globalMatchData.anglers) return alert("No leaderboard data available.");
+            if(!state.isSolo && (!globalMatchData || !globalMatchData.anglers)) return alert("No leaderboard data available.");
             
             let targetBtn = null;
             if (source === 'drawer') {
@@ -2307,8 +2423,16 @@
             }
             
             if(targetBtn) { targetBtn.innerText = "GENERATING REPORT..."; targetBtn.classList.add('reporting'); }
-            let arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
-            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn, globalMatchData.tides);
+            
+            let arr = [];
+            if(state.isSolo) {
+                let score = state.myCatches.reduce((sum,c)=>sum+c.points, 0);
+                arr = [{ name: state.name, score: score, catches: state.myCatches }];
+            } else {
+                arr = Object.values(globalMatchData.anglers).sort((a,b) => b.score - a.score);
+            }
+            
+            buildAndShareReport(arr, state.venue, new Date().toLocaleDateString(), state.format, targetBtn, state.isSolo ? state.tides : globalMatchData.tides);
         }
 
         function generateHistoricReport() {
@@ -2465,17 +2589,19 @@
             else if (fmt.startsWith('length')) t += `MATCH CATCH: ${formatTotalLength(matchTotalPhysicalSize)} (${totalFish} Fish)\n\n`;
             else t += `MATCH CATCH: ${formatScoreDisplay(matchTotalRaw, fmt, true).replace(/<[^>]*>?/gm, '')} (${totalFish} Fish)\n\n`;
             
-            t += `ANGLER SUCCESS: ${successRate}% Caught (${100 - successRate}% Blanked)\n\n`;
-            t += `BITE VELOCITY: ${biteVelocity} Fish/Angler/Hr\n\n`;
+            if(!state.isSolo) {
+                t += `ANGLER SUCCESS: ${successRate}% Caught (${100 - successRate}% Blanked)\n\n`;
+                t += `BITE VELOCITY: ${biteVelocity} Fish/Angler/Hr\n\n`;
+            }
             if (matchTides) {
                 t += `TIDAL BIAS: ${floodPct}% Flood / ${ebbPct}% Ebb\n\n`;
                 t += `TURN TRIGGER: ${turnPct}% caught right after slack water\n\n`;
                 t += `GOLDEN HOUR: ${peakStr}\n\n`;
             }
-            if (fmt !== 'speciesHunt') t += `MATCH BIGGEST: ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
+            if (fmt !== 'speciesHunt') t += `${state.isSolo ? 'SESSION' : 'MATCH'} BIGGEST: ${biggestStr.replace(/<[^>]*>?/gm, '')}\n\n`;
 
-            t += `FIRST BLOOD: ${firstBloodStr}\n\n`;
-            t += `TOP ROD (VOLUME): ${topRodStr}\n\n`;
+            if(!state.isSolo) t += `FIRST BLOOD: ${firstBloodStr}\n\n`;
+            if(!state.isSolo) t += `TOP ROD (VOLUME): ${topRodStr}\n\n`;
             t += `LATE SURGE: ${lateSurgeCount} fish caught in the final 30 minutes\n\n`;
 
             if (totalFish > 0) {
@@ -2525,7 +2651,7 @@
                 });
             }
 
-            t += `_Generated by ShoreScore V15.3.0_`;
+            t += `_Generated by ShoreScore V15.4.0_`;
 
             if (navigator.share) { 
                 navigator.share({ title: 'Official Report', text: t }).catch(console.error); 
@@ -2551,19 +2677,30 @@
         
         function leaveMatchEarly() { 
             haptic(); 
-            if (confirm("LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.")) { 
-                if (state.pin && db) {
+            let msg = state.isSolo ? "FINISH SESSION?\n\nYour session data will be saved locally." : "LEAVE TOURNAMENT?\n\nConnection will terminate. History saved locally.";
+            if (confirm(msg)) { 
+                if (state.pin && db && !state.isSolo) {
                     try { off(ref(db, 'matches/' + state.pin)); } catch(e) {}
                 }
-                saveHistory(true); 
-                closeAndWipeSession(); 
+                if(state.isSolo) {
+                    lockdownMatch(false);
+                } else {
+                    saveHistory(true); 
+                    closeAndWipeSession(); 
+                }
             } 
         }
         
         function saveHistory(isL) { 
             let h = JSON.parse(localStorage.getItem('matchHistory') || '[]'); 
             let matchTF = 0, matchBF = "None", bVal = 0, fullStandings = [];
-            if (globalMatchData && globalMatchData.anglers) {
+            
+            if (state.isSolo) {
+                matchTF = state.myCatches.length;
+                let sScore = state.myCatches.reduce((s,c)=>s+c.points,0);
+                state.myCatches.forEach(f => { if(f.size > bVal) { bVal = f.size; matchBF = `${state.name} - ${f.species} (${f.display || f.size})`; }});
+                fullStandings = [{ id: uid, name: state.name, score: sScore, catches: [...state.myCatches] }];
+            } else if (globalMatchData && globalMatchData.anglers) {
                 fullStandings = Object.entries(globalMatchData.anglers).map(([id, data]) => ({ id: id, name: data.name, score: data.score, catches: data.catches ? (Array.isArray(data.catches) ? data.catches : Object.values(data.catches)) : [] }));
                 Object.values(globalMatchData.anglers).forEach(angler => { 
                     if(angler.catches) { 
@@ -2587,6 +2724,7 @@
                 playerName: state.name, 
                 isLive: isL, 
                 isSteward: state.isSteward, 
+                isSolo: state.isSolo,
                 endTime: state.endTime, 
                 graceEndTime: state.graceEndTime || (state.endTime ? state.endTime + 180000 : null), 
                 totalMatchFish: matchTF, 
@@ -2600,16 +2738,20 @@
             if(h.length === 0) { r.innerHTML = '<p class="text-slate-500 py-24 font-black uppercase text-xs tracking-widest text-center">History Empty</p>'; return; }
             h.forEach((m, i) => { 
                 let isMatchActuallyFinished = !m.isLive;
-                if(m.isLive && m.endTime) { if (now >= (m.graceEndTime || m.endTime + 180000)) isMatchActuallyFinished = true; }
-                const showLive = !isMatchActuallyFinished;
+                if(m.isLive && m.endTime && !m.isSolo) { if (now >= (m.graceEndTime || m.endTime + 180000)) isMatchActuallyFinished = true; }
+                const showLive = (!isMatchActuallyFinished && !m.isSolo);
+                
+                let headerText = showLive ? "" : "<div class='text-[9px] font-black text-slate-400 mb-1.5 uppercase tracking-[0.4em] text-left'>SESSION SAVED</div>"; 
                 
                 let cardHtml = `
+                ${headerText}
                 <div class="flex items-center justify-between">
                     <div class="text-slate-900 text-sm font-bold flex items-center">
-                        <i class="fa-solid fa-location-dot mr-2 text-blue-600"></i> ${m.venue || 'Local Beach'}
+                        <i class="fa-solid fa-location-dot mr-2 ${m.isSolo ? 'text-orange-600' : 'text-blue-600'}"></i> ${m.venue || 'Local Beach'}
                     </div>
                     <div class="flex items-center gap-2">
                         ${showLive ? '<span class="text-[9px] bg-red-600 px-2 py-1 rounded-full text-white font-black animate-pulse">LIVE</span>' : ''}
+                        ${m.isSolo && !showLive ? '<span class="text-[9px] bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-black">SOLO</span>' : ''}
                         <button onclick="deleteHistoryItem('${m.id}'); event.stopPropagation();" class="text-slate-400 active:text-red-600 text-xl ml-2"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 </div>
@@ -2727,7 +2869,7 @@
                 let hubHtml = `
                 <div class="flex justify-between items-center w-full mb-3 mt-4">
                     <div class="text-slate-900 text-base font-bold flex items-center shrink-0">
-                        <i class="fa-solid fa-location-dot mr-2 text-blue-600"></i> ${m.venue || 'Local Beach'}
+                        <i class="fa-solid fa-location-dot mr-2 ${m.isSolo ? 'text-orange-600':'text-blue-600'}"></i> ${m.venue || 'Local Beach'}
                     </div>
                     <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
                         <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
@@ -2741,18 +2883,18 @@
                         <div class="text-3xl font-black text-blue-600">${formatScoreDisplay(m.score, m.format, true).replace(' pts', '<span class="text-sm font-medium text-slate-500 ml-1">Pts</span>')}</div>
                     </div>
                     <div class="text-right bg-white p-3 rounded-xl border border-slate-200 flex-1 shadow-sm">
-                        <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-1">Match Total</div>
+                        <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-1">${m.isSolo ? 'Session' : 'Match'} Total</div>
                         <div class="text-3xl font-black text-slate-900">${formatScoreDisplay(matchTotalScore, m.format, true).replace(' pts', '<span class="text-sm font-medium text-slate-500 ml-1">Pts</span>')}</div>
                     </div>
                 </div>
 
                 <div class="bg-white p-5 text-center border-b border-slate-200 space-y-4 rounded-xl mt-3 shadow-sm border">
                     <div class="text-[11px] font-black uppercase tracking-widest text-blue-600 mb-2 text-left">
-                        <i class="fa-solid fa-brain mr-1.5 text-blue-400"></i> Match Analysis Hub
+                        <i class="fa-solid fa-brain mr-1.5 text-blue-400"></i> ${m.isSolo ? 'Session' : 'Match'} Analysis Hub
                     </div>
                     <div class="space-y-3">
                         <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col text-left">
-                            <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-2">Match Species Breakdown</div>
+                            <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-2">Species Breakdown</div>
                             <div class="space-y-2 divide-y divide-slate-200">
                                 ${spHtml || '<div class="text-xs text-slate-500">No catches recorded</div>'}
                             </div>
@@ -2777,24 +2919,27 @@
                     <div class="text-sm font-black uppercase tracking-widest text-slate-900">
                         <i class="fa-solid fa-trophy mr-1.5 text-orange-500"></i> Final Standings
                     </div>
+                    ${!m.isSolo ? `<div class="text-[10px] font-medium text-slate-500 leading-tight mt-1">(Tap name for individual catch record)</div>` : ''}
                 </div>
                 `;
                 
+                const getOrd = (n) => { let s = ["th", "st", "nd", "rd"], v = n % 100; return (n < 20 && n > 10) ? n + "th" : n + (s[n % 10] || "th"); };
                 let tableHtml = `<div class="divide-y divide-slate-200 mt-0 bg-white rounded-b-xl border border-slate-200 border-t-0 shadow-sm mb-12">${m.standings.map((a, i) => {
                     let catchCount = a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0;
                     return `
-                    <div onclick="openPastCatchFeed('${a.id || a.name}')" class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} active:bg-slate-100 cursor-pointer transition-all duration-200">
+                    <div ${!m.isSolo ? `onclick="openPastCatchFeed('${a.id || a.name}')"` : ''} class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} ${!m.isSolo ? 'active:bg-slate-100 cursor-pointer' : ''} transition-all duration-200">
                         <div class="flex items-center space-x-3 flex-1 min-w-0">
-                            <div class="${i===0?'bg-blue-100 text-blue-700':'bg-slate-200 text-slate-600'} font-black p-3 rounded-full text-xs shrink-0">R${i+1}</div>
+                            <div class="${i===0?'bg-blue-100 text-blue-700':'bg-slate-200 text-slate-600'} font-black p-3 rounded-full text-xs shrink-0">${m.isSolo ? '<i class="fa-solid fa-user"></i>' : 'R'+(i+1)}</div>
                             <div class="flex flex-col min-w-0 text-left">
                                 <div class="text-sm font-black ${i===0?'text-slate-900':'text-slate-700'} flex items-center">
-                                    <span class="truncate">${a.name}</span> <i class="fa-solid fa-caret-right ml-2 text-slate-400 text-[10px]"></i>
+                                    <span class="truncate">${a.name}</span> ${!m.isSolo ? '<i class="fa-solid fa-caret-right ml-2 text-slate-400 text-[10px]"></i>' : ''}
                                 </div>
                                 <div class="text-xs font-bold text-slate-500 pt-0.5">Caught: ${catchCount} Fish</div>
                             </div>
                         </div>
                         <div class="text-right flex flex-col items-end shrink-0 leading-tight pt-1">
                             <div class="text-xl font-black ${i===0?'text-blue-600':'text-slate-900'} leading-tight">${formatScoreDisplay(a.score, m.format, true).replace(' pts', '<span class="text-xs text-slate-500 ml-1 leading-tight">Pts</span>')}</div>
+                          ${!m.isSolo ? `<div class="text-[10px] text-slate-500 font-medium">${i===0?'Winner':getOrd(i+1)}</div>` : ''}
                         </div>
                     </div>`}).join('')}</div>`;
                     
@@ -2809,7 +2954,7 @@
         window.openPastCatchFeed = (aid) => {
             haptic();
             const h = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
-            if (!h || !h.standings) return;
+            if (!h || !h.standings || h.isSolo) return;
             const a = h.standings.find(s => s.id === aid || s.name === aid);
             if(!a) return;
             document.getElementById('feedAnglerName').innerText = "HISTORY: " + a.name;
@@ -2837,7 +2982,7 @@
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            const CURRENT_FALLBACK_VERSION = "15.3.0";
+            const CURRENT_FALLBACK_VERSION = "15.4.0";
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
             fetch('version.json?t=' + new Date().getTime())
@@ -2871,12 +3016,18 @@
                     
                     if (['playing', 'hype', 'waiting', 'grace'].includes(oldState.status)) {
                         state = oldState;
-                        listenToCloud(); navTo(state.view);
                         
-                        if (['playing', 'grace'].includes(state.status)) {
-                            syncInputDeckToState(); renderCatchList(); startClock(); updateLiveTally();
-                            if (document.getElementById('stewardPinDisplay')) { document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); }
-                            if (globalMatchData) { checkAndFireTicker(); }
+                        if (state.isSolo) {
+                            navTo('fishing');
+                            if (document.getElementById('btnLiveLeaderboard')) document.getElementById('btnLiveLeaderboard').classList.add('hidden');
+                            syncInputDeckToState(); renderCatchList(); startClock(); updateLiveTally(); checkAndFireTicker();
+                        } else {
+                            listenToCloud(); navTo(state.view);
+                            if (['playing', 'grace'].includes(state.status)) {
+                                syncInputDeckToState(); renderCatchList(); startClock(); updateLiveTally();
+                                if (document.getElementById('stewardPinDisplay')) { document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); }
+                                if (globalMatchData) { checkAndFireTicker(); }
+                            }
                         }
                     }
                 } catch(e) { closeAndWipeSession(); }
@@ -2969,6 +3120,7 @@
         window.saveEditModal = saveEditModal;
         window.deleteFromEditModal = deleteFromEditModal;
         window.editCheckSpeciesSelection = editCheckSpeciesSelection;
+        window.startSoloSession = startSoloSession;
     </script>
 </body>
 </html>
