@@ -335,9 +335,9 @@
                     <span class="text-[10px] normal-case tracking-normal block mt-1.5 opacity-90 font-medium font-bold">Host a live leaderboard and set the rules for multiple anglers.</span>
                 </button>
                 
-                <button onclick="navTo('join')" class="w-full pill-btn font-black text-xl py-6 shadow-md border-2 border-emerald-700 bg-emerald-600 !text-white flex flex-col items-center justify-center text-center px-4">
+                <button onclick="navTo('join')" class="w-full pill-btn font-black text-xl py-6 shadow-md border-2 border-emerald-600 bg-emerald-600 !text-white flex flex-col items-center justify-center text-center px-4">
                     <div class="flex items-center text-white"><i class="fa-solid fa-user-tag mr-3"></i> JOIN MATCH</div>
-                    <span class="text-[10px] normal-case tracking-normal block mt-1.5 text-emerald-100 font-medium font-bold">Enter a 4-digit Room PIN, provided by your host, to compete in a live match.</span>
+                    <span class="text-[10px] normal-case tracking-normal block mt-1.5 text-emerald-50 font-medium font-bold">Enter a 4-digit Room PIN, provided by your host, to compete in a live match.</span>
                 </button>
 
                 <div class="border-t border-slate-200 w-3/4 mx-auto my-2"></div>
@@ -362,7 +362,7 @@
                 </div>
 
                 <div class="px-1 w-2/3 mx-auto">
-                    <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 text-center">Next High Water Time (Opt)</label>
+                    <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 text-center">Next High Water (Opt)</label>
                     <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-orange-500 focus-within:bg-white transition-all p-1">
                         <input type="text" id="soloHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('soloHtM').focus();">
                         <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
@@ -427,7 +427,7 @@
                         <p class="text-[10px] font-bold text-slate-600 leading-relaxed">To unlock Venue Intelligence, simply enter the next High Water time for today.</p>
                     </div>
                     <div class="px-1 w-2/3 mx-auto">
-                        <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 text-center">Next High Water Time (Opt)</label>
+                        <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 text-center">Next High Water (Opt)</label>
                         <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-blue-600 focus-within:bg-white transition-all p-1">
                             <input type="text" id="hostHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostHtM').focus();">
                             <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
@@ -779,6 +779,7 @@
         </div>
 
     </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, onValue, update, get, remove, off } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -2639,8 +2640,8 @@
         function shareUnifiedReport() { generateOfficialMasterReport('results'); }
         function endMatchEarly(grace) { haptic(); if(state.isSteward && state.pin) { if(grace) { closeOptionsDrawer(); document.getElementById('customEndModal').classList.remove('hidden'); } } }
         function stewardSetNewEnd(mins) { haptic(); closeCustomEndModal(); closeOptionsDrawer(); if(mins === 0) { let grace = Date.now() + 180000; update(ref(db, 'matches/' + state.pin), { status: 'grace', endTime: Date.now(), graceEndTime: grace }); } else { update(ref(db, 'matches/' + state.pin), { status: 'playing', endTime: Date.now() + (mins * 60000), graceEndTime: null }); } }
-        function transferSteward() { haptic(); if(!globalMatchData || !globalMatchData.anglers) return; let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); if(options.length === 0) { alert("No other competitors linked."); return; } let message = "Select Angler Number:\n\n"; options.forEach((opt, index) => { message += `${index + 1}: ${opt.name}\n`; }); let choice = prompt(message); let selectedIndex = parseInt(choice) - 1; if (!isNaN(selectedIndex) && selectedIndex >= 0
-function transferSteward() { 
+        
+        function transferSteward() { 
             haptic(); 
             if(!globalMatchData || !globalMatchData.anglers) return; 
             let options = Object.entries(globalMatchData.anglers).filter(([key]) => key !== uid).map(([key, val]) => ({ id: key, name: val.name })); 
@@ -2741,7 +2742,7 @@ function transferSteward() {
                 `;
 
                 let wrapper = document.createElement('div');
-                wrapper.innerHTML = `<div class="max-w-md mx-auto relative cursor-pointer active:scale-[0.98] transition-all bg-white rounded-xl neon-border-glow border p-3 mb-3 text-left shadow-sm" onclick="viewPastRecord('${m.id}')">${cardHtml}</div>`;
+                wrapper.innerHTML = `<div class="max-w-md mx-auto relative cursor-pointer active:scale-[0.98] transition-all bg-white rounded-xl neon-border-glow border p-3 mb-3 text-left shadow-sm pointer-events-auto" onclick="viewPastRecord('${m.id}')">${cardHtml}</div>`;
                 let card = wrapper.firstElementChild;
                 
                 if(m.id && i < 8) r.appendChild(card); else a.appendChild(card); 
