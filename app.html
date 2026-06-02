@@ -534,10 +534,9 @@
                     </div>
                 </div>
 
-                <button id="btnInitMatch" onclick="createMatch()" class="pill-btn w-full text-lg py-4 mt-6 border-blue-600 shadow-md">Continue</button>
-            </div>
-        </div>
-
+               
+           </div>
+        
         <div id="view-waiting" class="hidden view-frame p-5 space-y-4 bg-slate-50">
             <div class="flex justify-between items-center w-full pb-2 border-b border-slate-200">
                 <button onclick="exitWaitingRoom()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -1862,18 +1861,13 @@
             
             let htH = document.getElementById('hostHtH').value.trim();
             let htM = document.getElementById('hostHtM').value.trim();
-            let ltH = document.getElementById('hostLtH').value.trim();
-            let ltM = document.getElementById('hostLtM').value.trim();
-            
-            let tideData = null;
-            if (htH && htM && ltH && ltM) {
-                tideData = { high: `${htH.padStart(2,'0')}:${htM.padStart(2,'0')}`, low: `${ltH.padStart(2,'0')}:${ltM.padStart(2,'0')}` };
-            }
+           let tideData = null;
+        if (htH && htM) {
+            tideData = { high: `${htH.padStart(2, '0')}:${htM.padStart(2, '0')}` };
+        }
             state.tides = tideData;
 
-            const btn = document.getElementById('btnInitMatch');
-            const originalText = btn.innerText;
-            btn.innerText = "Connecting to Engine...";
+            
             
             set(ref(db, 'matches/' + state.pin), { 
                 hostId: uid, 
@@ -1883,7 +1877,7 @@
                 venue: state.venue,
                 anglers: { [uid]: { name: state.name, score: 0 } } 
             }).then(() => {
-                btn.innerText = originalText;
+               
                 state.status = 'waiting'; 
                 listenToCloud(); 
                 document.getElementById('displayPin').innerText = state.pin;
@@ -1919,7 +1913,7 @@
                     else { navTo('waiting'); }
                 } else { alert("Invalid PIN."); atmPin = ""; updateAtm(); }
             }).catch((err) => {
-                btn.innerText = originalText;
+                
                 alert("Connection failed: " + err.message);
             });
         }
