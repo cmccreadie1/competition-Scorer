@@ -1,7 +1,7 @@
 // ================================================================================
 // SHORESCORE v15.2.0 CORE OFFLINE SEAMLESS SERVICE WORKER INFRASTRUCTURE
 // ================================================================================
-const CACHE_IDENTIFIER = 'shorescore-v16.0.0-matrix-cache';
+const CACHE_IDENTIFIER = 'shorescore-v16.1.0-matrix-cache';
 const STATIC_ASSET_MANIFEST = [
   './',
   './index.html',
