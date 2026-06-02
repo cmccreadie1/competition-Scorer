@@ -527,7 +527,7 @@
                         </div>
                     </div>
 
-                    <button onclick="createMatch()" class="w-full pill-btn text-base py-4 shadow-md border-2 border-blue-600 bg-white">
+                    <button id="btnInitMatch" onclick="createMatch()" class="w-full pill-btn text-base py-4 shadow-md border-2 border-blue-600 bg-white">
                         <span class="font-black uppercase tracking-widest text-slate-900">CREATE MATCH</span>
                     </button>
                 </div>
@@ -1337,6 +1337,21 @@
             let mins = diffMins % 60;
             if (mins === 0) return `${hrs}hr ago`;
             return `${hrs}hr ${mins} mins ago`;
+        }
+
+        function formatTideOffset(diffH) {
+            let absH = Math.abs(diffH);
+            if (absH <= 0.5) return "High Water Slack";
+            if (Math.abs(absH - 6.25) <= 0.5) return "Low Water Slack";
+            let hrs = Math.floor(absH);
+            let mins = Math.round((absH - hrs) * 60);
+            let timeStr = "";
+            if (hrs > 0 && mins > 0) timeStr = `${hrs}h ${mins}m`;
+            else if (hrs > 0) timeStr = `${hrs}h`;
+            else timeStr = `${mins}m`;
+            
+            if (diffH > 0) return `${timeStr} after HW`;
+            return `${timeStr} before HW`;
         }
 
         function handleIslandTouchStart(e) {
@@ -2495,7 +2510,6 @@
 
         function buildAndShareReport(arr, venueName, matchDate, matchFormat, buttonRef, matchTides) {
             const fmt = matchFormat || state.format; 
-            let podium = arr.slice(0, 3);
             let biggestVal = 0, biggestStr = "N/A";
             
             let allCatches = [];
@@ -2594,7 +2608,7 @@
                 spMap[c.species].totalSize += (parseFloat(c.size) || 0);
                 if(c.ts) spMap[c.species].timestamps.push(c.ts);
             });
-            let topSpecies = Object.entries(spMap).sort((a,b) => b[1].count - a[1].count).slice(0, 3);
+            let topSpecies = Object.entries(spMap).sort((a,b) => b[1].count - a[1].count);
 
             let ruleStr = "";
             if(fmt === 'length') ruleStr = "Length Only (cm)";
@@ -2605,13 +2619,8 @@
             else ruleStr = fmt;
 
             // V15.2.0: CLINICAL REPORT DESIGN
-            let t = `SHORESCORE OFFICIAL REPORT\nVENUE: ${venueName}\nDATE: ${matchDate}\nRULES: ${ruleStr}\n\n`;
+            let t = `SHORESCORE OFFICIAL REPORT\nVENUE: ${venueName}\nDATE: ${matchDate}\nHIGH WATER: ${matchTides ? matchTides.high : 'Not Recorded'}\nRULES: ${ruleStr}\n\n`;
             
-            t += `------------------------\nFINAL PODIUM\n------------------------\n`;
-            t += `1ST: ${podium[0]?.name || '-'} — ${formatScoreDisplay(podium[0]?.score || 0, fmt, true).replace(/<[^>]*>?/gm, '')}\n`;
-            t += `2ND: ${podium[1]?.name || '-'} — ${formatScoreDisplay(podium[1]?.score || 0, fmt, true).replace(/<[^>]*>?/gm, '')}\n`;
-            t += `3RD: ${podium[2]?.name || '-'} — ${formatScoreDisplay(podium[2]?.score || 0, fmt, true).replace(/<[^>]*>?/gm, '')}\n\n`;
-
             t += `------------------------\nVENUE INTELLIGENCE\n------------------------\n`;
             if (fmt === 'speciesHunt') {
                 t += `MATCH CATCH: ${totalFish} Fish\n`;
@@ -2638,7 +2647,7 @@
             t += `\n`;
 
             if (totalFish > 0) {
-                t += `------------------------\nTOP 3 SPECIES PROFILES\n------------------------\n`;
+                t += `------------------------\nSPECIES PROFILES\n------------------------\n`;
                 topSpecies.forEach(sp => {
                     let name = sp[0];
                     let data = sp[1];
@@ -2659,10 +2668,7 @@
                             totalOffset += diffH;
                         });
                         let avgOffset = totalOffset / data.timestamps.length;
-                        if (Math.abs(avgOffset) < 0.5) peakSpTime = "High Water Slack";
-                        else if (Math.abs(avgOffset - 6.25) < 0.5 || Math.abs(avgOffset + 6.25) < 0.5) peakSpTime = "Low Water Slack";
-                        else if (avgOffset > 0) peakSpTime = `HW +${avgOffset.toFixed(1)}h`;
-                        else peakSpTime = `HW ${avgOffset.toFixed(1)}h`;
+                        peakSpTime = formatTideOffset(avgOffset);
                     }
 
                     t += `[ ${name.toUpperCase()} ] - ${pct}% of catch\n`;
@@ -2674,7 +2680,7 @@
 
             t += `------------------------\nFULL STANDINGS\n------------------------\n`;
             arr.forEach((a, i) => { 
-                t += `${(i+1).toString().padStart(2, ' ')}. ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true).replace(/<[^>]*>?/gm, '')}\n`; 
+                t += `${(i+1).toString().padStart(2, ' ')}. ${a.name} — ${formatScoreDisplay(a.score || 0, fmt, true).replace(/<[^>]*>?/gm, '')} (${a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0} Fish)\n`; 
             });
             
             t += `\nGenerated by ShoreScore V15.2.0`;
@@ -2709,7 +2715,7 @@
                 }
                 saveHistory(true); 
                 closeAndWipeSession();
-                navTo('role');
+                navTo('home');
             } 
         }
         
@@ -2816,160 +2822,157 @@
         function switchHistoryTab(tab) {
             haptic();
             const m = JSON.parse(localStorage.getItem('matchHistory')).find(x => x.id === activeHistoryId);
-            document.querySelectorAll('.history-tab').forEach(t => { t.classList.remove('active'); }); 
-            if (document.getElementById(`tab-${tab}`)) document.getElementById(`tab-${tab}`).classList.add('active');
             
-            if(tab === 'standings') { 
-                let matchTotalScore = m.standings ? m.standings.reduce((sum, s) => sum + s.score, 0) : 0;
-                let allMatchCatches = [];
+            let matchTotalScore = m.standings ? m.standings.reduce((sum, s) => sum + s.score, 0) : 0;
+            let allMatchCatches = [];
+            if(m.standings) {
                 m.standings.forEach(a => {
                     if (a.catches) {
                         let cList = Array.isArray(a.catches) ? a.catches : Object.values(a.catches);
                         cList.forEach(c => allMatchCatches.push(c));
                     }
                 });
-                
-                let spCounts = {};
-                allMatchCatches.forEach(c => { spCounts[c.species] = (spCounts[c.species] || 0) + 1; });
-                let spArr = Object.entries(spCounts).sort((a,b) => b[1] - a[1]);
-                let totalC = allMatchCatches.length || 1;
-                
-                let spHtml = spArr.map((sp, idx) => {
-                    let pct = Math.round((sp[1] / totalC) * 100);
-                    let barColor = idx === 0 ? 'bg-blue-600' : (idx === 1 ? 'bg-blue-500' : 'bg-blue-300');
-                    let txtColor = idx === 0 ? 'text-slate-900' : 'text-slate-600';
+            }
+            
+            let spCounts = {};
+            allMatchCatches.forEach(c => { spCounts[c.species] = (spCounts[c.species] || 0) + 1; });
+            let spArr = Object.entries(spCounts).sort((a,b) => b[1] - a[1]);
+            let totalC = allMatchCatches.length || 1;
+            
+            let spHtml = spArr.map((sp, idx) => {
+                let pct = Math.round((sp[1] / totalC) * 100);
+                let barColor = idx === 0 ? 'bg-blue-600' : (idx === 1 ? 'bg-blue-500' : 'bg-blue-300');
+                let txtColor = idx === 0 ? 'text-slate-900' : 'text-slate-600';
+                return `
+                <div class="flex items-center gap-2 pt-1.5">
+                    <div class="text-[11px] font-black uppercase tracking-tight ${txtColor} w-24 truncate">${sp[0]}</div>
+                    <div class="h-2 flex-1 bg-slate-200 rounded-full overflow-hidden">
+                        <div class="h-full ${barColor}" style="width: ${pct}%"></div>
+                    </div>
+                    <div class="text-[10px] font-bold text-slate-500 w-10 text-right">${pct}%</div>
+                </div>`;
+            }).join('');
+            
+            let peakCount = 0;
+            let hourBins = {};
+            allMatchCatches.forEach(c => {
+                if (c.ts) {
+                    let d = new Date(c.ts);
+                    let hr = d.getHours();
+                    let nextHr = hr === 23 ? 0 : hr + 1;
+                    let hrStr = `${hr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00`;
+                    let sortKey = hr;
+                    if(!hourBins[sortKey]) hourBins[sortKey] = { label: hrStr, count: 0 };
+                    hourBins[sortKey].count++;
+                }
+            });
+
+            let timelineHtml = "";
+            let sortedHours = Object.keys(hourBins).sort((a,b) => parseInt(a) - parseInt(b));
+            if(sortedHours.length === 0) {
+                timelineHtml = '<div class="text-xs text-slate-500">No time data available</div>';
+            } else {
+                sortedHours.forEach(k => { if(hourBins[k].count > peakCount) peakCount = hourBins[k].count; });
+                timelineHtml = sortedHours.map(k => {
+                    let bin = hourBins[k];
+                    let isPeak = bin.count === peakCount && peakCount > 0;
+                    let barW = peakCount > 0 ? Math.max(2, Math.round((bin.count / peakCount) * 100)) : 0;
                     return `
-                    <div class="flex items-center gap-2 pt-1.5">
-                        <div class="text-[11px] font-black uppercase tracking-tight ${txtColor} w-24 truncate">${sp[0]}</div>
-                        <div class="h-2 flex-1 bg-slate-200 rounded-full overflow-hidden">
-                            <div class="h-full ${barColor}" style="width: ${pct}%"></div>
+                    <div class="flex items-center justify-between gap-3 pt-1.5">
+                        <div class="text-[11px] font-black tracking-tight text-slate-600 w-24 shrink-0">${bin.label}</div>
+                        <div class="h-2 flex-1 bg-slate-200 rounded-full overflow-hidden flex items-center">
+                            <div class="h-full bg-blue-500 ${isPeak ? 'opacity-100' : 'opacity-60'}" style="width: ${barW}%"></div>
                         </div>
-                        <div class="text-[10px] font-bold text-slate-500 w-10 text-right">${pct}%</div>
+                        <div class="text-[10px] font-bold ${isPeak ? 'text-orange-600' : 'text-slate-900'} w-14 text-right">${bin.count} Fish ${isPeak ? '🔥' : ''}</div>
                     </div>`;
                 }).join('');
-                let peakCount = 0;
-                let hourBins = {};
-                allMatchCatches.forEach(c => {
-                    if (c.ts) {
-                        let d = new Date(c.ts);
-                        let hr = d.getHours();
-                        let nextHr = hr === 23 ? 0 : hr + 1;
-                        let hrStr = `${hr.toString().padStart(2,'0')}:00 - ${nextHr.toString().padStart(2,'0')}:00`;
-                        let sortKey = hr;
-                        if(!hourBins[sortKey]) hourBins[sortKey] = { label: hrStr, count: 0 };
-                        hourBins[sortKey].count++;
-                    }
-                });
+            }
 
-                let timelineHtml = "";
-                let sortedHours = Object.keys(hourBins).sort((a,b) => parseInt(a) - parseInt(b));
-                if(sortedHours.length === 0) {
-                    timelineHtml = '<div class="text-xs text-slate-500">No time data available</div>';
-                } else {
-                    sortedHours.forEach(k => { if(hourBins[k].count > peakCount) peakCount = hourBins[k].count; });
-                    timelineHtml = sortedHours.map(k => {
-                        let bin = hourBins[k];
-                        let isPeak = bin.count === peakCount && peakCount > 0;
-                        let barW = peakCount > 0 ? Math.max(2, Math.round((bin.count / peakCount) * 100)) : 0;
-                        return `
-                        <div class="flex items-center justify-between gap-3 pt-1.5">
-                            <div class="text-[11px] font-black tracking-tight text-slate-600 w-24 shrink-0">${bin.label}</div>
-                            <div class="h-2 flex-1 bg-slate-200 rounded-full overflow-hidden flex items-center">
-                                <div class="h-full bg-blue-500 ${isPeak ? 'opacity-100' : 'opacity-60'}" style="width: ${barW}%"></div>
-                            </div>
-                            <div class="text-[10px] font-bold ${isPeak ? 'text-orange-600' : 'text-slate-900'} w-14 text-right">${bin.count} Fish ${isPeak ? '🔥' : ''}</div>
-                        </div>`;
-                    }).join('');
-                }
+            let hubHtml = `
+            <div class="flex justify-between items-center w-full mb-3 mt-4">
+                <div class="text-slate-900 text-base font-bold flex items-center shrink-0">
+                    <i class="fa-solid fa-location-dot mr-2 text-blue-600"></i> ${m.venue || 'Local Beach'}
+                </div>
+                <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
+                    <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
+                </button>
+            </div>
+            <div class="text-slate-500 text-[10px] font-black uppercase tracking-widest text-left w-full mb-4">📅 ${m.date}</div>
 
-                let hubHtml = `
-                <div class="flex justify-between items-center w-full mb-3 mt-4">
-                    <div class="text-slate-900 text-base font-bold flex items-center shrink-0">
-                        <i class="fa-solid fa-location-dot mr-2 text-blue-600"></i> ${m.venue || 'Local Beach'}
-                    </div>
-                    <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95">
-                        <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
-                    </button>
+            <div class="flex items-start justify-between gap-4 mt-2">
+                <div class="text-left bg-white p-3 rounded-xl border border-slate-200 flex-1 shadow-sm">
+                    <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-1">Your Total Pts</div>
+                    <div class="text-3xl font-black text-blue-600">${formatScoreDisplay(m.score, m.format, true).replace(' pts', '<span class="text-sm font-medium text-slate-500 ml-1">Pts</span>')}</div>
                 </div>
-                <div class="text-slate-500 text-[10px] font-black uppercase tracking-widest text-left w-full mb-4">📅 ${m.date}</div>
+                <div class="text-right bg-white p-3 rounded-xl border border-slate-200 flex-1 shadow-sm">
+                    <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-1">Match Total (Beach)</div>
+                    <div class="text-3xl font-black text-slate-900">${formatScoreDisplay(matchTotalScore, m.format, true).replace(' pts', '<span class="text-sm font-medium text-slate-500 ml-1">Pts</span>')}</div>
+                </div>
+            </div>
 
-                <div class="flex items-start justify-between gap-4 mt-2">
-                    <div class="text-left bg-white p-3 rounded-xl border border-slate-200 flex-1 shadow-sm">
-                        <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-1">Your Total Pts</div>
-                        <div class="text-3xl font-black text-blue-600">${formatScoreDisplay(m.score, m.format, true).replace(' pts', '<span class="text-sm font-medium text-slate-500 ml-1">Pts</span>')}</div>
-                    </div>
-                    <div class="text-right bg-white p-3 rounded-xl border border-slate-200 flex-1 shadow-sm">
-                        <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-1">Match Total (Beach)</div>
-                        <div class="text-3xl font-black text-slate-900">${formatScoreDisplay(matchTotalScore, m.format, true).replace(' pts', '<span class="text-sm font-medium text-slate-500 ml-1">Pts</span>')}</div>
-                    </div>
+            <div class="bg-white p-5 text-center border-b border-slate-200 space-y-4 rounded-xl mt-3 shadow-sm border">
+                <div class="text-[11px] font-black uppercase tracking-widest text-blue-600 mb-2 text-left">
+                    <i class="fa-solid fa-brain mr-1.5 text-blue-400"></i> Match Analysis Hub
                 </div>
+                <div class="space-y-3">
+                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col text-left">
+                        <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-2">Match Species Breakdown (% of Total)</div>
+                        <div class="space-y-2 divide-y divide-slate-200">
+                            ${spHtml || '<div class="text-xs text-slate-500">No catches recorded</div>'}
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col text-left">
+                        <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-2">Hourly Catch Timeline</div>
+                        <div class="space-y-2 divide-y divide-slate-200">
+                            ${timelineHtml}
+                        </div>
+                    </div>
+                    ${m.tides ? `
+                    <div class="bg-white shadow-sm border border-slate-200 rounded-xl flex flex-col text-left mt-2 overflow-hidden pt-4 pb-2">
+                        <div class="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-2 text-center px-4">Tidal Wave Heatmap</div>
+                        <div class="w-full bg-white">
+                            <canvas id="historicTideCanvas" style="width: 100%; height: 160px;"></canvas>
+                        </div>
+                    </div>` : ''}
+                </div>
+            </div>
+            
+            <div class="bg-slate-100 px-4 py-3 text-center border border-slate-200 flex flex-col items-center mt-3 rounded-t-xl">
+                <div class="text-sm font-black uppercase tracking-widest text-slate-900">
+                    <i class="fa-solid fa-trophy mr-1.5 text-orange-500"></i> Final Standings
+                </div>
+                <div class="text-[10px] font-medium text-slate-500 leading-tight mt-1">
+                    (Tap name for individual catch record)
+                </div>
+            </div>
+            `;
+            
+            const getOrd = (n) => { let s = ["th", "st", "nd", "rd"], v = n % 100; return (n < 20 && n > 10) ? n + "th" : n + (s[n % 10] || "th"); };
+            
+            let tableHtml = `<div class="divide-y divide-slate-200 mt-0 bg-white rounded-b-xl border border-slate-200 border-t-0 shadow-sm">${(m.standings || []).map((a, i) => {
+                let catchCount = a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0;
+                return `
+                <div onclick="openPastCatchFeed('${a.id || a.name}')" class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} active:bg-slate-100 cursor-pointer transition-all duration-200">
+                    <div class="flex items-center space-x-3 flex-1 min-w-0">
+                        <div class="${i===0?'bg-blue-100 text-blue-700':'bg-slate-200 text-slate-600'} font-black p-3 rounded-full text-xs shrink-0">R${i+1}</div>
+                        <div class="flex flex-col min-w-0 text-left">
+                            <div class="text-sm font-black ${i===0?'text-slate-900':'text-slate-700'} flex items-center">
+                                <span class="truncate">${a.name}</span> <i class="fa-solid fa-caret-right ml-2 text-slate-400 text-[10px]"></i>
+                            </div>
+                            <div class="text-xs font-bold text-slate-500 pt-0.5">Caught: ${catchCount} Fish</div>
+                        </div>
+                    </div>
+                    <div class="text-right flex flex-col items-end shrink-0 leading-tight pt-1">
+                        <div class="text-xl font-black ${i===0?'text-blue-600':'text-slate-900'} leading-tight">${formatScoreDisplay(a.score, m.format, true).replace(' pts', '<span class="text-xs text-slate-500 ml-1 leading-tight">Pts</span>')}</div>
+                      <div class="text-[10px] text-slate-500 font-medium">${i===0?'Winner':getOrd(i+1)}</div>
+                    </div>
+                </div>`}).join('')}</div>`;
 
-                <div class="bg-white p-5 text-center border-b border-slate-200 space-y-4 rounded-xl mt-3 shadow-sm border">
-                    <div class="text-[11px] font-black uppercase tracking-widest text-blue-600 mb-2 text-left">
-                        <i class="fa-solid fa-brain mr-1.5 text-blue-400"></i> Match Analysis Hub
-                    </div>
-                    <div class="space-y-3">
-                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col text-left">
-                            <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-2">Match Species Breakdown (% of Total)</div>
-                            <div class="space-y-2 divide-y divide-slate-200">
-                                ${spHtml || '<div class="text-xs text-slate-500">No catches recorded</div>'}
-                            </div>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col text-left">
-                            <div class="text-[10px] font-black uppercase tracking-widest text-blue-700 mb-2">Hourly Catch Timeline</div>
-                            <div class="space-y-2 divide-y divide-slate-200">
-                                ${timelineHtml}
-                            </div>
-                        </div>
-                        ${m.tides ? `
-                        <div class="bg-white shadow-sm border border-slate-200 rounded-xl flex flex-col text-left mt-2 overflow-hidden pt-4 pb-2">
-                            <div class="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-2 text-center px-4">Tidal Wave Heatmap</div>
-                            <div class="w-full bg-white">
-                                <canvas id="historicTideCanvas" style="width: 100%; height: 160px;"></canvas>
-                            </div>
-                        </div>` : ''}
-                    </div>
-                </div>
-                
-                <div class="bg-slate-100 px-4 py-3 text-center border border-slate-200 flex flex-col items-center mt-3 rounded-t-xl">
-                    <div class="text-sm font-black uppercase tracking-widest text-slate-900">
-                        <i class="fa-solid fa-trophy mr-1.5 text-orange-500"></i> Final Standings
-                    </div>
-                    <div class="text-[10px] font-medium text-slate-500 leading-tight mt-1">
-                        (Tap name for individual catch record)
-                    </div>
-                </div>
-                `;
-                
-                const getOrd = (n) => { let s = ["th", "st", "nd", "rd"], v = n % 100; return (n < 20 && n > 10) ? n + "th" : n + (s[n % 10] || "th"); };
-                let tableHtml = `<div class="divide-y divide-slate-200 mt-0 bg-white rounded-b-xl border border-slate-200 border-t-0 shadow-sm mb-12">${m.standings.map((a, i) => {
-                    let catchCount = a.catches ? (Array.isArray(a.catches) ? a.catches.length : Object.keys(a.catches).length) : 0;
-                    return `
-                    <div onclick="openPastCatchFeed('${a.id || a.name}')" class="py-3 px-4 flex items-center justify-between gap-3 ${i===0?'bg-blue-50':'bg-white'} active:bg-slate-100 cursor-pointer transition-all duration-200">
-                        <div class="flex items-center space-x-3 flex-1 min-w-0">
-                            <div class="${i===0?'bg-blue-100 text-blue-700':'bg-slate-200 text-slate-600'} font-black p-3 rounded-full text-xs shrink-0">R${i+1}</div>
-                            <div class="flex flex-col min-w-0 text-left">
-                                <div class="text-sm font-black ${i===0?'text-slate-900':'text-slate-700'} flex items-center">
-                                    <span class="truncate">${a.name}</span> <i class="fa-solid fa-caret-right ml-2 text-slate-400 text-[10px]"></i>
-                                </div>
-                                <div class="text-xs font-bold text-slate-500 pt-0.5">Caught: ${catchCount} Fish</div>
-                            </div>
-                        </div>
-                        <div class="text-right flex flex-col items-end shrink-0 leading-tight pt-1">
-                            <div class="text-xl font-black ${i===0?'text-blue-600':'text-slate-900'} leading-tight">${formatScoreDisplay(a.score, m.format, true).replace(' pts', '<span class="text-xs text-slate-500 ml-1 leading-tight">Pts</span>')}</div>
-                          <div class="text-[10px] text-slate-500 font-medium">${i===0?'Winner':getOrd(i+1)}</div>
-                        </div>
-                    </div>`}).join('')}</div>`;
-                    
-                document.getElementById('historyContent').innerHTML = hubHtml + tableHtml; 
-                
-                if (m.tides) {
-                    setTimeout(() => renderTideCanvasEx(allMatchCatches, m.tides, 'historicTideCanvas'), 300);
-                }
-            } else { 
-                let listHtml = m.personalCatches.map(c => {
+            let personalDiaryListHtml = "";
+            if (m.personalCatches && m.personalCatches.length > 0) {
+                personalDiaryListHtml = m.personalCatches.map(c => {
                     const editMarker = c.edited ? `<i class="fa-solid fa-pen-to-square ml-1.5 text-orange-500 opacity-90" style="font-size: 0.9em;"></i>` : "";
-                    return `<div class="match-card p-3 flex justify-between items-center mb-1.5 border-slate-200">
+                    return `<div class="match-card p-3 flex justify-between items-center mb-1.5 border-slate-200 shadow-sm bg-white">
                         <div class="text-left">
                             <b class="text-slate-900 text-xs uppercase">${c.species}${editMarker}</b><br>
                             <span class="text-[10px] text-slate-500 font-black uppercase tracking-widest mt-1 inline-block">${c.time}</span>
@@ -2980,7 +2983,23 @@
                         </div>
                     </div>`
                 }).join('');
-                document.getElementById('historyContent').innerHTML = `<h4 class="text-[10px] font-black uppercase text-slate-500 mb-3 text-center tracking-widest mt-2">Catch Diary</h4><div class="space-y-2 pb-12">${listHtml}</div>`; 
+            } else {
+                personalDiaryListHtml = '<div class="text-xs text-slate-500 text-center italic py-4">No personal catches recorded</div>';
+            }
+
+            let personalDiaryHtml = `<div class="bg-slate-100 px-4 py-3 text-center border border-slate-200 flex flex-col items-center mt-6 rounded-t-xl">
+                <div class="text-sm font-black uppercase tracking-widest text-slate-900">
+                    <i class="fa-solid fa-book-open mr-1.5 text-blue-500"></i> Personal Catch Diary
+                </div>
+            </div>
+            <div class="bg-white rounded-b-xl border border-slate-200 border-t-0 shadow-sm mb-12 p-3 space-y-2">
+                ${personalDiaryListHtml}
+            </div>`;
+                
+            document.getElementById('historyContent').innerHTML = hubHtml + tableHtml + personalDiaryHtml; 
+            
+            if (m.tides) {
+                setTimeout(() => renderTideCanvasEx(allMatchCatches, m.tides, 'historicTideCanvas'), 300);
             }
         }
 
