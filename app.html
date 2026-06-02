@@ -395,55 +395,54 @@
 
     <div id="app-container">
 
-        <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative overflow-y-auto">
+       <div id="view-home" class="view-frame items-center justify-center p-5 space-y-4 relative overflow-y-auto">
+            
+            <button onclick="openGuide()" class="absolute top-5 left-5 domestic-action bg-white border border-slate-200 shadow-sm rounded-xl px-3 py-2 z-[50]">
+                <div class="text-[10px] font-black uppercase tracking-widest pointer-events-none text-slate-900">
+                    USER <span class="text-blue-600">GUIDE</span>
+                </div>
+            </button>
 
             <button onclick="exitApp()" class="absolute top-5 right-5 domestic-action text-slate-500 active:text-red-500 cursor-pointer flex flex-col items-center z-[50]">
-                <i class="fa-solid fa-power-off text-2xl mb-1"></i>
-                <span class="text-[10px] font-black uppercase tracking-widest">Close</span>
+                <i class="fa-solid fa-power-off text-2xl mb-1 pointer-events-none"></i>
+                <span class="text-[10px] font-black uppercase tracking-widest pointer-events-none">CLOSE</span>
             </button>
 
             <div class="text-center mt-6 relative w-full mb-2">
-                <h1 class="animate-text delay-title text-4xl font-black tracking-normal text-center mb-0.5 uppercase text-slate-900 mt-8 w-full flex justify-center">
+                <h1 class="animate-text delay-title text-4xl font-black tracking-normal text-center mb-0.5 uppercase text-slate-900 mt-8 w-full flex justify-center pointer-events-none">
                     SHORE<span class="text-blue-600">SCORE</span>
                 </h1>
-                <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display mt-2">
-                    V15.2.0
+                <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display mt-2 pointer-events-none">
+                    V16.0.0
                 </div>
             </div>
             
             <div class="w-full max-w-sm space-y-4 mt-6 pb-10">
                 <div class="match-card p-6 space-y-4 text-center shadow-lg relative z-10">
                     <div>
-                        <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center">Angler Profile</label>
+                        <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center pointer-events-none">Angler Profile</label>
                         <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Your Name" class="pill-input w-full py-4 px-4 text-base font-bold text-center">
                     </div>
                     <div class="pt-2 border-t border-slate-200 mt-4">
-                        <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center pt-2">Target Venue (Optional)</label>
+                        <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center pt-2 pointer-events-none">Target Venue (Optional)</label>
                         <input type="text" id="venueName" autocomplete="off" oninput="this.value = this.value.replace(/\b\w/g, c => c.toUpperCase())" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="e.g. Arbroath" class="pill-input w-full py-4 px-4 text-base font-bold text-center">
                     </div>
                     <button onclick="proceedToRoleSelection()" class="pill-btn w-full text-base py-4 mt-2 shadow-md border-2 border-blue-600">
-                        Continue
+                        <span class="pointer-events-none">Continue</span>
                     </button>
                 </div>
                 
                 <div class="w-full bg-white rounded-xl neon-border-glow border overflow-hidden domestic-action relative z-10 shadow-md">
                     <button onclick="navTo('history')" class="w-full p-5 flex flex-col items-center cursor-pointer">
-                        <div class="text-[var(--text-header)] text-lg font-black uppercase tracking-tight">View Past <span class="neon-text-blue">Matches</span></div>
-                    </button>
-                </div>
-
-                <div class="w-full bg-white rounded-xl neon-border-glow border overflow-hidden domestic-action relative z-10 shadow-md">
-                    <button onclick="openGuide()" class="w-full p-5 flex flex-col items-center cursor-pointer">
-                        <div class="text-[var(--text-header)] text-lg font-black uppercase tracking-tight">App <span class="neon-text-blue">Guide</span></div>
+                        <div class="text-[var(--text-header)] text-lg font-black uppercase tracking-tight pointer-events-none">View Past <span class="neon-text-blue">Matches</span></div>
                     </button>
                 </div>
 
                 <button id="btnInstallGuide" onclick="showInstallGuide()" class="hidden pill-btn w-full py-3 text-[10px] mt-2 relative z-10">
-                    <i class="fa-solid fa-mobile-screen mr-1.5 neon-text-blue"></i> Install App
+                    <i class="fa-solid fa-mobile-screen mr-1.5 neon-text-blue pointer-events-none"></i> <span class="pointer-events-none">Install App</span>
                 </button>
             </div>
         </div>
-
         <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-slate-50">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
                 <button onclick="navTo('home')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
