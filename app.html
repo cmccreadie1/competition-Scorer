@@ -421,7 +421,7 @@
                 <div class="match-card p-6 space-y-4 text-center shadow-lg relative z-10">
                     <div>
                         <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center pointer-events-none">Angler Profile</label>
-                        <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ proceedToRoleSelection(); }" placeholder="Your Name" class="pill-input w-full py-4 px-4 text-base font-bold text-center">
+                        <input type="text" id="playerName" autocomplete="off" onkeydown="if(event.key === 'Enter'){ document.getElementById('venueName').focus(); }" placeholder="Your Name" class="pill-input w-full py-4 px-4 text-base font-bold text-center">
                     </div>
                     <div class="pt-2 border-t border-slate-200 mt-4">
                         <label class="block text-slate-600 font-black text-[10px] uppercase tracking-widest mb-2 text-center pt-2 pointer-events-none">Target Venue (Optional)</label>
