@@ -510,23 +510,23 @@
                     </select>
                 </div>
 
-                <div class="pt-4 border-t border-slate-200 mt-6 mb-2">
-                    <div class="tide-explainer-box text-left mb-4">
-                        <h4 class="font-black text-blue-700 text-[10px] uppercase tracking-widest mb-1.5"><i class="fa-solid fa-chart-line mr-1"></i> Venue Intelligence</h4>
-                        <p class="text-[10px] font-bold text-slate-600 leading-relaxed">Entering the tide times below unlocks the Live Tide Ticker, Heatmap Graphs, Flood/Ebb Bias Ratios, and Species Peak Windows.</p>
-                    </div>
+          <div class="pt-4 border-t border-slate-200 mt-6 mb-2">
+                        <div class="tide-explainer-box text-left mb-4">
+                            <h4 class="font-black text-blue-700 text-[10px] uppercase tracking-widest mb-1.5"><i class="fa-solid fa-chart-line mr-1"></i> Venue Intelligence</h4>
+                            <p class="text-[10px] font-bold text-slate-600 leading-relaxed">Enter the time of the next high tide. The app will calculate the tidal state for the rest of your session.</p>
+                        </div>
 
-                    <div class="grid grid-cols-2 gap-4 px-1">
-                        <div class="text-left">
-                            <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">High Water (Opt)</label>
-                            <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-blue-600 focus-within:bg-white transition-all p-1">
-                                <input type="text" id="hostHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostHtM').focus();">
-                                <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
-                                <input type="text" id="hostHtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
+                        <div class="px-1">
+                            <div class="text-left">
+                                <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">Next High Tide (HH:MM)</label>
+                                <div class="flex space-x-1 items-center bg-white border-2 border-slate-300 rounded-lg p-2 focus-within:border-blue-600 transition-all">
+                                    <input type="text" id="hostHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostHtM').focus();">
+                                    <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
+                                    <input type="text" id="hostHtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
+                                </div>
                             </div>
                         </div>
-                        <div class="text-left">
-                            <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">Low Water (Opt)</label>
+                    </div>
                             <div class="flex space-x-1 items-center bg-input-bg border-2 border-card-border rounded-lg bg-[#f1f5f9] focus-within:border-blue-600 focus-within:bg-white transition-all p-1">
                                 <input type="text" id="hostLtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostLtM').focus();">
                                 <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
