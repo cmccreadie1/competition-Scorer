@@ -510,33 +510,30 @@
                     </select>
                 </div>
 
-  <div class="pt-4 border-t border-slate-200 mt-6 mb-6">
-                        <div class="tide-explainer-box text-left mb-4">
-                            <h4 class="font-black text-blue-700 text-[10px] uppercase tracking-widest mb-1.5"><i class="fa-solid fa-chart-line mr-1"></i> Venue Intelligence</h4>
-                            <p class="text-[10px] font-bold text-slate-600 leading-relaxed">Enter the time of the next high tide. The app will calculate the tidal state for the rest of your session.</p>
-                        </div>
+                <div class="pt-4 border-t border-slate-200 mt-6 mb-2">
+                    <div class="tide-explainer-box text-left mb-4">
+                        <h4 class="font-black text-blue-700 text-[10px] uppercase tracking-widest mb-1.5"><i class="fa-solid fa-chart-line mr-1"></i> Venue Intelligence</h4>
+                        <p class="text-[10px] font-bold text-slate-600 leading-relaxed">Entering the tide times below unlocks the Live Tide Ticker, Heatmap Graphs, Flood/Ebb Bias Ratios, and Species Peak Windows.</p>
+                    </div>
 
-                        <div class="px-1 mb-6">
-                            <div class="text-left">
-                                <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">Next High Tide (HH:MM)</label>
-                                <div class="flex space-x-1 items-center bg-white border-2 border-slate-300 rounded-lg p-2 focus-within:border-blue-600 transition-all">
-                                    <input type="text" id="hostHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostHtM').focus();">
-                                    <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
-                                    <input type="text" id="hostHtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
-                                </div>
+                    <div class="px-1 mb-6">
+                        <div class="text-left">
+                            <label class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1.5 ml-1">Next High Tide (HH:MM)</label>
+                            <div class="flex space-x-1 items-center bg-white border-2 border-slate-300 rounded-lg p-2 focus-within:border-blue-600 transition-all">
+                                <input type="text" id="hostHtH" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="HH" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none" oninput="if(this.value.length >= 2) document.getElementById('hostHtM').focus();">
+                                <span class="text-sm font-black text-slate-400 pb-0.5">:</span>
+                                <input type="text" id="hostHtM" inputmode="numeric" pattern="\d*" maxlength="2" placeholder="MM" class="w-full bg-transparent text-center text-sm font-black text-slate-900 outline-none">
                             </div>
                         </div>
-
-                        <!-- CREATE MATCH BUTTON -->
-                        <button onclick="createMatch()" class="w-full pill-btn text-base py-4 shadow-md border-2 border-blue-600 bg-white">
-                            <span class="font-black uppercase tracking-widest text-slate-900">CREATE MATCH</span>
-                        </button>
                     </div>
-                </div>
 
-               
-           </div>
-        
+                    <button onclick="createMatch()" class="w-full pill-btn text-base py-4 shadow-md border-2 border-blue-600 bg-white">
+                        <span class="font-black uppercase tracking-widest text-slate-900">CREATE MATCH</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div id="view-waiting" class="hidden view-frame p-5 space-y-4 bg-slate-50">
             <div class="flex justify-between items-center w-full pb-2 border-b border-slate-200">
                 <button onclick="exitWaitingRoom()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -1585,8 +1582,6 @@
             if(document.getElementById('hostHtH')) {
                 document.getElementById('hostHtH').value = '';
                 document.getElementById('hostHtM').value = '';
-                document.getElementById('hostLtH').value = '';
-                document.getElementById('hostLtM').value = '';
             }
             
             clearInterval(clockInterval);
@@ -1861,14 +1856,13 @@
             
             let htH = document.getElementById('hostHtH').value.trim();
             let htM = document.getElementById('hostHtM').value.trim();
-           let tideData = null;
-        if (htH && htM) {
-            tideData = { high: `${htH.padStart(2, '0')}:${htM.padStart(2, '0')}` };
-        }
+            
+            let tideData = null;
+            if (htH && htM) {
+                tideData = { high: `${htH.padStart(2,'0')}:${htM.padStart(2,'0')}` };
+            }
             state.tides = tideData;
 
-            
-            
             set(ref(db, 'matches/' + state.pin), { 
                 hostId: uid, 
                 format: state.format, 
@@ -1877,15 +1871,14 @@
                 venue: state.venue,
                 anglers: { [uid]: { name: state.name, score: 0 } } 
             }).then(() => {
-               
                 state.status = 'waiting'; 
                 listenToCloud(); 
                 document.getElementById('displayPin').innerText = state.pin;
+                if(document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = "PIN: " + state.pin;
                 document.getElementById('hostControls').classList.remove('hidden'); 
                 document.getElementById('joinerWaitingText').classList.add('hidden'); 
                 navTo('waiting');
             }).catch((err) => {
-                btn.innerText = originalText;
                 alert("Match Creation Failed. Please check your signal or Firebase permissions.\nError Code: " + err.message);
             });
         }
@@ -1913,7 +1906,7 @@
                     else { navTo('waiting'); }
                 } else { alert("Invalid PIN."); atmPin = ""; updateAtm(); }
             }).catch((err) => {
-                
+                btn.innerText = originalText;
                 alert("Connection failed: " + err.message);
             });
         }
@@ -2462,8 +2455,8 @@
             document.getElementById('finalSpecies').innerText = new Set(state.myCatches.map(c => c.species)).size; 
             if(state.isSteward) document.getElementById('resultsReportBtn').classList.remove('hidden');
             
-            calculateGoldenHour();
-            renderExtraDataPoints();
+            calculateLiveGoldenHour();
+            
             if(state.tides) {
                 document.getElementById('tideGraphCard').classList.remove('hidden');
                 setTimeout(() => renderTideCanvasEx(state.myCatches, state.tides, 'tideGraphCanvas'), 300);
@@ -2537,7 +2530,7 @@
             }
             let biteVelocity = matchDurHours > 0 && numAnglers > 0 ? (totalFish / numAnglers / matchDurHours).toFixed(1) : "0.0";
 
-            let tideStr = matchTides ? `HW: ${matchTides.high} | LW: ${matchTides.low}` : "Not Recorded";
+            let tideStr = matchTides ? `HW: ${matchTides.high}` : "Not Recorded";
             let peakStr = document.getElementById('stat-golden-hour') ? document.getElementById('stat-golden-hour').innerText : "--:--";
             let floodCount = 0; let ebbCount = 0;
             let slackCount = 0; let flowCount = 0; let turnCount = 0;
@@ -2715,7 +2708,8 @@
                     try { off(ref(db, 'matches/' + state.pin)); } catch(e) {}
                 }
                 saveHistory(true); 
-                closeAndWipeSession(); 
+                closeAndWipeSession();
+                navTo('role');
             } 
         }
         
