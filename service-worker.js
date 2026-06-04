@@ -1,65 +1,66 @@
-// ================================================================================
-// SHORESCORE v15.2.0 CORE OFFLINE SEAMLESS SERVICE WORKER INFRASTRUCTURE
-// ================================================================================
-const CACHE_IDENTIFIER = 'shorescore-v16.1.0-matrix-cache';
-const STATIC_ASSET_MANIFEST = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-512.png'
+const CACHE_NAME = 'shorescore-cache-v16.0.0';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png',
+  'https://cdn.tailwindcss.com',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap'
 ];
 
-// Installation Runtime Hook Handler
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_IDENTIFIER)
-      .then((activeCacheContainer) => {
-        return activeCacheContainer.addAll(STATIC_ASSET_MANIFEST);
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache);
       })
-      .then(() => self.skipWaiting())
   );
+  self.skipWaiting();
 });
 
-// Cache Eviction & Cleanup Operations Routing Loop Context Flags
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
+  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then((allRegisteredCacheKeys) => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        allRegisteredCacheKeys.map((key) => {
-          if (key !== CACHE_IDENTIFIER) {
-            return caches.delete(key);
+        cacheNames.map(cacheName => {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
           }
         })
       );
-    }).then(() => self.clients.claim())
+    })
   );
+  self.clients.claim();
 });
 
-// Interception Logic Pipelines (Stale-While-Revalidate Structural Network Optimization Pattern)
-self.addEventListener('fetch', (event) => {
-  // Guard network requests handling to prioritize inner storage arrays components layers
-  if (event.request.method !== 'GET') return;
-
-  // STRICT BYPASS: Never cache the version file so the app always sees the Netlify update
-  if (event.request.url.includes('version.json')) {
-      event.respondWith(fetch(event.request));
-      return;
+self.addEventListener('fetch', event => {
+  if (event.request.url.startsWith('https://www.gstatic.com') || event.request.url.includes('firebasedatabase.app')) {
+    return;
   }
-
+  
   event.respondWith(
-    caches.open(CACHE_IDENTIFIER).then((cacheStorage) => {
-      return cacheStorage.match(event.request).then((cachedAssetResponse) => {
-        const backgroundFetchDeployment = fetch(event.request).then((freshNetworkResponse) => {
-          if (freshNetworkResponse.status === 200) {
-            cacheStorage.put(event.request, freshNetworkResponse.clone());
+    caches.match(event.request)
+      .then(response => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request).then(
+          function(response) {
+            if(!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+            var responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then(function(cache) {
+                cache.put(event.request, responseToCache);
+              });
+            return response;
           }
-          return freshNetworkResponse;
-        }).catch(() => {
-          // Silent catch to handle deep offline states elegantly
-        });
-
-        return cachedAssetResponse || backgroundFetchDeployment;
-      });
-    })
+        );
+      })
   );
 });
