@@ -883,8 +883,9 @@
         </div>
 
     </div>
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, onValue, update, get, remove, off } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
@@ -1055,6 +1056,8 @@
             }
         }
 
+        // ==========================================================
+        
         function openOptionsDrawer() { haptic(); if(document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = "PIN: " + (state.pin || "----"); document.getElementById('optionsDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('open'), 10); }
         function closeOptionsDrawer() { haptic(); document.getElementById('optionsDrawer').classList.remove('open'); setTimeout(()=>document.getElementById('optionsDrawer').classList.add('hidden'), 300); }
         function openInMatchHelp() { haptic(); document.getElementById('inMatchHelpDrawer').classList.remove('hidden'); setTimeout(()=>document.getElementById('inMatchHelpDrawer').classList.add('open'), 10); }
@@ -2728,11 +2731,14 @@
             let matchStartTimeStr = minTs ? new Date(minTs).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : m.time;
             let matchEndTimeStr = m.endTime ? new Date(m.endTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : '--:--';
 
-            let firstBlood = "N/A", buzzerBeater = "N/A", avgFishSize = "0.0 cm", speciesMaster = "N/A";
+            let firstBlood = "N/A", buzzerBeater = "N/A", avgFishSize = "0.0", speciesMaster = "N/A";
             let myFishCount = m.personalCatches ? m.personalCatches.length : 0;
             let mySpeciesCount = m.personalCatches ? new Set(m.personalCatches.map(c=>c.species)).size : 0;
-            let spCounts = {};
             let matchSpeciesCount = 0;
+            let biggestStr = "N/A";
+            let biggestVal = 0;
+
+            let spMap = {};
 
             if (totalC > 0) {
                 let sorted = [...allMatchCatches].sort((a,b) => a.ts - b.ts);
@@ -2743,8 +2749,17 @@
                 let totalSz = sorted.reduce((sum, c) => sum + (parseFloat(c.size) || 0), 0);
                 avgFishSize = (totalSz / totalC).toFixed(1) + (m.format.includes('weight') ? ' raw' : ' cm');
 
-                sorted.forEach(c => { spCounts[c.species] = (spCounts[c.species] || 0) + 1; });
-                matchSpeciesCount = Object.keys(spCounts).length;
+                sorted.forEach(c => { 
+                    if(!spMap[c.species]) spMap[c.species] = { count: 0, totalSize: 0 };
+                    spMap[c.species].count++;
+                    spMap[c.species].totalSize += (parseFloat(c.size) || 0);
+                    
+                    if(c.size > biggestVal) { 
+                        biggestVal = c.size; 
+                        biggestStr = `${c.species} (${c.display || c.size}) — ${c.anglerName}`; 
+                    }
+                });
+                matchSpeciesCount = Object.keys(spMap).length;
             }
 
             if (m.standings) {
@@ -2756,18 +2771,20 @@
                 });
             }
 
-            let spArr = Object.entries(spCounts).sort((a,b) => b[1] - a[1]);
+            let spArr = Object.entries(spMap).sort((a,b) => b[1].count - a[1].count);
             let totalCForPct = totalC || 1;
             
             let spHtml = spArr.map((sp, idx) => {
                 let name = sp[0];
-                let count = sp[1];
-                let pct = Math.round((count / totalCForPct) * 100);
+                let data = sp[1];
+                let pct = Math.round((data.count / totalCForPct) * 100);
+                let avg = (data.totalSize / data.count).toFixed(1);
+                let avgStr = !m.format.includes('speciesHunt') ? `(Avg: ${avg}${m.format.includes('weight') ? '' : 'cm'})` : '';
                 return `
                 <div class="flex flex-col gap-1 pt-2 pb-2 border-b border-slate-100 last:border-0">
                     <div class="flex items-center justify-between">
-                        <div class="text-[11px] font-black uppercase tracking-tight text-slate-900 w-24 truncate">${name}</div>
-                        <div class="text-[10px] font-bold text-slate-500 text-right">${count} Fish (${pct}%)</div>
+                        <div class="text-[11px] font-black uppercase tracking-tight text-slate-900 truncate pr-2">${name} <span class="text-slate-500 font-bold ml-1">${avgStr}</span></div>
+                        <div class="text-[10px] font-bold text-slate-500 text-right shrink-0">${data.count} Fish (${pct}%)</div>
                     </div>
                     <div class="h-2 w-full bg-slate-200 rounded-full overflow-hidden mb-1">
                         <div class="h-full bg-blue-600" style="width: ${pct}%"></div>
@@ -2828,17 +2845,17 @@
 
             let hubHtml = `
             <div class="flex justify-between items-center w-full mb-3 mt-4">
-                <div class="text-slate-900 text-base font-bold flex flex-col items-start shrink-0 text-left">
-                    <span><i class="fa-solid fa-location-dot mr-2 text-blue-600"></i> ${m.venue || 'Local Beach'}</span>
-                    <span class="text-[10px] font-bold text-slate-500 tracking-widest mt-1">📅 ${m.date} (${matchStartTimeStr} - ${matchEndTimeStr})</span>
-                    <span class="text-[10px] font-bold text-slate-500 tracking-widest mt-0.5">🌊 ${m.tides ? 'HW ' + m.tides.high : 'No Tide Data'}${tideBreakdownStr}</span>
+                <div class="text-slate-900 text-base font-bold flex flex-col items-start shrink-0 text-left min-w-0 pr-2">
+                    <span class="truncate w-full font-black text-slate-900 text-lg">${m.venue || 'Local Beach'}</span>
+                    <span class="text-[11px] font-bold text-slate-500 mt-1">${m.date} • ${matchStartTimeStr} - ${matchEndTimeStr}</span>
+                    <span class="text-[11px] font-bold text-slate-500 mt-0.5">${m.tides ? 'HW ' + m.tides.high : 'No Tide Data'} • ${tideBreakdownStr.replace(/[()]/g, '')}</span>
                 </div>
-                <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95 shrink-0 ml-2">
-                    <i class="fa-solid fa-share-nodes mr-2"></i> SHARE CARD
+                <button onclick="generateHistoricReport()" class="pill-btn px-4 py-2.5 text-[10px] shadow-sm border border-blue-600 transition-transform active:scale-95 shrink-0">
+                    <i class="fa-solid fa-share-nodes mr-2"></i> SHARE
                 </button>
             </div>
 
-            <div class="flex items-start justify-between gap-4 mt-4 mb-4">
+            <div class="flex items-start justify-between gap-4 mt-4 mb-6">
                 <div class="text-left bg-blue-50 p-4 rounded-xl border border-blue-200 flex-1 shadow-sm">
                     <div class="text-[11px] font-black uppercase tracking-widest text-blue-800 mb-2 border-b border-blue-200 pb-1">Your Performance</div>
                     <div class="text-3xl font-black text-blue-600 leading-none mb-3">${formatScoreDisplay(m.score, m.format, true).replace(' pts', '<span class="text-sm font-medium text-slate-500 ml-1">Pts</span>')}</div>
@@ -2863,13 +2880,28 @@
                 }
             });
 
+            let biggestHtml = "";
+            if (!m.format.includes('speciesHunt') && biggestVal > 0) {
+                biggestHtml = `
+                <div class="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 p-3 rounded-xl flex items-center justify-between mb-4 shadow-sm">
+                    <div class="flex flex-col text-left min-w-0 pr-2">
+                        <span class="text-[9px] font-black uppercase tracking-widest text-orange-600 mb-0.5">👑 Match Biggest Fish</span>
+                        <span class="font-black text-slate-900 text-sm truncate w-full">${biggestStr.split(' — ')[0] || biggestStr}</span>
+                        <span class="text-[10px] font-bold text-slate-600 truncate w-full">${biggestStr.split(' — ')[1] || ''}</span>
+                    </div>
+                    <i class="fa-solid fa-trophy text-orange-400 text-2xl opacity-50 pr-2"></i>
+                </div>
+                `;
+            }
+
             let tableHtml = `
+            ${biggestHtml}
             <div class="bg-slate-100 px-4 py-3 text-center border border-slate-200 flex flex-col items-center rounded-t-xl">
                 <div class="text-sm font-black uppercase tracking-widest text-slate-900">
-                    <i class="fa-solid fa-trophy mr-1.5 text-orange-500"></i> Final Standings
+                    <i class="fa-solid fa-list-ol mr-1.5 text-blue-500"></i> Final Standings
                 </div>
-                <div class="text-[10px] font-medium text-slate-500 leading-tight mt-1">
-                    (Tap name for individual catch log)
+                <div class="text-[10px] font-black text-slate-700 leading-tight mt-1">
+                    (Tap any angler's name for their catch log)
                 </div>
             </div>
             <div class="divide-y divide-slate-200 mt-0 bg-white border border-slate-200 border-t-0 shadow-sm">
