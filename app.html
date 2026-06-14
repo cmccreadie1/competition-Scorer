@@ -1878,27 +1878,38 @@
             setTimeout(() => { countdownActive = false; if(state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'playing' }); } beginFishing(false); }, 1500);
         }
 
-        function focusMeasurement() {
+        function checkSpeciesSelection() {
+    const select = document.getElementById('inputSpecies');
+    if (select.value === "[ADD OTHER]") { 
+        promptCustomSpecies(); 
+    } else if (state.format === 'speciesHunt') { 
+        document.getElementById('btnRecord').focus(); 
+    } else { 
+        let el = document.getElementById('inputSize');
+        if (state.format === 'weightLb') el = document.getElementById('inputLbs');
+        if (state.format === 'weightKg') el = document.getElementById('inputKg');
+        
+        if (el) {
+            el.focus();
+            el.click();
+            setTimeout(() => { el.focus(); el.click(); }, 50);
+        }
+    }
+}
+const select = document.getElementById('inputSpecies');
+        if (select.value === "[ADD OTHER]") { 
+            promptCustomSpecies(); 
+        } else if (state.format === 'speciesHunt') { 
+            document.getElementById('btnRecord').focus(); 
+        } else { 
             let el = document.getElementById('inputSize');
-            if (state.format === 'weightLb') { el = document.getElementById('inputLbs'); }
-            if (state.format === 'weightKg') { el = document.getElementById('inputKg'); }
+            if (state.format === 'weightLb') el = document.getElementById('inputLbs');
+            if (state.format === 'weightKg') el = document.getElementById('inputKg');
             
             if (el) {
-                setTimeout(() => {
-                    el.focus();
-                    el.click(); 
-                }, 100); 
-            }
-        }
-
-        function checkSpeciesSelection() {
-            const select = document.getElementById('inputSpecies');
-            if (select.value === "[ADD OTHER]") { 
-                promptCustomSpecies(); 
-            } else if (state.format === 'speciesHunt') { 
-                document.getElementById('btnRecord').focus(); 
-            } else { 
-                focusMeasurement(); 
+                el.focus();
+                el.click();
+                setTimeout(() => { el.focus(); el.click(); }, 50);
             }
         }
 
