@@ -690,13 +690,13 @@
 
             <div id="loggingArea" class="scrollable-area p-4 flex flex-col w-full max-w-md mx-auto">
                 <div class="flex justify-between items-center mb-2 w-full px-1 space-x-2">
-    <button onclick="openInMatchHelp()" class="pill-btn flex-1 text-[10px] py-2.5 shadow-sm bg-amber-600">
-        HELP GUIDE
-    </button>
-    <button onclick="openOptionsDrawer()" class="pill-btn flex-1 text-[10px] py-2.5 shadow-sm bg-amber-600">
-        MENU / PACK UP EARLY
-    </button>
-</div>
+                    <button onclick="openInMatchHelp()" class="pill-btn flex-1 text-[10px] py-2.5 shadow-sm">
+                        📖 HELP
+                    </button>
+                    <button onclick="openOptionsDrawer()" class="pill-btn flex-1 text-[10px] py-2.5 shadow-sm">
+                        ⚙️ OPTIONS & EXIT
+                    </button>
+                </div>
                 <div class="flex-1 flex flex-col min-h-[50vh]">
                     <div id="localCatchList" class="space-y-2 flex-1"></div>
                 </div>
@@ -1878,38 +1878,27 @@
             setTimeout(() => { countdownActive = false; if(state.isHost) { update(ref(db, 'matches/' + state.pin), { status: 'playing' }); } beginFishing(false); }, 1500);
         }
 
-        function checkSpeciesSelection() {
-    const select = document.getElementById('inputSpecies');
-    if (select.value === "[ADD OTHER]") { 
-        promptCustomSpecies(); 
-    } else if (state.format === 'speciesHunt') { 
-        document.getElementById('btnRecord').focus(); 
-    } else { 
-        let el = document.getElementById('inputSize');
-        if (state.format === 'weightLb') el = document.getElementById('inputLbs');
-        if (state.format === 'weightKg') el = document.getElementById('inputKg');
-        
-        if (el) {
-            el.focus();
-            el.click();
-            setTimeout(() => { el.focus(); el.click(); }, 50);
-        }
-    }
-}
-const select = document.getElementById('inputSpecies');
-        if (select.value === "[ADD OTHER]") { 
-            promptCustomSpecies(); 
-        } else if (state.format === 'speciesHunt') { 
-            document.getElementById('btnRecord').focus(); 
-        } else { 
+        function focusMeasurement() {
             let el = document.getElementById('inputSize');
-            if (state.format === 'weightLb') el = document.getElementById('inputLbs');
-            if (state.format === 'weightKg') el = document.getElementById('inputKg');
+            if (state.format === 'weightLb') { el = document.getElementById('inputLbs'); }
+            if (state.format === 'weightKg') { el = document.getElementById('inputKg'); }
             
             if (el) {
-                el.focus();
-                el.click();
-                setTimeout(() => { el.focus(); el.click(); }, 50);
+                setTimeout(() => {
+                    el.focus();
+                    el.click(); 
+                }, 100); 
+            }
+        }
+
+        function checkSpeciesSelection() {
+            const select = document.getElementById('inputSpecies');
+            if (select.value === "[ADD OTHER]") { 
+                promptCustomSpecies(); 
+            } else if (state.format === 'speciesHunt') { 
+                document.getElementById('btnRecord').focus(); 
+            } else { 
+                focusMeasurement(); 
             }
         }
 
