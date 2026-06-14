@@ -1301,14 +1301,16 @@
             const rankTxt = document.getElementById('island-rank-text');
             const gapTxt = document.getElementById('island-gap-text');
             
-            if (rankTxt && gapTxt) {
-                rankTxt.classList.replace('opacity-100', 'opacity-0');
-                gapTxt.classList.replace('opacity-100', 'opacity-0');
-                
-                hudState = (hudState + 1) % 2;
-                
-                if (hudState === 0) rankTxt.classList.replace('opacity-0', 'opacity-100');
-                else if (hudState === 1) gapTxt.classList.replace('opacity-0', 'opacity-100');
+            if (rankTxt && gapTxt && gapTxt.innerText !== '🎯 --') {
+                if (hudState === 0) {
+                    rankTxt.classList.add('hidden');
+                    gapTxt.classList.remove('hidden');
+                    hudState = 1;
+                } else {
+                    gapTxt.classList.add('hidden');
+                    rankTxt.classList.remove('hidden');
+                    hudState = 0;
+                }
             }
         }, 4000);
 
