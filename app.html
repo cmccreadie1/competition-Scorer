@@ -1,22 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full overflow-hidden bg-slate-50">
+<html lang="en" class="h-full overflow-x-hidden bg-slate-50">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ShoreScore</title>
-    <meta name="theme-color" content="#f8fafc">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://matchscorerpro.netlify.app/">
-    <meta property="og:title" content="ShoreScore">
-    <meta property="og:description" content="The ultimate real-time match engine for beach anglers. Zero latency, smart offline caching, and instant cloud syncing.">
-    <meta property="og:image" content="https://matchscorerpro.netlify.app/icon-512.png">
+    <title>ShoreScore | Match Scorer & Catch Diary</title>
+    
+    <meta name="description" content="The ultimate live scorecard and personal catch diary for shore anglers.">
+    <link rel="canonical" href="https://www.shorescore.co.uk">
 
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://matchscorerpro.netlify.app/">
-    <meta property="twitter:title" content="ShoreScore">
-    <meta property="twitter:description" content="The ultimate real-time match engine for beach anglers. Zero latency, smart offline caching, and instant cloud syncing.">
-    <meta property="twitter:image" content="https://matchscorerpro.netlify.app/icon-512.png">
-    <link rel="manifest" href="manifest.json">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.shorescore.co.uk/">
+    <meta property="og:title" content="ShoreScore | Match Scorer & Catch Diary">
+    <meta property="og:description" content="Interactive live leaderboards, solo session tracking, and deep tidal analytics built for beach anglers.">
+    <meta property="og:image" content="https://www.shorescore.co.uk/icon-512.png">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://www.shorescore.co.uk/">
+    <meta name="twitter:title" content="ShoreScore | Match Scorer & Catch Diary">
+    <meta name="twitter:description" content="The ultimate live scorecard and personal catch diary for shore anglers.">
+    <meta name="twitter:image" content="https://www.shorescore.co.uk/icon-512.png">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="ShoreScore">
+    <meta name="apple-mobile-web-app-title" content="ShoreScore">
+    <meta name="theme-color" content="#f8fafc">
+
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="apple-touch-icon" href="icon-512.png">
+    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -26,8 +39,8 @@
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --input-bg: #f1f5f9;
-            --text-main: #0f172a;
-            --text-header: #020617;
+            --text-main: #475569;
+            --text-header: #0f172a;
             --neon-blue: #0284c7;
             --neon-amber: #ea580c;
             --neon-red: #dc2626;
@@ -43,7 +56,8 @@
             width: 100%;
             height: 100dvh; 
             position: fixed; 
-            overflow: hidden; 
+            overflow-x: hidden; 
+            overflow-y: auto;
             overscroll-behavior: none;
             margin: 0;
             padding: 0;
@@ -143,8 +157,6 @@
 
         .telemetry-unit { font-size: 0.65em; opacity: 0.9; font-weight: 700; margin-left: 2px; text-transform: lowercase; color: var(--text-main); }
 
-        .island-text-fade { transition: opacity 0.8s ease-in-out; }
-
         @keyframes ticker-scroll { 0% { left: 100%; transform: translateX(0); } 100% { left: 0; transform: translateX(-100%); } }
         .ticker-track { position: absolute; display: flex; align-items: center; height: 100%; white-space: nowrap; will-change: transform, left; left: 100%; }
         .scroll-active { animation: ticker-scroll 28s linear infinite; }
@@ -179,20 +191,33 @@
         .drawer-left { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
         .drawer-left.open { transform: translateX(0); }
         .hidden { display: none !important; }
-        .history-tab.active { background-color: var(--neon-blue); color: #ffffff; border-color: var(--neon-blue); }
+        
         #customEndModal, #installModal, #stewardGodModal, #editRecordModal { background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(15px); }
 
         .splash-text { font-size: 3rem; font-weight: 900; color: var(--neon-blue); text-align: center; text-transform: uppercase; letter-spacing: -0.05em; line-height: 1; }
 
         @keyframes text-reveal { 0% { opacity: 0; transform: translateY(20px); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+        @keyframes icon-assemble { 0% { opacity: 0; transform: scale(0.4) translateY(40px); filter: blur(10px); } 100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
+
         .animate-icon { opacity: 0; animation: icon-assemble 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: 0.2s; }
         .animate-text { opacity: 0; animation: text-reveal 0.8s ease-out forwards; }
+        .animate-pop { opacity: 0; animation: icon-assemble 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: 0.2s; }
         .delay-title { animation-delay: 0.1s; }
         .delay-version { animation-delay: 0.4s; }
         
         .reporting { background-color: #cbd5e1 !important; color: #64748b !important; pointer-events: none; }
         
         .tide-explainer-box { background: rgba(2, 132, 199, 0.05); border: 1px dashed rgba(2, 132, 199, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; margin-bottom: 0.5rem; }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            opacity: 0; 
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+        }
+        .feature-card.visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -289,30 +314,35 @@
             </div>
             
             <div>
-                <select id="godInputSpecies" onchange="godCheckSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none">
-                    <option value="" disabled selected>-- Select Fish Species --</option>
-                    <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
-                        <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
-                    </optgroup>
-                    <optgroup label="ROUNDFISH">
-                        <option value="Blue Whiting">Blue Whiting</option><option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option><option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option><option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option><option value="Gurnard (Grey)">Gurnard (Grey)</option><option value="Gurnard (Red)">Gurnard (Red)</option><option value="Gurnard (Tub)">Gurnard (Red)</option><option value="Haddock">Haddock</option><option value="Herring">Herring</option><option value="John Dory">John Dory</option><option value="Poor Cod">Poor Cod</option><option value="Red Mullet">Red Mullet</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
-                    </optgroup>
-                    <optgroup label="FLATFISH">
-                        <option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Halibut">Halibut</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
-                    </optgroup>
-                    <optgroup label="RAYS & SHARKS">
-                        <option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Blonde Ray">Blonde Ray</option><option value="Blue Shark">Blue Shark</option><option value="Common Skate">Common Skate</option><option value="Cuckoo Ray">Cuckoo Ray</option><option value="Porbeagle Shark">Porbeagle Shark</option><option value="Small-eyed Ray">Small-eyed Ray</option><option value="Smooth-hound">Smooth-hound</option><option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option><option value="Spotted Ray">Spotted Ray</option><option value="Stingray">Stingray</option><option value="Tope">Tope</option><option value="Undulate Ray">Undulate Ray</option>
-                    </optgroup>
-                    <optgroup label="WRASSE">
-                        <option value="Baillon's Wrasse">Baillon's Wrasse</option><option value="Ballan Wrasse">Ballan Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option>
-                    </optgroup>
-                    <optgroup label="MINI SPECIES">
-                        <option value="Black Goby">Black Goby</option><option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Common Dragonet">Common Dragonet</option><option value="Eelpout (Viviparous Blenny)">Eelpout (Viviparous Blenny)</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option><option value="Leopard-spotted Goby">Leopard-spotted Goby</option><option value="Lesser Weever">Lesser Weever</option><option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Northern Rockling">Northern Rockling</option><option value="Painted Goby">Painted Goby</option><option value="Pogge (Armed Bullhead)">Pogge (Armed Bullhead)</option><option value="Rock Goby">Rock Goby</option><option value="Shore Rockling">Shore Rockling</option><option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Topknot">Topknot</option><option value="Yarrell's Blenny">Yarrell's Blenny</option>
-                    </optgroup>
-                    <optgroup label="UNLISTED / CUSTOM" id="godCustomSpeciesGroup">
-                        <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
-                    </optgroup>
-                </select>
+                <div class="relative">
+                    <select id="godInputSpecies" onchange="godCheckSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none pr-10">
+                        <option value="" disabled selected>-- Select Fish Species --</option>
+                        <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
+                            <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
+                        </optgroup>
+                        <optgroup label="ROUNDFISH">
+                            <option value="Blue Whiting">Blue Whiting</option><option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option><option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option><option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option><option value="Gurnard (Grey)">Gurnard (Grey)</option><option value="Gurnard (Red)">Gurnard (Red)</option><option value="Gurnard (Tub)">Gurnard (Red)</option><option value="Haddock">Haddock</option><option value="Herring">Herring</option><option value="John Dory">John Dory</option><option value="Poor Cod">Poor Cod</option><option value="Red Mullet">Red Mullet</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
+                        </optgroup>
+                        <optgroup label="FLATFISH">
+                            <option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Halibut">Halibut</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
+                        </optgroup>
+                        <optgroup label="RAYS & SHARKS">
+                            <option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Blonde Ray">Blonde Ray</option><option value="Blue Shark">Blue Shark</option><option value="Common Skate">Common Skate</option><option value="Cuckoo Ray">Cuckoo Ray</option><option value="Porbeagle Shark">Porbeagle Shark</option><option value="Small-eyed Ray">Small-eyed Ray</option><option value="Smooth-hound">Smooth-hound</option><option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option><option value="Spotted Ray">Spotted Ray</option><option value="Stingray">Stingray</option><option value="Tope">Tope</option><option value="Undulate Ray">Undulate Ray</option>
+                        </optgroup>
+                        <optgroup label="WRASSE">
+                            <option value="Baillon's Wrasse">Baillon's Wrasse</option><option value="Ballan Wrasse">Ballan Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option>
+                        </optgroup>
+                        <optgroup label="MINI SPECIES">
+                            <option value="Black Goby">Black Goby</option><option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Common Dragonet">Common Dragonet</option><option value="Eelpout (Viviparous Blenny)">Eelpout (Viviparous Blenny)</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option><option value="Leopard-spotted Goby">Leopard-spotted Goby</option><option value="Lesser Weever">Lesser Weever</option><option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Northern Rockling">Northern Rockling</option><option value="Painted Goby">Painted Goby</option><option value="Pogge (Armed Bullhead)">Pogge (Armed Bullhead)</option><option value="Rock Goby">Rock Goby</option><option value="Shore Rockling">Shore Rockling</option><option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Topknot">Topknot</option><option value="Yarrell's Blenny">Yarrell's Blenny</option>
+                        </optgroup>
+                        <optgroup label="UNLISTED / CUSTOM" id="godCustomSpeciesGroup">
+                            <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
+                        </optgroup>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                        <i class="fa-solid fa-chevron-down text-slate-400"></i>
+                    </div>
+                </div>
             </div>
             <div id="godDeckSizeInputs">
                 <div id="godDeckLength">
@@ -413,7 +443,7 @@
                     SHORE<span class="text-blue-600">SCORE</span>
                 </h1>
                 <div class="animate-text delay-version text-slate-500 font-bold text-xs tracking-widest uppercase opacity-90 version-display mt-2 pointer-events-none">
-                    V16.0.0
+                    V1.0.0
                 </div>
             </div>
             
@@ -443,6 +473,7 @@
                 </button>
             </div>
         </div>
+
         <div id="view-role" class="hidden view-frame p-5 space-y-6 relative bg-slate-50 overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
                 <button onclick="navTo('home')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
@@ -453,23 +484,29 @@
             <div class="flex-1 flex flex-col justify-center space-y-6 max-w-sm mx-auto w-full pb-10">
                 <button onclick="navTo('host')" class="w-full py-8 shadow-sm border-2 border-slate-300 bg-blue-50 rounded-xl flex flex-col items-center justify-center text-center px-6 transition-transform active:scale-[0.98]">
                     <span class="font-black uppercase tracking-tight text-xl text-slate-900">CREATE <span class="text-blue-600">MATCH</span></span>
-                    <span class="text-sm normal-case tracking-normal block mt-3 font-bold text-slate-600 leading-relaxed">Host a live leaderboard for a tournament, or track a personal session diary just for yourself.</span>
+                    <span class="text-sm normal-case tracking-normal block mt-3 font-bold text-slate-600 leading-relaxed">
+                        Steward a match for you and your friends.
+                        <div align="center" class="my-1 text-slate-400 font-normal"><i>- or -</i></div>
+                        Keep a personal record on an individual session.
+                    </span>
                 </button>
 
                 <button onclick="navTo('join')" class="w-full py-8 shadow-sm border-2 border-slate-300 bg-emerald-50 rounded-xl flex flex-col items-center justify-center text-center px-6 transition-transform active:scale-[0.98]">
                     <span class="font-black uppercase tracking-tight text-xl text-slate-900">JOIN <span class="text-blue-600">MATCH</span></span>
-                    <span class="text-sm normal-case tracking-normal block mt-3 font-bold text-slate-600 leading-relaxed">Enter a 4-digit Room PIN provided by your host to link your scorecard.</span>
+                    <span class="text-sm normal-case tracking-normal block mt-3 font-bold text-slate-600 leading-relaxed">Link to a current match.</span>
                 </button>
             </div>
         </div>
+
         <div id="view-join" class="hidden view-frame p-4 bg-slate-50">
             <div class="flex justify-between items-center border-b border-slate-300 pb-3 pt-1">
                 <button onclick="navTo('role')" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2 class="text-base font-black uppercase tracking-tight text-slate-900">Room <span class="text-blue-600">PIN</span></h2>
                 <div class="w-6"></div>
             </div>
-            <div class="text-center pt-8 pb-4">
-                <h2 class="text-slate-600 font-black text-[11px] uppercase tracking-[0.3em] mb-3">Enter Room PIN</h2>
+            <div class="text-center pt-6 pb-4">
+                <h2 class="text-slate-600 font-black text-[11px] uppercase tracking-[0.3em] mb-1">Enter Room PIN</h2>
+                <p class="text-[10px] text-slate-500 font-bold mb-4">Input the 4-digit code provided by your Steward.</p>
                 <div class="flex justify-center space-x-3">
                     <div class="w-14 h-16 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-3xl font-black metric-white shadow-md" id="pin-1"></div>
                     <div class="w-14 h-16 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-3xl font-black metric-white shadow-md" id="pin-2"></div>
@@ -495,19 +532,29 @@
             <div class="match-card p-6 space-y-5 text-center mt-8 shadow-lg pb-8">
                 <div>
                     <label class="block text-slate-600 font-black text-[10px] uppercase tracking-[0.2em] mb-2 text-left ml-3">Tournament Duration</label>
-                    <select id="hostDuration" class="pill-input w-full p-3 text-base appearance-none">
-                        <option value="1">1.0 Hour</option><option value="2">2.0 Hours</option><option value="3">3.0 Hours</option><option value="4" selected>4.0 Hours</option><option value="5">5.0 Hours</option><option value="6">6.0 Hours</option>
-                    </select>
+                    <div class="relative">
+                        <select id="hostDuration" class="pill-input w-full p-3 text-base appearance-none pr-10">
+                            <option value="1">1.0 Hour</option><option value="2">2.0 Hours</option><option value="3">3.0 Hours</option><option value="4" selected>4.0 Hours</option><option value="5">5.0 Hours</option><option value="6">6.0 Hours</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                            <i class="fa-solid fa-chevron-down text-slate-400"></i>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label class="block text-slate-600 font-black text-[10px] uppercase tracking-[0.2em] mb-2 text-left ml-3">Rules Engine</label>
-                    <select id="hostFormat" class="pill-input w-full p-3 text-base appearance-none">
-                        <option value="length" selected>Length Only (cm)</option>
-                        <option value="length10">Length + 10 Pts</option>
-                        <option value="weightLb">Weight (Lbs & Oz)</option>
-                        <option value="weightKg">Weight (Kg & g)</option>
-                        <option value="speciesHunt">Species Hunt</option>
-                    </select>
+                    <div class="relative">
+                        <select id="hostFormat" class="pill-input w-full p-3 text-base appearance-none pr-10">
+                            <option value="length" selected>Length Only (cm)</option>
+                            <option value="length10">Length + 10 Pts</option>
+                            <option value="weightLb">Weight (Lbs & Oz)</option>
+                            <option value="weightKg">Weight (Kg & g)</option>
+                            <option value="speciesHunt">Species Hunt</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                            <i class="fa-solid fa-chevron-down text-slate-400"></i>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="pt-4 border-t border-slate-200 mt-6 mb-2">
@@ -527,8 +574,8 @@
                         </div>
                     </div>
 
-                    <button id="btnInitMatch" onclick="createMatch()" class="w-full pill-btn text-base py-4 shadow-md border-2 border-blue-600 bg-white">
-                        <span class="font-black uppercase tracking-widest text-slate-900">CREATE MATCH</span>
+                    <button id="btnInitMatch" onclick="createMatch()" class="w-full pill-btn text-base py-4 shadow-md bg-blue-600 border-none">
+                        <span class="font-black uppercase tracking-widest text-white">CREATE MATCH</span>
                     </button>
                 </div>
             </div>
@@ -537,7 +584,10 @@
         <div id="view-waiting" class="hidden view-frame p-5 space-y-4 bg-slate-50">
             <div class="flex justify-between items-center w-full pb-2 border-b border-slate-200">
                 <button onclick="exitWaitingRoom()" class="text-slate-600 text-xl px-2"><i class="fa-solid fa-arrow-left"></i></button>
-                <div class="neon-text-blue font-black tracking-[0.2em] bg-white px-5 py-1.5 rounded-full border border-slate-300 shadow-sm text-xl" id="displayPin">0000</div>
+                <div class="flex items-center space-x-2">
+                    <span id="pinHintText" class="text-[9px] font-black uppercase text-slate-400 tracking-widest hidden text-right leading-tight mt-0.5">Share this PIN with<br>your anglers <i class="fa-solid fa-hand-point-right text-blue-500 ml-0.5"></i></span>
+                    <div class="neon-text-blue font-black tracking-[0.2em] bg-white px-5 py-1.5 rounded-full border border-slate-300 shadow-sm text-xl" id="displayPin">0000</div>
+                </div>
             </div>
             <div class="flex-1 flex flex-col items-center space-y-4 pt-3">
                 <h3 class="text-xl font-black text-slate-900 uppercase tracking-tight">Angler <span class="text-blue-600">Lobby</span></h3>
@@ -583,30 +633,35 @@
                     </div>
                     <div class="bg-slate-100 p-2.5 pb-3">
                         <div class="flex flex-col space-y-2">
-                            <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none border-slate-300 bg-white">
-                                <option value="" disabled selected>-- Select Fish Species --</option>
-                                <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
-                                    <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
-                                </optgroup>
-                                <optgroup label="ROUNDFISH">
-                                    <option value="Blue Whiting">Blue Whiting</option><option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option><option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option><option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option><option value="Gurnard (Grey)">Gurnard (Grey)</option><option value="Gurnard (Red)">Gurnard (Red)</option><option value="Gurnard (Tub)">Gurnard (Red)</option><option value="Haddock">Haddock</option><option value="Herring">Herring</option><option value="John Dory">John Dory</option><option value="Poor Cod">Poor Cod</option><option value="Red Mullet">Red Mullet</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
-                                </optgroup>
-                                <optgroup label="FLATFISH">
-                                    <option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Halibut">Halibut</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
-                                </optgroup>
-                                <optgroup label="RAYS & SHARKS">
-                                    <option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Blonde Ray">Blonde Ray</option><option value="Blue Shark">Blue Shark</option><option value="Common Skate">Common Skate</option><option value="Cuckoo Ray">Cuckoo Ray</option><option value="Porbeagle Shark">Porbeagle Shark</option><option value="Small-eyed Ray">Small-eyed Ray</option><option value="Smooth-hound">Smooth-hound</option><option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option><option value="Spotted Ray">Spotted Ray</option><option value="Stingray">Stingray</option><option value="Tope">Tope</option><option value="Undulate Ray">Undulate Ray</option>
-                                </optgroup>
-                                <optgroup label="WRASSE">
-                                    <option value="Baillon's Wrasse">Baillon's Wrasse</option><option value="Ballan Wrasse">Ballan Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option>
-                                </optgroup>
-                                <optgroup label="MINI SPECIES">
-                                    <option value="Black Goby">Black Goby</option><option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Common Dragonet">Common Dragonet</option><option value="Eelpout (Viviparous Blenny)">Eelpout (Viviparous Blenny)</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option><option value="Leopard-spotted Goby">Leopard-spotted Goby</option><option value="Lesser Weever">Lesser Weever</option><option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Northern Rockling">Northern Rockling</option><option value="Painted Goby">Painted Goby</option><option value="Pogge (Armed Bullhead)">Pogge (Armed Bullhead)</option><option value="Rock Goby">Rock Goby</option><option value="Shore Rockling">Shore Rockling</option><option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Topknot">Topknot</option><option value="Yarrell's Blenny">Yarrell's Blenny</option>
-                                </optgroup>
-                                <optgroup label="UNLISTED / CUSTOM" id="customSpeciesGroup">
-                                    <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
-                                </optgroup>
-                            </select>
+                            <div class="relative">
+                                <select id="inputSpecies" onchange="checkSpeciesSelection()" class="pill-input w-full p-2.5 text-sm appearance-none border-slate-300 bg-white pr-10">
+                                    <option value="" disabled selected>-- Select Fish Species --</option>
+                                    <optgroup label="🏴󠁧󠁢󠁳󠁣󠁴󠁿 COMMON SPECIES">
+                                        <option value="Bass">Bass</option><option value="Bull Huss">Bull Huss</option><option value="Coalfish">Coalfish</option><option value="Codling / Cod">Codling / Cod</option><option value="Conger Eel">Conger Eel</option><option value="Dab">Dab</option><option value="Dogfish (LSD)">Dogfish (LSD)</option><option value="Flounder">Flounder</option><option value="Mackerel">Mackerel</option><option value="Plaice">Plaice</option><option value="Pollack">Pollack</option><option value="Pouting">Pouting</option><option value="Spurdog">Spurdog</option><option value="Thornback Ray">Thornback Ray</option><option value="Turbot">Turbot</option><option value="Whiting">Whiting</option>
+                                    </optgroup>
+                                    <optgroup label="ROUNDFISH">
+                                        <option value="Blue Whiting">Blue Whiting</option><option value="Grey Mullet (Golden-grey)">Grey Mullet (Golden-grey)</option><option value="Grey Mullet (Thick-lipped)">Grey Mullet (Thick-lipped)</option><option value="Grey Mullet (Thin-lipped)">Grey Mullet (Thin-lipped)</option><option value="Gurnard (Grey)">Gurnard (Grey)</option><option value="Gurnard (Red)">Gurnard (Red)</option><option value="Gurnard (Tub)">Gurnard (Red)</option><option value="Haddock">Haddock</option><option value="Herring">Herring</option><option value="John Dory">John Dory</option><option value="Poor Cod">Poor Cod</option><option value="Red Mullet">Red Mullet</option><option value="Scad (Horse Mackerel)">Scad (Horse Mackerel)</option>
+                                    </optgroup>
+                                    <optgroup label="FLATFISH">
+                                        <option value="Brill">Brill</option><option value="Dover Sole">Dover Sole</option><option value="Halibut">Halibut</option><option value="Lemon Sole">Lemon Sole</option><option value="Megrim">Megrim</option>
+                                    </optgroup>
+                                    <optgroup label="RAYS & SHARKS">
+                                        <option value="Blackmouth Dogfish">Blackmouth Dogfish</option><option value="Blonde Ray">Blonde Ray</option><option value="Blue Shark">Blue Shark</option><option value="Common Skate">Common Skate</option><option value="Cuckoo Ray">Cuckoo Ray</option><option value="Porbeagle Shark">Porbeagle Shark</option><option value="Small-eyed Ray">Small-eyed Ray</option><option value="Smooth-hound">Smooth-hound</option><option value="Smooth-hound (Starry)">Smooth-hound (Starry)</option><option value="Spotted Ray">Spotted Ray</option><option value="Stingray">Stingray</option><option value="Tope">Tope</option><option value="Undulate Ray">Undulate Ray</option>
+                                    </optgroup>
+                                    <optgroup label="WRASSE">
+                                        <option value="Baillon's Wrasse">Baillon's Wrasse</option><option value="Ballan Wrasse">Ballan Wrasse</option><option value="Corkwing Wrasse">Corkwing Wrasse</option><option value="Cuckoo Wrasse">Cuckoo Wrasse</option><option value="Goldsinny Wrasse">Goldsinny Wrasse</option><option value="Rock Cook Wrasse">Rock Cook Wrasse</option><option value="Scale-rayed Wrasse">Scale-rayed Wrasse</option>
+                                    </optgroup>
+                                    <optgroup label="MINI SPECIES">
+                                        <option value="Black Goby">Black Goby</option><option value="Butterfish (Gunnel)">Butterfish (Gunnel)</option><option value="Common Blenny (Shanny)">Common Blenny (Shanny)</option><option value="Common Dragonet">Common Dragonet</option><option value="Eelpout (Viviparous Blenny)">Eelpout (Viviparous Blenny)</option><option value="Five-bearded Rockling">Five-bearded Rockling</option><option value="Four-bearded Rockling">Four-bearded Rockling</option><option value="Leopard-spotted Goby">Leopard-spotted Goby</option><option value="Lesser Weever">Lesser Weever</option><option value="Long-spined Sea Scorpion">Long-spined Sea Scorpion</option><option value="Montagu's Blenny">Montagu's Blenny</option><option value="Northern Rockling">Northern Rockling</option><option value="Painted Goby">Painted Goby</option><option value="Pogge (Armed Bullhead)">Pogge (Armed Bullhead)</option><option value="Rock Goby">Rock Goby</option><option value="Shore Rockling">Shore Rockling</option><option value="Short-spined Sea Scorpion">Short-spined Sea Scorpion</option><option value="Three-bearded Rockling">Three-bearded Rockling</option><option value="Tompot Blenny">Tompot Blenny</option><option value="Topknot">Topknot</option><option value="Yarrell's Blenny">Yarrell's Blenny</option>
+                                    </optgroup>
+                                    <optgroup label="UNLISTED / CUSTOM" id="customSpeciesGroup">
+                                        <option value="[ADD OTHER]">-- [Add Other Species...] --</option>
+                                    </optgroup>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                                    <i class="fa-solid fa-chevron-down text-slate-400"></i>
+                                </div>
+                            </div>
                             <div>
                                 <label id="labelSize" class="block text-slate-500 font-black text-[9px] uppercase tracking-widest mb-1 text-left pl-2">Measurement (cm)</label>
                                 <div class="flex space-x-2">
@@ -752,7 +807,7 @@
                         <i class="fa-solid fa-rotate text-xl mr-2" id="updateSpinnerInternal"></i>
                         <span class="text-xs tracking-widest text-white">Wipe Cache & Update</span>
                     </button>
-                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V16.0.0</p>
+                    <p class="text-[10px] text-slate-400 font-bold mt-4 uppercase tracking-[0.2em] version-display">V1.0.0</p>
                 </section>
             </div>
             <div class="p-4 bg-white border-t border-slate-200 mt-auto shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50 flex items-center justify-center">
@@ -885,7 +940,7 @@
     </div>
 
     <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, onValue, update, get, remove, off } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
@@ -987,7 +1042,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         }
 
         // ==========================================================
-        // V16.0.0 TIDE MATH & LIVE TICKER ENGINE
+        // V1.0.0 TIDE MATH & LIVE TICKER ENGINE
         // ==========================================================
         
         function getLiveTideString(tidesObj) {
@@ -1686,6 +1741,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
                 }
                 state.endTime = globalMatchData.endTime;
                 if (state.view !== 'fishing' && state.status !== 'hype') { beginFishing(false); }
+                document.getElementById('pinHintText')?.classList.remove('hidden');
             }
             if (globalMatchData.status === 'hype' && state.status !== 'hype') { runGlobalCountdown(); }
             if (globalMatchData.status === 'grace' && state.status !== 'grace') {
@@ -1754,6 +1810,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
                 if(document.getElementById('stewardPinDisplay')) document.getElementById('stewardPinDisplay').innerText = "PIN: " + state.pin;
                 document.getElementById('hostControls').classList.remove('hidden'); 
                 document.getElementById('joinerWaitingText').classList.add('hidden'); 
+                const hintEl = document.getElementById('pinHintText');
+                if(hintEl) hintEl.classList.remove('hidden');
                 navTo('waiting');
             }).catch((err) => {
                 alert("Match Creation Failed. Please check your signal or Firebase permissions.\nError Code: " + err.message);
@@ -1779,6 +1837,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 
                     listenToCloud(); 
                     update(ref(db, `matches/${state.pin}/anglers/${uid}`), { name: state.name, score: 0 });
+                    
+                    const hintEl = document.getElementById('pinHintText');
+                    if(hintEl) hintEl.classList.add('hidden');
+
                     if(snapshot.val().status === 'playing' || snapshot.val().status === 'grace') { state.endTime = snapshot.val().endTime; state.status = snapshot.val().status; beginFishing(false); }
                     else { navTo('waiting'); }
                 } else { alert("Invalid PIN."); atmPin = ""; updateAtm(); }
@@ -2541,7 +2603,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
                 });
             }
 
-            t += `Generated by ShoreScore V16.0.0`;
+            t += `Generated by ShoreScore V1.0.0`;
 
             if (navigator.share) { 
                 navigator.share({ title: 'Official Report', text: t }).catch(console.error); 
@@ -2998,7 +3060,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
         window.onload = () => {
             history.pushState(null, null, window.location.href);
             
-            const CURRENT_FALLBACK_VERSION = "16.0.0";
+            const CURRENT_FALLBACK_VERSION = "1.0.0";
             document.querySelectorAll('.version-display').forEach(el => el.innerText = "V" + CURRENT_FALLBACK_VERSION);
             
             fetch('version.json?t=' + new Date().getTime())
