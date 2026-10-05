@@ -1375,7 +1375,7 @@
             }, 1800);
         }
 
-        function runMonteCarloDrawSimulation() {
+      function runMonteCarloDrawSimulation() {
             for (let attempt = 1; attempt <= 3000; attempt++) {
                 let candidateDraw = generateSingleDrawAttempt();
                 if (candidateDraw && validateDrawRules(candidateDraw).isValid) {
@@ -1423,18 +1423,31 @@
             let day1Draw = [];
             let day2Draw = [];
 
-            const mobAnglers = appState.anglers.filter(a => a.mobility);
             const reqPegsD1 = appState.config.mobilityRequired ? parsePegList(appState.config.accessPegsD1) : [3,4,5,6];
             const reqPegsD2 = appState.config.mobilityRequired ? parsePegList(appState.config.accessPegsD2) : [3,4,5,6];
 
-            let shuffledMob = [...mobAnglers].sort(() => Math.random() - 0.5);
+            const jumpMapPrimaryD2 = { 'Red': 'Green', 'Yellow': 'Blue', 'Green': 'Red', 'Blue': 'Yellow' };
+            
+            // PHASE 1: PROCESS MOBILITY ANGLERS & THEIR TEAMMATES FIRST
+            const mobAnglers = appState.anglers.filter(a => a.mobility).sort(() => Math.random() - 0.5);
 
-            shuffledMob.forEach((a, idx) => {
-                let p1 = reqPegsD1[idx % reqPegsD1.length] || (idx + 1);
+            mobAnglers.forEach((a) => {
+                if (day1Draw.some(d => d.anglerId === a.id)) return; // Already placed via team pass
+
+                let availD1 = reqPegsD1.filter(p => openPegsD1.includes(p));
+                let p1 = availD1.length > 0 ? availD1[Math.floor(Math.random() * availD1.length)] : openPegsD1[0];
                 let z1 = bounds.getZoneForPeg(p1);
 
-                let availD2Pegs = reqPegsD2.filter(p => bounds.getZoneForPeg(p) !== z1 && openPegsD2.includes(p));
-                let p2 = availD2Pegs.length > 0 ? availD2Pegs[Math.floor(Math.random() * availD2Pegs.length)] : reqPegsD2[(idx + 1) % reqPegsD2.length];
+                // Try for a different zone on Day 2 first
+                let diffZonePegsD2 = reqPegsD2.filter(p => bounds.getZoneForPeg(p) !== z1 && openPegsD2.includes(p));
+                let p2;
+                if (diffZonePegsD2.length > 0) {
+                    p2 = diffZonePegsD2[Math.floor(Math.random() * diffZonePegsD2.length)];
+                } else {
+                    // Fallback: Same zone on Day 2 if beach/peg restrictions dictate
+                    let sameZonePegsD2 = reqPegsD2.filter(p => openPegsD2.includes(p));
+                    p2 = sameZonePegsD2.length > 0 ? sameZonePegsD2[Math.floor(Math.random() * sameZonePegsD2.length)] : openPegsD2[0];
+                }
                 let z2 = bounds.getZoneForPeg(p2);
 
                 day1Draw.push({ anglerId: a.id, zone: z1, peg: String(p1) });
@@ -1444,44 +1457,81 @@
 
                 openPegsD1 = openPegsD1.filter(p => p !== p1);
                 openPegsD2 = openPegsD2.filter(p => p !== p2);
+
+                // IMMEDIATELY ALLOCATE REMAINING TEAMMATES OF THIS MOBILITY ANGLER
+                if (a.teamId) {
+                    const team = appState.teams.find(t => t.id === a.teamId);
+                    if (team) {
+                        const teammates = appState.anglers.filter(m => m.teamId === team.id && m.id !== a.id);
+                        
+                        let d1LockedZones = day1Draw.filter(d => teamHasMember(team.id, d.anglerId)).map(d => d.zone);
+                        let availZonesD1 = ZONE_COLORS.filter(z => !d1LockedZones.includes(z)).sort(() => Math.random() - 0.5);
+
+                        teammates.forEach((m, mIdx) => {
+                            if (day1Draw.some(d => d.anglerId === m.id)) return;
+
+                            let zD1 = availZonesD1[mIdx] || ZONE_COLORS.find(z => !d1LockedZones.includes(z)) || 'Green';
+                            let targetZD2 = jumpMapPrimaryD2[zD1];
+
+                            let d2LockedZones = day2Draw.filter(d => teamHasMember(team.id, d.anglerId)).map(d => d.zone);
+                            if (d2LockedZones.includes(targetZD2)) {
+                                let fallbackZones = ZONE_COLORS.filter(z => z !== zD1 && !d2LockedZones.includes(z));
+                                targetZD2 = fallbackZones.length > 0 ? fallbackZones[0] : ZONE_COLORS.find(z => z !== zD1);
+                            }
+
+                            let openInZD1 = openPegsD1.filter(p => bounds.getZoneForPeg(p) === zD1);
+                            let pegD1 = openInZD1.length > 0 ? openInZD1[Math.floor(Math.random() * openInZD1.length)] : openPegsD1.shift();
+                            openPegsD1 = openPegsD1.filter(p => p !== pegD1);
+
+                            let openInZD2 = openPegsD2.filter(p => bounds.getZoneForPeg(p) === targetZD2);
+                            let pegD2 = openInZD2.length > 0 ? openInZD2[Math.floor(Math.random() * openInZD2.length)] : openPegsD2.shift();
+                            openPegsD2 = openPegsD2.filter(p => p !== pegD2);
+
+                            day1Draw.push({ anglerId: m.id, zone: zD1, peg: String(pegD1) });
+                            if (appState.config.duration === 2) {
+                                day2Draw.push({ anglerId: m.id, zone: targetZD2, peg: String(pegD2) });
+                            }
+                        });
+                    }
+                }
             });
 
-            const jumpMapPrimaryD2 = { 'Red': 'Green', 'Yellow': 'Blue', 'Green': 'Red', 'Blue': 'Yellow' };
-
+            // PHASE 2: PROCESS ALL REMAINING TEAMS
             appState.teams.forEach(team => {
                 const members = appState.anglers.filter(a => a.teamId === team.id);
-
-                let d1LockedZones = day1Draw.filter(d => members.some(m => m.id === d.anglerId)).map(d => d.zone);
                 let unassigned = members.filter(m => !day1Draw.some(d => d.anglerId === m.id));
 
-                let availZonesD1 = ZONE_COLORS.filter(z => !d1LockedZones.includes(z)).sort(() => Math.random() - 0.5);
+                if (unassigned.length > 0) {
+                    let d1LockedZones = day1Draw.filter(d => teamHasMember(team.id, d.anglerId)).map(d => d.zone);
+                    let availZonesD1 = ZONE_COLORS.filter(z => !d1LockedZones.includes(z)).sort(() => Math.random() - 0.5);
 
-                unassigned.forEach((m, mIdx) => {
-                    let zD1 = availZonesD1[mIdx] || 'Green';
-                    
-                    let targetZD2 = jumpMapPrimaryD2[zD1];
-                    let d2LockedZones = day2Draw.filter(d => members.some(m2 => m2.id === d.anglerId)).map(d => d.zone);
-                    
-                    if (d2LockedZones.includes(targetZD2)) {
-                        let fallbackZones = ZONE_COLORS.filter(z => z !== zD1 && !d2LockedZones.includes(z));
-                        targetZD2 = fallbackZones.length > 0 ? fallbackZones[0] : ZONE_COLORS.find(z => z !== zD1);
-                    }
+                    unassigned.forEach((m, mIdx) => {
+                        let zD1 = availZonesD1[mIdx] || 'Green';
+                        let targetZD2 = jumpMapPrimaryD2[zD1];
 
-                    let openInZD1 = openPegsD1.filter(p => bounds.getZoneForPeg(p) === zD1);
-                    let pegD1 = openInZD1.length > 0 ? openInZD1[Math.floor(Math.random() * openInZD1.length)] : openPegsD1.shift();
-                    openPegsD1 = openPegsD1.filter(p => p !== pegD1);
+                        let d2LockedZones = day2Draw.filter(d => teamHasMember(team.id, d.anglerId)).map(d => d.zone);
+                        if (d2LockedZones.includes(targetZD2)) {
+                            let fallbackZones = ZONE_COLORS.filter(z => z !== zD1 && !d2LockedZones.includes(z));
+                            targetZD2 = fallbackZones.length > 0 ? fallbackZones[0] : ZONE_COLORS.find(z => z !== zD1);
+                        }
 
-                    let openInZD2 = openPegsD2.filter(p => bounds.getZoneForPeg(p) === targetZD2);
-                    let pegD2 = openInZD2.length > 0 ? openInZD2[Math.floor(Math.random() * openInZD2.length)] : openPegsD2.shift();
-                    openPegsD2 = openPegsD2.filter(p => p !== pegD2);
+                        let openInZD1 = openPegsD1.filter(p => bounds.getZoneForPeg(p) === zD1);
+                        let pegD1 = openInZD1.length > 0 ? openInZD1[Math.floor(Math.random() * openInZD1.length)] : openPegsD1.shift();
+                        openPegsD1 = openPegsD1.filter(p => p !== pegD1);
 
-                    day1Draw.push({ anglerId: m.id, zone: zD1, peg: String(pegD1) });
-                    if (appState.config.duration === 2) {
-                        day2Draw.push({ anglerId: m.id, zone: targetZD2, peg: String(pegD2) });
-                    }
-                });
+                        let openInZD2 = openPegsD2.filter(p => bounds.getZoneForPeg(p) === targetZD2);
+                        let pegD2 = openInZD2.length > 0 ? openInZD2[Math.floor(Math.random() * openInZD2.length)] : openPegsD2.shift();
+                        openPegsD2 = openPegsD2.filter(p => p !== pegD2);
+
+                        day1Draw.push({ anglerId: m.id, zone: zD1, peg: String(pegD1) });
+                        if (appState.config.duration === 2) {
+                            day2Draw.push({ anglerId: m.id, zone: targetZD2, peg: String(pegD2) });
+                        }
+                    });
+                }
             });
 
+            // PHASE 3: PROCESS UNASSIGNED SOLOS
             const unassignedSolos = appState.anglers.filter(a => !day1Draw.some(d => d.anglerId === a.id));
             unassignedSolos.forEach(solo => {
                 let pD1 = openPegsD1.shift();
@@ -1502,11 +1552,15 @@
             return { day1: day1Draw, day2: day2Draw };
         }
 
+        function teamHasMember(teamId, anglerId) {
+            const a = appState.anglers.find(x => x.id === anglerId);
+            return a && a.teamId === teamId;
+        }
+
         function validateDrawRules(drawObj) {
             let errors = [];
-            const N = appState.anglers.length;
-            const bounds = getZoneBoundsForN(N);
 
+            // 1. Strict Teammate Separation Check
             [1, 2].forEach(day => {
                 if (day === 2 && appState.config.duration === 1) return;
                 const list = day === 1 ? drawObj.day1 : drawObj.day2;
@@ -1524,6 +1578,7 @@
                 });
             });
 
+            // 2. Mobility Peg Range Check
             if (appState.config.mobilityRequired) {
                 const mobAnglerIds = appState.anglers.filter(a => a.mobility).map(a => a.id);
                 const allowedPegsD1 = parsePegList(appState.config.accessPegsD1);
@@ -1539,18 +1594,18 @@
                     if (appState.config.duration === 2 && d2 && !allowedPegsD2.includes(parseInt(d2.peg))) {
                         errors.push(`Day 2: Mobility angler assigned illegal peg ${d2.peg}.`);
                     }
-                    if (appState.config.duration === 2 && d1 && d2 && d1.zone === d2.zone) {
-                        errors.push(`Day 2: Mobility angler assigned duplicate zone ${d1.zone}.`);
-                    }
                 });
             }
 
+            // 3. Zone Rotation Check (Enforced for non-mobility anglers)
             if (appState.config.duration === 2) {
                 appState.anglers.forEach(a => {
-                    const d1 = drawObj.day1.find(d => d.anglerId === a.id);
-                    const d2 = drawObj.day2.find(d => d.anglerId === a.id);
-                    if (d1 && d2 && d1.zone === d2.zone) {
-                        errors.push(`Angler ${a.name} is in ${d1.zone} Zone on both Day 1 and Day 2.`);
+                    if (!a.mobility) {
+                        const d1 = drawObj.day1.find(d => d.anglerId === a.id);
+                        const d2 = drawObj.day2.find(d => d.anglerId === a.id);
+                        if (d1 && d2 && d1.zone === d2.zone) {
+                            errors.push(`Angler ${a.name} is in ${d1.zone} Zone on both Day 1 and Day 2.`);
+                        }
                     }
                 });
             }
